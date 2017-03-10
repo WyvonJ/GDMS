@@ -1,0 +1,56 @@
+[
+	{
+		
+		"category":1,
+		"title":"新网络漏洞的发现与研究",
+		"details":"网络，操作系统的新漏洞。",
+		"available":2,
+		"selected":0,
+		"field":"信息安全"
+	},
+	{
+		
+		"category":1,
+		"title":"社交网络的可视化研究的开发",
+		"details":"基于微博数据的信息交互展示研究。",
+		"available":2,
+		"selected":1,
+		"field":"数据可视化"
+	},
+	{
+		
+		"category":1,
+		"title":"云计算平台的运行与安全监控",
+		"details":"基于日志的数据采集或者在线采集与分析。",
+		"available":1,
+		"selected":1,
+		"field":"云计算"
+	},
+	{
+		
+		"category":1,
+		"title":"基于Javascript的虚拟实验开发",
+		"details":"试验操作的交互。",
+		"available":2,
+		"selected":0,
+		"field":"其它"
+	},
+	{
+		
+		"category":1,
+		"title":"基于视频信息的测量与计算技术的研究",
+		"details":"视频中兴趣物理量的测量。",
+		"available":1,
+		"selected":0,
+		"field":"图形图像处理"
+	},
+	{
+		
+		"category":1,
+		"title":"基于Matlab的语音信号的采集与分析",
+		"details":"通过语音传递信息是人类最有效、最重要、最常用和最方便的交换信息的方式。本课题要求通过PC机录一段声音，运用matlab进行仿真分析。",
+		"available":2,
+		"selected":1,
+		"field":"数字信号处理"
+	}
+]
