@@ -11,7 +11,7 @@
           <mu-card-header :title="userName">
             <mu-avatar icon="assignment_turned_in" />
           </mu-card-header>
-          <mu-card-title :title="notifyTitle" />
+          
           <mu-card-text>
             {{notifyContent}}
           </mu-card-text>

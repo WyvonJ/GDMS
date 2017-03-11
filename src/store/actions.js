@@ -19,11 +19,11 @@ const stopLoading = (commit, start, timeAllowed = 400) => {
 let timeId
 const duration = 3000
 
-const showSnackbar = ( {commit }, payload ) => {
-    clearTimeout(timeId)
-    commit('SET_SNACKBAR_CONTENT',payload)
-    commit('SHOW_SNACKBAR',true)
-    timeId=setTimeout(()=>commit('SHOW_SNACKBAR',false),duration)
+const showSnackbar = ({ commit }, payload) => {
+  clearTimeout(timeId)
+  commit('SET_SNACKBAR_CONTENT', payload)
+  commit('SHOW_SNACKBAR', true)
+  timeId = setTimeout(() => commit('SHOW_SNACKBAR', false), duration)
 }
 
 //任何情况下都会执行的函数 写在catch之后
@@ -40,139 +40,151 @@ export default {
   showSnackbar,
   //帐号登录
   login({ commit }, payload) {
-      return axios.post('/login', payload)
-        .then(response => {
-          //response就是res.send发送过来的Object或status
-          if (response.data.state === 1) {
+    return axios.post('/login', payload)
+      .then(response => {
+        //response就是res.send发送过来的Object或status
+        if (response.data.state === 1) {
 
-            commit('SET_USER', payload)
-            commit('SET_USERINFO', {
-                userName: response.data.userName,
-                userType: response.data.userType
-              })
-              //把用户的名字发送过来
-            commit('SET_NOTIFICATION', response.data.notification)
-          } else {
-
-            return Promise.resolve(response.data.state)
-          }
-        })
-    },
-    stuSetContactData: ({ commit }, payload) => {
-      return axios.post('/student/stuSetContactData', payload)
-        .catch(error=>{
-            showSnackbar({commit} , '出了点小问题，请重试')
-            return Promise.reject(error)
+          commit('SET_USER', payload)
+          commit('SET_USERINFO', {
+            userName: response.data.userName,
+            userType: response.data.userType
           })
-    },
-    //学生获取题目
-    stuGetTopics: ({ commit }) => {
-      //设置进度条开始
-      const start = beginLoading(commit)
-      return axios.get('/student/stuGetTopics')
-        .then(response => {
+          commit('SET_NOTIFICATION', response.data.notification)
+        } else {
+          return Promise.resolve(response.data.state)
+        }
+      })
+  },
+  stuSetContactData: ({ commit }, payload) => {
+    return axios.post('/student/stuSetContactData', payload)
+      .catch(error => {
+        showSnackbar({ commit }, '出了点小问题，请重试')
+        return Promise.reject(error)
+      })
+  },
+  //学生获取题目
+  stuGetTopics: ({ commit }) => {
+    //设置进度条开始
+    const start = beginLoading(commit)
+    return axios.get('/student/stuGetTopics')
 
-          stopLoading(commit, start)
-            //提交
-          commit('SET_STU_TOPICS', response.data)
-        })
-    },
-    //学生提交已选题目
-    stuCommitSelection: ({ commit }, payload) => {
-      return axios.post('/student/stuCommitSelection', payload)
-        .catch(error => {
-          Promise.reject(error)
-        })
-    },
-    //学生查看选题情况
-    stuSelectionResult: ({ commit }, payload) => {
-      return axios.post('/student/stuSelectionResult',payload)
-        .then(response=>{
-          commit('SET_STU_FINAL_TOPIC',response.data)
-        })
-        .catch(error=>{
-          showSnackbar({commit} , '出了点小问题，请重试')
-          return Promise.reject(error)
-        })
-    },
-    //学生查看答辩分组
-    stuGrouping: ({ commit }) => {
+    .then(response => {
+        stopLoading(commit, start)
+          //提交
+        commit('SET_STU_TOPICS', response.data)
+      })
+      .catch(error => {
+        showSnackbar({ commit }, '出了点小问题，请重试')
+        return Promise.reject(error)
+      })
+  },
+  //学生提交已选题目
+  stuCommitSelection: ({ commit }, payload) => {
+    return axios.post('/student/stuCommitSelection', payload)
+      .then((response)=>{
+        if (response.data.state==1) {
+        showSnackbar({ commit }, '选题志愿提交成功')
+        }
+      })
+      .catch(error => {
+        showSnackbar({ commit }, '出了点小问题，请重试')
+        Promise.reject(error)
+      })
+  },
+  //学生查看选题情况
+  stuSelectionResult: ({ commit }, payload) => {
+    return axios.post('/student/stuSelectionResult', payload)
+      .then(response => {
+        commit('SET_STU_FINAL_TOPIC', response.data)
+      })
+      .catch(error => {
+        showSnackbar({ commit }, '出了点小问题，请重试')
+        return Promise.reject(error)
+      })
+  },
+  //学生查看答辩分组
+  stuGrouping: ({ commit }) => {
 
-    },
-    //学生给老师评价 POST评分
-    stuEvaluationToTch: ({ commit }, payload) => {
-      //
-    },
-    //学生提交联系信息
-    stuContactInfo: ({ commit }, payload) => {
+  },
+  //学生给老师评价 POST评分
+  stuEvaluationToTch: ({ commit }, payload) => {
+    //
+  },
+  //学生提交联系信息
+  stuContactInfo: ({ commit }, payload) => {
 
-    },
-    //学生更改密码
-    stuAccountInfo: ({ commit }, payload) => {
+  },
+  //学生更改密码
+  stuAccountInfo: ({ commit }, payload) => {
 
-    },
-    ///////////////////
-    //老师创建课题
-    tchCreateTopic: ({ commit }, payload) => {
-      return axios.post('/teacher/tchCreateTopic', payload)
-        .then(response => {
-          if (response.data.state === 1) {
-            payload._id = response.data._id
-            commit('TCH_CREATE_TOPIC', payload)
-          }
-        })
-    },
-    tchSetContactData: ({ commit }, payload) => {
-      return axios.post('/teacher/tchSetContactData', payload)
-          .catch(error=>{
-            showSnackbar({commit} , '出了点小问题，请重试')
-            return Promise.reject(error)
-          })
-    },
-    //载入老师课题
-    tchGetTopics: ({ commit }, payload) => {
-      return axios.post('/teacher/tchGetTopics', payload)
-        .then(response => {
-          console.log(response)
-          commit('SET_TCH_TOPIC_CARD', response.data)
-        })
-    },
-    tchGetCreatedTopics: ({ commit }, payload) => {
-      return axios.post('/teacher/tchGetCreatedTopics', payload)
-        .then(response => {
-          console.log(response)
-          commit('TCH_GET_CREATED_TOPICS', response.data)
-        })
-    },
-    //老师删除课题
-    tchDeleteTopic: ({ commit }, payload) => {
-      return axios.post('/teacher/tchDeleteTopic', payload)
-        .then(response => {
-          console.log(response)
-        })
-        .catch(error => {
+  },
+  ///////////////////
+  //老师创建课题
+  tchCreateTopic: ({ commit }, payload) => {
+    return axios.post('/teacher/tchCreateTopic', payload)
+      .then(response => {
+        if (response.data.state === 1) {
+          payload._id = response.data._id
+          commit('TCH_CREATE_TOPIC', payload)
+        }
+      })
+      .catch(error => {
+        showSnackbar({ commit }, '出了点小问题，请重试')
+        return Promise.reject(error)
+      })
+  },
+  tchSetContactData: ({ commit }, payload) => {
+    return axios.post('/teacher/tchSetContactData', payload)
+      .catch(error => {
+        showSnackbar({ commit }, '出了点小问题，请重试')
+        return Promise.reject(error)
+      })
+  },
+  //载入老师课题
+  tchGetTopics: ({ commit }, payload) => {
+    return axios.post('/teacher/tchGetTopics', payload)
+      .then(response => {
+        console.log(response)
+        commit('SET_TCH_TOPIC_CARD', response.data)
+      })
+  },
+  tchGetCreatedTopics: ({ commit }, payload) => {
+    return axios.post('/teacher/tchGetCreatedTopics', payload)
+      .then(response => {
+        console.log(response)
+        commit('TCH_GET_CREATED_TOPICS', response.data)
+      })
+  },
+  //老师删除课题
+  tchDeleteTopic: ({ commit }, payload) => {
+    return axios.post('/teacher/tchDeleteTopic', payload)
+      .then(response => {
+        console.log(response)
+      })
+      .catch(error => {
 
-        })
-    },
-    //确认学生选题
-    tchConfirmStudent: ({ commit }, payload) => {
-      return axios.post('/teacher/tchConfirmStudent', payload)
-        .then(response => {
-          //提交成功
-          //得到available 
-          var ava = 1
-          showSnackbar({commit},'确认学生选题成功')
-        })
-    },
-    tchSelectionResult: ({ commit }, payload) => {
-      return axios.post('/teacher/tchSelectionResult', payload)
-        .then(response => {
-          commit('SET_TCH_SELECTION_RESULT', response.data)
-        })
-    },
-    //提交学生评价
-    tchEvaluationToStu: ({ commit }, payload) => {
+      })
+  },
+  //确认学生选题
+  tchConfirmStudent: ({ commit }, payload) => {
+    return axios.post('/teacher/tchConfirmStudent', payload)
+      .then(response => {
+        //提交成功
+        //得到available 
+        var ava = 1
+        showSnackbar({ commit }, '确认学生选题成功')
+      })
+  },
+  tchSelectionResult: ({ commit }, payload) => {
+    return axios.post('/teacher/tchSelectionResult', payload)
+      .then(response => {
+        commit('SET_TCH_SELECTION_RESULT', response.data)
+      })
+  },
+  //提交学生评价
+  tchEvaluationToStu: ({ commit }, payload) => {
 
-    }
+  }
 
 }

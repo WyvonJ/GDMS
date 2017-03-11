@@ -5,10 +5,9 @@
 
   <h2 class="md-title" style="flex: 1">{{tableTitle}}</h2>
 
-  <mu-icon-button tooltip="刷新" icon="refresh"/>
+  <mu-icon-button icon="refresh" @click="refreshTopics"/>
 </md-toolbar>
     <mu-table :fixedHeader="fixedHeader" height="640"
-    :enableSelectAll="enableSelectAll" :multiSelectable="multiSelectable"
     :selectable="selectable" :showCheckbox="showCheckbox" @click.stop.self="rowClick">
     <mu-thead slot="header">
       <mu-tr>
@@ -34,7 +33,7 @@
   </mu-table>
 
   <mu-content-block>
-            <mu-pagination :total="total" :current="current" :pageSize="pageSize" @pageChange="handlePage" :pageSizeOption="pageSizeOption" showSizeChanger @pageSizeChange="handlePageSizeChange">
+            <mu-pagination :total="total" :current="currentPage" :pageSize="pageSize" @pageChange="handlePage" :pageSizeOption="pageSizeOption" showSizeChanger @pageSizeChange="handlePageSizeChange">
             </mu-pagination>
         </mu-content-block>
   </mu-paper>
@@ -45,7 +44,7 @@
 
 <script>
 //导入full build 以后更改需求
-import { mapState, mapActions,mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   data() {
@@ -55,9 +54,7 @@ export default {
   pageSizeOption: [10, 20, 30, 40],
   pageSize: 10,
   fixedHeader: true,
-  selectable: true,
-  multiSelectable: false,
-  snackbarMsg: '',
+  selectable: false,
   toggleTableBar: true,
   showCheckbox:false,
   lastSelection:0,
@@ -84,6 +81,27 @@ export default {
                     details: '虚拟景区以游客互动体验为中心，通过智能网络能够及时、透彻、全面地感知景区景点和基础服务设施，实现景区三维可视化，并且通过全景视图对景点周边景色进行漫游。在三维虚拟景区地图上配以全景视图、文字、图片等主要内容的Android手1机客户端能够为用户或游客提供情景式的观赏和漫游，非常有利于旅游景区的宣传和推广，提高旅游服务质量的同时提升景区品味。',
                     available: 3,
                     selected: 2
+                },{
+                    _id: 39,
+                    category: 0,
+                    title: '999基于Unity的三维场景的交互设计与实现',
+                    details: 'Vue 尝试尽可能高效的渲染元素，通常会复用已有元素而不是从头开始渲染。这登录方式之间切换',
+                    available: 3,
+                    selected: 3
+                }, {
+                    _id: 14,
+                    category: 0,
+                    title: '000基于Unity的三维场景的交互设计与实现',
+                    details: '虚拟景区以游客互动体验为中心，通过智能网络能够及时、透彻、全面地感知景区景点和基础服务设施，实现景区三维可视化，并且通过全景视图对景点周边景色进行漫游。在三维虚拟景区地图上配以全景视图、文字、图片等主要内容的Andro_id手机客户端能够为用户或游客提供情景式的观赏和漫游，非常有利于旅游景区的宣传和推广，提高旅游服务质量的同时提升景区品味。',
+                    available: 2,
+                    selected: 0
+                }, {
+                    _id: 5,
+                    category: 1,
+                    title: '111Anduirowhatdyyyusfuckisthatt设计与实现',
+                    details: '虚拟景区以游客互动体验为中心，通过智能网络能够及时、透彻、全面地感知景区景点和基础服务设施，实现景区三维可视化，并且通过全景视图对景点周边景色进行漫游。在三维虚拟景区地图上配以全景视图、文字、图片等主要内容的Android手1机客户端能够为用户或游客提供情景式的观赏和漫游，非常有利于旅游景区的宣传和推广，提高旅游服务质量的同时提升景区品味。',
+                    available: 3,
+                    selected: 2
                 }]
 }
 
@@ -101,6 +119,14 @@ export default {
         this.pageSize = newPageSize
          this.topicsChunk = _.chunk(this.topicsData, this.pageSize)
       this.topicsInDisplay = this.topicsChunk[this.currentPage-1]
+      },
+      refreshTopics(){
+        this.stuGetTopics()
+          .then(()=>{
+          this.total=this.topicsData.length
+          this.topicsChunk = _.chunk(this.topicsData, this.pageSize)
+          this.topicsInDisplay = this.topicsChunk[0]
+      })
       },
       click(index,topic){
         var cart = this.$parent.selectedInCart
@@ -125,6 +151,7 @@ export default {
               {
                 if (topic._id !== cart[0]._id && topic._id !== cart[1]._id) {
                   cart.push(topic)
+                  this.showSnackbar("已经选满三个志愿，请在已选课题面板中编辑或提交。")
                 } else {
                   this.showSnackbar("不能选择相同志愿！不能选择相同志愿！不能选择相同志愿！")
                 }
@@ -142,17 +169,18 @@ export default {
         }
 
       },
-      ...mapActions(['stuGetTopics','showSnackbar']),
-      ...mapMutations(['SHOW_SNACKBAR'])
+      ...mapActions(['stuGetTopics','showSnackbar'])
 
     },
     mounted() {
       var id = this.$root.getCookie('user')
-      console.log(id)
-      this.stuGetTopics().then(()=>{
+      /*this.stuGetTopics().then(()=>{
         this.total=this.topicsData.length
         this.topicsChunk = _.chunk(this.topicsData, this.pageSize)
         this.topicsInDisplay = this.topicsChunk[0]
+      })*/
+      this.topicsInDisplay = _.sortBy(this.topicsInDisplay,(o)=>{
+        return o._id
       })
     }
 }
@@ -163,39 +191,81 @@ export default {
 @import '../../style/variables.scss';
 .md-toolbar
 {
-    min-height: 48px;
-    h2.md-title{
-    	font-weight: lighter;
+    min-height: 40px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+
+    h2.md-title
+    {
+        font-weight: lighter;
+    }
+    .mu-icon-button{
+      padding: 0;
+      width: 36px;
+      height: 36px;
     }
 }
 
-	.all-selected-warn{
-		color: #f44336;
-	}
-.mu-table{
-	.mu-td:nth-child(4){
-		cursor: help;
-
-	}
-	.mu-td{
-		font-size: 14px;
-	}
-}
-
-.mu-tr.selected {
-    background-color: #fafafa;
+.all-selected-warn
+{
     color: #f44336;
 }
-.mu-tr.hover{
-    background-color: #efefef;
+.mu-table
+{
+    .mu-td:nth-child(4)
+    {
+        cursor: help;
+    }
+    .mu-td
+    {
+        font-size: 14px;
+        .mu-icon-button{
+          &:hover{
+            color: #f44336;
+          }
+          
 
+        }
+    }
+    .mu-tr
+    {
+        transition: $material-leave;
+    }
+    .mu-tr.hover
+{
+    background-color: #efefef;
 }
+}
+
 .mu-content-block
 {
     padding-left: calc(50% - 200px);
+    .mu-select-field
+    {
+        margin-bottom: 0 !important;
+    }
 }
-.mu-text-field-content{
-        padding-top: 12px !important;
-        padding-bottom: 6px !important;
-      }
+@media (max-width: 1280px)
+{
+    .mu-table
+    {
+        .mu-td
+        {
+            font-size: 13px;
+
+            height: 40px;
+        }
+        .mu-tr
+        {
+            height: 40px;
+        }
+        .mu-icon-button
+        {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+        }
+    }
+}
+
 </style>

@@ -5,7 +5,9 @@
       <div class="console-panel">
         <div class="logo">
           <img src="../../assets/img/gd_logo.png" alt="GDMS">
-          <p class="jnudm">JNUDM</p>
+          <p class="jnudm">
+            JNUDM
+          </p>
         </div>
         <mu-divider />
         <mu-menu :autoWidth="false" :maxHeight="320" :width=256 :desktop="true" :value="menuVal" @change="menuChange">
@@ -20,11 +22,18 @@
       <mu-divider />
       <div class="choice-cart">
         <transition name="slide-fade">
-          <span class="chosen-topics-title" v-if="selectedInCart[0]">已选课题</span>
+          <span class="chosen-topics-title" v-if="selectedInCart[0]">
+          &lt;已选课题&gt;
+          <md-tooltip md-direction="top">
+                选题数限制为三个<br/>
+                按照顺序表示第一、二、三志愿<br/>
+                每次对已选课题编辑后务必提交
+            </md-tooltip>
+          </span>
         </transition>
         <div class="topic-level">
           <transition-group tag="ul" name="slide-fade">
-            <li class="selected-item" v-for="(topic,index) in selectedInCart" v-dragging="{ item: topic, list: selectedInCart, group: 'topic' }" :key="topic._id">
+            <li class="selected-item" v-for="(topic,index) in selectedInCart" :class="{'selected-edit' : selectedEdit}" v-dragging="{ item: topic, list: selectedInCart, group: 'topic' }" :key="topic._id">
               <mu-avatar :size="20" :backgroundColor="selectedBgc[index]">
                 {{index+1}}
               </mu-avatar>
@@ -155,7 +164,7 @@ export default {
             	if (this.selectedInCart.length===0) return
               if (!this.$root.getCookie('user')){
                 alert('超时未操作，请重新登录')
-                this.$router.push('/')
+               // this.$router.push('/')
               }
                var selectedInCartWrapper = {
                     _id: this.$root.getCookie('user'),
@@ -163,11 +172,7 @@ export default {
                     second: this.selectedInCart[1]._id,
                     third: this.selectedInCart[2]._id
                 }
-                this.stuCommitSelection(selectedInCartWrapper).then(() => {
-                    this.$refs.snackbar.open()
-                }).catch((error) => {
-                    console.log(error)
-                })
+                this.stuCommitSelection(selectedInCartWrapper)
             },
             ...mapActions(['stuCommitSelection'])
         },
@@ -200,6 +205,18 @@ export default {
 
 <style lang="sass" rel="stylesheet/scss">
 @import '../../style/variables.scss';
+@keyframes selected-list{
+    0%{
+        background-color: #f2f2f2;
+    }
+    50%{
+        background-color: #fefefe;
+    }
+
+    100%{
+        background-color: #f2f2f2;
+    }
+}
 .choice-cart
 {
     margin-top: 20px;
@@ -234,13 +251,25 @@ export default {
             margin-top: 0;
 
             cursor: move;
-            transition: all .25s cubic-bezier(.03,.46,.43,.95);
+            transition: $material-enter;
             &:hover
             {
                 background-color: rgba(0,0,0,.1);
             }
+
+                    &.selected-edit
+                    {
+                        left: -48px;
+                    }
+             &.selected-edit
+            {
+                        animation: 1.4s selected-list infinite;
+    -webkit-box-shadow: $material-shadow-1dp;
+       -moz-box-shadow: $material-shadow-1dp;
+            box-shadow: $material-shadow-1dp;
+                    }
             .mu-avatar
-                {
+            {
                   position: absolute;
                     font-family: $fontCenturyGothic;
                     left: 8px;
@@ -250,13 +279,12 @@ export default {
             .selected-item-content
             {
                 position: absolute;
-                top: 14px;
+                top: 10px;
                 left: 32px;
 
                 width: 218px;
-                height: 40px;
+                height: 44px;
 
-                
                 p
                 {
                     font-size: 12px;
@@ -267,55 +295,31 @@ export default {
 
                     display: inline-block;
 
-                    width: 240px;
+                    width: 218px;
 
                     transition: $swift-ease-out;
                     text-align: left;
-                    &.selected-edit
-                    {
-                        left: -36px;
-                    }
                 }
                 .mu-icon-button
                 {
                     //delete button
                     position: absolute;
                     bottom: 6px;
-                    left: 186px;
+                    left: 224px;
+                    border-radius: 0;
+                    background-color: #f44336;
 
-                    color: #f44336;
-                    &.selected-edit
-                    {
-                        left: 176px;
-                    }
+    -webkit-box-shadow: $material-shadow-1dp;
+       -moz-box-shadow: $material-shadow-1dp;
+            box-shadow: $material-shadow-1dp;
+                    color: #fff;
                 }
             }
         }
         .edit-button
         {
-            position: absolute;
-            left: 40px;
-        }
-        .edit-button-transition-enter-active,
-        .edit-button-transition-leave-active,
-        {
+            position: relative;
             transition: $swift-ease-out;
-        }
-        .edit-button-transition-enter,
-        .edit-button-transition-leave,
-        {
-            &.selected-t1
-            {
-                top: 440px;
-            }
-            &.selected-t2
-            {
-                top: 490px;
-            }
-            &.selected-t3
-            {
-                top: 540px;
-            }
         }
     }
 }

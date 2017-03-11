@@ -1,46 +1,57 @@
 <template>
   <div class="main-content" v-if="gotTopic">
     <div class="student-status-card">
-          <mu-paper :zDepth="1">
-            <div class="card-title">
-            {{card._id}}. {{card.title}}
-            <mu-avatar backgroundColor="lightBlue500" :size="32" icon="check" />
-            </div>
-            
-            <div class="teacher-info">
-            <div class="keys">
-              MENTOR<br>
-              TEL<br>
-              EMAIL<br>
-              QQ <br>
-              WECHAT<br>
-              OFFICE
-            </div>
-            <div class="values">
-              {{card.name}}<br>
-              {{card.tel}}<br>
-              <a :href="'mailto:'+card.email">{{card.email}}</a><br>
-              {{card.qq}}<br>
-              {{card.wechat}}<br>
-              {{card.office}}
-            </div>
-              
-            </div>
-            <div class="card-description">
-            <h3>DESCRIPTION</h3>
-              {{card.details}}
-            </div>
-            <span class="category-tag">{{card.category===0?'论文':'设计'}}</span>
-          </mu-paper>
+      <div class="teacher-info">
+      <div class="teacher-name">
+         <mu-avatar icon="person" :size="44" :iconSize="36" />
+        <div class="name">
+            {{card.name}}
+        </div>
+        <mu-avatar icon="check" backgroundColor="greenA700" :size="36" :iconSize="24" class="check-icon"/>
+      </div>
+       
+        <div class="tel chip">
+          <mu-icon value="call" :size="18" /> {{card.tel}}
+        </div>
+        <div class="email chip">
+          <mu-icon value="mail" :size="18" />
+          <a :href="'mailto:'+card.email">{{card.email}}</a>
+        </div>
+        <div class="office chip">
+          <mu-icon value="desktop_mac" :size="18" /> {{card.office}}
+        </div>
+        <div class="qq chip">
+          <img src="../../assets/icon/qq.svg" alt="QQ" /> {{card.qq}}
+        </div>
+        <div class="wechat chip">
+          <img src="../../assets/icon/wechat.svg" alt="WECHAT" /> {{card.wechat}}
+        </div>
+        
+      </div>
+      <div class="topic-wrapper">
+        <div class="topic-info">
+          {{card._id}}
+        </div>
+        <div class="topic-info">
+          {{card.title}}
+        </div>
+        <div class="topic-info">
+          {{card.details}}
+        </div>
+        <span class="category-tag">{{card.category===0?'论文':'设计'}}
+        </span>
     </div>
+      </div>
+      
   </div>
   <div class="main-content" v-else>
-       <div class="empty-card-title" :class="{'hide':open}" @click="toggleEmpty">
-       这里空空如也！
-       <p class="intrgging">不是说了啥都没有么 (゜-゜)つロ。</p>
-       </div>
+    <div class="empty-card-title" :class="{'hide':open}" @click="toggleEmpty">
+      这里空空如也！
+      <p class="intrgging">不是说了啥都没有么 (゜-゜)つロ。</p>
+    </div>
   </div>
 </template>
+
 
 <script>
 import {mapActions,mapState} from 'vuex'
@@ -50,6 +61,16 @@ import {mapActions,mapState} from 'vuex'
         open:false,
         gotTopic:true,
         card: {
+          _id:4,
+          title:'江南大学图书馆阅读信息的价值发掘与可视化表达',
+          name:'郭振芳',
+          tel:'18645910268',
+          qq:'552084209',
+          wechat:'welovevue',
+          email:'fangg@gmail.com',
+          office:'数媒楼503',
+          category:0,
+          details:'基于机器学习时兴的迁移学习技术，学习已有知识应用到现有数据集上的分析处理。该技术将在医学成像MR/CT优化处理上进行应用实践。'
         }
       }
     },
@@ -68,103 +89,175 @@ import {mapActions,mapState} from 'vuex'
                 alert('超时未操作，请重新登录')
                 return this.$router.push('/')
               }*/
-              console.log(user)
-
-      this.stuSelectionResult({studentId:user})
+      /*this.stuSelectionResult({studentId:user})
         .then(()=>{
         if (this.affirmativeTopic.length!=0) {
           this.gotTopic=true
           this.card=this.affirmativeTopic
           console.log(this.affirmativeTopic)
         }
-      })
+      })*/
     }
   }
 </script>
 
-<style lang="sass" rel="stylesheet/scss">
+<style lang="sass" rel="stylesheet/scss" scoped>
 @import '../../style/variables.scss';
-//改成绝对定位------------------------------------
 .student-status-card
 {
-  max-width: 480px; 
-  font-size: 16px;
-    .mu-paper
+    font-size: 16px;
+
+    position: relative;
+
+    max-width: 480px;
+
+    transition: $material-enter;
+
+    color: rgba(0,0,0,.6);
+    border-radius: 3px;
+    -webkit-box-shadow: $material-shadow-1dp;
+       -moz-box-shadow: $material-shadow-1dp;
+            box-shadow: $material-shadow-1dp;
+    &:hover
     {
+        transform: translateY(-4px);
+
+        -webkit-box-shadow: $material-shadow-6dp;
+           -moz-box-shadow: $material-shadow-6dp;
+                box-shadow: $material-shadow-6dp;
+    }
+    .teacher-info
+    {
+        padding: 16px;
+
+        background-color: #efefef;
+    }
+    .chip
+    {
+        font-size: 14px;
+
         position: relative;
-      transition: $material-enter;
-      .category-tag
-            {
-                font-size: 13px;
 
-                position: absolute;
-                right: 2px;
-                bottom: 0;
+        display: inline-block;
 
-                color: rgba(0, 0, 0, .4);
-            }
+        width: auto;
+        height: 32px;
+        margin: 6px;
+        padding: 2px 12px;
+
+        transition: $material-enter;
+
+        border: 1px #efefef solid;
+        border-radius: 16px;
+        background-color: #fff;
         &:hover
         {
-            transform: translateY(-6px);
-            -webkit-box-shadow: $material-shadow-9dp;
-               -moz-box-shadow: $material-shadow-9dp;
-                    box-shadow: $material-shadow-9dp;
+            -webkit-box-shadow: $material-shadow-1dp;
+               -moz-box-shadow: $material-shadow-1dp;
+                    box-shadow: $material-shadow-1dp;
         }
-    }
-        .card-title
+        .mu-icon
         {
             position: relative;
-
-            padding: 8px;
-            background-color: #f44336;
-
-            color: #fff;
-            border-top-left-radius: 2px;
-            border-top-right-radius: 2px;
-            .mu-avatar
-            {
-                position: absolute;
-                right: -16px;
-                bottom: -16px;
-                //关闭文本选择
-
-                -webkit-user-select:      none;
-                   -moz-user-select: -moz-none;
-                    -ms-user-select:      none;
-                        user-select:      none;
-
-                -khtml-user-select: none;
-            }
+            top: 5px;
         }
-        .teacher-info{
-          padding: 8px 16px;
-          
-          .keys{
-            display: inline-block;
-          }
-          .values{
-            margin-left: 24px;
-            display: inline-block;
-            a{
-              color: #000;
-              &:hover{
-                text-decoration: none;
-                color: #f44336;
-              }
-            }
-          }
-        }
-        .card-description
+        img
         {
-          
-          padding: 8px 16px 16px 16px;
-          h3{
-            margin-bottom: 12px;
-            font-weight: 100;
-          }
+            position: relative;
+            bottom: 2px;
 
-            
+            height: 30px;
         }
     }
+    .teacher-name
+    {
+        line-height: 24px;
+
+        margin-bottom: 18px;
+        .name
+        {
+            font-size: 24px;
+
+            position: relative;
+            bottom: 6px;
+            left: 18px;
+
+            display: inline-block;
+        }
+        .check-icon
+        {
+            position: absolute;
+            top: 21px;
+            right: 16px;
+
+            cursor: default;
+            transition: $material-enter;
+            &:hover
+            {
+                transform: rotateZ(360deg);
+            }
+        }
+    }
+    .email
+    {
+        a
+        {
+            margin-left: 4px;
+
+            text-decoration: none !important;
+
+            color: rgba(0,0,0,.5) !important;
+        }
+    }
+    .topic-wrapper
+    {
+        position: relative;
+
+        padding: 16px 32px;
+        .topic-info
+        {
+            margin-top: 16px;
+            padding: 6px 12px;
+
+            border-left: 1px #dcdcdc
+            solid;
+            &:before
+            {
+                position: absolute;
+                top: 18px;
+                left: 26px;
+
+                width: 12px;
+                height: 12px;
+
+                content: '';
+                border: 3px #f44336 solid;
+                border-radius: 50%;
+            }
+            &:nth-child(2)
+            {
+                min-height: 52px;
+            }
+            &:nth-child(2):before
+            {
+                top: 66px;
+            }
+            &:nth-child(3):before
+            {
+                top: 134px;
+            }
+        }
+        .category-tag
+        {
+            font-size: 14px;
+
+            position: absolute;
+            top: 6px;
+            right: 9px;
+
+            color: rgba(0,0,0,.4);
+        }
+    }
+}
 
 </style>
