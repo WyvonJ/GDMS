@@ -45,7 +45,7 @@
   				</mu-card-actions>
 				</mu-card>
   		</md-tab>
-		</mu-tabs>
+		</md-tabs>
 	</div>
 </template>
 

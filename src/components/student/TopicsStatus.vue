@@ -4,7 +4,7 @@
           <mu-paper :zDepth="1">
             <div class="card-title">
             {{card._id}}. {{card.title}}
-            <mu-avatar slot="right" backgroundColor="lightBlue500" :size="32" icon="check">
+            <mu-avatar slot="right" backgroundColor="lightBlue500" :size="32" icon="check"/>
             </div>
             
             <div class="teacher-info">
