@@ -1,7 +1,7 @@
 <template>
 <transition name="main-transition">
   <div>
-  <span class="title">在开始今年的毕业设计前，还有一点小小的信息要填</span>
+  <span class="title">在开始今年的毕业设计前，还有一点小小的信息要填。</span>
   <mu-icon value="edit" :size="24" />
   <div class="info-container">
     <mu-stepper :activeStep="activeStep" orientation="vertical">
@@ -28,6 +28,17 @@
           <mu-flat-button label="上一步" class="step-button" @click="handlePrev" />
         </mu-step-content>
       </mu-step>
+      <mu-step v-if="userType">
+        <mu-step-label>
+          请填写您的办公室位置
+          <br>
+        </mu-step-label>
+        <mu-step-content>
+          <mu-text-field icon="desktop_mac" hintText="OFFICE" v-model="office" />
+          <mu-raised-button label="下一步" class="step-button" @click="handleOffice" secondary/>
+          <mu-flat-button label="上一步" class="step-button" @click="handlePrev" />
+        </mu-step-content>
+      </mu-step>
       <mu-step>
         <mu-step-label>
           附加联系信息（可选）
@@ -44,17 +55,7 @@
           <mu-flat-button label="上一步" class="step-button" @click="handlePrev" />
         </mu-step-content>
       </mu-step>
-      <mu-step v-if="userType">
-        <mu-step-label>
-          请填写您的办公室位置
-          <br>
-        </mu-step-label>
-        <mu-step-content>
-          <mu-text-field icon="desktop_mac" hintText="OFFICE" v-model="office" />
-          <mu-raised-button label="下一步" class="step-button" @click="handleOffice" secondary/>
-          <mu-flat-button label="上一步" class="step-button" @click="handlePrev" />
-        </mu-step-content>
-      </mu-step>
+      
       <mu-step v-if="userType">
         <mu-step-label>
           请选择您的研究领域以及技艺占比（重要）
@@ -82,7 +83,7 @@
         </mu-step-label>
         <mu-step-content>
           <div>
-            <mu-text-field hintText="自我介绍" v-model.trim="intro" multiLine :rows="3" :rowsMax="6" :maxLength="50" />
+            <mu-text-field hintText="自我介绍" v-model.trim="intro" multiLine @textOverflow="handleOverflow" :errorText="introError" :rows="3" :rowsMax="6" :maxLength="80" />
           </div>
           <mu-raised-button label="下一步" class="step-button" @click="handleIntro" secondary/>
           <mu-flat-button label="上一步" class="step-button" @click="handlePrev" />
@@ -120,6 +121,7 @@ export default {
         telError: '',
         emailError:'',
         fieldsError:'',
+        introError:'',
         userType:0,
         classratio:50,
           account:'',
@@ -136,7 +138,8 @@ export default {
     },
     computed: {
       finished() {
-        return this.activeStep > 3
+        var steps=(this.userType ? 4 : 3)
+        return this.activeStep > steps
       }
     },
     methods: {
@@ -149,10 +152,11 @@ export default {
         this.tel=tel
         if(tel.length!=11){
           //好像能输入小数点 需改进
-          this.telError='请输入正确的手机号码'
+          this.telError='请输入正确的手机号码。'
         }else{
           this.activeStep++
-        }this.activeStep++
+        }
+          this.activeStep++
         
       },
       fieldsChange(value){
@@ -161,7 +165,7 @@ export default {
       handleFields(){
 
         if (this.fields.length == 0) {
-          return this.fieldsError = "还没选择课题研究方向！"
+          return this.fieldsError = "还没选择课题研究方向。"
         }else{
            this.activeStep++
         }
@@ -171,7 +175,7 @@ export default {
          if(this.isEmail(this.email)){
            this.activeStep++
         }else{
-          this.emailError='请输入正确格式的邮箱地址'
+          this.emailError='请输入正确格式的邮箱地址。'
         }this.activeStep++
       },
       handleAdd() {
@@ -181,7 +185,12 @@ export default {
         this.activeStep++
       },
       handleIntro(){
-        this.activeStep++
+        if (this.intro.length<=80) {
+          this.activeStep++
+        }
+      },
+      handleOverflow(){
+        this.introError="字数超过了，再精简点。"
       },
       handlePrev() {
         this.activeStep--
@@ -233,72 +242,90 @@ export default {
         this.emailError=''
         this.telError=''
         this.fieldsError=''
+        this.introError=''
       },
       ...mapActions(['stuSetContactData','tchSetContactData'])
     },
     mounted(){
-      this.userType=this.$store.state.userInfo.userType
+      //this.userType=this.$store.state.userInfo.userType
     },
     watch:{
       email:'clearError',
       tel:'clearError',
-      fields:'clearError'
+      fields:'clearError',
+      intro:'clearError'
     }
 }
 
 </script>
 
 <style lang="sass" rel="stylesheet.scss" scoped>
-span.title{
-  margin-top: 50px;
-  padding: 24px;
-  font-weight: 100;
-  display: inline-block;
-  font-size: 28px;
-  line-height: 28px;
+span.title
+{
+    font-size: 28px;
+    font-weight: 100;
+    line-height: 28px;
+
+    display: inline-block;
+
+    margin-top: 50px;
+    padding: 24px;
 }
-.info-container{
-  margin: 4vw auto;
-  max-width: 380px;
-  max-height: 600px;
+.info-container
+{
+    max-width: 380px;
+    max-height: 600px;
+    margin: 4vw auto;
 }
-.mu-text-field-multiline{
-  width: 300px;
-  height: 70px;
+.mu-text-field-multiline
+{
+    width: 300px;
+    height: 70px;
 }
 
-.step-button {
-  margin-top: 12px;
-  margin-right: 12px;
+.step-button
+{
+    margin-top: 12px;
+    margin-right: 12px;
 }
-.slider{
-  margin-top: 12px;
-  height: 24px;
-  span{
-    font-size: 12px;
-    display: inline-block;
-    position: absolute;
-    top: 15px;
-  }
-  .class-left{
-    left: 0;
-  }
-  .class-right{
-    right: 0
-  }
-  .mu-slider{
-    width: 200px;
-    position: absolute;
-    left: 60px;
-    display: inline-block;
-    margin-bottom: 0;
-  }
+.slider
+{
+    height: 24px;
+    margin-top: 12px;
+    span
+    {
+        font-size: 12px;
 
+        position: absolute;
+        top: 15px;
+
+        display: inline-block;
+    }
+    .class-left
+    {
+        left: 0;
+    }
+    .class-right
+    {
+        right: 0;
+    }
+    .mu-slider
+    {
+        position: absolute;
+        left: 60px;
+
+        display: inline-block;
+
+        width: 200px;
+        margin-bottom: 0;
+    }
 }
-.fields{
-  
-  .mu-text-field{
-    width: 320px !important;
+.fields
+{
+    .mu-text-field
+    {
+        width: 320px !important;
+    }
 }
-}
+
 </style>

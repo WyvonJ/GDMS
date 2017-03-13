@@ -53,7 +53,19 @@ export default {
         showHelp: true,
         snackbarText: '',
         currentRef:'',
-        cardData: []
+        cardData: [{
+          _id:55,
+          title:'对象用于规定在文本中检索的内容',
+          available:3,
+          firststudents:[{
+            _id:'1030514321',
+            name:'李云涛',
+            gender:'男',
+            gpa:3.5,
+            intro:'风速达绿化覆盖'
+          }]
+
+        }]
       }
     },
     computed: {

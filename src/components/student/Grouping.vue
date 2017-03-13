@@ -1,45 +1,17 @@
 <template>
-  <div class="main-content" v-if="gotTopic">
-    <div class="student-status-card">
-      <div class="teacher-info">
-      <div class="teacher-name">
-         <mu-avatar icon="person" :size="44" :iconSize="36" />
-        <div class="name">
-            {{card.name}}
+  <div class="main-content" v-if="gotGroup">
+    <div class="group-status-card">
+      <div class="teacher-wrapper">
+      <span class="card-title">TEACHER</span>
+        <div class="chip" v-for="(teacher,index) in card.teachers">
+          <mu-icon value="account_circle" color="greenA700" :size="18" /> {{teacher}}
         </div>
-        <mu-avatar icon="check" backgroundColor="greenA700" :size="36" :iconSize="24" class="check-icon"/>
       </div>
-       
-        <div class="tel chip">
-          <mu-icon value="call" :size="18" /> {{card.tel}}
+      <div class="student-wrapper">
+      <span class="card-title">STUDENT</span>
+      <div class="chip" v-for="(student,index) in card.students">
+          <mu-icon value="face" color="blue500" :size="18" /> {{student}}
         </div>
-        <div class="email chip">
-          <mu-icon value="mail" :size="18" />
-          <a :href="'mailto:'+card.email">{{card.email}}</a>
-        </div>
-        <div class="office chip">
-          <mu-icon value="desktop_mac" :size="18" /> {{card.office}}
-        </div>
-        <div class="qq chip">
-          <img src="../../assets/icon/qq.svg" alt="QQ" /> {{card.qq}}
-        </div>
-        <div class="wechat chip">
-          <img src="../../assets/icon/wechat.svg" alt="WECHAT" /> {{card.wechat}}
-        </div>
-        
-      </div>
-      <div class="topic-wrapper">
-        <div class="topic-info">
-          {{card._id}}
-        </div>
-        <div class="topic-info">
-          {{card.title}}
-        </div>
-        <div class="topic-info">
-          {{card.details}}
-        </div>
-        <span class="category-tag">{{card.category===0?'论文':'设计'}}
-        </span>
     </div>
       </div>
       
@@ -59,18 +31,10 @@ import {mapActions,mapState} from 'vuex'
     data(){
       return {
         open:false,
-        gotTopic:true,
+        gotGroup:true,
         card: {
-          _id:4,
-          title:'江南大学图书馆阅读信息的价值发掘与可视化表达',
-          name:'郭振芳',
-          tel:'18645910268',
-          qq:'552084209',
-          wechat:'welovevue',
-          email:'fangg@gmail.com',
-          office:'数媒楼503',
-          category:0,
-          details:'基于机器学习时兴的迁移学习技术，学习已有知识应用到现有数据集上的分析处理。该技术将在医学成像MR/CT优化处理上进行应用实践。'
+         teachers:['程砚秋','尚小云','荀慧生','马连良','杨宝森'],
+         students:['谭富英','裘盛戎','周信芳','余叔岩','张君秋','奚啸伯','杜月笙']
         }
       }
     },
@@ -92,7 +56,7 @@ import {mapActions,mapState} from 'vuex'
       /*this.stuSelectionResult({studentId:user})
         .then(()=>{
         if (this.affirmativeTopic.length!=0) {
-          this.gotTopic=true
+          this.gotGroup=true
           this.card=this.affirmativeTopic
           console.log(this.affirmativeTopic)
         }
@@ -103,7 +67,7 @@ import {mapActions,mapState} from 'vuex'
 
 <style lang="sass" rel="stylesheet/scss" scoped>
 @import '../../style/variables.scss';
-.student-status-card
+.group-status-card
 {
     font-size: 16px;
 
@@ -126,9 +90,15 @@ import {mapActions,mapState} from 'vuex'
            -moz-box-shadow: $material-shadow-6dp;
                 box-shadow: $material-shadow-6dp;
     }
-    .teacher-info
+    .card-title{
+      position: absolute;
+      left: 12px;
+      top: 12px;
+      font-family: Century Gothic;
+    }
+    .teacher-wrapper
     {
-        padding: 16px;
+        padding: 36px 16px 16px 8px;
 
         background-color: #efefef;
     }
@@ -143,7 +113,7 @@ import {mapActions,mapState} from 'vuex'
         width: auto;
         height: 32px;
         margin: 6px;
-        padding: 2px 12px;
+        padding: 2px 16px 2px 12px;
 
         transition: $material-enter;
 
@@ -161,103 +131,17 @@ import {mapActions,mapState} from 'vuex'
             position: relative;
             top: 5px;
         }
-        img
-        {
-            position: relative;
-            bottom: 2px;
-
-            height: 30px;
-        }
     }
-    .teacher-name
-    {
-        line-height: 24px;
-
-        margin-bottom: 18px;
-        .name
-        {
-            font-size: 24px;
-
-            position: relative;
-            bottom: 6px;
-            left: 18px;
-
-            display: inline-block;
-        }
-        .check-icon
-        {
-            position: absolute;
-            top: 21px;
-            right: 16px;
-
-            cursor: default;
-            transition: $material-enter;
-            &:hover
-            {
-                transform: rotateZ(360deg);
-            }
-        }
-    }
-    .email
-    {
-        a
-        {
-            margin-left: 4px;
-
-            text-decoration: none !important;
-
-            color: rgba(0,0,0,.5) !important;
-        }
-    }
-    .topic-wrapper
+    .student-wrapper
     {
         position: relative;
 
-        padding: 16px 32px;
-        .topic-info
-        {
-            margin-top: 16px;
-            padding: 6px 12px;
-
-            border-left: 1px #dcdcdc
-            solid;
-            &:before
-            {
-                position: absolute;
-                top: 18px;
-                left: 26px;
-
-                width: 12px;
-                height: 12px;
-
-                content: '';
-                border: 3px #f44336 solid;
-                border-radius: 50%;
-            }
-            &:nth-child(2)
-            {
-                min-height: 52px;
-            }
-            &:nth-child(2):before
-            {
-                top: 66px;
-            }
-            &:nth-child(3):before
-            {
-                top: 134px;
-            }
+        padding: 36px 16px 16px 8px;
+        .chip{
+          background-color: #efefef;
         }
-        .category-tag
-        {
-            font-size: 14px;
-
-            position: absolute;
-            top: 6px;
-            right: 9px;
-
-            color: rgba(0,0,0,.4);
         }
-    }
+        
 }
 
 </style>

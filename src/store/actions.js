@@ -1,9 +1,9 @@
 import axios from 'axios'
-//把所有Ajax处理全部放在这里
-//传入
-//开始展示loading spinner
+//把所有Ajax处理全部放在这里 
+//传入  
+//开始展示loading spinner 
 const beginLoading = commit => {
-    //提交loading显示的mutation
+    //提交loading显示的mutation  
     commit('LOADING_TOGGLE', true)
     return Date.now()
   }
@@ -39,7 +39,7 @@ Promise.prototype.finally = function(callback) {
 export default {
   showSnackbar,
   //帐号登录
-  login({ commit }, payload) {
+  login: ({ commit }, payload) => {
     return axios.post('/login', payload)
       .then(response => {
         //response就是res.send发送过来的Object或status
@@ -59,7 +59,7 @@ export default {
   stuSetContactData: ({ commit }, payload) => {
     return axios.post('/student/stuSetContactData', payload)
       .catch(error => {
-        showSnackbar({ commit }, '出了点小问题，请重试')
+        showSnackbar({ commit }, '出了点小问题，再试试')
         return Promise.reject(error)
       })
   },
@@ -75,20 +75,20 @@ export default {
         commit('SET_STU_TOPICS', response.data)
       })
       .catch(error => {
-        showSnackbar({ commit }, '出了点小问题，请重试')
+        showSnackbar({ commit }, '出了点小问题，再试试')
         return Promise.reject(error)
       })
   },
   //学生提交已选题目
   stuCommitSelection: ({ commit }, payload) => {
     return axios.post('/student/stuCommitSelection', payload)
-      .then((response)=>{
-        if (response.data.state==1) {
-        showSnackbar({ commit }, '选题志愿提交成功')
+      .then((response) => {
+        if (response.data.state === 1) {
+          showSnackbar({ commit }, '选题志愿提交成功')
         }
       })
       .catch(error => {
-        showSnackbar({ commit }, '出了点小问题，请重试')
+        showSnackbar({ commit }, '出了点小问题，再试试')
         Promise.reject(error)
       })
   },
@@ -99,12 +99,16 @@ export default {
         commit('SET_STU_FINAL_TOPIC', response.data)
       })
       .catch(error => {
-        showSnackbar({ commit }, '出了点小问题，请重试')
+        showSnackbar({ commit }, '出了点小问题，再试试')
         return Promise.reject(error)
       })
   },
   //学生查看答辩分组
-  stuGrouping: ({ commit }) => {
+  stuGrouping: ({ commit }, payload) => {
+    return axios.post('/student/stuGrouping', payload)
+      .then(response => {
+        commit('SET_STU_GROUPING', response.data)
+      })
 
   },
   //学生给老师评价 POST评分
@@ -119,7 +123,6 @@ export default {
   stuAccountInfo: ({ commit }, payload) => {
 
   },
-  ///////////////////
   //老师创建课题
   tchCreateTopic: ({ commit }, payload) => {
     return axios.post('/teacher/tchCreateTopic', payload)
@@ -130,14 +133,14 @@ export default {
         }
       })
       .catch(error => {
-        showSnackbar({ commit }, '出了点小问题，请重试')
+        showSnackbar({ commit }, '出了点小问题，再试试')
         return Promise.reject(error)
       })
   },
   tchSetContactData: ({ commit }, payload) => {
     return axios.post('/teacher/tchSetContactData', payload)
       .catch(error => {
-        showSnackbar({ commit }, '出了点小问题，请重试')
+        showSnackbar({ commit }, '出了点小问题，再试试')
         return Promise.reject(error)
       })
   },
@@ -162,17 +165,17 @@ export default {
       .then(response => {
         console.log(response)
       })
-      .catch(error => {
-
+      .catch((error) => {
+        this.showSnackbar('出了点问题，再试试')
+        return Promise.reject(error)
       })
+
   },
   //确认学生选题
   tchConfirmStudent: ({ commit }, payload) => {
     return axios.post('/teacher/tchConfirmStudent', payload)
       .then(response => {
-        //提交成功
-        //得到available 
-        var ava = 1
+        //提交成功 得到available 
         showSnackbar({ commit }, '确认学生选题成功')
       })
   },

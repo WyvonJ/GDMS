@@ -1,7 +1,7 @@
 <template>
-  <header class="nav-bar">
+  <header class="nav-bar" :class="{'focused':searchFocus}">
     <mu-icon-button icon="menu" @click="toggleNav"></mu-icon-button>
-    <mu-text-field hintText="SEARCH" v-if="showSearchInput" type="text" icon="search" />
+    <mu-text-field hintText="SEARCH" v-if="showSearchInput" type="text" icon="search" @focus="focus" @blur="blur"/>
     <div class="noti-info">
       <mu-icon-button tooltip="通知" class="notify-button" ref="notify" icon="notifications" @click="showNotification" />
       <mu-icon-button tooltip="注销" class="logout-button" ref="button" icon="exit_to_app" @click="logout" />
@@ -46,7 +46,8 @@ export default {
     return {
       notification: 1,
       openNotification: false,
-      trigger: null
+      trigger: null,
+      searchFocus:false
     }
   },
   methods: {
@@ -55,6 +56,12 @@ export default {
     },
     handleClose(e) {
       this.openNotification = false
+    },
+    focus(){
+      this.searchFocus=true
+    },
+    blur(){
+      this.searchFocus=false
     },
     toggleNav() {
       this.$parent.toggleNav()
@@ -77,7 +84,7 @@ export default {
 
 </script>
 
-<style lang="sass" rel="stylesheet/scss">
+<style lang="sass" rel="stylesheet/scss" scoped>
 @import "../../style/variables";
 
 .nav-bar
@@ -91,12 +98,17 @@ export default {
     width: auto;
     height: 64px;
 
-    transition: $swift-ease-out;
-
-    background-color: #fafafa;
     -webkit-box-shadow: $material-shadow-1dp;
        -moz-box-shadow: $material-shadow-1dp;
             box-shadow: $material-shadow-1dp;
+    &.focused{
+      -webkit-box-shadow: $material-shadow-5dp;
+       -moz-box-shadow: $material-shadow-5dp;
+            box-shadow: $material-shadow-5dp;
+    }
+    transition: $swift-ease-out;
+
+    background-color: #fafafa;
     &.nav-hide
     {
         left: 0;
@@ -108,12 +120,12 @@ export default {
     }
     .notify-button{
       position: absolute;
-      right: 0px;
+      right: -32px;
       top: 8px;
     }
     .logout-button{
       position: absolute;
-      right: -48px;
+      right: -80px;
       top: 8px;
     }
     .mu-text-field
@@ -141,5 +153,23 @@ export default {
         text-align: left;
     }
 }
+@media (max-width: 1280px){
+  .nav-bar{
+    height: 56px;
 
+    >.mu-icon-button{
+      top: 4px;
+    }
+    .notify-button{
+      top: 4px;
+    }
+    .logout-button{
+      top: 4px;
+    }
+    .mu-text-field
+    {
+        top: 6px;
+    }
+  }
+}
 </style>

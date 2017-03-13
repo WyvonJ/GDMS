@@ -124,17 +124,13 @@ export default {
           available: this.available
         }
 
-        //拿到数据库生成的id
+        //重新取得所有topics
         this.tchCreateTopic(currentTopic)
-          .catch(err => {
-            this.showSnackbar("出了点问题，请重试")
-            return Promise.reject(err)
-          })
           .then(() => {
-            this.topicsData.push(currentTopic)
-            this.showSnackbar("创建成功，请在管理面板查看")
-          })
-          .then(() => {
+            this.tchGetCreatedTopics({
+              teacherId: this.$root.getCookie('user'),
+            })
+
             this.fields = []
             this.titleText = ''
             this.detailText = ''
@@ -151,11 +147,10 @@ export default {
             this.tchGetCreatedTopics({
                 teacherId: this.$root.getCookie('user'),
               })
-            .catch((error)=>{
-              this.showSnackbar("出了点问题，请重试")
-              return Promise.reject(error)
-            })
-            .then(() => {
+              .then(() => {
+                this.topicsData = this.createdTopics
+              })
+              .then(() => {
                 this.showSnackbar("课题已删除")
                 this.topicsData = this.createdTopics
               })
@@ -191,8 +186,6 @@ export default {
         //}else{
         //  this.$router.push('/')
         //}
-
-
     },
     watch: {
       fields: 'clearError',

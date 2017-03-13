@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-   <wyvonj-header :class="{'nav-hide': !openDrawer}" showSearchInput :username="username" :notifyTitle="notifyTitle"></wyvonj-header>
+   <wyvonj-header :class="{'nav-hide': !openDrawer}" :showSearchInput="menuVal==1" :username="username" :notifyTitle="notifyTitle"></wyvonj-header>
     <mu-drawer @hide="handleHide" @close="handleClose" :open="openDrawer" :docked="docked" class="sidebar-drawer" :zDepth="1">
       <div class="console-panel">
         <div class="logo">
@@ -177,7 +177,12 @@ export default {
             ...mapActions(['stuCommitSelection'])
         },
         computed: {
-          ...mapState(['user','userInfo','notification'])
+          ...mapState(['user','userInfo','notification'])/*,
+          showSearchInput(){
+            var show=_.last(window.location.pathname.split('/'))=='topics'
+            console.log(show)
+            return show
+          }*/
         },
         components: {
             WyvonjHeader,

@@ -8,7 +8,7 @@
 
 <style lang="sass" rel="stylesheet/scss">
 	footer{
-		position: fixed;
+		position: absolute;
 		width: 100%;
 		bottom: 0;
 		div.copyright{

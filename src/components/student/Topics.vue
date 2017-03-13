@@ -179,9 +179,12 @@ export default {
         this.topicsChunk = _.chunk(this.topicsData, this.pageSize)
         this.topicsInDisplay = this.topicsChunk[0]
       })*/
-      this.topicsInDisplay = _.sortBy(this.topicsInDisplay,(o)=>{
+      if (this.topicsInDisplay.length>0) {
+        this.topicsInDisplay = _.sortBy(this.topicsInDisplay,(o)=>{
         return o._id
       })
+      }
+      
     }
 }
 

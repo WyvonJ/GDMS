@@ -21,6 +21,9 @@ export default {
 	SET_STU_TOPICS:(state,stuTopics)=>{
 		state.topicsData=stuTopics
 	},
+	SET_STU_GROUPING:(state,grouping)=>{
+		state.grouping=grouping
+	},
 	SET_STU_FINAL_TOPIC:(state,affirmativeTopic)=>{
 		state.affirmativeTopic=affirmativeTopic
 	},
@@ -29,9 +32,6 @@ export default {
 		state.selectedInCart=selectedInCart
 	},
 	//老师创建选题
-	TCH_CREATE_TOPIC:(state,createdTopic)=>{
-		state.createdTopic=createdTopic
-	},
 	TCH_GET_CREATED_TOPICS:(state,createdTopics)=>{
 		state.createdTopics=createdTopics
 	},

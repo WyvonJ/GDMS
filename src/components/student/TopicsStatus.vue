@@ -3,7 +3,7 @@
     <div class="student-status-card">
       <div class="teacher-info">
       <div class="teacher-name">
-         <mu-avatar icon="face" :size="44" :iconSize="36" />
+         <mu-avatar icon="face" backgroundColor="deepOrange500" :size="44" :iconSize="36" />
         <div class="name">
             {{card.name}}
         </div>
@@ -11,7 +11,7 @@
       </div>
        
         <div class="tel chip">
-          <mu-icon value="call" :size="18" /> {{card.tel}}
+          <mu-icon value="call" :size="18" /> {{tele}}
         </div>
         <div class="email chip">
           <mu-icon value="mail" :size="18" />
@@ -75,7 +75,18 @@ import {mapActions,mapState} from 'vuex'
       }
     },
     computed:{
-      ...mapState(['affirmativeTopic'])
+      ...mapState(['affirmativeTopic']),
+      tele(){
+        //手机号码转换
+        let tel=''
+        for (var i = 0; i < this.card.tel.length; i++) {
+          if (i===3 || i===7) {
+            tel+='-'
+          }
+          tel+=this.card.tel[i]
+        }
+        return tel
+      }
     },
     methods:{
       toggleEmpty(){

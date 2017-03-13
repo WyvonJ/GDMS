@@ -1,4 +1,4 @@
-# graduation
+# GDMS
 
 > A Vue.js App For Graduation Project
 
@@ -16,6 +16,17 @@ npm run build
 
 #run server at localhost:3000
 npm run server
+```
+
+##Plugins
+``` components libs 
+Muse-UI / Vue-Material
+
+Awe-dnd
+
+Axios
+
+
 ```
 
 For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).

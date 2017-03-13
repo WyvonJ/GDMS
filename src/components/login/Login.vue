@@ -1,49 +1,42 @@
 <template>
-	<div class="login-panel">
-		<header class="header">
-			<img src="../../assets/img/logo.png" class="smlogo" alt="SCHOOL OF DIGITAL MEDIA">
-			<h1 class="headline">毕业设计选题管理系统</h1>
-		</header>
-		<section class="container">
-			<mu-avatar id="school-icon" icon="school" color="#f8f8f8" background-color="#7e848c" :size="60" :iconSize="44"></mu-avatar>
-			<div @keyup.enter="doLogin">
-				<mu-text-field label="帐号" 
-											 hintText="请输入帐号" 
-											 :errorText="accountError"
-											 v-model.trim="account" 
-											 labelFloat/><br/>
-				<mu-text-field label="密码" 
-											 hintText="请输入密码"
-											 type="password"
-											 :errorText="passwordError"
-											 v-model.trim="password"
-											 labelFloat/><br/>
-				<mu-raised-button label="登 录" 
-													class="login-button"
-													v-on:click="doLogin" 
-													primary/>
-			</div>
-			<span class="pw-forget" 
-											@click="open">忘记密码？</span>
-		</section>
-		<mu-popup position="bottom"
-							popupClass="demo-popup-bottom" 
-							:open="bottomPopup" 
-							@close="close('bottom')">
-    <mu-appbar title="密码提示">
-      <mu-flat-button slot="right" 
-      								label="关闭" 
-      								color="white" 
-      								@click="close('bottom')"/>
-    	</mu-appbar>
-    <mu-content-block>
-      <p>
-        学生初始密码都为学号，如果修改密码后忘记密码请咨询管理员修改密码。
-      </p>
-    </mu-content-block>
-  </mu-popup>
-	</div>
+  <div class="login-panel" @keyup.enter="doLogin">
+    <div class="openup" :class="{'opened':openLoginToggle}">
+      <header class="header">
+        <!--<img src="../../assets/img/logo.png" class="smlogo" alt="SCHOOL OF DIGITAL MEDIA">-->
+        <mu-icon id="school-icon" color="#fff" :size="90" value="school" />
+        <h1 class="headline">毕业设计选题管理系统</h1>
+      </header>
+      <div class="open-button" @click.once="openLogin" :class="{'opened':openLoginToggle}">
+        <div class="login-title" v-if="!openLoginToggle">
+          Login
+        </div>
+        <section class="container" v-else>
+          <div class="login-title">
+            Login
+          </div>
+          <div>
+            <mu-text-field label="帐号" hintText="请输入帐号" :errorText="accountError" v-model.trim="account" :underlineFocusClass="underlineClass" labelFloat/>
+            <br/>
+            <mu-text-field label="密码" hintText="请输入密码" type="password" :underlineFocusClass="underlineClass" :errorText="passwordError" v-model.trim="password" labelFloat/>
+            <mu-raised-button label="登 录" class="login-button" v-on:click="doLogin" />
+          </div>
+          <span class="pw-forget" @click="open">忘记密码？</span>
+        </section>
+      </div>
+    </div>
+    <mu-popup position="bottom" popupClass="demo-popup-bottom" :open="bottomPopup" @close="close('bottom')">
+      <mu-appbar title="密码提示">
+        <mu-flat-button slot="right" label="关闭" color="white" @click="close('bottom')" />
+      </mu-appbar>
+      <mu-content-block>
+        <p>
+          学生初始密码都为学号，如果修改密码后忘记密码请咨询管理员修改密码。
+        </p>
+      </mu-content-block>
+    </mu-popup>
+  </div>
 </template>
+
 
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
@@ -51,10 +44,12 @@ export default {
   data() {
       return {
         bottomPopup: false,
+        openLoginToggle:false,
         account: '',
         password: '',
         accountError: '',
-        passwordError: ''
+        passwordError: '',
+        underlineClass:{'background-color':'#03a9f4'}
       }
     },
     computed: {
@@ -66,6 +61,9 @@ export default {
       },
       close() {
         this.bottomPopup = false
+      },
+      openLogin(){
+        this.openLoginToggle=!this.openLoginToggle
       },
       //登录方法
       doLogin() {
@@ -103,8 +101,11 @@ export default {
           const date = new Date(Date.now() + 60000 * 30)
             //设置cookie
           this.$root.setCookie('user', this.account, date, '/', location.hostname)
-
+          if (this.userInfo.userType!=2) {
             this.$router.push({ path: '/entryinformation' })
+ }
+            this.$router.push({ path: '/admin' })
+         
         })
       },
       //清除错误信息
@@ -125,40 +126,115 @@ export default {
 
 <style lang="sass" rel="stylesheet/scss" scoped>
 @import "../../style/variables";
+
+@keyframes typing
+{
+    from
+    {
+        width: 0;
+    }
+}
+@keyframes blink-caret
+{
+    50%
+    {
+        border-color: transparent;
+    }
+}
+
 .login-panel
 {
+    position: relative;
+
     width: 100%;
-    margin-top: 7%;
+    height: 100%;
+    background-color: #efefef;
+    .openup
+    {
+        position: absolute;
+        z-index: 100;
+        top: 0;
+        left: -20%;
+
+        width: 140%;
+        height: 50%;
+
+        border-bottom-right-radius: 50%;
+        border-bottom-left-radius: 50%;
+        background-color: #3e4eb8;
+        transition: $material-enter;
+        -webkit-box-shadow: $material-shadow-4dp;
+           -moz-box-shadow: $material-shadow-4dp;
+                box-shadow: $material-shadow-4dp;
+        &.opened{
+          border-radius: 0;
+        }
+        .open-button
+        {
+            position: fixed;
+            top: calc(50% - 45px);
+            left: calc(50% - 128px);
+
+            width: 256px;
+            height: 90px;
+
+            transition: $material-enter;
+
+            border-radius: 45px;
+            background-color: #fff;
+            -webkit-box-shadow: $material-shadow-4dp;
+               -moz-box-shadow: $material-shadow-4dp;
+                    box-shadow: $material-shadow-4dp;
+            &.opened
+            {
+                height: 256px;
+                top: calc(50% - 128px);
+
+                border-radius: 4px;
+            }
+            &:hover
+            {
+                -webkit-box-shadow: $material-shadow-7dp;
+                   -moz-box-shadow: $material-shadow-7dp;
+                        box-shadow: $material-shadow-7dp;
+            }
+        }
+    }
+    header{
+        position: absolute;
+        width: 610px;
+        top: calc(17% - 30px);
+        left: calc(50% - 305px);
+    }
     .headline
     {
-        font-size: 40px;
+        font-size: 60px;
         font-weight: lighter;
-        line-height: 40px;
+        line-height: 60px;
 
-        margin: 14px 0;
+        overflow: hidden;
 
-        color: rgba(0,0,0,.7);
+        width: 100%;
+        margin: 0 auto;
+        padding-right: 6px;
+
+        transition: $swift-ease-out;
+        animation: typing 5s steps(10,end),
+        blink-caret.5s step-end infinite alternate;
+        white-space: nowrap;
+
+        color: #fff;
+        border-right: .1em solid;
     }
+        .login-title{
+          color: #b7b7b7;
+        font-size: 24px;
+        margin-top:34px;
+      }
     section.container
     {
-      position: relative;
-        width: 260px;
-        height: 320px;
-        margin: 0 auto;
-        padding: 20px 0 20px 0;
 
-        -webkit-border-radius: 3px;
-           -moz-border-radius: 3px;
-                border-radius: 3px;
-        background-color: #fdfdfd;
-        -webkit-box-shadow: $material-shadow-1dp;
-           -moz-box-shadow: $material-shadow-1dp;
-                box-shadow: $material-shadow-1dp;
-        &:hover{
-          -webkit-box-shadow: $material-shadow-6dp;
-           -moz-box-shadow: $material-shadow-6dp;
-                box-shadow: $material-shadow-6dp;
-        }
+        position: relative;
         .mu-text-field
         {
             font-size: 14px;
@@ -167,65 +243,60 @@ export default {
             margin-bottom: 0;
             .mu-text-field-content
             {
-                padding: 28px 0 6px 0;
-                .mu-text-field-label{
-                  color: #5c5d5f !important;
+              padding: 24px 0 6px 0 !important;
+              .mu-text-field-focus-line{
+                background-color: #000 !important;
+              }
+                
+                .mu-text-field-label
+                {
+                    color: #5c5d5f !important;
+                }
+                .mu-text-field-hint
+                {
+                    color: #000;
+                }
             }
-            .mu-text-field-hint{
-              color: #000;
-            }
-            }
-
         }
-
         .login-button
         {
-            font-size: 12px;
-
+            font-size: 14px;
+            position: absolute;
+            bottom: 16px;
+            left: 46px;
             width: 160px;
-            height: 28px;
-            margin: 20px 0 8px 0;
+            height: 36px;
+            background-color: #f44336;
+            color: #fff;
+            word-spacing: 16px;
+            border-radius: 36px;
+            transition: $material-enter;
 
-            word-spacing: 10px;
+            &:hover
+            {
+                -webkit-box-shadow: $material-shadow-7dp;
+                   -moz-box-shadow: $material-shadow-7dp;
+                        box-shadow: $material-shadow-7dp;
+            }
         }
-        .pw-forget{
-          position: absolute;
-          right: 10px;
-          bottom: 10px;
-          cursor: pointer;
-          &:hover{
-            color: #e53935;
-          }
+        .pw-forget
+        {
+            position: absolute;
+            right: 96px;
+            bottom: -20px;
+            font-size: 11px;
+            cursor: pointer;
+            &:hover
+            {
+                color: #e53935;
+            }
         }
     }
 }
 .mu-appbar{
   height: 48px;
 }
-.mu-content-block
-{
-    font-size: 16px;
-}
-
-@media all and (max-width: 800px)
-{
-    .headline
-    {
-        font-size: 36px;
-    }
-}
-@media all and (max-width: 720px)
-{
-    .headline
-    {
-        font-size: 28px;
-    }
-}
-@media handheld and (max-width: 640px)
-{
-    .headline
-    {
-        font-size: 24px;
-    }
+.mu-content-block{
+  font-size: 24px;
 }
 </style>
