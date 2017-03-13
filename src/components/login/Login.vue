@@ -1,17 +1,18 @@
 <template>
   <div class="login-panel" @keyup.enter="doLogin">
-    <div class="openup" :class="{'opened':openLoginToggle}">
+    <div class="openup" :class="{'opened':showLoginPanel}">
       <header class="header">
-        <!--<img src="../../assets/img/logo.png" class="smlogo" alt="SCHOOL OF DIGITAL MEDIA">-->
         <mu-icon id="school-icon" color="#fff" :size="90" value="school" />
         <h1 class="headline">毕业设计选题管理系统</h1>
       </header>
-      <div class="open-button" @click.once="openLogin" :class="{'opened':openLoginToggle}">
-        <div class="login-title" v-if="!openLoginToggle">
+
+      <div class="open-button" :class="{'opened':showLoginPanel}">
+        <mu-circular-progress :size="70" color="red" v-if="loading"/>
+        <div class="login-outer" @click="openLogin" v-if="!openLoginToggle">
           Login
         </div>
-        <section class="container" v-else>
-          <div class="login-title">
+        <section class="container" v-if="showLoginPanel">
+          <div class="login-inner">
             Login
           </div>
           <div>
@@ -20,20 +21,11 @@
             <mu-text-field label="密码" hintText="请输入密码" type="password" :underlineFocusClass="underlineClass" :errorText="passwordError" v-model.trim="password" labelFloat/>
             <mu-raised-button label="登 录" class="login-button" v-on:click="doLogin" />
           </div>
-          <span class="pw-forget" @click="open">忘记密码？</span>
+          <span class="pw-forget" @click="passwordForget">忘记密码？</span>
+          <p class="pw-forget-content" v-show="showPasswordForget">学生初始密码都为学号，<br/>如果修改密码后忘记密码，<br/>请咨询管理员修改密码。</p>
         </section>
       </div>
     </div>
-    <mu-popup position="bottom" popupClass="demo-popup-bottom" :open="bottomPopup" @close="close('bottom')">
-      <mu-appbar title="密码提示">
-        <mu-flat-button slot="right" label="关闭" color="white" @click="close('bottom')" />
-      </mu-appbar>
-      <mu-content-block>
-        <p>
-          学生初始密码都为学号，如果修改密码后忘记密码请咨询管理员修改密码。
-        </p>
-      </mu-content-block>
-    </mu-popup>
   </div>
 </template>
 
@@ -43,8 +35,10 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
   data() {
       return {
-        bottomPopup: false,
+
+        showLoginPanel:false,
         openLoginToggle:false,
+        showPasswordForget:false,
         account: '',
         password: '',
         accountError: '',
@@ -53,67 +47,66 @@ export default {
       }
     },
     computed: {
-      ...mapState(['userInfo'])
+      ...mapState(['userInfo','loading'])
     },
     methods: {
-      open() {
-        this.bottomPopup = true
-      },
-      close() {
-        this.bottomPopup = false
-      },
       openLogin(){
-        this.openLoginToggle=!this.openLoginToggle
-      },
+        this.openLoginToggle=true
+        this.showLoginPanel=true
+              },
       //登录方法
       doLogin() {
-        //this指export出的本对象？data函数return的对象
+        
+        
         if (!this.account.length) return this.accountError = '请输入帐号！'
         if (!this.password.length) return this.passwordError = '请输入密码！'
+
+        this.showLoginPanel=false
+        this.beginLoading()
           //路由跳转
-        this.login({ account: this.account, password: this.password })
-        .then((state) => {
-          if (state) {
-            switch (state) {
-              case 0:
-                {
-                  return this.accountError = '找不到帐号'
-                  break
-                }
-              case 2:
-                {
-                  return this.passwordError = '密码错误'
-                  break
-                }
-              case 3:
-                {
-                  return this.accountError = '未知错误'
-                  break
-                }
-            }
-          }
-         
-        }).catch(error => {
-          return Promise.reject(error)
-        })
+        setTimeout(()=>{
+          this.login({ account: this.account, password: this.password })
         .then(()=>{
            //设置cookie有效时间为半小时
+          this.stopLoading()
           const date = new Date(Date.now() + 60000 * 30)
             //设置cookie
           this.$root.setCookie('user', this.account, date, '/', location.hostname)
-          if (this.userInfo.userType!=2) {
+          console.log(this.userInfo)
+          if (this.userInfo.userType<2) {
             this.$router.push({ path: '/entryinformation' })
- }
-            this.$router.push({ path: '/admin' })
-         
+          }else{
+              this.$router.push({ path: '/admin' })
+          }
         })
+        .catch((error)=>{
+          this.showLoginPanel=true
+           this.stopLoading()
+           switch(error){
+            case 0: {
+              this.accountError='找不到该账户'
+            break
+          }
+            case 2:{
+             this.passwordError='密码错误'
+            break
+          }
+            case 3: {
+              this.accountError='未知错误，请重试'
+            }
+           }
+        })
+      },400)
       },
       //清除错误信息
       clearError() {
         this.accountError = ''
         this.passwordError = ''
       },
-      ...mapActions(['login'])
+      passwordForget(){
+        this.showPasswordForget=!this.showPasswordForget
+      },
+      ...mapActions(['login','beginLoading','stopLoading'])
     },
     watch: {
       //如果输入了帐号密码就清除错误信息
@@ -226,10 +219,21 @@ export default {
         color: #fff;
         border-right: .1em solid;
     }
-        .login-title{
+        .login-outer{
+          cursor: pointer;
+
+          color: #a7a7a7;
+        font-size: 30px;
+        margin-top:34px;
+      }
+       .login-inner{
           color: #b7b7b7;
         font-size: 24px;
         margin-top:34px;
+      }
+      .mu-circular-progress
+      {
+        margin-top: 10px;
       }
     section.container
     {
@@ -241,29 +245,17 @@ export default {
 
             width: 200px;
             margin-bottom: 0;
-            .mu-text-field-content
-            {
-              padding: 24px 0 6px 0 !important;
-              .mu-text-field-focus-line{
-                background-color: #000 !important;
-              }
-                
-                .mu-text-field-label
-                {
-                    color: #5c5d5f !important;
-                }
-                .mu-text-field-hint
-                {
-                    color: #000;
-                }
+            .mu-text-field-label{
+              color: #717171 !important;
             }
+            
         }
         .login-button
         {
-            font-size: 14px;
+            font-size: 16px;
             position: absolute;
             bottom: 16px;
-            left: 46px;
+            left: 48px;
             width: 160px;
             height: 36px;
             background-color: #f44336;
@@ -291,12 +283,12 @@ export default {
                 color: #e53935;
             }
         }
+        .pw-forget-content{
+          position: absolute;
+            right: -142px;
+            bottom: 32px;
+            font-size: 11px;
+        }
     }
-}
-.mu-appbar{
-  height: 48px;
-}
-.mu-content-block{
-  font-size: 24px;
 }
 </style>

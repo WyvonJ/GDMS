@@ -24,7 +24,10 @@
         <mu-td width="9%">{{topic._id}}</mu-td>
         <mu-td width="12%">{{topic.category===0?"论文":"设计"}}</mu-td>
         <mu-td width="45%">{{topic.title}} <md-tooltip md-direction="top">
-                            {{topic.details}}
+        <div class="details-appbar">DESCRIPTION</div>
+                   <div class="details-content">
+                     {{topic.details}}
+                   </div>         
                         </md-tooltip></mu-td>
         <mu-td width="25%" :class="{'all-selected-warn' : topic.selected >= topic.available}">{{ topic.selected }}/{{ topic.available }}</mu-td>
 
@@ -209,6 +212,33 @@ export default {
     }
 }
 
+.md-tooltip{
+  width: 480px ;
+  height: auto;
+  font-size: 14px ;
+  white-space: normal ;
+  background-color: #fff;
+  border-radius: 5px;
+  color: #000;
+  padding: 0;
+        -webkit-box-shadow: $material-shadow-3dp;
+           -moz-box-shadow: $material-shadow-3dp;
+                box-shadow: $material-shadow-3dp;
+  .details-appbar{
+    width: 100%;
+    height: 24px;
+    line-height: 16px;
+    padding:4px 6px;
+    background-color: #f44336;
+    color: #fff;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+
+  }
+  .details-content{
+    padding: 8px;
+  }
+}
 .all-selected-warn
 {
     color: #f44336;

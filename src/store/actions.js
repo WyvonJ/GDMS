@@ -2,13 +2,13 @@ import axios from 'axios'
 //把所有Ajax处理全部放在这里 
 //传入  
 //开始展示loading spinner 
-const beginLoading = commit => {
+const beginLoading = ({ commit }) => {
     //提交loading显示的mutation  
     commit('LOADING_TOGGLE', true)
     return Date.now()
   }
   //结束展示loading spinner
-const stopLoading = (commit, start, timeAllowed = 400) => {
+const stopLoading = ({ commit }, start, timeAllowed = 400) => {
   //计算空余时间 start为开始时间
   const spareTime = timeAllowed - (Date.now() - start)
     //调用commit
@@ -38,21 +38,38 @@ Promise.prototype.finally = function(callback) {
 
 export default {
   showSnackbar,
+  beginLoading,
+  stopLoading,
   //帐号登录
   login: ({ commit }, payload) => {
+    //开始Loading
     return axios.post('/login', payload)
-      .then(response => {
+      .then((response) => {
         //response就是res.send发送过来的Object或status
-        if (response.data.state === 1) {
-
-          commit('SET_USER', payload)
-          commit('SET_USERINFO', {
-            userName: response.data.userName,
-            userType: response.data.userType
-          })
-          commit('SET_NOTIFICATION', response.data.notification)
-        } else {
-          return Promise.resolve(response.data.state)
+        console.log(response)
+        switch (response.data.state) {
+          case 0:
+            {
+              return Promise.reject(0)
+            }
+          case 1:
+            {
+              commit('SET_USER', payload)
+              commit('SET_USERINFO', {
+                userName: response.data.userName,
+                userType: response.data.userType
+              })
+              commit('SET_NOTIFICATION', response.data.notification)
+              break
+            }
+          case 2:
+            {
+              return Promise.reject(2)
+            }
+          case 3:
+            {
+              return Promise.reject(3)
+            }
         }
       })
   },

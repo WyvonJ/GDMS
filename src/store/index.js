@@ -9,7 +9,7 @@ Vue.use(Vuex)
 const store=new Vuex.Store({
 	state:{
 		//进度条显示
-		isLoading:false,
+		loading:false,
 		//展示snackbar
 		snackbarText:'',
 		showSnackbar:false,

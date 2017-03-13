@@ -12,7 +12,7 @@ router.post('/login', (req, res) => {
         console.log(err)
         break
       case !doc:
-        res.send({ state: 0, msg: '帐号不存在！' })
+        res.send({ state: 0 })
         break
       case doc.password === password:
         {
@@ -25,10 +25,10 @@ router.post('/login', (req, res) => {
           break
         }
       case doc.password !== password:
-        res.send({ state: 2, msg: '密码错误' })
+        res.send({ state: 2})
         break
       default:
-        res.send({ state: 3, msg: '未知错误' })
+        res.send({ state: 3 })
     }
   })
 })

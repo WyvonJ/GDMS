@@ -2,6 +2,9 @@ export default {
 
 	//类似于事件注册
 	//设置用户
+	SET_LOGIN_STATE:(state,loginState)=>{
+		state.loginState=loginState
+	},
 	SET_USER:(state,user)=>{
 		state.user=user
 	},
@@ -42,7 +45,7 @@ export default {
 		state.resultData=resultData
 	},
 	//开始进度条显示
-	LOADING_TOGGLE:(state,isLoading)=>{
-		state.isLoading=isLoading
+	LOADING_TOGGLE:(state,loading)=>{
+		state.loading=loading
 	}
 }
