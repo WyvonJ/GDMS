@@ -38,19 +38,7 @@ import { mapState ,mapActions,mapMutations} from 'vuex'
 		data(){
 			return {
 				gotResult:true,
-				resultDataInView:[{
-					_id:77,
-					title:'超实用的Node实战技巧',
-					finalstudents:[{
-						_id:'1030514413',
-						name:'王祖贤',
-						gender:'女',
-						tel:'18965411236',
-						email:'wzx@qq.com',
-						qq:'652369854',
-						wechat:'wzzzzx'
-					}]
-				}]
+				resultDataInView:[]
 			}
 		},
 		computed:{
@@ -62,7 +50,7 @@ import { mapState ,mapActions,mapMutations} from 'vuex'
 		},
 		mounted(){
 
-	   //if(this.$root.getCookie('user')){
+	   if(this.$root.getCookie('user')){
        var user=this.$root.getCookie('user')
         this.tchSelectionResult({teacherId:user})
 				.then(()=>{
@@ -71,9 +59,9 @@ import { mapState ,mapActions,mapMutations} from 'vuex'
 				.catch(error=>{
 					console.log(error)
 				})
-     // }else{
-      // this.$router.push('/')
-     //}
+     }else{
+       this.$router.push('/')
+     }
 			
 		}
 	}

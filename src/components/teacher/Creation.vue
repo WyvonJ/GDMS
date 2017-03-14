@@ -176,16 +176,16 @@ export default {
     },
     mounted() {
       //如果cookie过期则跳转到登录界面------------------
-      //if(this.$root.getCookie('user')){
+      if(this.$root.getCookie('user')){
       this.tchGetCreatedTopics({
           teacherId: this.$root.getCookie('user'),
         })
         .then(() => {
           this.topicsData = this.createdTopics
         })
-        //}else{
-        //  this.$router.push('/')
-        //}
+        }else{
+          this.$router.push('/')
+        }
     },
     watch: {
       fields: 'clearError',

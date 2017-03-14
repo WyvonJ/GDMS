@@ -6,7 +6,7 @@
       <mu-avatar backgroundColor="red500" class="group-id-icon">{{card._id}}</mu-avatar>
       <span class="card-title">TEACHER</span>
         <div class="chip" v-for="(teacher,index) in card.teachers">
-          <mu-icon value="account_circle" color="greenA700" :size="18" /> {{teacher}}
+          <mu-icon value="account_circle" color="greenA700" :size="18" /> {{teacher.name}}
         </div>
       </div>
       <div class="student-wrapper">
@@ -17,7 +17,7 @@
             {{student.name}}
           </span>
           <div class="student-topic">
-            {{student.topic}}
+            {{student.final.title}}
           </div>
         </div>
     </div>
@@ -40,36 +40,7 @@ import {mapActions,mapState} from 'vuex'
       return {
         open:false,
         gotGroup:true,
-        card: {
-          _id:5,
-         teachers:[
-         '程硯秋',
-         '尚小雲',
-         '荀慧生',
-         '馬連良',
-         '楊寶森'],
-         students:[
-         {
-          name:'譚富英',
-          topic:'我也不知道我的題目是什麼'
-         },{
-          name:'裘盛戎',
-          topic:'我也不知道我的題目是什麼'
-         },{
-          name:'周信芳',
-          topic:'我也不知道我的題目是什麼'
-         },{
-          name:'張君秋',
-          topic:'我也不知道我的題目是什麼'
-         },{
-          name:'奚嘯伯',
-          topic:'我也不知道我的題目是什麼'
-         },
-         {
-          name:'杜月笙',
-          topic:'我也不知道我的題目是什麼'
-         }]
-        }
+        card: {}
       }
     },
     computed:{
@@ -84,9 +55,9 @@ import {mapActions,mapState} from 'vuex'
     mounted(){
       var user=this.$root.getCookie('user')
       if(!user){
-                //alert('超时未操作，请重新登录')
-               // return this.$router.push('/')
-              }
+            alert('超时未操作，请重新登录')
+            return this.$router.push('/')
+      }
       this.tchGrouping({account:user})
         .then(()=>{
         if (this.grouping.length!=0) {

@@ -63,49 +63,7 @@ export default {
   lastSelection:0,
   tableTitle: '选题表',
   topicsChunk: [],
-  topicsInDisplay: [{
-                    _id: 9,
-                    category: 0,
-                    title: '999基于Unity的三维场景的交互设计与实现',
-                    details: 'Vue 尝试尽可能高效的渲染元素，通常会复用已有元素而不是从头开始渲染。这登录方式之间切换',
-                    available: 3,
-                    selected: 3
-                }, {
-                    _id: 10,
-                    category: 0,
-                    title: '000基于Unity的三维场景的交互设计与实现',
-                    details: '虚拟景区以游客互动体验为中心，通过智能网络能够及时、透彻、全面地感知景区景点和基础服务设施，实现景区三维可视化，并且通过全景视图对景点周边景色进行漫游。在三维虚拟景区地图上配以全景视图、文字、图片等主要内容的Andro_id手机客户端能够为用户或游客提供情景式的观赏和漫游，非常有利于旅游景区的宣传和推广，提高旅游服务质量的同时提升景区品味。',
-                    available: 2,
-                    selected: 0
-                }, {
-                    _id: 11,
-                    category: 1,
-                    title: '111Anduirowhatdyyyusfuckisthatt设计与实现',
-                    details: '虚拟景区以游客互动体验为中心，通过智能网络能够及时、透彻、全面地感知景区景点和基础服务设施，实现景区三维可视化，并且通过全景视图对景点周边景色进行漫游。在三维虚拟景区地图上配以全景视图、文字、图片等主要内容的Android手1机客户端能够为用户或游客提供情景式的观赏和漫游，非常有利于旅游景区的宣传和推广，提高旅游服务质量的同时提升景区品味。',
-                    available: 3,
-                    selected: 2
-                },{
-                    _id: 39,
-                    category: 0,
-                    title: '999基于Unity的三维场景的交互设计与实现',
-                    details: 'Vue 尝试尽可能高效的渲染元素，通常会复用已有元素而不是从头开始渲染。这登录方式之间切换',
-                    available: 3,
-                    selected: 3
-                }, {
-                    _id: 14,
-                    category: 0,
-                    title: '000基于Unity的三维场景的交互设计与实现',
-                    details: '虚拟景区以游客互动体验为中心，通过智能网络能够及时、透彻、全面地感知景区景点和基础服务设施，实现景区三维可视化，并且通过全景视图对景点周边景色进行漫游。在三维虚拟景区地图上配以全景视图、文字、图片等主要内容的Andro_id手机客户端能够为用户或游客提供情景式的观赏和漫游，非常有利于旅游景区的宣传和推广，提高旅游服务质量的同时提升景区品味。',
-                    available: 2,
-                    selected: 0
-                }, {
-                    _id: 5,
-                    category: 1,
-                    title: '111Anduirowhatdyyyusfuckisthatt设计与实现',
-                    details: '虚拟景区以游客互动体验为中心，通过智能网络能够及时、透彻、全面地感知景区景点和基础服务设施，实现景区三维可视化，并且通过全景视图对景点周边景色进行漫游。在三维虚拟景区地图上配以全景视图、文字、图片等主要内容的Android手1机客户端能够为用户或游客提供情景式的观赏和漫游，非常有利于旅游景区的宣传和推广，提高旅游服务质量的同时提升景区品味。',
-                    available: 3,
-                    selected: 2
-                }]
+  topicsInDisplay: []
 }
 
   },
@@ -177,11 +135,11 @@ export default {
     },
     mounted() {
       var id = this.$root.getCookie('user')
-      /*this.stuGetTopics().then(()=>{
+      this.stuGetTopics().then(()=>{
         this.total=this.topicsData.length
         this.topicsChunk = _.chunk(this.topicsData, this.pageSize)
         this.topicsInDisplay = this.topicsChunk[0]
-      })*/
+      })
       if (this.topicsInDisplay.length>0) {
         this.topicsInDisplay = _.sortBy(this.topicsInDisplay,(o)=>{
         return o._id
