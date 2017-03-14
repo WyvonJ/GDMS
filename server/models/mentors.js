@@ -20,7 +20,12 @@ var mentorsSchema = new Schema
 	group: 			{type:  Number, ref: 'groups'},//答辨所在的分组
     topics:         [{type: Number, ref: 'topics'}], //导师所出的题
     fields: 		{type: [String]}, //研究方向
-    office:         {type: String}//办公室地址
+    office:         {type: String},//办公室地址
+    notification:   {type: String},
+    qq:             {type: String},
+    wechat:         {type: String},
+    eventstack:     [{type: Number, ref: 'topics'}],//导师需要人工选择学生的题，如果stack里有题的话，就要取stack里题处理
+    classratio:     {type: Number,default: 0.5}//技术与艺术类别比例：0为偏向艺术,1为偏向技术,默认是不偏不椅
 },{colletion: 'mentors' })
 
 const mentors = mongoose.model('mentors',mentorsSchema)

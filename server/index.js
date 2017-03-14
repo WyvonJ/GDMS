@@ -10,11 +10,16 @@ const express=require('express')
 const favicon=require('serve-favicon')
 //中间件 完成请求体消息的三种转换功能
 const bodyParser=require('body-parser')
-//中间件 对Cookie头进行处理 然后通过req.cookies访问所有cookie对象
-const cookieParser=require('cookie-parser')
 const db=require('./models/db')
 const resolve=file=>path.resolve(__dirname,file)
 var routes = require('./routes');
+
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
+//中间件 对Cookie头进行处理 然后通过req.cookies访问所有cookie对象
+//const cookieParser=require('cookie-parser')
+//var cookieParser = require('cookie-parser');
+
 //app表示Express应用
 const app=express()
 
@@ -32,9 +37,22 @@ app.use(favicon(resolve('../dist/favicon.ico')))
 app.use(bodyParser.json())
 //将文本作为URL编码数据解析 
 app.use(bodyParser.urlencoded({extended:false}))
-app.use(cookieParser())
+
 //express.static负责托管Express应用内的静态资源
 app.use('/dist',express.static(resolve('../dist')))
+//app.use(cookieParser())
+app.use(session({
+  resave: false,  
+  saveUninitialized: true,  
+  name: 'GDMS',// 设置 cookie 中保存 session id 的字段名称
+  secret: 'GDMS',// 通过设置 secret 来计算 hash 值并放在 cookie 中，使产生的 signedCookie 防篡改
+  cookie: {
+    maxAge: 2592000000// 过期时间，过期后 cookie 中的 session id 自动删除
+  },
+  store: new MongoStore({// 将 session 存储到 mongodb
+    url: 'mongodb://127.0.0.1/GDMS'// mongodb 地址
+  })
+}));
 
 //app.use(routes)//加载
 routes(app)

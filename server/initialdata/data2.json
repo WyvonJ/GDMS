@@ -5,25 +5,23 @@
 		"title":"新网络漏洞的发现与研究",
 		"details":"网络，操作系统的新漏洞。",
 		"available":1,
-		"firststudents":[],
-		"secondstudents":[],
-		"thirdstudents":[],
-		"fields":["计算机网络","信息安全","web"],
-		"mentor":2030113001,
-		"selected":0
-	},
-	{
+		"firststudents":[1030513401,1030513402],
+		"secondstudents":[1030513402,1030513403],
+		"thirdstudents":[1030513404,1030513405],
+		"fields":"信息安全",
+		"mentor":1030113005
+	}
+	/*{
 		
 		"category":1,
 		"title":"社交网络的可视化研究的开发",
 		"details":"基于微博数据的信息交互展示研究。",
 		"available":2,
-		"firststudents":[],
-		"secondstudents":[],
-		"thirdstudents":[],
-		"fields":["数据可视化","图形图像处理","多媒体"],
-		"mentor":2030113002,
-		"selected":0
+		"firststudents":[1030513403],
+		"secondstudents":[1030513401,1030513402],
+		"thirdstudents":[1030513401,1030513402],
+		"fields":"数据可视化",
+		"mentor":1030113006
 	},
 	{
 		
@@ -32,11 +30,10 @@
 		"details":"基于日志的数据采集或者在线采集与分析。",
 		"available":1,
 		"firststudents":[],
-		"secondstudents":[],
-		"thirdstudents":[],
-		"fields":["云计算","信息安全","数据库"],
-		"mentor":2030113003,
-		"selected":0
+		"secondstudents":[1030513401,1030513402],
+		"thirdstudents":[1030513404],
+		"fields":"云计算",
+		"mentor":1030113001
 	},
 	{
 		
@@ -44,25 +41,23 @@
 		"title":"基于Javascript的虚拟实验开发",
 		"details":"试验操作的交互。",
 		"available":2,
-		"fields":["其它","程序语言","web","软件工程"],
+		"fields":"其它",
 		"firststudents":[],
-		"secondstudents":[],
-		"thirdstudents":[],
-		"mentor":2030113004,
-		"selected":0
+		"secondstudents":[1030513406,103051340],
+		"thirdstudents":[103051340,103051340],
+		"mentor":1030113002
 	},
 	{
 		
 		"category":1,
 		"title":"基于视频信息的测量与计算技术的研究",
 		"details":"视频中兴趣物理量的测量。",
-		"available":3,
-		"fields":["图形图像处理","多媒体"],
-		"mentor":2030113005,
+		"available":1,
+		"fields":"图形图像处理",
+		"mentor":1030113003,
 		"firststudents":[],
-		"secondstudents":[],
-		"thirdstudents":[],
-		"selected":0
+		"secondstudents":[103051340,103051340],
+		"thirdstudents":[103051340,103051340]
 	},
 	{
 		
@@ -71,10 +66,9 @@
 		"details":"通过语音传递信息是人类最有效、最重要、最常用和最方便的交换信息的方式。本课题要求通过PC机录一段声音，运用matlab进行仿真分析。",
 		"available":2,
 		"firststudents":[],
-		"secondstudents":[],
-		"thirdstudents":[],
-		"fields":["数字信号处理","多媒体","程序语言","其它","软件工程"],
-		"mentor":2030113006,
-		"selected":0
-	}
+		"secondstudents":[103051340,103051340],
+		"thirdstudents":[103051340,103051340],
+		"fields":"数字信号处理",
+		"mentor":1030113004
+	}*/
 ]
