@@ -63,7 +63,7 @@ import {mapActions,mapState} from 'vuex'
         card: {
           _id:4,
           title:'江南大学图书馆阅读信息的价值发掘与可视化表达',
-          name:'郭振芳',
+          name:'陳麗芳',
           tel:'18645910268',
           qq:'552084209',
           wechat:'welovevue',
@@ -114,161 +114,116 @@ import {mapActions,mapState} from 'vuex'
 
 <style lang="sass" rel="stylesheet/scss" scoped>
 @import '../../style/variables.scss';
-.student-status-card
-{
-    font-size: 16px;
-
+.student-status-card {
+  font-size: 16px;
+  position: relative;
+  max-width: 480px;
+  transition: $material-enter;
+  color: rgba(0, 0, 0, .6);
+  border-radius: 3px;
+  -webkit-box-shadow: $material-shadow-1dp;
+  -moz-box-shadow: $material-shadow-1dp;
+  box-shadow: $material-shadow-1dp;
+  &:hover {
+    transform: translateY(-4px);
+    -webkit-box-shadow: $material-shadow-6dp;
+    -moz-box-shadow: $material-shadow-6dp;
+    box-shadow: $material-shadow-6dp;
+  }
+  .teacher-info {
+    padding: 16px;
+    background-color: #e4e4e4;
+  }
+  .chip {
+    font-size: 14px;
     position: relative;
-
-    max-width: 480px;
-
+    display: inline-block;
+    width: auto;
+    height: 32px;
+    margin: 6px;
+    padding: 2px 12px;
     transition: $material-enter;
-
-    color: rgba(0,0,0,.6);
-    border-radius: 3px;
-    -webkit-box-shadow: $material-shadow-1dp;
-       -moz-box-shadow: $material-shadow-1dp;
-            box-shadow: $material-shadow-1dp;
-    &:hover
-    {
-        transform: translateY(-4px);
-
-        -webkit-box-shadow: $material-shadow-6dp;
-           -moz-box-shadow: $material-shadow-6dp;
-                box-shadow: $material-shadow-6dp;
+    border: 1px #efefef solid;
+    border-radius: 16px;
+    background-color: #fff;
+    &:hover {
+      -webkit-box-shadow: $material-shadow-1dp;
+      -moz-box-shadow: $material-shadow-1dp;
+      box-shadow: $material-shadow-1dp;
     }
-    .teacher-info
-    {
-        padding: 16px;
-
-        background-color: #efefef;
+    .mu-icon {
+      position: relative;
+      top: 5px;
     }
-    .chip
-    {
-        font-size: 14px;
-
-        position: relative;
-
-        display: inline-block;
-
-        width: auto;
-        height: 32px;
-        margin: 6px;
-        padding: 2px 12px;
-
-        transition: $material-enter;
-
-        border: 1px #efefef solid;
-        border-radius: 16px;
-        background-color: #fff;
-        &:hover
-        {
-            -webkit-box-shadow: $material-shadow-1dp;
-               -moz-box-shadow: $material-shadow-1dp;
-                    box-shadow: $material-shadow-1dp;
-        }
-        .mu-icon
-        {
-            position: relative;
-            top: 5px;
-        }
-        img
-        {
-            position: relative;
-            bottom: 2px;
-
-            height: 30px;
-        }
+    img {
+      position: relative;
+      bottom: 2px;
+      height: 30px;
     }
-    .teacher-name
-    {
-        line-height: 24px;
-
-        margin-bottom: 18px;
-        .name
-        {
-            font-size: 24px;
-
-            position: relative;
-            bottom: 6px;
-            left: 18px;
-
-            display: inline-block;
-        }
-        .check-icon
-        {
-            position: absolute;
-            top: 21px;
-            right: 16px;
-
-            cursor: default;
-            transition: $material-enter;
-            &:hover
-            {
-                transform: rotateZ(360deg);
-            }
-        }
+  }
+  .teacher-name {
+    line-height: 24px;
+    margin-bottom: 18px;
+    .name {
+      font-size: 24px;
+      position: relative;
+      bottom: 6px;
+      left: 18px;
+      display: inline-block;
     }
-    .email
-    {
-        a
-        {
-            margin-left: 4px;
-
-            text-decoration: none !important;
-
-            color: rgba(0,0,0,.5) !important;
-        }
+    .check-icon {
+      position: absolute;
+      top: 21px;
+      right: 16px;
+      cursor: default;
+      transition: $material-enter;
+      &:hover {
+        transform: rotateZ(360deg);
+      }
     }
-    .topic-wrapper
-    {
-        position: relative;
-
-        padding: 16px 32px;
-        .topic-info
-        {
-            margin-top: 16px;
-            padding: 6px 12px;
-
-            border-left: 1px #dcdcdc
-            solid;
-            &:before
-            {
-                position: absolute;
-                top: 18px;
-                left: 26px;
-
-                width: 12px;
-                height: 12px;
-
-                content: '';
-                border: 3px #f44336 solid;
-                border-radius: 50%;
-            }
-            &:nth-child(2)
-            {
-                min-height: 52px;
-            }
-            &:nth-child(2):before
-            {
-                top: 66px;
-            }
-            &:nth-child(3):before
-            {
-                top: 134px;
-            }
-        }
-        .category-tag
-        {
-            font-size: 14px;
-
-            position: absolute;
-            top: 6px;
-            right: 9px;
-
-            color: rgba(0,0,0,.4);
-        }
+  }
+  .email {
+    a {
+      margin-left: 4px;
+      text-decoration: none !important;
+      color: rgba(0, 0, 0, .5) !important;
     }
+  }
+  .topic-wrapper {
+    position: relative;
+    padding: 16px 32px;
+    .topic-info {
+      margin-top: 16px;
+      padding: 6px 12px;
+      border-left: 1px #dcdcdc solid;
+      &:before {
+        position: absolute;
+        top: 18px;
+        left: 26px;
+        width: 12px;
+        height: 12px;
+        content: '';
+        border: 3px #f44336 solid;
+        border-radius: 50%;
+      }
+      &:nth-child(2) {
+        min-height: 52px;
+      }
+      &:nth-child(2):before {
+        top: 66px;
+      }
+      &:nth-child(3):before {
+        top: 134px;
+      }
+    }
+    .category-tag {
+      font-size: 14px;
+      position: absolute;
+      top: 6px;
+      right: 9px;
+      color: rgba(0, 0, 0, .4);
+    }
+  }
 }
 
 </style>

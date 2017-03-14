@@ -47,7 +47,9 @@ li
 {
     font-family: $fontYahei;
     font-weight: lighter;
+
     height: 100%;
+
     text-align: center;
 
     color: $black2;
@@ -98,25 +100,37 @@ li
             background: #fff;
             .logo
             {
+                position: relative;
+
+                height: 64px;
+
                 background-color: #474a4f;
+                @media (max-width: 1280px)
+                {
+                    height: 56px;
+                }
                 img
                 {
-                    max-width: 40%;
-                    margin-top: 20px;
+                    position: absolute;
+                    left: 38px;
 
-                    transition: all .2s cubic-bezier(.21, .64, .39, .79);
-                    &:hover
+                    display: inline;
+
+                    max-width: 64px;;
+                    @media (max-width: 1280px)
                     {
-                        transform: scale(1.2);
+                        max-width: 56px;
                     }
                 }
                 p.jnudm
                 {
                     font-family: $fontCenturyGothic;
-                    font-size: 18px;
+                    font-size: 24px;
                     font-weight: lighter;
 
-                    padding-bottom: 8px;
+                    position: absolute;
+                    top: 18px;
+                    right: 45px;
 
                     color: #fff;
                 }
@@ -143,31 +157,52 @@ li
                 font-size: 16px;
                 font-weight: lighter;
             }
-            @media (max-width: 1280px)
-            {
-                .mu-menu-list
-                {
-                    padding: 4px 0;
-                }
-                > .mu-icon
-                {
-                    margin-top: 8px;
-                }
-                
-            }
         }
     }
     .main-content
     {
-        padding: 80px 16px 28px 272px;
         height: 100%;
+        padding: 80px 16px 28px 272px;
+
         transition: $material-enter;
         text-align: left;
+
         background-color: #f6f6f6;
         &.nav-hide
         {
             padding-left: 16px;
         }
+    }
+}
+
+@media (max-width: 1280px)
+{
+    .mu-menu-list
+    {
+        padding: 4px 0;
+    }
+    > .mu-icon
+    {
+        margin-top: 8px;
+    }
+    img
+    {
+        max-width: 56px;
+    }
+    .logo
+    {
+        height: 56px;
+    }
+}
+@media (max-width: 993px)
+{
+    .nav-bar
+    {
+        left: 0 !important;
+    }
+    .main-content
+    {
+        padding-left: 16px !important;
     }
 }
 

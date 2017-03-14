@@ -221,6 +221,8 @@ export default {
   border-radius: 5px;
   color: #000;
   padding: 0;
+
+    font-family: $fontYahei;
         -webkit-box-shadow: $material-shadow-3dp;
            -moz-box-shadow: $material-shadow-3dp;
                 box-shadow: $material-shadow-3dp;
@@ -228,7 +230,7 @@ export default {
     width: 100%;
     height: 24px;
     line-height: 16px;
-    padding:4px 6px;
+    padding:4px 8px;
     background-color: #f44336;
     color: #fff;
     border-top-left-radius: 5px;

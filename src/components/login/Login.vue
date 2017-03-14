@@ -75,7 +75,7 @@ export default {
           console.log(this.userInfo)
           if (this.userInfo.userType<2) {
             this.$router.push({ path: '/entryinformation' })
-          }else{
+          }else if(this.userInfo.userType===2){
               this.$router.push({ path: '/admin' })
           }
         })
@@ -96,7 +96,7 @@ export default {
             }
            }
         })
-      },400)
+      },500)
       },
       //清除错误信息
       clearError() {
@@ -154,7 +154,7 @@ export default {
 
         border-bottom-right-radius: 50%;
         border-bottom-left-radius: 50%;
-        background-color: #3e4eb8;
+        background-color: #3f51b5;
         transition: $material-enter;
         -webkit-box-shadow: $material-shadow-4dp;
            -moz-box-shadow: $material-shadow-4dp;

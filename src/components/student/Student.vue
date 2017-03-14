@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-   <wyvonj-header :class="{'nav-hide': !openDrawer}" :showSearchInput="menuVal==1" :username="username" :notifyTitle="notifyTitle"></wyvonj-header>
+   <wyvonj-header :class="{'nav-hide': !openDrawer}" :showSearchInput="menuVal==1" :userName="userName" :notifyContent="notifyContent"></wyvonj-header>
     <mu-drawer @hide="handleHide" @close="handleClose" :open="openDrawer" :docked="docked" class="sidebar-drawer" :zDepth="1">
       <div class="console-panel">
         <div class="logo">
@@ -77,7 +77,7 @@
 import { mapState, mapMutations, mapActions } from 'vuex'
 import WyvonjHeader from '../utils/WyvonjHeader.vue'
 import WyvonjFooter from '../utils/WyvonjFooter.vue'
-var isDesktop = () => window.innerWidth > 900
+var isDesktop = () => window.innerWidth > 993
 export default {
     data() {
             const desktop = isDesktop()
@@ -90,8 +90,8 @@ export default {
                 selectedEdit:false,
                 menuVal: 1,
                 selectedInCart: [],
-                username:'lalaland',
-                notifyTitle:'可以查看选题情况了',
+                userName:'lalaland',
+                notifyContent:'可以查看选题情况了',
                 selectedBgc:["red500","lightBlueA700","teal500"]
             }
         },
@@ -177,12 +177,7 @@ export default {
             ...mapActions(['stuCommitSelection'])
         },
         computed: {
-          ...mapState(['user','userInfo','notification'])/*,
-          showSearchInput(){
-            var show=_.last(window.location.pathname.split('/'))=='topics'
-            console.log(show)
-            return show
-          }*/
+          ...mapState(['user','userInfo','notification'])
         },
         components: {
             WyvonjHeader,
@@ -194,8 +189,8 @@ export default {
         },
         mounted() {
            //if(!this.$root.getCookie('user')) return this.$router.push('/')
-            this.username=this.userInfo.userName
-            this.notifyTitle=this.notification
+            this.userName=this.userInfo.userName
+            this.notifyContent=this.notification
             this.changeNav()
             this.handleResize = () => {
                 this.changeNav()
@@ -312,12 +307,16 @@ export default {
                     bottom: 6px;
                     left: 224px;
                     border-radius: 0;
-                    background-color: #f44336;
+                    background-color: #ff2828;
 
     -webkit-box-shadow: $material-shadow-1dp;
        -moz-box-shadow: $material-shadow-1dp;
             box-shadow: $material-shadow-1dp;
                     color: #fff;
+                    &:hover{
+                    background-color: #f44336;
+                        
+                    }
                 }
             }
         }

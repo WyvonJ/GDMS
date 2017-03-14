@@ -100,7 +100,7 @@ import {mapActions,mapState} from 'vuex'
     {
         padding: 36px 16px 16px 8px;
 
-        background-color: #efefef;
+        background-color: #e4e4e4;
     }
     .chip
     {
@@ -109,7 +109,7 @@ import {mapActions,mapState} from 'vuex'
         position: relative;
 
         display: inline-block;
-
+        cursor: default;
         width: auto;
         height: 32px;
         margin: 6px;
@@ -138,7 +138,7 @@ import {mapActions,mapState} from 'vuex'
 
         padding: 36px 16px 16px 8px;
         .chip{
-          background-color: #efefef;
+          background-color: #e4e4e4;
         }
         }
         
