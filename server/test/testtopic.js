@@ -59,12 +59,12 @@ transporter.sendMail(mailOptions, function(error, info){
         console.log('Message sent: ' + info.response);
     }
 });*/
-var App = require('alidayu-node');
-var app = new App('23681988', '0f14adb89325c37e59ab2f211fe53711');
+//var App = require('alidayu-node');
+//var app = new App('23681988', '0f14adb89325c37e59ab2f211fe53711');
  
-app.smsSend({
-    sms_free_sign_name: '注册验证',
-    sms_param: {"code": "123456", "product": "测试网站"},
+/*app.smsSend({
+    sms_free_sign_name: '毕业设计管理系统',
+    sms_param: {"name": "吴吉"},
     rec_num: '18861823231',
-    sms_template_code: 'SMS_640004'
-});
+    sms_template_code: 'SMS_53770189'
+});*/

@@ -14,8 +14,8 @@ const db=require('./models/db')
 const resolve=file=>path.resolve(__dirname,file)
 var routes = require('./routes');
 
-var session = require('express-session');
-var MongoStore = require('connect-mongo')(session);
+//var session = require('express-session');
+//var MongoStore = require('connect-mongo')(session);
 //中间件 对Cookie头进行处理 然后通过req.cookies访问所有cookie对象
 //const cookieParser=require('cookie-parser')
 //var cookieParser = require('cookie-parser');
@@ -41,7 +41,7 @@ app.use(bodyParser.urlencoded({extended:false}))
 //express.static负责托管Express应用内的静态资源
 app.use('/dist',express.static(resolve('../dist')))
 //app.use(cookieParser())
-app.use(session({
+/*app.use(session({
   resave: false,  
   saveUninitialized: true,  
   name: 'GDMS',// 设置 cookie 中保存 session id 的字段名称
@@ -52,7 +52,7 @@ app.use(session({
   store: new MongoStore({// 将 session 存储到 mongodb
     url: 'mongodb://127.0.0.1/GDMS'// mongodb 地址
   })
-}));
+}));*/
 
 //app.use(routes)//加载
 routes(app)
