@@ -95,16 +95,15 @@ import {mapActions,mapState} from 'vuex'
     },
     mounted(){
       var user=this.$root.getCookie('user')
-      if (!user){
+      /*if (!user){
                 alert('超时未操作，请重新登录')
                 return this.$router.push('/')
-              }
+              }*/
       this.stuSelectionResult({studentId:user})
         .then(()=>{
         if (this.affirmativeTopic.length!=0) {
           this.gotTopic=true
           this.card=this.affirmativeTopic
-          console.log(this.affirmativeTopic)
         }
       })
     }

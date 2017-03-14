@@ -1,5 +1,6 @@
 <template>
-	<mu-card class="created-topics">
+<div class="main-content">
+    <mu-card class="created-topics">
                     <md-table-card>
                         <md-toolbar>
                             <h1 class="md-title">学生评价表</h1>
@@ -32,6 +33,8 @@
                         </md-table>
                     </md-table-card>
                 </mu-card>
+</div>
+	
 </template>
 
 <script>

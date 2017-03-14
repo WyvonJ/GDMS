@@ -72,7 +72,6 @@ export default {
           const date = new Date(Date.now() + 60000 * 30)
             //设置cookie
           this.$root.setCookie('user', this.account, date, '/', location.hostname)
-          console.log(this.userInfo)
           if (this.userInfo.userType<2) {
             this.$router.push({ path: '/entryinformation' })
           }else if(this.userInfo.userType===2){
@@ -93,10 +92,14 @@ export default {
           }
             case 3: {
               this.accountError='未知错误，请重试'
+              break
+            }
+            default :{
+              this.accountError='未知错误，请重试'
             }
            }
         })
-      },500)
+      },700)
       },
       //清除错误信息
       clearError() {
@@ -212,12 +215,13 @@ export default {
         padding-right: 6px;
 
         transition: $swift-ease-out;
-        animation: typing 5s steps(10,end),
-        blink-caret.5s step-end infinite alternate;
+       /* animation: typing 2s steps(10,end),
+        blink-caret.5s step-end 10 alternate;
+        border-right: .1em solid;*/
         white-space: nowrap;
 
         color: #fff;
-        border-right: .1em solid;
+        
     }
         .login-outer{
           cursor: pointer;

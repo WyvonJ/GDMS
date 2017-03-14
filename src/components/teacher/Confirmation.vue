@@ -52,20 +52,7 @@ export default {
         showOverlay: false,
         showHelp: true,
         snackbarText: '',
-        currentRef:'',
-        cardData: [{
-          _id:55,
-          title:'对象用于规定在文本中检索的内容',
-          available:3,
-          firststudents:[{
-            _id:'1030514321',
-            name:'李云涛',
-            gender:'男',
-            gpa:3.5,
-            intro:'风速达绿化覆盖'
-          }]
-
-        }]
+        currentRef:''
       }
     },
     computed: {
@@ -130,18 +117,19 @@ export default {
       ...mapMutations(['SHOW_SNACKBAR']),
       ...mapActions(['tchConfirmStudent', 'tchGetTopics'])
     },
-    created() {
-     this.tchGetTopics({ teacherId: this.user.account }).then(() => {
+    mounted() {
+     this.tchGetTopics({ teacherId: this.$root.getCookie('user') })
+     .then(() => {
         _.forEach(this.cardData, (value) => {
           value.confirmedCount = 0
           _.forEach(value.firststudents, (student) => {
             student.confirmed = false //每个学生是否被选中
+
           })
         })
       })
-
+       console.warn(this.card.firststudents)
     },
-    mounted() {},
     components: {
       IntroCard
     }

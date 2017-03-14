@@ -247,7 +247,7 @@ export default {
       ...mapActions(['stuSetContactData','tchSetContactData'])
     },
     mounted(){
-      //this.userType=this.$store.state.userInfo.userType
+      this.userType=this.$store.state.userInfo.userType
     },
     watch:{
       email:'clearError',

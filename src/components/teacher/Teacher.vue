@@ -11,9 +11,10 @@
                 <mu-menu-item title="创建选题" value="1" leftIcon="playlist_add" @click="createTopics" />
                 <mu-menu-item title="选择学生" value="2" leftIcon="check_circle" @click="confirmTopics" />
                 <mu-menu-item title="选题结果" value="3" leftIcon="local_library" @click="confirmResult" />
-                <mu-menu-item title="学生评价" value="4" leftIcon="star_half" @click="studentEvaluation" />
-                <mu-menu-item title="联系信息" value="5" leftIcon="contact_phone" @click="contact" />
-                <mu-menu-item title="帐号管理" value="6" leftIcon="settings" @click="account" />
+          			<mu-menu-item title="答辩分组" value="4" leftIcon="group" @click="grouping" />
+                <mu-menu-item title="学生评价" value="5" leftIcon="star_half" @click="studentEvaluation" />
+                <mu-menu-item title="联系信息" value="6" leftIcon="contact_phone" @click="contact" />
+                <mu-menu-item title="帐号管理" value="7" leftIcon="settings" @click="account" />
             </mu-menu>
         </div>
         <mu-divider/>
@@ -31,7 +32,7 @@
 import {mapState,mapMutations} from 'vuex'
 import WyvonjHeader from '../utils/WyvonjHeader.vue'
 import WyvonjFooter from '../utils/WyvonjFooter.vue'
-var isDesktop = () => window.innerWidth > 900
+var isDesktop = () => window.innerWidth > 993
 const desktop=isDesktop()
 	export default {
 		data(){
@@ -57,6 +58,9 @@ const desktop=isDesktop()
 			confirmResult(){
 				this.$router.push('/teacher/selectionresult')
 			},
+       grouping() {
+           this.$router.push('/teacher/grouping')
+       },
 			studentEvaluation(){
 				this.$router.push('/teacher/evaluation')
 			},

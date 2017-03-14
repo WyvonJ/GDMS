@@ -29,7 +29,6 @@
 .wyvonj-snackbar{
 	position: fixed;
 	top: -100px;
-	margin-top: 8px;
 	justify-content: center;
 	display: flex;
 	right: 0;

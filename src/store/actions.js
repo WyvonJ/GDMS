@@ -46,7 +46,6 @@ export default {
     return axios.post('/login', payload)
       .then((response) => {
         //response就是res.send发送过来的Object或status
-        console.log(response)
         switch (response.data.state) {
           case 0:
             {
@@ -83,11 +82,10 @@ export default {
   //学生获取题目
   stuGetTopics: ({ commit }) => {
     //设置进度条开始
-    const start = beginLoading(commit)
+    const start = beginLoading({commit})
     return axios.get('/student/stuGetTopics')
-
     .then(response => {
-        stopLoading(commit, start)
+        stopLoading({commit}, start)
           //提交
         commit('SET_STU_TOPICS', response.data)
       })
@@ -211,6 +209,9 @@ export default {
     return axios.post('/teacher/tchGrouping',payload)
       .then(response=>{
         commit('SET_GROUPING', response.data)
+      })
+      .catch(error=>{
+        return Promise.reject(error)
       })
   }
 

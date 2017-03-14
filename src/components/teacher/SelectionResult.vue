@@ -60,7 +60,7 @@ import { mapState ,mapActions,mapMutations} from 'vuex'
 					console.log(error)
 				})
      }else{
-       this.$router.push('/')
+       //this.$router.push('/')
      }
 			
 		}

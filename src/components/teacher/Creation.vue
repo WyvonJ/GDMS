@@ -184,7 +184,7 @@ export default {
           this.topicsData = this.createdTopics
         })
         }else{
-          this.$router.push('/')
+          //this.$router.push('/')
         }
     },
     watch: {

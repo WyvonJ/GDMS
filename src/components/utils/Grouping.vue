@@ -3,15 +3,15 @@
     <div class="group-status-card">
       
       <div class="teacher-wrapper">
-      <mu-avatar backgroundColor="red500" class="group-id-icon">{{card._id}}</mu-avatar>
+      <mu-avatar backgroundColor="red500" class="group-id-icon">{{groupId}}</mu-avatar>
       <span class="card-title">TEACHER</span>
-        <div class="chip" v-for="(teacher,index) in card.teachers">
+        <div class="chip" v-for="(teacher,index) in teachers">
           <mu-icon value="account_circle" color="greenA700" :size="18" /> {{teacher.name}}
         </div>
       </div>
       <div class="student-wrapper">
       <span class="card-title">STUDENT</span>
-      <div class="chip" v-for="(student,index) in card.students">
+      <div class="chip" v-for="(student,index) in students">
           <mu-icon value="face" color="blue500" :size="18" /> 
           <span class="student-name">
             {{student.name}}
@@ -40,7 +40,16 @@ import {mapActions,mapState} from 'vuex'
       return {
         open:false,
         gotGroup:true,
-        card: {}
+        groupId:0,
+        students:[{
+          _id:'54',
+          name:'asdsa',
+          final:{
+            _id:4,
+            title:'4daksdjb'
+          }
+        }],
+        teachers:[]
       }
     },
     computed:{
@@ -55,16 +64,16 @@ import {mapActions,mapState} from 'vuex'
     mounted(){
       var user=this.$root.getCookie('user')
       if(!user){
-            alert('超时未操作，请重新登录')
-            return this.$router.push('/')
+            //alert('超时未操作，请重新登录')
+           // return this.$router.push('/')
       }
       this.tchGrouping({account:user})
         .then(()=>{
         if (this.grouping.length!=0) {
           this.gotGroup=true
-          this.card._id=this.grouping._id
-          this.card.teachers=this.grouping.teachers
-          this.card.students=this.grouping.students
+          this.groupId=this.grouping._id
+          this.teachers=this.grouping.teachers
+          this.students=this.grouping.students
         }
       })
     }
@@ -161,9 +170,6 @@ import {mapActions,mapState} from 'vuex'
         {
           height: 80px;
           width: auto;
-        }
-        .student-name{
-
         }
         .student-topic{
           padding: 4px 0;

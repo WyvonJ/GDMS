@@ -35,7 +35,7 @@ const store=new Vuex.Store({
 		cardData:[],
 		affirmativeTopic:{},
 		//获取答辩分组
-		grouping:[],
+		grouping:{},
 		/************Teacher***************/
 		//创建的课题
 		createdTopic:{

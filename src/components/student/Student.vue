@@ -162,10 +162,10 @@ export default {
             //提交选题按钮
             commitSelectedTopics() {
             	if (this.selectedInCart.length===0) return
-              if (!this.$root.getCookie('user')){
+             /* if (!this.$root.getCookie('user')){
                 alert('超时未操作，请重新登录')
                 this.$router.push('/')
-              }
+              }*/
                var selectedInCartWrapper = {
                     _id: this.$root.getCookie('user'),
                     first: this.selectedInCart[0]._id,
@@ -188,8 +188,8 @@ export default {
             window.removeEventListener('resize', this.handleResize)
         },
         mounted() {
-           if(!this.$root.getCookie('user')) 
-                return this.$router.push('/')
+           //if(!this.$root.getCookie('user')) 
+             //   return this.$router.push('/')
             this.userName=this.userInfo.userName
             this.notifyContent=this.notification
             this.changeNav()
