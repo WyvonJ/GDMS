@@ -160,4 +160,55 @@ router.post('/tchSetContactData',(req,res) => {
 	                             		      else res.send('success')
                                         })
 })
+
+/*得到分组信息*/
+router.get('/tchGrouping',(req,res)=>{
+	var mydb = {
+		0:db.students,
+		1:db.mentors
+	}
+	var type = 0
+    console.log('here')
+	var account = '1030513401'
+	if(account[0]==1)type = 0
+	else if(account[0]==2)type = 1
+	var cardData = {
+					_id:Number,
+					teachers:[],
+					students:[] }
+
+		 mydb[type].findOne({_id: account},'group')
+		           .exec()
+		           .then((doc)=>{
+		           	db.groups.findOne({_id:doc.group},['mentors','students'])
+		           	         .populate('mentors','name')
+		           	         .populate('students','name final')
+		           	         .exec()
+		           	         .then((group)=>{
+		           	         	cardData._id = group._id
+		           	         	cardData.teachers = group.mentors
+		           	            Promise.all(group.students.map((student)=>fillCardData(student,cardData)))
+		           	                   .then(()=>{
+		           	                   	console.log(cardData)
+		           	                   })
+		           	         	
+		           	         })
+		           	         })
+		           	           
+ function fillCardData(student,cardData){
+     return new Promise((resolve, reject)=>{
+            db.students.findOne({_id:student._id},['name','final'])
+		           	   .populate('final','title')
+		           	   .exec((err,student)=>{
+                          	if(student)
+                          	{
+                          		cardData.students.push(student)
+                          		resolve(student)
+                          	}
+                          	else
+                          		reject(err)
+                         })
+                })
+        }
+})
 module.exports = router

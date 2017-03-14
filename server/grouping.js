@@ -14,7 +14,7 @@ var groupMentors = function(cb){//根据导师的类别比例进行分组
 			  	    var numGroupMembers = Math.floor(numMentors/numGroups)//向下取整,每组中有多少人
 			  	    var leftMentors = numMentors-numGroupMembers*numGroups//会剩下这么多人没得分组
 			  	    var query = db.mentors.find()
-			  	    query.select({name: 1, fields:1, classrate:1})
+			  	    query.select({name: 1, fields:1, classrate:1, group:1})
 			  	    query.sort({classrate: -1})
 			  	    query.exec()
 			             .then((mentors)=>{
@@ -34,6 +34,11 @@ var groupMentors = function(cb){//根据导师的类别比例进行分组
                                 	{
                               
                                 		    group.mentors.push(mentors[i+j]._id)
+                                		    db.mentors.findOneAndUpdate({_id: mentors[i+j]._id},
+                                		    	                        {$set: {group: group._id}},
+                                		    	                        {new: true}).exec()
+                                           // mentors[i+j].group = group.groupId
+                                           // mentors[i+j].save()
                                 		for (var k=0; k<mentors[i+j].fields.length; k++)
                                 		{
                                 			//console.log(mentors[i+j].fields[k])
@@ -57,7 +62,7 @@ var groupMentors = function(cb){//根据导师的类别比例进行分组
 }
 
 var groupTopics = function(){
-	db.topics.find({},['_id','mentor','fields']).exec()
+	db.topics.find({},['_id','mentor','fields','finalstudents']).exec()
 	  .then((topics)=>{
 	  	var numTopicGroups = Math.floor(numTopics/numGroups)//每组差不多要答遍这么多题目
       //  db.groups.find({},['_id','mentors','fields']).exec()
@@ -78,6 +83,10 @@ var groupTopics = function(){
 	  				for(var k = 0; k < topics[i].fields.length; k++)
 	  					if(groups[j].fields.indexOf(topics[i].fields[k]) != -1){//如果这组有题目的研究方向
                          db.groups.findOneAndUpdate({_id:groups[j]._id},{$push: {topics: topics[i]._id}}).exec()
+                            for(var s = 0; s<topics[i].finalstudents.length; s++ ){
+                            	db.students.findOneAndUpdate({_id:topics[i].finalstudents[s]},{$set: {group: groups[j]._id}}).exec()
+                            	db.groups.findOneAndUpdate({_id:groups[j]._id},{$push: {students:topics[i].finalstudents[s]}}).exec()
+                            }
                          topics[i].isgrouped = true
                          groups[j].numTopics++
                          if(topics[i].isgrouped)break
@@ -89,7 +98,11 @@ var groupTopics = function(){
                    {
                     if(groups[randIndex].mentors.indexOf(topics[i].mentor) === -1)
                      {
-                   	   db.groups.findOneAndUpdate({_id:groups[randIndex]._id},{$push: {topics: topics[i]._id}}).exec()   
+                   	   db.groups.findOneAndUpdate({_id:groups[randIndex]._id},{$push: {topics: topics[i]._id}}).exec()
+                   	   for(var s = 0; s<topics[i].finalstudents.length; s++ ){
+                            	db.students.findOneAndUpdate({_id:topics[i].finalstudents[s]},{$set: {group: groups[randIndex]._id}}).exec()
+                            	db.groups.findOneAndUpdate({_id:groups[randIndex]._id},{$push: {students:topics[i].finalstudents[s]}}).exec()
+                            	}   
                    	   topics[i].isgrouped = true
                    	   break
                    	 }
