@@ -52,7 +52,6 @@
   </div>
 </template>
 
-
 <script>
 import {mapActions,mapState} from 'vuex'
   export default{
@@ -96,18 +95,18 @@ import {mapActions,mapState} from 'vuex'
     },
     mounted(){
       var user=this.$root.getCookie('user')
-      /*if (!user){
+      if (!user){
                 alert('超时未操作，请重新登录')
                 return this.$router.push('/')
-              }*/
-      /*this.stuSelectionResult({studentId:user})
+              }
+      this.stuSelectionResult({studentId:user})
         .then(()=>{
         if (this.affirmativeTopic.length!=0) {
           this.gotTopic=true
           this.card=this.affirmativeTopic
           console.log(this.affirmativeTopic)
         }
-      })*/
+      })
     }
   }
 </script>
@@ -119,7 +118,6 @@ import {mapActions,mapState} from 'vuex'
   position: relative;
   max-width: 480px;
   transition: $material-enter;
-  color: rgba(0, 0, 0, .6);
   border-radius: 3px;
   -webkit-box-shadow: $material-shadow-1dp;
   -moz-box-shadow: $material-shadow-1dp;
@@ -192,6 +190,7 @@ import {mapActions,mapState} from 'vuex'
   .topic-wrapper {
     position: relative;
     padding: 16px 32px;
+    background-color: #fff;
     .topic-info {
       margin-top: 16px;
       padding: 6px 12px;

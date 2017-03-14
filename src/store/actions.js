@@ -124,7 +124,7 @@ export default {
   stuGrouping: ({ commit }, payload) => {
     return axios.post('/student/stuGrouping', payload)
       .then(response => {
-        commit('SET_STU_GROUPING', response.data)
+        commit('SET_GROUPING', response.data)
       })
 
   },
@@ -205,6 +205,13 @@ export default {
   //提交学生评价
   tchEvaluationToStu: ({ commit }, payload) => {
 
+  }
+  ,
+  tchGrouping:({commit} , payload)=>{
+    return axios.post('/teacher/tchGrouping',payload)
+      .then(response=>{
+        commit('SET_GROUPING', response.data)
+      })
   }
 
 }

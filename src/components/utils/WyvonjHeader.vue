@@ -93,7 +93,7 @@ export default {
     z-index: 5;
     top: 0;
     right: 0;
-    left: 256px;
+    left: 188px;
 
     width: auto;
     height: 64px;
@@ -106,7 +106,7 @@ export default {
        -moz-box-shadow: $material-shadow-5dp;
             box-shadow: $material-shadow-5dp;
     }
-    transition: $swift-ease-out;
+    transition: $material-enter;
 
     background-color: #fafafa;
     &.nav-hide

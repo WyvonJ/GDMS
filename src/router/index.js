@@ -4,11 +4,13 @@ import Router from 'vue-router'
 Vue.use(Router)
   //login panel
 import Login from '../components/login/Login.vue'
+//Grouping
+import Grouping from '../components/utils/Grouping.vue'
+
 //student panel
 import Student from '../components/student/Student.vue'
 import Topics from '../components/student/Topics.vue'
 import TopicsStatus from '../components/student/TopicsStatus.vue'
-import Grouping from '../components/student/Grouping.vue'
 import TeacherEvaluation from '../components/student/TeacherEvaluation.vue'
 import StudentAccount from '../components/student/StudentAccount.vue'
 import StudentContact from "../components/student/StudentContact.vue"
@@ -30,9 +32,8 @@ import SelectionResult from '../components/teacher/SelectionResult.vue'
 export default new Router({
   mode: 'history',
   routes: [
-    { path: '/', component: Login },  
-    { path: '/entryinformation', component: EntryInformation },
-    {
+    { path: '/', component: Login },
+    { path: '/entryinformation', component: EntryInformation }, {
       path: '/student',
       component: Student,
       children: [
@@ -52,7 +53,8 @@ export default new Router({
         { path: '', component: Creation },
         { path: 'creation', name: 'creation', component: Creation },
         { path: 'confirmation', name: 'confirmation', component: Confirmation },
-        {path:'selectionresult',name:'selectionresult',component:SelectionResult},
+        { path: 'selectionresult', name: 'selectionresult', component: SelectionResult },
+        { path: 'grouping', component: Grouping },
         { path: 'evaluation', name: 'teacherevaluation', component: StudentEvaluation },
         { path: 'contact', name: 'teachercontact', component: TeacherContact },
         { path: 'account', name: 'teacheraccount', component: TeacherAccount }
