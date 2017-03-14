@@ -24,7 +24,7 @@ export default {
 	SET_STU_TOPICS:(state,stuTopics)=>{
 		state.topicsData=stuTopics
 	},
-	SET_STU_GROUPING:(state,grouping)=>{
+	SET_GROUPING:(state,grouping)=>{
 		state.grouping=grouping
 	},
 	SET_STU_FINAL_TOPIC:(state,affirmativeTopic)=>{

@@ -1,4 +1,4 @@
-/*定义公共样式*/
+//定义公共样式
 
 [v-cloak]
 {
@@ -112,7 +112,7 @@ li
                 img
                 {
                     position: absolute;
-                    left: 38px;
+                    left: 16px;
 
                     display: inline;
 
@@ -130,24 +130,30 @@ li
 
                     position: absolute;
                     top: 18px;
-                    right: 45px;
+                    right: 27px;
 
                     color: #fff;
+                    @media (max-width: 1280px)
+                    {
+                        top: 22px;
+                    right: 20px;
+
+                    }
                 }
             }
             .mu-menu-item-wrapper.hover
             {
                 .mu-menu-item-left-icon
                 {
-                    left: 36px;
+                    left: 16px;
                 }
             }
             .mu-menu-item
             {
-                padding-left: 100px;
+                padding-left: 72px;
                 .mu-menu-item-left-icon
                 {
-                    left: 56px;
+                    left: 40px;
 
                     transition: $material-enter;
                 }
@@ -162,7 +168,7 @@ li
     .main-content
     {
         height: 100%;
-        padding: 80px 16px 28px 272px;
+        padding: 80px 16px 28px 200px;
 
         transition: $material-enter;
         text-align: left;
