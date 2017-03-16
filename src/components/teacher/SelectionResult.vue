@@ -1,22 +1,34 @@
 <template>
-	<div class="main-content" v-if="gotResult">
+  <div class="main-content" v-if="gotResult">
     <div class="teacher-topics-status">
       <md-layout md-gutter="16">
-        <md-layout class="single-card" md-flex-small="100" md-flex-medium="50" v-for="(result,index) in resultDataInView">
+        <md-layout class="single-card" md-flex-small="100" md-flex-medium="50" v-for="(result,index) in resultData">
           <mu-paper :zDepth="2">
             <div class="result-title">
               {{result._id}}. {{result.title}}
             </div>
             <div class="a-student" v-for="(student,sid) in  result.finalstudents">
-            <div class="student-details">
-            	<mu-avatar :size="48" :backgroundColor="student.gender=='女'?'#ff4081':'#26c6da'">{{student.name}}</mu-avatar> - {{student._id}}</span>
-            <div class="student-contact">
-            	 	TEL:{{student.tel}}<br/>
-            		EMAIL:{{student.email}}<br/>
-            		QQ:{{student.qq}}<br/>
-            		WECHAT:{{student.wechat}}
-            </div>
-            </div>
+              <div class="student-details">
+                <mu-avatar :size="32" icon="face"></mu-avatar>{{student.name}}{{student._id}}</span>
+                <div class="student-contact">
+                  <div class="tel chip">
+                    <mu-icon value="call" :size="18" /> {{tele}}
+                  </div>
+                  <div class="email chip">
+                    <mu-icon value="mail" :size="18" />
+                    <a :href="'mailto:'+card.email">{{card.email}}</a>
+                  </div>
+                  <div class="office chip">
+                    <mu-icon value="desktop_mac" :size="18" /> {{card.office}}
+                  </div>
+                  <div class="qq chip">
+                    <img src="../../assets/icon/qq.svg" alt="QQ" /> {{card.qq}}
+                  </div>
+                  <div class="wechat chip">
+                    <img src="../../assets/icon/wechat.svg" alt="WECHAT" /> {{card.wechat}}
+                  </div>
+                </div>
+              </div>
             </div>
           </mu-paper>
         </md-layout>
@@ -31,6 +43,7 @@
   </div>
 </template>
 
+
 <script>
 
 import { mapState ,mapActions,mapMutations} from 'vuex'
@@ -38,7 +51,19 @@ import { mapState ,mapActions,mapMutations} from 'vuex'
 		data(){
 			return {
 				gotResult:true,
-				resultDataInView:[]
+				resultData:[{
+                    _id:46,
+                    title:'江南大学图书馆阅读信息的价值发掘与可视化表达',
+                    finalstudents:[{
+                        _id:'1030515120',
+                        name:'杨延昭',
+                        gender:'男',
+                        tel:'18861853209',
+                        email:'donaldjtrump@gmail.com',
+                        qq:'852663214',
+                        wechat:'donaldjtrump'
+                    }]
+                }]
 			}
 		},
 		computed:{
@@ -53,12 +78,6 @@ import { mapState ,mapActions,mapMutations} from 'vuex'
 	   if(this.$root.getCookie('user')){
        var user=this.$root.getCookie('user')
         this.tchSelectionResult({teacherId:user})
-				.then(()=>{
-					this.resultDataInView=this.resultData
-				})
-				.catch(error=>{
-					console.log(error)
-				})
      }else{
        //this.$router.push('/')
      }
@@ -107,22 +126,14 @@ import { mapState ,mapActions,mapMutations} from 'vuex'
         {
             position: relative;
 
-            width: 184px;
-            height: 64px;
+            width: 256px;
             margin: 12px;
 
             transition: $material-enter;
-            border-radius: 56px;
+            border-radius: 4px;
             -webkit-box-shadow: $material-shadow-1dp;
                -moz-box-shadow: $material-shadow-1dp;
                     box-shadow: $material-shadow-1dp;
-            &:hover
-            {
-                .student-contact
-                {
-                    display: block !important;
-                }
-            }
             .student-details
             {
                 font-size: 16px;
@@ -130,14 +141,6 @@ import { mapState ,mapActions,mapMutations} from 'vuex'
                 overflow: hidden;
 
                 padding: 8px;
-                .mu-avatar
-                {
-                    font-size: 14px !important;
-                }
-                .student-contact
-                {
-                    display: none;
-                }
             }
         }
     }

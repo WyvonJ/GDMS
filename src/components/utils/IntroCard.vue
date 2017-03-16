@@ -1,7 +1,7 @@
 <template>
   <div class="intro-card" :class="{'active' : toggleIntro}">
-    <div v-if="!confirmed">
-      <mu-paper :class="{'active' : toggleIntro,'confirm-panel' : toggleComfirmation}">
+    <div v-if="!isselected">
+      <mu-paper :class="{'active' : toggleIntro,'confirm-panel' : toggleConfirmation}">
         <div class="student-intro-content">
           <span>GPA: {{student.gpa}}</span>
           <span style="float: right;">{{student._id}}</span>
@@ -11,7 +11,7 @@
           </div>
         </div>
         <transition name="confirm-slide" mode="out-in">
-          <div class="confirm" v-if="toggleComfirmation">
+          <div class="confirm" v-if="toggleConfirmation">
             <mu-divider/>
             <div class="no-regret">确定要选择{{student.gender=="女"?"她":"他"}}吗？
             </div>
@@ -23,11 +23,11 @@
         {{student.name}}
         <md-tooltip v-if="student.name.length>3" md-direction="top">{{student.name}}</md-tooltip>
       </md-button>
-      <md-button class="check-button md-warn" :class="{'active' : toggleIntro,'confirm-panel' : toggleComfirmation}" @click.native="studentConfirmed">
-        <md-icon>{{!toggleComfirmation ? 'check' : 'clear'}}</md-icon>
+      <md-button class="check-button md-warn" :class="{'active' : toggleIntro,'confirm-panel' : toggleConfirmation}" @click.native="studentConfirmed">
+        <md-icon>{{!toggleConfirmation ? 'check' : 'clear'}}</md-icon>
       </md-button>
     </div>
-    <div v-else="!confirmed" class="confirmed-avatar">
+    <div v-else="!isselected" class="confirmed-avatar">
       <mu-avatar  backgroundColor="greenA700" color="#fff" :size="56">{{student.name}}
       <md-tooltip md-direction="top">{{student._id}}</md-tooltip>
       </mu-avatar>
@@ -41,23 +41,23 @@ export default{
 	name:'intro-card',
 	props:{
 		student: Object,
-		confirmed: Boolean
+		isselected: Boolean
 	},
 	data(){
 		return{
         toggleIntro:false,
-      	toggleComfirmation:false,
+      	toggleConfirmation:false,
       	studentId:''
 	}},
 	methods:{
 		toggleIntroContent(){
         this.toggleIntro=!this.toggleIntro
-        this.toggleComfirmation=false
+        this.toggleConfirmation=false
         this.$emit('current')
         this.$emit('overlay')
       },
       studentConfirmed(){
-        this.toggleComfirmation=!this.toggleComfirmation
+        this.toggleConfirmation=!this.toggleConfirmation
       },
       toggleFinal(){
       	this.$emit('confirm')
@@ -86,32 +86,36 @@ export default{
         position: absolute !important;
         bottom: 6px;
         left: 36px;
-        max-height: 0;
+        height: 0;
         width: 0 !important;
-            overflow: hidden;
+        border-radius: 6px;
+        overflow: hidden;
 
         transition:$material-enter;
         opacity: 0;
         &.active
         {
-        	  max-height: 125px;
+        	  height: 125px;
             padding: 12px 36px;
             opacity: 1;
             width: 256px !important;
         }
         &.confirm-panel{
-        	  max-height: 200px;
+        	  height: 200px;
             padding-bottom: 12px;
         }
-        .no-regret{
+        .confirm{
+          position: absolute;
+          bottom: 6px;
+          width: 184px;
           text-align: center;
-          padding: 8px 0;
-        }
         .mu-raised-button{
           background-color: #1e88e5 !important;
+          border-radius: 18px;
           color: #fff;
-          margin-left: 42px;
         }
+        }
+        
 
     }
     .name-button

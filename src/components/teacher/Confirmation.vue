@@ -12,15 +12,15 @@
     </mu-paper>
     <div class="teacher-status-card">
       <md-layout md-gutter="16">
-        <md-layout class="single-card" md-flex-small="100" md-flex-medium="50" v-for="(card,index) in cardData">
+        <md-layout class="single-card" md-flex-small="100" md-flex-medium="50" v-for="(topic,index) in cardData">
           <mu-paper :zDepth="2">
             <div class="card-title">
-              {{card._id}}. {{card.title}}
-              <mu-avatar slot="right" backgroundColor="red500" :size="24">{{card.available}}</mu-avatar>
+              {{topic._id}}. {{topic.title}}
+              <mu-avatar slot="right" backgroundColor="red500" :size="24">{{topic.available}}</mu-avatar>
             </div>
 
-            <div v-for="(astudent,i) in card.firststudents" class="a-student-button">
-              <intro-card :student="astudent" :confirmed="astudent.confirmed" @overlay="toggleOverlay" @confirm="final(astudent)" @current="currentOpen('stu'+card._id+i)" :ref="'stu'+card._id+i"/>
+            <div v-for="(astudent,i) in topic.students" class="a-student-button">
+              <intro-card :student="astudent" :isselected="astudent.isselected" @overlay="toggleOverlay" @confirm="final(astudent,topic)" @current="currentOpen('stu'+topic._id+i)" :ref="'stu'+topic._id+i"/>
             </div>
 
           </mu-paper>
@@ -43,7 +43,6 @@
 <script>
 import IntroCard from '../utils/IntroCard.vue'
 import { mapActions, mapState, mapMutations } from 'vuex'
-
 export default {
   data() {
       return {
@@ -52,11 +51,41 @@ export default {
         showOverlay: false,
         showHelp: true,
         snackbarText: '',
-        currentRef:''
+        currentRef: '',
+        cardData: [{
+          _id: 46,
+          title: '江南大学图书馆阅读信息的价值发掘与可视化表达',
+          available: 2,
+          students: [{
+            _id: '1030516410',
+            name: '陈奕迅',
+            gender: '男',
+            gpa: 3.6,
+            intro: 'wwwwwwwww'
+          }, {
+            _id: '1030516410',
+            name: '谭正岩',
+            gender: '男',
+            gpa: 3.5,
+            intro: 'wwwwwwwww'
+          }, {
+            _id: '1030516410',
+            name: '迟小秋',
+            gender: '女',
+            gpa: 2.9,
+            intro: 'wwwwwwwww'
+          }, {
+            _id: '1030516410',
+            name: '马晓曼',
+            gender: '女',
+            gpa: 3.1,
+            intro: 'wwwwwwwww'
+          }]
+        }]
       }
     },
     computed: {
-      ...mapState(['user', 'cardData'])
+      ...mapState(['user'])
     },
     methods: {
       toggleEmpty() {
@@ -65,75 +94,52 @@ export default {
       toggleOverlay(astudent) {
         this.showOverlay = !this.showOverlay
       },
-      currentOpen(refs){
-        this.currentRef=refs
+      currentOpen(refs) {
+        this.currentRef = refs
       },
-      toggleOverlayDiv(){
-        _.head(this.$refs[this.currentRef]).toggleIntro=false
+      toggleOverlayDiv() {
+        _.head(this.$refs[this.currentRef]).toggleIntro = false
         this.showOverlay = !this.showOverlay
       },
-      final(astudent) {
-        this.currentOpenItem=astudent
-        var topic
-        _.forEach(this.cardData, (topic) => {
-          _.forEach(topic.firststudents, (item) => {
-            if (item === astudent) {
-              //小于可选人数
-              var c = topic.confirmedCount
-              var a = topic.available
-
-                var tchSelection = {
-                  teacherId: this.$root.getCookie('user'), //String
-                  studentId: astudent._id, //String
-                  topicId: topic._id //Number
-                }
-
-                this.tchConfirmStudent(tchSelection)
-                  .catch(error => {
-                    if (error) {
-                      this.SHOW_SNACKBAR("好像出了点问题，请再试试。")
-                      this.$root.$refs.snackbar.open()
-                      return Promise.reject(error)
-                    }
-                  })
-                  .then(() => {
-                    this.$set(astudent, 'confirmed', true)
-                    topic.confirmedCount++
-                      this.$root.$refs.snackbar.open()
-                  })
-                if (topic.confirmedCount === a) {
-                  _.forEach(topic,(value)=>{
-
-                  })
-              }
-            }
-          })
-        })
+      final(astudent, topic) {
+        this.currentOpenItem = astudent
+        //小于可选人数
+        var tchSelection = {
+            teacherId: this.$root.getCookie('user'), //String
+            studentId: astudent._id, //String
+            topicId: topic._id //Number
+          }
+          //this.tchConfirmStudent(tchSelection).then(() => {})
+        this.$set(astudent, 'isselected', true)
+        topic.count++
+          if (topic.count === topic.available) {
+            var sub=topic.students.length - topic.available
+            var sorted=_.groupBy(topic.students,'isselected')
+            this.$delete(sorted , false)
+            topic.students=sorted[true]
+          }
 
       },
       closeHelp() {
         this.showHelp = false
       },
-      ...mapMutations(['SHOW_SNACKBAR']),
-      ...mapActions(['tchConfirmStudent', 'tchGetTopics'])
+      ...mapActions(['tchConfirmStudent', 'tchGetTopics', 'showSnackbar'])
     },
     mounted() {
-     this.tchGetTopics({ teacherId: this.$root.getCookie('user') })
-     .then(() => {
-        _.forEach(this.cardData, (value) => {
-          value.confirmedCount = 0
-          _.forEach(value.firststudents, (student) => {
-            student.confirmed = false //每个学生是否被选中
-
+      _.forEach(this.cardData, (value) => {
+          value.count = 0
+          //这个服务器发过来 。。。。。。现测试用
+          _.forEach(value.students,student=>{
+            student.isselected=false
           })
         })
-      })
-       console.warn(this.card.firststudents)
+        //this.tchGetTopics({ teacherId: this.$root.getCookie('user') }).then(() => {})
     },
     components: {
       IntroCard
     }
 }
+
 
 </script>
 
@@ -151,8 +157,8 @@ export default {
 
         padding: 8px;
 
-        color: #fff;
-        background-color: #2196f3;
+        color: #4d4d4d;
+        background-color: #cdcdcd;
     }
     .help-content
     {
@@ -187,6 +193,7 @@ export default {
     .mu-paper
     {
         transition: $material-enter;
+        border-radius: 4px;
         &:hover
         {
             -webkit-box-shadow: $material-shadow-9dp;
@@ -205,10 +212,10 @@ export default {
             position: relative;
             padding: 6px 8px;
 
-            color: #fff;
-            border-top-left-radius: 2px;
-            border-top-right-radius: 2px;
-            background-color: #2196f3 !important;
+            color: #4d4d4d;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            background-color: #cdcdcd;
             .mu-avatar
             {
                 font-family: $fontCenturyGothic;
@@ -222,10 +229,6 @@ export default {
                    -moz-user-select: -moz-none;
                     -ms-user-select:      none;
                         user-select:      none;
-
-                -webkit-box-shadow: $material-shadow-1dp;
-                   -moz-box-shadow: $material-shadow-1dp;
-                        box-shadow: $material-shadow-1dp;
             }
         }
     }

@@ -5,7 +5,7 @@
       <div class="teacher-name">
          <mu-avatar icon="face" backgroundColor="deepOrange500" :size="44" :iconSize="36" />
         <div class="name">
-            {{card.name}}
+            {{card.name}} 老师
         </div>
         <mu-avatar icon="check" backgroundColor="greenA700" :size="36" :iconSize="24" class="check-icon"/>
       </div>
@@ -130,33 +130,6 @@ import {mapActions,mapState} from 'vuex'
   .teacher-info {
     padding: 16px;
     background-color: #e4e4e4;
-  }
-  .chip {
-    font-size: 14px;
-    position: relative;
-    display: inline-block;
-    width: auto;
-    height: 32px;
-    margin: 6px;
-    padding: 2px 12px;
-    transition: $material-enter;
-    border: 1px #efefef solid;
-    border-radius: 16px;
-    background-color: #fff;
-    &:hover {
-      -webkit-box-shadow: $material-shadow-1dp;
-      -moz-box-shadow: $material-shadow-1dp;
-      box-shadow: $material-shadow-1dp;
-    }
-    .mu-icon {
-      position: relative;
-      top: 5px;
-    }
-    img {
-      position: relative;
-      bottom: 2px;
-      height: 30px;
-    }
   }
   .teacher-name {
     line-height: 24px;

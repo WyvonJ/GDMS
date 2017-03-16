@@ -13,7 +13,7 @@
 	export default{
 		props:{
 			show:{
-				type:Boolean,
+				type:Boolean, 
 				default:false
 			},
 			text:{
@@ -34,11 +34,13 @@
 	right: 0;
 	left: 0;
 	cursor: default;
+	max-width: 568px;
 	transition: all .4s cubic-bezier(.25,.8,.25,1);
 	z-index: 300;
+	margin: 0 auto;
 
 	&.show{
-		transform: translateY(100px);
+		transform: translateY(104px);
 	}
 	.snackbar-container{
 		background-color: #f44336;
@@ -49,7 +51,7 @@
 		padding: 10px;
 		overflow: hidden;
 		pointer-events: auto;
-		border-radius: 5px;
+		border-radius: 28px;
 		color: #fff;
 		font-size: 16px;
 		 -webkit-box-shadow: $material-shadow-4dp;

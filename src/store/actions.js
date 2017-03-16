@@ -128,9 +128,16 @@ export default {
   },
   //学生给老师评价 POST评分
   stuEvaluationToTch: ({ commit }, payload) => {
-    //
+    return axios.post('/student/stuEvaluationToTch',payload)
+      .then(response=>{
+        showSnackbar({ commit }, '分数提交成功')
+      })
+      .catch(error=>{
+        showSnackbar({ commit }, '出了点小问题，再试试')
+        return Promise.reject(error)
+      })
   },
-  //学生提交联系信息
+  //学生修改联系信息
   stuContactInfo: ({ commit }, payload) => {
 
   },
@@ -163,8 +170,11 @@ export default {
   tchGetTopics: ({ commit }, payload) => {
     return axios.post('/teacher/tchGetTopics', payload)
       .then(response => {
-        console.log(response)
         commit('SET_TCH_TOPIC_CARD', response.data)
+      })
+      .catch((error) => {
+        this.showSnackbar('载入课题出了点问题，再刷新试试')
+        return Promise.reject(error)
       })
   },
   tchGetCreatedTopics: ({ commit }, payload) => {
@@ -193,6 +203,10 @@ export default {
         //提交成功 得到available 
         showSnackbar({ commit }, '确认学生选题成功')
       })
+      .catch((error) => {
+        showSnackbar({ commit }, '出了点问题，再试试')
+        return Promise.reject(error)
+      })
   },
   tchSelectionResult: ({ commit }, payload) => {
     return axios.post('/teacher/tchSelectionResult', payload)
@@ -202,7 +216,7 @@ export default {
   },
   //提交学生评价
   tchEvaluationToStu: ({ commit }, payload) => {
-
+    return axios.post('/teacher/tchEvaluationToStu')
   }
   ,
   tchGrouping:({commit} , payload)=>{

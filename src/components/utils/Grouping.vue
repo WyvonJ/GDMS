@@ -40,15 +40,8 @@ import {mapActions,mapState} from 'vuex'
       return {
         open:false,
         gotGroup:true,
-        groupId:0,
-        students:[{
-          _id:'54',
-          name:'asdsa',
-          final:{
-            _id:4,
-            title:'4daksdjb'
-          }
-        }],
+        groupId:'',
+        students:[],
         teachers:[]
       }
     },

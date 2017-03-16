@@ -129,15 +129,13 @@ li
                     font-weight: lighter;
 
                     position: absolute;
-                    top: 18px;
-                    right: 27px;
+                    top: 22px;
+                    right: 20px;
 
                     color: #fff;
                     @media (max-width: 1280px)
                     {
-                        top: 22px;
-                    right: 20px;
-
+                        top: 18px;
                     }
                 }
             }
@@ -168,7 +166,7 @@ li
     .main-content
     {
         height: 100%;
-        padding: 80px 16px 28px 200px;
+        padding: 72px 16px 28px 200px;
 
         transition: $material-enter;
         text-align: left;
@@ -176,7 +174,7 @@ li
         background-color: #f6f6f6;
         &.nav-hide
         {
-            padding-left: 16px;
+            padding-left: 12px;
         }
     }
 }
@@ -236,6 +234,35 @@ li
 
     opacity: 0;
 }
+
+
+  .chip {
+    font-size: 14px;
+    position: relative;
+    display: inline-block;
+    width: auto;
+    height: 32px;
+    margin: 6px;
+    padding: 2px 12px;
+    transition: $material-enter;
+    border: 1px #efefef solid;
+    border-radius: 16px;
+    background-color: #fff;
+    &:hover {
+      -webkit-box-shadow: $material-shadow-1dp;
+      -moz-box-shadow: $material-shadow-1dp;
+      box-shadow: $material-shadow-1dp;
+    }
+    .mu-icon {
+      position: relative;
+      top: 5px;
+    }
+    img {
+      position: relative;
+      bottom: 2px;
+      height: 30px;
+    }
+  }
 
 //如果要实现当前page切出时过渡？？？上面的leave-active设置无效？？？
 //还没有内容时的提示卡片样式
