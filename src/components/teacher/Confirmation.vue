@@ -12,7 +12,7 @@
     </mu-paper>
     <div class="teacher-status-card">
       <md-layout md-gutter="16">
-        <md-layout class="single-card" md-flex-small="100" md-flex-medium="50" v-for="(topic,index) in cardData">
+        <md-layout class="single-card" md-flex-small="50" md-flex-medium="33" v-for="(topic,index) in cardData">
           <mu-paper :zDepth="2">
             <div class="card-title">
               {{topic._id}}. {{topic.title}}
@@ -53,6 +53,35 @@ export default {
         snackbarText: '',
         currentRef: '',
         cardData: [{
+          _id: 46,
+          title: '江南大学图书馆阅读信息的价值发掘与可视化表达',
+          available: 2,
+          students: [{
+            _id: '1030516410',
+            name: '陈奕迅',
+            gender: '男',
+            gpa: 3.6,
+            intro: 'wwwwwwwww'
+          }, {
+            _id: '1030516410',
+            name: '谭正岩',
+            gender: '男',
+            gpa: 3.5,
+            intro: 'wwwwwwwww'
+          }, {
+            _id: '1030516410',
+            name: '迟小秋',
+            gender: '女',
+            gpa: 2.9,
+            intro: 'wwwwwwwww'
+          }, {
+            _id: '1030516410',
+            name: '马晓曼',
+            gender: '女',
+            gpa: 3.1,
+            intro: 'wwwwwwwww'
+          }]
+        },{
           _id: 46,
           title: '江南大学图书馆阅读信息的价值发掘与可视化表达',
           available: 2,
@@ -204,15 +233,18 @@ export default {
     .single-card
     {
         margin: 8px 0;
+        flex: initial;
+        -ms-flex: initial;
         .mu-paper{
           width: 100%;
         }
         .card-title
         {
             position: relative;
-            padding: 6px 8px;
+            padding: 8px 10px;
 
             color: #4d4d4d;
+            font-size: 16px;
             border-top-left-radius: 4px;
             border-top-right-radius: 4px;
             background-color: #cdcdcd;
@@ -236,7 +268,7 @@ export default {
 
 .a-student-button
 {
-    display: block;
+    display: inline-block;
 }
 .overlay
 {

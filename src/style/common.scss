@@ -11,17 +11,25 @@
     padding: 0;
 }
 
-html,
 body
 {
     font-family: $fontYahei;
     font-weight: lighter;
 
-    height: 100%;
+    width: 100%;
 
     letter-spacing: .05em;
 
     color: $black2;
+    background-color: #f6f6f6 !important;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+html,
+body
+{
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 a
@@ -75,6 +83,7 @@ li
     background: $selectionColor;
 }
 
+
 .md-tooltip
 {
     font-weight: lighter;
@@ -97,14 +106,13 @@ li
         -khtml-user-select: none;
         .console-panel
         {
-            background: #fff;
             .logo
             {
                 position: relative;
 
                 height: 64px;
+                border-bottom: 1px #dedede solid;
 
-                background-color: #474a4f;
                 @media (max-width: 1280px)
                 {
                     height: 56px;
@@ -131,8 +139,6 @@ li
                     position: absolute;
                     top: 22px;
                     right: 20px;
-
-                    color: #fff;
                     @media (max-width: 1280px)
                     {
                         top: 18px;
@@ -236,33 +242,43 @@ li
 }
 
 
-  .chip {
+.chip
+{
     font-size: 14px;
+
     position: relative;
+
     display: inline-block;
+
     width: auto;
     height: 32px;
     margin: 6px;
     padding: 2px 12px;
+
     transition: $material-enter;
+
     border: 1px #efefef solid;
     border-radius: 16px;
     background-color: #fff;
-    &:hover {
-      -webkit-box-shadow: $material-shadow-1dp;
-      -moz-box-shadow: $material-shadow-1dp;
-      box-shadow: $material-shadow-1dp;
+    &:hover
+    {
+        -webkit-box-shadow: $material-shadow-1dp;
+           -moz-box-shadow: $material-shadow-1dp;
+                box-shadow: $material-shadow-1dp;
     }
-    .mu-icon {
-      position: relative;
-      top: 5px;
+    .mu-icon
+    {
+        position: relative;
+        top: 5px;
     }
-    img {
-      position: relative;
-      bottom: 2px;
-      height: 30px;
+    img
+    {
+        position: relative;
+        bottom: 2px;
+
+        height: 30px;
     }
-  }
+}
 
 //如果要实现当前page切出时过渡？？？上面的leave-active设置无效？？？
 //还没有内容时的提示卡片样式

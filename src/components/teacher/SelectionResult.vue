@@ -2,7 +2,7 @@
   <div class="main-content" v-if="gotResult">
     <div class="teacher-topics-status">
       <md-layout md-gutter="16">
-        <md-layout class="single-card" md-flex-small="100" md-flex-medium="50" v-for="(result,index) in resultData">
+        <md-layout class="single-card" md-flex-small="50" md-flex-medium="50" v-for="(result,index) in resultData">
           <mu-paper :zDepth="2">
             <div class="result-title">
               {{result._id}}. {{result.title}}
@@ -12,20 +12,17 @@
                 <mu-avatar :size="32" icon="face"></mu-avatar>{{student.name}}{{student._id}}</span>
                 <div class="student-contact">
                   <div class="tel chip">
-                    <mu-icon value="call" :size="18" /> {{tele}}
+                    <mu-icon value="call" :size="18" /> {{student.tel}}
                   </div>
                   <div class="email chip">
                     <mu-icon value="mail" :size="18" />
-                    <a :href="'mailto:'+card.email">{{card.email}}</a>
-                  </div>
-                  <div class="office chip">
-                    <mu-icon value="desktop_mac" :size="18" /> {{card.office}}
+                    <a :href="'mailto:'+student.email">{{student.email}}</a>
                   </div>
                   <div class="qq chip">
-                    <img src="../../assets/icon/qq.svg" alt="QQ" /> {{card.qq}}
+                    <img src="../../assets/icon/qq.svg" alt="QQ" /> {{student.qq}}
                   </div>
                   <div class="wechat chip">
-                    <img src="../../assets/icon/wechat.svg" alt="WECHAT" /> {{card.wechat}}
+                    <img src="../../assets/icon/wechat.svg" alt="WECHAT" /> {{student.wechat}}
                   </div>
                 </div>
               </div>
@@ -47,6 +44,7 @@
 <script>
 
 import { mapState ,mapActions,mapMutations} from 'vuex'
+
 	export default{
 		data(){
 			return {
@@ -55,6 +53,30 @@ import { mapState ,mapActions,mapMutations} from 'vuex'
                     _id:46,
                     title:'江南大学图书馆阅读信息的价值发掘与可视化表达',
                     finalstudents:[{
+                        _id:'1030515120',
+                        name:'杨延昭',
+                        gender:'男',
+                        tel:'18861853209',
+                        email:'donaldjtrump@gmail.com',
+                        qq:'852663214',
+                        wechat:'donaldjtrump'
+                    },{
+                        _id:'1030515120',
+                        name:'杨延昭',
+                        gender:'男',
+                        tel:'18861853209',
+                        email:'donaldjtrump@gmail.com',
+                        qq:'852663214',
+                        wechat:'donaldjtrump'
+                    },{
+                        _id:'1030515120',
+                        name:'杨延昭',
+                        gender:'男',
+                        tel:'18861853209',
+                        email:'donaldjtrump@gmail.com',
+                        qq:'852663214',
+                        wechat:'donaldjtrump'
+                    },{
                         _id:'1030515120',
                         name:'杨延昭',
                         gender:'男',
@@ -74,7 +96,6 @@ import { mapState ,mapActions,mapMutations} from 'vuex'
 			//一键导出excel表格功能实现
 		},
 		mounted(){
-
 	   if(this.$root.getCookie('user')){
        var user=this.$root.getCookie('user')
         this.tchSelectionResult({teacherId:user})

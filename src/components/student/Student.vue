@@ -9,8 +9,7 @@
             JNUDM
           </p>
         </div>
-        <mu-divider />
-        <mu-menu :autoWidth="false" :maxHeight="320" :width=256 :desktop="true" :value="menuVal" @change="menuChange">
+        <mu-menu :autoWidth="false" :desktop="true" :value="menuVal" @change="handleMenuChange">
           <mu-menu-item title="学生选题" value="1" leftIcon="description" @click="topics" />
           <mu-menu-item title="选题结果" value="2" leftIcon="beenhere" @click="status" />
           <mu-menu-item title="答辩分组" value="3" leftIcon="group" @click="grouping" />
@@ -19,7 +18,7 @@
           <mu-menu-item title="帐号管理" value="6" leftIcon="settings" @click="account" />
         </mu-menu>
       </div>
-      <mu-divider />
+      <mu-divider/>
     </mu-drawer>
     
     <transition name="main-transition" appear>
@@ -69,9 +68,10 @@ export default {
             account() {
                 this.$router.push('/student/account')
             },
-            menuChange(val) {
-                this.menuVal = val
-      			this.$emit('change', val)
+            handleMenuChange(val) {
+             this.menuVal = val
+             if(!isDesktop())
+              this.handleClose()
             },
             changeNav() {
                 const desktop = isDesktop()

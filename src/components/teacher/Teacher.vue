@@ -1,13 +1,14 @@
 <template>
 	<div class="container">
     <wyvonj-header :class="{'nav-hide': !openDrawer}" :userName="userName" :notifyContent="notifyContent"></wyvonj-header>
-    <mu-drawer @hide="handleHide" @close="handleClose" :open="openDrawer" :docked="docked" class="sidebar-drawer" :zDepth="1">
+    <mu-drawer @close="handleClose" :open="openDrawer" :docked="docked" class="sidebar-drawer" :zDepth="1">
         <div class="console-panel">
             <div class="logo">
         		<img src="../../assets/img/gd_logo.png" alt="GDMS by WyvonJ">
             	<p class="jnudm">JNUDM</p>
-        	</div>
-            <mu-menu :autoWidth="false" :maxHeight="320" :width=256 :desktop="true" :value="menuValue" @change="menuChange">
+        </div>
+
+            <mu-menu :desktop="true" :value="menuValue" @change="menuChange">
                 <mu-menu-item title="创建选题" value="1" leftIcon="playlist_add" @click="createTopics" />
                 <mu-menu-item title="选择学生" value="2" leftIcon="check_circle" @click="confirmTopics" />
                 <mu-menu-item title="选题结果" value="3" leftIcon="local_library" @click="confirmResult" />
@@ -36,7 +37,6 @@ var isDesktop = () => window.innerWidth > 993
 const desktop=isDesktop()
 	export default {
 		data(){
-			
 			return{
 				openDrawer:true,
 				docked:desktop,
@@ -72,7 +72,9 @@ const desktop=isDesktop()
 			},
 			menuChange(val){
 				this.menuValue=val
-				this.$emit('change', val)
+				if(!isDesktop())
+        	this.handleClose()
+
 			},
 			changeNav () {
      		const desktop = isDesktop()
@@ -92,11 +94,8 @@ const desktop=isDesktop()
     	close () {
       	this.dialog = false
     	},
-    	handleHide () {
-    	},
     	toggleNav(){
           this.openDrawer=!this.openDrawer
-
     	}
 		},
 		computed:{

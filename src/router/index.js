@@ -29,7 +29,7 @@ import TeacherContact from '../components/teacher/TeacherContact.vue'
 import TeacherAccount from '../components/teacher/TeacherAccount.vue'
 import SelectionResult from '../components/teacher/SelectionResult.vue'
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     { path: '/', component: Login },
@@ -71,3 +71,12 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to,from,next)=>{
+  window.scrollTo(0,0)
+  next()
+})
+
+
+
+export default router

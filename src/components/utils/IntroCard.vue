@@ -120,13 +120,10 @@ export default{
     }
     .name-button
     {
+
+        padding: 6px 8px;
+        display: inline-block;
         z-index: 3;
-        &.confirmed-background{
-        	background-color: #fff !important;
-        }
-        .md-tooltip{
-        	width: 50px !important;
-        }
        
     }
     .check-button
@@ -179,8 +176,7 @@ export default{
   padding: 6px 8px;
   display: inline-block;
   .mu-avatar{
-    font-size: 14px !important;
-     border-radius: 50%;
+    font-size: 14px;
      cursor: default;
      -khtml-user-select: none;
                 -webkit-user-select:      none;
