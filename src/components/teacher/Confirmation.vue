@@ -186,16 +186,12 @@ export default {
 
         padding: 8px;
 
-        color: #4d4d4d;
-        background-color: #cdcdcd;
+        color: #fff;
+        background-color: #2196f3;
     }
     .help-content
     {
         padding: 8px;
-        em
-        {
-            color: #f44336;
-        }
     }
     .mu-icon-button
     {
@@ -243,11 +239,11 @@ export default {
             position: relative;
             padding: 8px 10px;
 
-            color: #4d4d4d;
+            color: #fff;
             font-size: 16px;
             border-top-left-radius: 4px;
             border-top-right-radius: 4px;
-            background-color: #cdcdcd;
+            background-color: #2196f3;
             .mu-avatar
             {
                 font-family: $fontCenturyGothic;
@@ -269,6 +265,7 @@ export default {
 .a-student-button
 {
     display: inline-block;
+    width: 68px;
 }
 .overlay
 {

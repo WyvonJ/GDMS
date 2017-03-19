@@ -9,13 +9,13 @@
         <mu-thead slot="header">
           <mu-tr>
             <mu-th width="8%">添加</mu-th>
-            <mu-th width="8%">序号</mu-th>
-            <mu-th width="10%">类别</mu-th>
+            <mu-th width="8%"><mu-flat-button class="category-sort" :iconClass="flatIcon" icon="arrow_upward" labelPosition="before">序号</mu-flat-button></mu-th>
+            <mu-th width="10%"><mu-flat-button class="category-sort" :iconClass="flatIcon" icon="arrow_upward" labelPosition="before">类别</mu-flat-button> </mu-th>
             <mu-th width="60%">课题名称</mu-th>
             <mu-th width="16%">已选/可选</mu-th>
           </mu-tr>
         </mu-thead>
-        <mu-tbody @click.stop="rowClick">
+        <mu-tbody>
           <mu-tr v-for="(topic,index) in topicsInDisplay">
             <mu-td width="8%">
               <mu-icon-button icon="add_circle_outline" @click="click(index,topic)" /></mu-td>
@@ -29,7 +29,7 @@
                 </div>
               </md-tooltip>
             </mu-td>
-            <mu-td width="14%" :class="{'all-selected-warn' : topic.selected >= topic.available}">{{ topic.selected }}/{{ topic.available }}</mu-td>
+            <mu-td width="14%" ><span :class="{'all-selected-warn' : topic.selected >= topic.available}" class="selected-available">{{ topic.selected||0 }}/{{ topic.available }}</span></mu-td>
           </mu-tr>
         </mu-tbody>
       </mu-table>
@@ -85,17 +85,18 @@ export default {
         showCheckbox: false,
         lastSelection: 0,
         tableTitle: '选题表',
+        flatIcon:{'icon-size':true},
         showDetails:[false,false,false],
         selectedBgc: ["red500", "lightBlueA700", "teal500"],
         topicsCart: [],
         topicsChunk: [],
+        topicsSearch:[],
         topicsInDisplay: [{
           _id: 4,
           category: 1,
           title: '444基于Unity的三维场景的交互设计与实现',
           details: 'Vu能高效的渲染元素，通常会复用已有元素而不是从头开始渲染。这么做除了使 Vue 更快之外还可以得到一些好处。如下例，当允许用户在不同的登录方式之间切换',
-          available: 3,
-          selected: 2
+          available: 3
         }, {
           _id: 5,
           category: 1,
@@ -273,18 +274,21 @@ export default {
 {
     position: relative;
 }
+
 .table-container
 {
     display: inline-block;
+
     width: 100%;
+
     transition: $material-enter;
-    
 
     -webkit-box-shadow: $material-shadow-2dp;
        -moz-box-shadow: $material-shadow-2dp;
             box-shadow: $material-shadow-2dp;
-    &.show-cart{
-      width: calc(100% - 256px);
+    &.show-cart
+    {
+        width: calc(100% - 256px);
     }
     .md-toolbar
     {
@@ -303,12 +307,25 @@ export default {
             padding: 0;
         }
     }
+    .selected-available
+    {
+        padding: 4px;
+
+        color: #42b983;
+        border: 1px #42b983 solid;
+        border-radius: 8px;
+    }
     .all-selected-warn
     {
         color: #f44336;
+        border-color: #f44336;
     }
     .mu-table
     {
+      .mu-th{
+        padding-left: 18px;
+        padding-right: 0;
+      }
         .mu-td:first-child
         {
             padding-right: 8px;
@@ -333,9 +350,16 @@ export default {
         .mu-tr
         {
             transition: $material-leave;
-        }
-        .mu-tr:nth-child(even){
-          background-color: #f4f4f4;
+           
+        } 
+        .category-sort
+            {
+                min-width: 36px;
+
+            }
+        .mu-tr:nth-child(even)
+        {
+            background-color: #f4f4f4;
         }
         .mu-tr.hover
         {
@@ -370,121 +394,138 @@ export default {
         }
     }
 }
-
 .topics-cart
 {
     position: absolute;
     top: 0;
+    right: -270px;
+
+    overflow: hidden;
+
     width: 256px;
     height: 100%;
-    right: -270px;
     padding-top: 72px;
-    overflow: hidden;
+
+    transition: $material-enter;
+
     background-color: #fff;
     -webkit-box-shadow: $material-shadow-3dp;
        -moz-box-shadow: $material-shadow-3dp;
             box-shadow: $material-shadow-3dp;
-        transition: $material-enter;
-
-    &.show-cart{
-      right: 0;
+    &.show-cart
+    {
+        right: 0;
     }
     .chosen-topics-title
     {
         font-size: 16px;
+
         width: 84px;
-        padding: 8px;
-        border-radius: 26px;
         margin: 16px auto;
+        padding: 8px;
+
         color: #42b983;
         border: 1px solid #42b983;
-
-
-    }
-    .choice-cart
-    {
-        margin-top: 12px;
-        transition: $material-enter;
-        
-        .topic-level
-        {
-            .selected-item
-            {
-                position: relative;
-
-                width: 240px;
-                min-height: 80px;
-                margin: 8px auto;
-
-                cursor: move;
-                transition: $material-enter;
-                border: 1px #dedede solid;
-                border-radius: 20px;
-                &.show-details{
-                  min-height: 256px;
-                }
-                &:hover
-                {
-                    background-color: #efefef;
-                }
-                .mu-avatar
-                {
-                    font-family: $fontCenturyGothic;
-                    position: absolute;
-                    z-index: 100;
-                    top: 6px;
-                    left: 6px;
-                    cursor: default;
-                }
-                .arrow-button{
-                  position: absolute;
-                  top: 48px;
-                  left: 5px;
-                  transition: $material-enter;
-                  cursor: pointer;
-
-                  &.show-details{
-                    transform: rotateZ(90deg);
-                  }
-                }
-                .delete-button{
-                  position: absolute;
-                  bottom: 0;
-                  width: 36px;
-                  height: 36px;
-                  padding: 0;
-                  right: 0;
-                  color: #f44336;
-                }
-                .selected-item-content
-                {
-                    position: absolute;
-                    top: 10px;
-                    left: 32px;
-                    width: 200px;
-                    .title
-                    {
-                        font-size: 14px;
-                        display: inline-block;
-                    }
-                    p.details{
-                      font-size: 13px;
-                      margin-top: 12px;
-                    }
-                }
-            }
-        }
-        .mu-raised-button
-        {
-            left: 84px;
-            border-radius: 18px;
-        }
+        border-radius: 26px;
     }
     .dragging
     {
         -webkit-box-shadow: $material-shadow-3dp;
            -moz-box-shadow: $material-shadow-3dp;
                 box-shadow: $material-shadow-3dp;
+    }
+}
+.choice-cart
+{
+    margin-top: 12px;
+
+    transition: $material-enter;
+    .topic-level
+    {
+        .selected-item
+        {
+            position: relative;
+
+            width: 240px;
+            min-height: 80px;
+            margin: 8px auto;
+
+            cursor: move;
+            transition: $material-enter;
+
+            border: 1px #dedede solid;
+            border-radius: 20px;
+            &.show-details
+            {
+                min-height: 256px;
+            }
+            &:hover
+            {
+                background-color: #efefef;
+            }
+            .mu-avatar
+            {
+                font-family: $fontCenturyGothic;
+
+                position: absolute;
+                z-index: 100;
+                top: 6px;
+                left: 6px;
+
+                cursor: default;
+            }
+            .arrow-button
+            {
+                position: absolute;
+                top: 48px;
+                left: 5px;
+
+                cursor: pointer;
+                transition: $material-enter;
+                &.show-details
+                {
+                    transform: rotateZ(90deg);
+                }
+            }
+            .delete-button
+            {
+                position: absolute;
+                right: 0;
+                bottom: 0;
+
+                width: 36px;
+                height: 36px;
+                padding: 0;
+
+                color: #f44336;
+            }
+            .selected-item-content
+            {
+                position: absolute;
+                top: 10px;
+                left: 32px;
+
+                width: 200px;
+                .title
+                {
+                    font-size: 14px;
+
+                    display: inline-block;
+                }
+                p.details
+                {
+                    font-size: 13px;
+
+                    margin-top: 12px;
+                }
+            }
+        }
+    }
+    .mu-raised-button
+    {
+        left: 84px;
+
+        border-radius: 18px;
     }
 }
 .md-tooltip
@@ -535,10 +576,12 @@ export default {
 .slide-fade-leave-active
 {
     transform: translateX(40px);
+
     opacity: 0;
 }
 .slide-fade-move
 {
     transition: $material-enter;
 }
+
 </style>

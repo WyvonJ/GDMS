@@ -40,7 +40,7 @@
 	margin: 0 auto;
 
 	&.show{
-		transform: translateY(104px);
+		transform: translateY(110px);
 	}
 	.snackbar-container{
 		background-color: #f44336;

@@ -183,9 +183,6 @@ export default{
                    -moz-user-select: -moz-none;
                     -ms-user-select:      none;
                         user-select:      none;
-     -webkit-box-shadow: $material-shadow-6dp;
-        -moz-box-shadow: $material-shadow-6dp;
-             box-shadow: $material-shadow-6dp;
   }
   
 

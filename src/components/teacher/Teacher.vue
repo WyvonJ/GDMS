@@ -3,11 +3,6 @@
     <wyvonj-header :class="{'nav-hide': !openDrawer}" :userName="userName" :notifyContent="notifyContent"></wyvonj-header>
     <mu-drawer @close="handleClose" :open="openDrawer" :docked="docked" class="sidebar-drawer" :zDepth="1">
         <div class="console-panel">
-            <div class="logo">
-        		<img src="../../assets/img/gd_logo.png" alt="GDMS by WyvonJ">
-            	<p class="jnudm">JNUDM</p>
-        </div>
-
             <mu-menu :desktop="true" :value="menuValue" @change="menuChange">
                 <mu-menu-item title="创建选题" value="1" leftIcon="playlist_add" @click="createTopics" />
                 <mu-menu-item title="选择学生" value="2" leftIcon="check_circle" @click="confirmTopics" />
