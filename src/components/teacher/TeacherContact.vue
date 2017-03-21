@@ -1,6 +1,7 @@
 <template>
-	<div class="main-content">
   <div class="student-intro">
+  <div class="sub-padding">
+
   <mu-paper :class="{'active' : toggleIntro,'confirm-panel' : toggleComfirmation}">
     <span>GPA:4.0</span>
     <span style="float: right;">1030513430</span>
@@ -16,7 +17,6 @@
       </div>
     </transition>
     
-    
   </mu-paper>
      <md-button class="name-button md-fab" @click.native="toggle">
       派大星
@@ -24,9 +24,7 @@
     <md-button class="check-button md-warn" :class="{'active' : toggleIntro}" @click.native="studentConfirmed">
    <md-icon>{{!toggleComfirmation ? 'check' : 'clear'}}</md-icon>
     </md-button>
-
-  </div>
-    
+</div>
   </div>
 </template>
 

@@ -6,8 +6,11 @@
     </div>
     <mu-icon-button icon="menu" @click="toggleNav"></mu-icon-button>
     <!--<mu-text-field hintText="SEARCH" v-if="showSearchInput" type="text" icon="search" @focus="focus" @blur="blur" />-->
-    <mu-icon class="search-icon" value="search"/>
-    <input type="text" v-if="showSearchInput" @focus="focus" @blur="blur" :class="{'focused':searchFocus}"  placeholder="Search" class="search-input" name="search">
+    <div class="search-bar-wrapper" v-if="showSearchInput" :class="{'focused':searchFocus}">
+      <mu-icon class="search-icon" value="search"/>
+      <input type="text" @focus="focus" @blur="blur"   placeholder="Search" class="search-input" name="search">
+    </div>
+    
     <div class="noti-info">
       <mu-icon-button tooltip="通知" class="notify-button" ref="notify" icon="notifications" @click="showNotification" />
       <mu-icon-button tooltip="注销" class="logout-button" ref="button" icon="exit_to_app" @click="logout" />
@@ -91,31 +94,6 @@ export default {
 
 <style lang="sass" rel="stylesheet/scss">
 @import "../../style/variables";
-.logo
-{
-    position: relative;
-    img
-    {
-        position: absolute;
-        left: 16px;
-
-        display: inline;
-
-        max-width: 64px;
-    }
-    p.jnudm
-    {
-        font-family: $fontCenturyGothic;
-        font-size: 24px;
-        font-weight: lighter;
-
-        position: absolute;
-        top: 22px;
-        left: 84px;
-
-        color: #fff;
-    }
-}
 .nav-bar
 {
     position: fixed;
@@ -148,31 +126,44 @@ export default {
         top: 8px;
         right: -80px;
     }
-    .search-icon{
-
+    .search-bar-wrapper{
       position: absolute;
-      left: 228px;
-      top: 10px;
-      margin: 12px;
-    }
-    .search-input{
-      position: absolute;
-      left: 256px;
-      top: 10px;
-      border: 0;
-      color: #fff;
-      padding: 8px;
-      font-size: 20px;
-      width: 40%;
-      margin-left: 20px;
-      background-color: #5c6bc0;
-      outline: none;
-      transition: $material-enter;
       border-radius: 3px;
+      height: 48px;
+      cursor: text;
+      white-space: nowrap;
+      padding-left: 48px;
+      background-color: #5c6bc0;
+      left: 256px;
+      width: 40%;
+      top: 8px;
+
+      transition: $material-enter;
       &.focused{
         width: 60%;
       }
+      .search-icon{
+
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: 12px;
     }
+    .search-input
+    {
+      position: relative;
+      top: 8px;
+      border: 0;
+      color: #fff;
+      font-size: 20px;
+      outline: none;
+      background-color: transparent;
+      width: 90%;
+      height: 32px;
+
+    }
+    }
+    
     .noti-info
     {
         position: absolute;
@@ -189,6 +180,9 @@ export default {
 
         text-align: left;
     }
+}
+@media (max-width: 993px){
+  
 }
 
 </style>

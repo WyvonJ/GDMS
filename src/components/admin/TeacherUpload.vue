@@ -1,5 +1,5 @@
 <template>
-	<div class="main-content">
+	<div class="teacher-upload sub-padding">
 		<md-tabs md-fixed
   					 md-centerd
   					 class="md-transparent">

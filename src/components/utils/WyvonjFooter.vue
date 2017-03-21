@@ -16,7 +16,7 @@
 			color: #aaa;
 			font-weight: 100;
 			font-size: 12px;
-			height: 24px;
+			height: 18px;
 			border-top: 1px solid #ddd;
 			transition: all .8s cubic-bezier(.1,.1,.4,1);
 			a{

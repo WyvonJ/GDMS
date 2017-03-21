@@ -94,11 +94,47 @@ li
     font-weight: lighter;
 }
 
+.sub-padding{
+    padding-top: 12px;
+    padding-left: 12px; 
+}
+.mu-pagination-item.active{
+  background-color: #f44336 !important;
+}
+.logo
+{
+    position: relative;
+
+    height: 64px;
+
+    background-color: #3f51b5;
+    img
+    {
+        position: absolute;
+        left: 16px;
+
+        display: inline;
+
+        max-width: 64px;
+    }
+    p.jnudm
+    {
+        font-family: $fontCenturyGothic;
+        font-size: 24px;
+        font-weight: lighter;
+
+        position: absolute;
+        top: 22px;
+        left: 84px;
+
+        color: #fff;
+    }
+}
 .container
 {
     height: 100%;
 
-    transition: $swift-ease-out;
+    transition: $material-enter;
     .sidebar-drawer
     {
         max-width: $sidebar-size;
@@ -109,7 +145,6 @@ li
                 user-select:      none;
 
         -khtml-user-select: none;
-        padding-top: 64px;
         .mu-menu-item-wrapper.hover
         {
             .mu-menu-item-left-icon
@@ -130,13 +165,12 @@ li
         .mu-menu-item-title
         {
             font-size: 16px;
-            font-weight: lighter;
         }
     }
     .main-content
     {
         height: 100%;
-        padding: 72px 16px 28px 200px;
+        padding: 64px 8px 18px 188px;
 
         transition: $material-enter;
         text-align: left;
@@ -148,32 +182,18 @@ li
         }
     }
 }
-
-@media (max-width: 1280px)
+.mu-th
 {
-    .mu-menu-list
+    height: 36px !important;
+    .mu-th-wrapper
     {
-        padding: 4px 0;
-    }
-    > .mu-icon
-    {
-        margin-top: 8px;
-    }
-    img
-    {
-        max-width: 56px;
-    }
-    .logo
-    {
-        height: 56px;
+        padding-top: 0;
+        padding-bottom: 0;
     }
 }
+
 @media (max-width: 993px)
 {
-    .nav-bar
-    {
-        left: 0 !important;
-    }
     .main-content
     {
         padding-left: 16px !important;
@@ -183,7 +203,7 @@ li
 //主内容区过渡动画
 .main-transition-enter-active
 {
-    transition: $material-leave;
+    transition: $material-enter;
     transition-delay: .3s !important; //不知道为什么失效了
     //元素进来时给大于等于离开动画的延迟
     //就能避免两个元素同时在画内
@@ -193,7 +213,7 @@ li
 //因为元素的opacity本来为1 所以会渐变化成1
 .main-transition-enter
 {
-    transform: translateY(40px); //这个是执行函数
+    transform: translateY(-40px); //这个是执行函数
 
     opacity: 0; //而这个是直接设置
 }
@@ -257,7 +277,7 @@ li
     height: 48px;
     padding: 16px;
 
-    transition: $swift-ease-out;
+    transition: $material-enter;
     text-align: center;
 
     color: #fff;

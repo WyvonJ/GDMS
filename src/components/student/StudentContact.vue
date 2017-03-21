@@ -1,29 +1,28 @@
 <template>
-	<div class="main-content">
-		<div class="contact-card">
-			<div class="card-content">
-				<div class="tel chip">
+			<div class="contact-content">
+  <div class="sub-padding">
+
+				<div class="contact-input">
           <mu-icon value="call" :size="18" />
-          <mu-text-field :underlineFocusClass="underline" type="number" v-model.trim="card.tel"/>
+          <mu-text-field type="number" v-model.trim="card.tel"/>
         </div>
-        <div class="email chip">
+        <div class="contact-input">
         	<mu-icon value="mail" :size="18" />
           <mu-text-field type="email" v-model.trim="card.email"/>
         </div>
-        <div class="qq chip">
+        <div class="contact-input">
           <img src="../../assets/icon/qq.svg" alt="QQ" /> 
           <mu-text-field type="number" v-model.trim="card.qq"/>
         </div>
-        <div class="wechat chip">
+        <div class="contact-input">
           <img src="../../assets/icon/wechat.svg" alt="WECHAT" /> 
           <mu-text-field v-model.trim="card.wechat"/>
         </div>
         <br/>
-        <mu-flat-button labelPosition="before" label="确认更改" icon="check" @click="commitContact" primary/>
+        <mu-raised-button labelPosition="before" label="确认更改" icon="check" @click="commitContact"/>
 				</div>
 			</div>
-		</div>
-	</div>
+            </div>
 </template>
 
 <script>
@@ -31,9 +30,6 @@
 	export default{
 		data(){
 			return {
-				underline:{
-					"display":"none"
-				},
 				card:{
 				tel:'18649150331',
 				email:'sunisdown@hotmail.com',
@@ -52,40 +48,39 @@
 
 <style lang="sass" rel="stylesheet/scss" scoped>
 @import '../../style/variables.scss';
-.contact-card {
-	font-size: 16px;
-  position: relative;
-  max-width: 480px;
-  transition: $material-enter;
-  border-radius: 6px;
-  		padding: 8px;
-  		background-color: #fff;
-  -webkit-box-shadow: $material-shadow-1dp;
-  -moz-box-shadow: $material-shadow-1dp;
-  box-shadow: $material-shadow-1dp;
-  &:hover {
-    transform: translateY(-4px);
-    -webkit-box-shadow: $material-shadow-6dp;
-    -moz-box-shadow: $material-shadow-6dp;
-    box-shadow: $material-shadow-6dp;
-  }
-  	.card-content{
-  		.chip{
-  			background-color: #efefef;
-    cursor: pointer;
-    height: 40px;
-    border-radius: 20px;
-    .mu-text-field{
-    	width: 200px;
-    }
-    }
-    .mu-flat-button
+
+.contact-content
+{
+    .contact-input
+    {
+        width: 332px;
+        height: 64px;
+        margin-bottom: 12px;
+        padding: 8px 12px;
+
+        cursor: text;
+        white-space: nowrap;
+
+        border: 1px #3f51b5 solid;
+        border-radius: 5px;
+        .mu-icon
         {
-            border-radius: 18px;
-            margin: 6px;
-            margin-top: 16px;
+            position: relative;
+            top: 6px;
+            left: 2px;
         }
-  	}
+        .mu-text-field
+        {
+            margin-left: 12px;
+        }
+    }
+}
+.mu-raised-button
+{
+    margin: 16px;
+
+    color: #fff;
+    background-color: #03a9f4;
 }
 
 </style>

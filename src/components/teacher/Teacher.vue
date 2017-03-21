@@ -3,6 +3,12 @@
     <wyvonj-header :class="{'nav-hide': !openDrawer}" :userName="userName" :notifyContent="notifyContent"></wyvonj-header>
     <mu-drawer @close="handleClose" :open="openDrawer" :docked="docked" class="sidebar-drawer" :zDepth="1">
         <div class="console-panel">
+        <div class="logo">
+          <img src="../../assets/img/gd_logo.png" alt="GDMS">
+          <p class="jnudm">
+            JNUDM
+          </p>
+        </div>
             <mu-menu :desktop="true" :value="menuValue" @change="menuChange">
                 <mu-menu-item title="创建选题" value="1" leftIcon="playlist_add" @click="createTopics" />
                 <mu-menu-item title="选择学生" value="2" leftIcon="check_circle" @click="confirmTopics" />
@@ -16,8 +22,8 @@
         <mu-divider/>
     </mu-drawer>
 
-    <transition name="main-transition" appear>
-            <router-view :class="{'nav-hide': !openDrawer}"></router-view>
+     <transition name="main-transition" appear>
+      <router-view :class="{'nav-hide': !openDrawer}" class="main-content"></router-view>
     </transition>
     <wyvonj-footer></wyvonj-footer>
 </div>
@@ -36,7 +42,6 @@ const desktop=isDesktop()
 				openDrawer:true,
 				docked:desktop,
 				desktop:desktop,
-				dialog:false,
 				firstEdit:true,
 				menuValue:1,
 				userName:'派大星',
@@ -86,15 +91,9 @@ const desktop=isDesktop()
 			handleClose () {
       	this.openDrawer=!this.openDrawer
     	},
-    	close () {
-      	this.dialog = false
-    	},
     	toggleNav(){
           this.openDrawer=!this.openDrawer
     	}
-		},
-		computed:{
-
 		},
 		components:{
 			WyvonjHeader,
@@ -115,7 +114,3 @@ const desktop=isDesktop()
 		}
 
 </script>
-
-<style lang="sass" rel="stylesheet/scss">
-
-</style>

@@ -1,5 +1,7 @@
 <template>
-  <div class="main-content" v-if="gotGroup">
+  <div class="grouping-container" v-if="gotGroup">
+  <div class="sub-padding">
+
     <div class="group-status-card">
       
       <div class="teacher-wrapper">
@@ -22,7 +24,7 @@
         </div>
     </div>
       </div>
-      
+      </div>
   </div>
   <div class="main-content" v-else>
     <div class="empty-card-title" :class="{'hide':open}" @click="toggleEmpty">

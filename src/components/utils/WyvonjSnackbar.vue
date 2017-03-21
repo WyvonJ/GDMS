@@ -51,7 +51,7 @@
 		padding: 10px;
 		overflow: hidden;
 		pointer-events: auto;
-		border-radius: 28px;
+		border-radius: 6px;
 		color: #fff;
 		font-size: 16px;
 		 -webkit-box-shadow: $material-shadow-4dp;

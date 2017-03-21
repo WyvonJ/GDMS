@@ -33,10 +33,9 @@
 						</mu-menu>	
 					</div>
 			</mu-drawer>
-		<transition name="main-transition" 
-								appear>
-      	<router-view :class="{'nav-hide': !openDrawer}"></router-view>
-		</transition>
+     <transition name="main-transition" appear>
+      <router-view :class="{'nav-hide': !openDrawer}" class="main-content"></router-view>
+    </transition>
 </div>
 </template>
 <script>

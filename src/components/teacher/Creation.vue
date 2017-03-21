@@ -1,7 +1,6 @@
 <template>
-  <div class="main-content">
     <div class="layout">
-      <md-tabs md-fixed md-centerd class="md-transparent">
+      <md-tabs md-fixed md-centerd>
         <md-tab id="teacher-account-upload" md-label="课题创建" md-icon="library_add">
           <mu-card class="creation-card">
             <mu-card-text>
@@ -58,7 +57,6 @@
         </md-tab>
       </md-tabs>
     </div>
-  </div>
 </template>
 
 

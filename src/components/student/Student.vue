@@ -3,6 +3,12 @@
    <wyvonj-header :class="{'nav-hide': !openDrawer}" :showSearchInput="menuVal==1" :userName="userName" :notifyContent="notifyContent"></wyvonj-header>
     <mu-drawer @close="handleClose" :open="openDrawer" :docked="docked" class="sidebar-drawer" :zDepth="1">
       <div class="console-panel">
+        <div class="logo">
+          <img src="../../assets/img/gd_logo.png" alt="GDMS">
+          <p class="jnudm">
+            JNUDM
+          </p>
+        </div>
         <mu-menu :autoWidth="false" :desktop="true" :value="menuVal" @change="handleMenuChange">
           <mu-menu-item title="学生选题" value="1" leftIcon="description" @click="topics" />
           <mu-menu-item title="选题结果" value="2" leftIcon="beenhere" @click="status" />
@@ -16,7 +22,7 @@
     </mu-drawer>
     
     <transition name="main-transition" appear>
-      <router-view :class="{'nav-hide': !openDrawer}"></router-view>
+      <router-view :class="{'nav-hide': !openDrawer}" class="main-content"></router-view>
     </transition>
 
     <wyvonj-footer></wyvonj-footer>

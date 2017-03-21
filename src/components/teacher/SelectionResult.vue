@@ -1,5 +1,7 @@
 <template>
-  <div class="main-content" v-if="gotResult">
+  <div class="result-container" v-if="gotResult">
+  <div class="sub-padding">
+
     <div class="teacher-topics-status">
       <md-layout md-gutter="16">
         <md-layout class="single-card" md-flex-small="100" md-flex-medium="50" v-for="(result,index) in resultData">
@@ -32,6 +34,7 @@
         </md-layout>
       </md-layout>
     </div>
+  </div>
   </div>
   <div class="main-content" v-else>
     <div class="empty-card-title" :class="{'hide':open}">

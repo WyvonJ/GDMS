@@ -1,11 +1,12 @@
 <template>
-  <div class="main-content">
+  <div class="topics-table-container">
+  <div class="sub-padding">
     <div class="table-container" :class="{'show-cart':selectedInCart[0]}">
-      <md-toolbar :class="[toggleTableBar?'md-warn':'md-primary']">
+      <md-toolbar :class="{'md-warn':!selectedInCart[0]}">
         <h2 class="md-title" style="flex: 1">{{tableTitle}}</h2>
         <mu-icon-button icon="refresh" @click="refreshTopics" />
       </md-toolbar>
-      <mu-table :fixedHeader="fixedHeader" :selectable="selectable" :showCheckbox="showCheckbox" @click.stop.self="rowClick">
+      <mu-table :fixedHeader="fixedHeader" :selectable="selectable" :showCheckbox="showCheckbox">
         <mu-thead slot="header">
           <mu-tr>
             <mu-th width="8%">添加</mu-th>
@@ -67,6 +68,8 @@
 
     </div>
   </div>
+    
+  </div>
 </template>
 
 
@@ -81,7 +84,6 @@ export default {
         pageSize: 10,
         fixedHeader: true,
         selectable: false,
-        toggleTableBar: true,
         showCheckbox: false,
         lastSelection: 0,
         tableTitle: '选题表',
@@ -215,7 +217,6 @@ export default {
               }
           }
         } else {
-          this.toggleTableBar = true
           this.lastSelection = topic._id
         }
 
@@ -229,7 +230,7 @@ export default {
              this.$router.push('/')
            }*/
         var selectedInCartWrapper = {
-          _id: this.$root.getCookie('user'),
+          _id: this.$root.getCookie('user')||'1030513430',
           first: this.selectedInCart[0]._id,
           second: this.selectedInCart[1]._id,
           third: this.selectedInCart[2]._id
@@ -243,8 +244,6 @@ export default {
       deleteTopic(index) {
         //删除本条选题
         this.selectedInCart.splice(index, 1)
-        this.selectedEdit = !this.selectedEdit
-        this.$children[2].selectable = !this.$children[2].selectable
       },
       ...mapActions(['stuGetTopics', 'showSnackbar','stuCommitSelection'])
     },
@@ -270,11 +269,6 @@ export default {
 </script>
 <style lang="sass" rel="stylesheet/scss" scoped>
 @import '../../style/variables.scss';
-.main-content
-{
-    position: relative;
-}
-
 .table-container
 {
     display: inline-block;
@@ -310,6 +304,7 @@ export default {
     .selected-available
     {
         padding: 4px;
+        transition: $material-enter;
 
         color: #42b983;
         border: 1px #42b983 solid;
@@ -350,7 +345,6 @@ export default {
         .mu-tr
         {
             transition: $material-leave;
-           
         } 
         .category-sort
             {
@@ -364,6 +358,15 @@ export default {
         .mu-tr.hover
         {
             background-color: #dedede;
+
+            .selected-available{
+              color: #fff;
+              background-color: #42b983;
+            }
+            .all-selected-warn{
+              color: #fff;
+              background-color: #f44336;
+            }
         }
     }
     .mu-content-block
@@ -424,9 +427,9 @@ export default {
         margin: 16px auto;
         padding: 8px;
 
-        color: #42b983;
-        border: 1px solid #42b983;
-        border-radius: 26px;
+        color: #3f51b5;
+        border: 1px solid #3f51b5;
+        border-radius: 3px;
     }
     .dragging
     {
@@ -440,8 +443,6 @@ export default {
     margin-top: 12px;
 
     transition: $material-enter;
-    .topic-level
-    {
         .selected-item
         {
             position: relative;
@@ -454,7 +455,7 @@ export default {
             transition: $material-enter;
 
             border: 1px #dedede solid;
-            border-radius: 20px;
+            border-radius: 6px;
             &.show-details
             {
                 min-height: 256px;
@@ -520,12 +521,17 @@ export default {
                 }
             }
         }
-    }
     .mu-raised-button
     {
         left: 84px;
+    }
+}
 
-        border-radius: 18px;
+
+@media (max-width: 993px)
+{
+    .topics-cart{
+      right: -270px;
     }
 }
 .md-tooltip
@@ -536,7 +542,7 @@ export default {
     width: 480px;
     height: auto;
     padding: 0;
-
+    z-index: 248;
     white-space: normal;
 
     color: #000;

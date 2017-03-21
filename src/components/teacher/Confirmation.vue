@@ -1,6 +1,7 @@
 <template>
-  <div class="main-content" v-if="gotTopic">
-    <mu-paper :zDepth="1" class="help" v-if="showHelp">
+  <div class="confirmation-container" v-if="gotTopic">
+  <div class="sub-padding">
+     <mu-paper :zDepth="1" class="help" v-if="showHelp">
       <div class="help-title">帮助</div>
       <mu-icon-button icon="clear" @click="closeHelp" />
       <p class="help-content">
@@ -31,11 +32,6 @@
       <div class="overlay" v-if="showOverlay" @click="toggleOverlayDiv"></div>
     </transition>
   </div>
-  <div class="main-content" v-else>
-    <div class="empty-card-title" :class="{'hide':open}">
-      这里空空如也！
-      <p class="intrgging">不是说了啥都没有么 (゜-゜)つロ。</p>
-    </div>
   </div>
 </template>
 
