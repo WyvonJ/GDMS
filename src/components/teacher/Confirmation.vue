@@ -20,8 +20,8 @@
               <mu-avatar slot="right" backgroundColor="red500" :size="24">{{topic.available}}</mu-avatar>
             </div>
 
-            <div v-for="(astudent,i) in topic.students" class="a-student-button">
-              <intro-card :student="astudent" :isselected="astudent.isselected" @overlay="toggleOverlay" @confirm="final(astudent,topic)" @current="currentOpen('stu'+topic._id+i)" :ref="'stu'+topic._id+i"/>
+            <div v-for="(student,i) in topic.students" class="a-student-button">
+              <intro-card :student="student" :isselected="student.isselected" @overlay="toggleOverlay" @confirm="final(student,topic)" @current="currentOpen('stu'+topic._id+i)" :ref="'stu'+topic._id+i"/>
             </div>
 
           </mu-paper>
@@ -46,7 +46,6 @@ export default {
         gotTopic: true,
         showOverlay: false,
         showHelp: true,
-        snackbarText: '',
         currentRef: '',
         cardData: [{
           _id: 46,
@@ -116,7 +115,7 @@ export default {
       toggleEmpty() {
         this.open = !this.open
       },
-      toggleOverlay(astudent) {
+      toggleOverlay(student) {
         this.showOverlay = !this.showOverlay
       },
       currentOpen(refs) {
@@ -126,20 +125,20 @@ export default {
         _.head(this.$refs[this.currentRef]).toggleIntro = false
         this.showOverlay = !this.showOverlay
       },
-      final(astudent, topic) {
-        this.currentOpenItem = astudent
+      final(student, topic) {
+        this.currentOpenItem = student
         //小于可选人数
-        var tchSelection = {
+        let tchSelection = {
             teacherId: this.$root.getCookie('user'), //String
-            studentId: astudent._id, //String
+            studentId: student._id, //String
             topicId: topic._id //Number
           }
-          //this.tchConfirmStudent(tchSelection).then(() => {})
-        this.$set(astudent, 'isselected', true)
+        this.tchConfirmStudent(tchSelection)
+        this.$set(student, 'isselected', true)
         topic.count++
           if (topic.count === topic.available) {
-            var sub=topic.students.length - topic.available
-            var sorted=_.groupBy(topic.students,'isselected')
+            let sub=topic.students.length - topic.available
+            let sorted=_.groupBy(topic.students,'isselected')
             this.$delete(sorted , false)
             topic.students=sorted[true]
           }
@@ -158,7 +157,8 @@ export default {
             student.isselected=false
           })
         })
-        //this.tchGetTopics({ teacherId: this.$root.getCookie('user') }).then(() => {})
+      //       正式接入服务器的时候 在mapState里面加cardData
+        //this.tchGetTopics({ teacherId: this.$root.getCookie('user') })
     },
     components: {
       IntroCard

@@ -1,6 +1,6 @@
 <template>
     <div class="layout">
-      <md-tabs md-fixed md-centerd>
+      <md-tabs md-fixed class="md-transparent" md-centerd>
         <md-tab id="teacher-account-upload" md-label="课题创建" md-icon="library_add">
           <mu-card class="creation-card">
             <mu-card-text>
@@ -39,13 +39,13 @@
                   </mu-tr>
                 </mu-thead>
                 <mu-tbody>
-                  <mu-tr v-for="(topic,index) in topicsData">
+                  <mu-tr v-for="(topic,index) in createdTopics">
                     <mu-td width="4%">{{topic._id}}</mu-td>
                     <mu-td width="7%">{{topic.category===0?"论文":"设计"}}</mu-td>
                     <mu-td width="20%">{{topic.title}}
                     </mu-td>
                     <mu-td width="44%">{{ topic.details }}</mu-td>
-                    <mu-td width="10%">{{ topic.available }}</mu-td>
+                    <mu-td width="10%">{{ topic.restriction }}</mu-td>
                     <mu-td width="10%">
                       <mu-icon-button @click="deleteTopic(topic , index)" icon="cancel"></mu-icon-button>
                     </mu-td>
@@ -92,7 +92,6 @@ export default {
     },
     methods: {
       ...mapActions(['tchCreateTopic', 'tchDeleteTopic', 'tchGetCreatedTopics', 'showSnackbar']),
-      ...mapMutations(['SHOW_SNACKBAR']),
       createTopic() {
         if (this.fields.length == 0) {
           return this.fieldsError = "还没选择课题研究方向！"
@@ -119,11 +118,12 @@ export default {
             this.tchGetCreatedTopics({
               teacherId: this.$root.getCookie('user'),
             })
-            this.topicsData=this.createdTopics
             this.fields = []
             this.titleText = ''
             this.detailText = ''
             this.available = '1'
+            this.showSnackbar("课题创建成功")
+//--------没有触发视图更新？？？？
           })
       },
       deleteTopic(topic, index) {
@@ -137,11 +137,7 @@ export default {
                 teacherId: this.$root.getCookie('user'),
               })
               .then(() => {
-                this.topicsData = this.createdTopics
-              })
-              .then(() => {
                 this.showSnackbar("课题已删除")
-                this.topicsData = this.createdTopics
               })
           })
       },
@@ -167,9 +163,6 @@ export default {
       if(this.$root.getCookie('user')){
       this.tchGetCreatedTopics({
           teacherId: this.$root.getCookie('user'),
-        })
-        .then(() => {
-          this.topicsData = this.createdTopics
         })
         }else{
           //this.$router.push('/')

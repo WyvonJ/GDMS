@@ -5,7 +5,6 @@
       <p class="jnudm">JNUDM</p>
     </div>
     <mu-icon-button icon="menu" @click="toggleNav"></mu-icon-button>
-    <!--<mu-text-field hintText="SEARCH" v-if="showSearchInput" type="text" icon="search" @focus="focus" @blur="blur" />-->
     <div class="search-bar-wrapper" v-if="showSearchInput" :class="{'focused':searchFocus}">
       <mu-icon class="search-icon" value="search"/>
       <input type="text" @focus="focus" @blur="blur"   placeholder="Search" class="search-input" name="search">

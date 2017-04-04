@@ -45,7 +45,7 @@
   </div>
   <div class="main-content" v-else>
     <div class="empty-card-title" :class="{'hide':open}" @click="toggleEmpty">
-      这里空空如也！
+      这里空空如也！    显示三个选题
       <p class="intrgging">不是说了啥都没有么 (゜-゜)つロ。</p>
     </div>
   </div>
@@ -59,18 +59,7 @@ import {mapActions,mapState} from 'vuex'
       return {
         open:false,
         gotTopic:true,
-        card: {
-          _id:4,
-          title:'江南大学图书馆阅读信息的价值发掘与可视化表达',
-          name:'陳麗芳',
-          tel:'18645910268',
-          qq:'552084209',
-          wechat:'welovevue',
-          email:'fangg@gmail.com',
-          office:'数媒楼503',
-          category:0,
-          details:'基于机器学习时兴的迁移学习技术，学习已有知识应用到现有数据集上的分析处理。该技术将在医学成像MR/CT优化处理上进行应用实践。'
-        }
+        card: {}
       }
     },
     computed:{
@@ -85,7 +74,7 @@ import {mapActions,mapState} from 'vuex'
           tel+=this.card.tel[i]
         }
         return tel
-      }
+      }//*********************添加三个课题显示
     },
     methods:{
       toggleEmpty(){

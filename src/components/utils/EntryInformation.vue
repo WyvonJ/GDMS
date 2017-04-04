@@ -151,7 +151,6 @@ export default {
         var tel=this.tel.toString()
         this.tel=tel
         if(tel.length!=11){
-          //好像能输入小数点 需改进
           this.telError='请输入正确的手机号码。'
         }else{
           this.activeStep++

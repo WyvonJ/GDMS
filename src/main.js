@@ -27,7 +27,7 @@ Vue.material.registerTheme('default', {
   primary: 'red',
   accent: 'red',
   warn: 'white',
-  background: 'red'
+  background: 'white'
 })
 var vm = new Vue({
   router,

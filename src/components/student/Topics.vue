@@ -23,14 +23,22 @@
             <mu-td width="8%">{{topic._id}}</mu-td>
             <mu-td width="10%">{{topic.category===0?"论文":"设计"}}</mu-td>
             <mu-td width="60%">{{topic.title}}
-              <md-tooltip md-direction="top">
+              <md-tooltip md-direction="top" class="details-tooltip">
                 <div class="details-appbar">DESCRIPTION</div>
                 <div class="details-content">
                   {{topic.details}}
                 </div>
               </md-tooltip>
             </mu-td>
-            <mu-td width="14%" ><span :class="{'all-selected-warn' : topic.selected >= topic.available}" class="selected-available">{{ topic.selected||0 }}/{{ topic.available }}</span></mu-td>
+            <mu-td width="14%" ><span :class="{'all-selected-warn' : topic.selected >= topic.restriction}" class="selected-restriction">{{ topic.selected||0 }}/{{ topic.restriction ||0}}</span>
+              <md-tooltip md-direction="top" class="selected-tooltip">
+                <ul>
+                  <li>第一志愿：{{topic.firststudents===undefined?0:topic.firststudents.length}}</li>
+                  <li>第二志愿：{{topic.secondstudents===undefined?0:topic.secondstudents.length}}</li>
+                  <li>第三志愿：{{topic.thirdstudents===undefined?0:topic.thirdstudents.length}}</li>
+                </ul>
+              </md-tooltip>
+            </mu-td>
           </mu-tr>
         </mu-tbody>
       </mu-table>
@@ -98,70 +106,99 @@ export default {
           category: 1,
           title: '444基于Unity的三维场景的交互设计与实现',
           details: 'Vu能高效的渲染元素，通常会复用已有元素而不是从头开始渲染。这么做除了使 Vue 更快之外还可以得到一些好处。如下例，当允许用户在不同的登录方式之间切换',
-          available: 3
+          restriction: 3,
+          selected:3,
+          secondstudents:[],
+          thirdstudents:[3]
         }, {
           _id: 5,
           category: 1,
           title: '555基于Unity的三维场景的交互设计与实现',
           details: 'Vue 尝试尽可能高效的渲染元素，通常会复用已有元素而不是从头开始渲染。这么做Vue 更快之外还可以得到一些好处。如下例，当允许用户在不同的登录方式之间切换',
-          available: 3,
-          selected: 0
+          selected: 0,
+          firststudents:[1,3],
+          secondstudents:[],
+          thirdstudents:[3]
         }, {
           _id: 6,
           category: 0,
           title: '666基于Unity的三维场景的交互设计与实现',
           details: 'Vue 尝试尽可能高效的渲染元素，通常会复用已有元素而不是从头开始渲染。这么做除了使 Vue 更快之外还可以得到一些好处。如下例，当允许用户在不同的登录方式之间切换',
-          available: 2,
-          selected: 2
+          restriction: 2,
+          selected: 2,
+          firststudents:[1,3],
+          secondstudents:[],
+          thirdstudents:[3]
         }, {
           _id: 7,
           category: 1,
           title: '777基于Unity的三维场景的交互设计与实现',
           details: 'Vue 尝试尽可能高效的4512445hh更快之外还可以得到一些好处。如下例，当允许用户在不同的登录方式之间切换',
-          available: 3,
-          selected: 2
+          restriction: 3,
+          selected: 2,
+          firststudents:[1,3],
+          secondstudents:[],
+          thirdstudents:[3]
         }, {
           _id: 8,
           category: 1,
           title: '888基于Unity的三维场景的交互设计与实现',
           details: 'Vue 尝试尽可能高效的渲染元素，通常会复用已有元素而不是从头开始渲染。这么做除了使 Vue 更快之外还可以得到一些好处。如下例，之间切换',
-          available: 1,
-          selected: 1
+          restriction: 1,
+          selected: 1,
+          firststudents:[1,3],
+          secondstudents:[],
+          thirdstudents:[3]
         }, {
           _id: 4,
           category: 1,
           title: '江南大学图书馆阅读信息的价值发掘与可视化表达（与艺术系老师合作课题）',
           details: 'Vu能高效的渲染元素，通常会复用已有元素而不是从头开始渲染。这么做除了使 Vue 更快之外还可以得到一些好处。如下例，当允许用户在不同的登录方式之间切换',
-          available: 3,
-          selected: 2
+          restriction: 3,
+          selected: 2,
+          firststudents:[1,3],
+          secondstudents:[],
+          thirdstudents:[3]
         }, {
           _id: 5,
           category: 1,
           title: '555基于Unity的三维场景的交互设计与实现',
           details: 'Vue 尝试尽可能高效的渲染元素，通常会复用已有元素而不是从头开始渲染。这么做Vue 更快之外还可以得到一些好处。如下例，当允许用户在不同的登录方式之间切换',
-          available: 3,
-          selected: 0
+          restriction: 3,
+          selected: 0,
+          firststudents:[1,3],
+          secondstudents:[],
+          thirdstudents:[3]
         }, {
           _id: 6,
           category: 0,
           title: '666基于Unity的三维场景的交互设计与实现',
           details: 'Vue 尝试尽可能高效的渲染元素，通常会复用已有元素而不是从头开始渲染。这么做除了使 Vue 更快之外还可以得到一些好处。如下例，当允许用户在不同的登录方式之间切换',
-          available: 2,
-          selected: 2
+          restriction: 2,
+          selected: 2,
+          firststudents:[1,3],
+          secondstudents:[],
+          thirdstudents:[3]
         }, {
           _id: 7,
           category: 1,
           title: '777基于Unity的三维场景的交互设计与实现',
           details: 'Vue 尝试尽可能高效的4512445hh更快之外还可以得到一些好处。如下例，当允许用户在不同的登录方式之间切换',
-          available: 3,
-          selected: 2
+          restriction: 3,
+          selected: 2,
+          firststudents:[1,3],
+          secondstudents:[],
+          thirdstudents:[3]
         }, {
           _id: 8,
           category: 1,
           title: '888基于Unity的三维场景的交互设计与实现',
           details: 'Vue 尝试尽可能高效的渲染元素，通常会复用已有元素而不是从头开始渲染。这么做除了使 Vue 更快之外还可以得到一些好处。如下例，之间切换',
-          available: 1,
-          selected: 1
+          restriction: 1,
+          selected: 1,
+          firststudents:[1,3],
+          secondstudents:[],
+          thirdstudents:[3]
         }]
       }
     },
@@ -229,11 +266,11 @@ export default {
              alert('超时未操作，请重新登录')
              this.$router.push('/')
            }*/
-        var selectedInCartWrapper = {
-          _id: this.$root.getCookie('user')||'1030513430',
+        let selectedInCartWrapper = {
+          _id: this.$root.getCookie('user'),
           first: this.selectedInCart[0]._id,
-          second: this.selectedInCart[1]._id,
-          third: this.selectedInCart[2]._id
+          second: this.selectedInCart[1]===undefined?-1:this.selectedInCart[1]._id,
+          third: this.selectedInCart[2]===undefined?-1:this.selectedInCart[2]._id
         }
         this.stuCommitSelection(selectedInCartWrapper)
       },
@@ -249,6 +286,7 @@ export default {
     },
     beforeDestroyed(){
       //切换路由时如果还没保存 就弹出提示
+      this.selectedInCart=[]
     },
     mounted() {
       /*var id = this.$root.getCookie('user')
@@ -301,7 +339,7 @@ export default {
             padding: 0;
         }
     }
-    .selected-available
+    .selected-restriction
     {
         padding: 4px;
         transition: $material-enter;
@@ -359,7 +397,7 @@ export default {
         {
             background-color: #dedede;
 
-            .selected-available{
+            .selected-restriction{
               color: #fff;
               background-color: #42b983;
             }
@@ -534,7 +572,25 @@ export default {
       right: -270px;
     }
 }
-.md-tooltip
+.md-tooltip.selected-tooltip
+{
+    font-family: $fontYahei;
+    font-size: 14px;
+
+    width: 100px;
+    height: auto;
+    padding: 8px;
+    z-index: 248;
+    white-space: normal;
+
+    color: #000;
+    border-radius: 5px;
+    background-color: #fff;
+    -webkit-box-shadow: $material-shadow-3dp;
+       -moz-box-shadow: $material-shadow-3dp;
+            box-shadow: $material-shadow-3dp;
+}
+.md-tooltip.details-tooltip
 {
     font-family: $fontYahei;
     font-size: 14px;
