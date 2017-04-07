@@ -117,3 +117,5 @@ if (process.env.NODE_ENV === 'production') {
     })
   ])
 }
+
+process.traceDeprecation = true

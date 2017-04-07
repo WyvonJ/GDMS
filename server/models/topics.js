@@ -96,6 +96,9 @@ topicsSchema.statics.removeTopic = function(topicId,cb){
 	            	                                       	this.findOneAndRemove({_id:doc.topicsSeq+1}).exec((err,doc)=>{
 	            	                                       		        
                                                                         var deletedId = deletedTopic._id
+                                                                        db.mentors.findOneAndUpdate({_id:doc.mentors},
+                                                                        	                        {$pull:{topics: doc._id}, $push:{ topics: deletedId}})
+                                                                                                    .exec()
                                                                         doc._id = deletedId//删除的题目
 
 	            	                                       				this.collection.insert(doc)//插入最后一个题

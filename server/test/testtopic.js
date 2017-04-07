@@ -68,3 +68,14 @@ transporter.sendMail(mailOptions, function(error, info){
     rec_num: '18861823231',
     sms_template_code: 'SMS_53770189'
 });*/
+db.students.find({}).exec()
+  .then((students)=>{
+    var record = []
+    for(var i=0;i<students.length;i++)
+    {
+        for(var j=0;j<2;j++)
+        record[i]={a:j}
+       // record[i].a =
+    }
+    console.log(record)
+  })

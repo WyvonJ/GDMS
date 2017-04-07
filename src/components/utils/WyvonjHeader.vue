@@ -2,14 +2,15 @@
   <header class="nav-bar">
     <div class="logo">
       <img src="../../assets/img/gd_logo.png" alt="GDMS">
-      <p class="jnudm">JNUDM</p>
+      <p class="jnudm">Jnudm</p>
     </div>
     <mu-icon-button icon="menu" @click="toggleNav"></mu-icon-button>
-    <div class="search-bar-wrapper" v-if="showSearchInput" :class="{'focused':searchFocus}">
+    <transition name="search-transition">
+      <div class="search-bar-wrapper" v-show="showSearchInput" >
       <mu-icon class="search-icon" value="search"/>
-      <input type="text" @focus="focus" @blur="blur"   placeholder="Search" class="search-input" name="search">
+      <input type="text" @focus="focus" :class="{'focused':searchFocus}" @blur="blur" @keyup.enter="search" v-model.trim="str" placeholder="Search" class="search-input" name="search">
     </div>
-    
+    </transition>
     <div class="noti-info">
       <mu-icon-button tooltip="通知" class="notify-button" ref="notify" icon="notifications" @click="showNotification" />
       <mu-icon-button tooltip="注销" class="logout-button" ref="button" icon="exit_to_app" @click="logout" />
@@ -54,7 +55,8 @@ export default {
       notification: 1,
       openNotification: false,
       trigger: null,
-      searchFocus:false
+      searchFocus:false,
+      str:''
     }
   },
   methods: {
@@ -70,6 +72,10 @@ export default {
     blur(){
       this.searchFocus=false
     },
+    search(){
+      this.$emit('search')
+      this.SET_SEARCH_STR(this.str)
+    },
     toggleNav() {
       this.$parent.toggleNav()
     },
@@ -77,12 +83,13 @@ export default {
     logout(){
       unsetCookie('user','/',window.location.hostname)
       this.SET_USER({account:'',password:''})
+      this.RESET_STATE()
       this.$router.push('/')//返回登录界面
     },
-    ...mapMutations(['SET_USER'])
+    ...mapMutations(['SET_USER','RESET_STATE','SET_SEARCH_STR'])
   },
   computed:{
-    ...mapState(['user','username'])
+    ...mapState(['user','username','searchStr'])
   },
   mounted() {
     this.trigger = this.$refs.notify.$el
@@ -138,9 +145,7 @@ export default {
       top: 8px;
 
       transition: $material-enter;
-      &.focused{
-        width: 60%;
-      }
+     
       .search-icon{
 
       position: absolute;
@@ -157,9 +162,12 @@ export default {
       font-size: 20px;
       outline: none;
       background-color: transparent;
-      width: 90%;
+      width: 100%;
       height: 32px;
-
+      font-variant: small-caps;
+       &.focused{
+        width: 120%;
+      }
     }
     }
     
@@ -184,4 +192,28 @@ export default {
   
 }
 
+//主内容区过渡动画
+.search-transition-enter-active
+{
+    transition: $material-enter;
+    transition-delay: .3s !important; 
+    //元素进来时给大于等于离开动画的延迟
+    //就能避免两个元素同时在画内
+}
+
+//page进来的时候将其向上移动80px opacity设置为0
+//因为元素的opacity本来为1 所以会渐变化成1
+.search-transition-enter
+{
+    transform: translateX(-40px); //这个是执行函数
+
+    opacity: 0; //而这个是直接设置
+}
+
+.search-transition-leave-active
+{
+    transform: translateX(40px);
+
+    opacity: 0;
+}
 </style>

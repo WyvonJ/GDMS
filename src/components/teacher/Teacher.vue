@@ -6,7 +6,7 @@
         <div class="logo">
           <img src="../../assets/img/gd_logo.png" alt="GDMS">
           <p class="jnudm">
-            JNUDM
+            Jnudm
           </p>
         </div>
             <mu-menu :desktop="true" :value="menuValue" @change="menuChange">
@@ -44,10 +44,13 @@ const desktop=isDesktop()
 				desktop:desktop,
 				firstEdit:true,
 				menuValue:1,
-				userName:'派大星',
-				notifyContent:'可以开始选择二批志愿了。'
+				userName:'',
+				notifyContent:''
 			}
 		},
+    computed:{
+      ...mapState(['userInfo'])
+    },
 		methods:{
 			createTopics(){
 				this.$router.push('/teacher/creation')
@@ -105,12 +108,18 @@ const desktop=isDesktop()
     	window.removeEventListener('resize', this.handleResize)
   	},
 		mounted(){
-			this.changeNav()
-			this.handleResize=()=>{
-				this.changeNav()
-			}
-			window.addEventListener('resize',this.handleResize)
-		}
+			if (!this.$root.getCookie('user')||this.userInfo.userType!=1)
+       // return this.$router.push('/')
+     
+        this.userName = this.userInfo.userName
+        this.notifyContent = this.notification
+        this.changeNav()
+        this.handleResize = () => {
+          this.changeNav()
+        }
+        window.addEventListener('resize', this.handleResize)
+        this.$emit('resize')
+    }
 		}
 
 </script>

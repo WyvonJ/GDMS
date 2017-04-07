@@ -9,9 +9,7 @@ import 'muse-ui/dist/theme-carbon.css'
 import 'vue-material/dist/vue-material.css'
 
 import StyleInjector from './components/utils/StyleInjector.vue'
-import LoadingSpinner from './components/utils/LoadingSpinner.vue'
 import WyvonjCanvas from './components/utils/WyvonjCanvas.vue'
-
 import WyvonjSnackbar from './components/utils/WyvonjSnackbar.vue'
 
 import store from './store'
@@ -34,7 +32,6 @@ var vm = new Vue({
   store,
   components: { 
   	StyleInjector,
-  	LoadingSpinner,
     WyvonjCanvas,
     WyvonjSnackbar
    },

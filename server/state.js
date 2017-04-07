@@ -2,13 +2,21 @@ var StateEnum =
 {
   InitializeData: 0,
   CreateTopics: 1,
-  SelectTopics: 2,
-  ReSelectTopics: 3,
-  DetermineGroups: 4,
-  Scoring: 5
-}
-var CurrentState = StateEnum.Scoring
+  
+  SelecTopics:2,
+  FirstSelectTopics: 3,
+  SecondSelectTopics: 4,
+  ThirdSelectTopics: 5,
 
-exports.StateEnum = StateEnum
-exports.CurrentState = CurrentState
+  ReSelectTopics: 6,
+  ReFirstSelectTopics: 7,
+  ReSecondSelectTopics: 8,
+  ReThirdSelectTopics: 9,
+
+  ReDetermineGroups: 10,
+  Scoring: 11
+}
+
+var global.CurrentState = StateEnum.InitializeData
+
 

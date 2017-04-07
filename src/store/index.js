@@ -13,6 +13,7 @@ const store=new Vuex.Store({
 		//展示snackbar
 		snackbarText:'',
 		showSnackbar:false,
+		searchStr:'',
 		/***********Student************/
 		//设置现在的用户是谁
 		user: {
@@ -22,7 +23,8 @@ const store=new Vuex.Store({
 		//用户名
 		userInfo:{
 			userName:'',
-			userType:Number
+			userType:-1,
+			isFirstLogin:true
 		},
 		//notification信息
 		notification:'',
@@ -33,7 +35,18 @@ const store=new Vuex.Store({
 		//已确定的课题
 		//放在老师选择的卡片中的数据
 		cardData:[],
-		affirmativeTopic:{},
+		affirmativeTopic:{
+			name:'',
+			tel:'',
+			email:'',
+			office:'',
+			qq:'',
+			wechat:'',
+			_id:-1,
+			title:'',
+			details:'',
+			category:-1
+		},
 		//获取答辩分组
 		grouping:{},
 		/************Teacher***************/

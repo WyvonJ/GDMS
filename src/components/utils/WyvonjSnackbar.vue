@@ -2,8 +2,12 @@
 	<div class="wyvonj-snackbar" :class="{'show':show}">
 		<div class="snackbar-container">
 			<div class="snackbar-content" >
-			<md-icon>error_outline</md-icon>
+			<div class="info-icon">
+				<md-icon>error_outline</md-icon>
+			</div>
+			<div class="info-text">
 				<span>{{text}}</span>
+			</div>
   		</div>
 			</div>
 	</div>
@@ -40,19 +44,17 @@
 	margin: 0 auto;
 
 	&.show{
-		transform: translateY(110px);
+		transform: translateY(112px);
 	}
 	.snackbar-container{
-		background-color: #f44336;
 		width: auto;
 		min-width: 200px;
 		max-width: 568px;
-		max-height: 56px;
-		padding: 10px;
+		max-height: 48px;
 		overflow: hidden;
 		pointer-events: auto;
 		border-radius: 6px;
-		color: #fff;
+		background-color: #efefef;
 		font-size: 16px;
 		 -webkit-box-shadow: $material-shadow-4dp;
        -moz-box-shadow: $material-shadow-4dp;
@@ -67,13 +69,20 @@
                 user-select:      none;
 
         -khtml-user-select: none;
-			.md-icon{
-				margin: 0 8px;
+      .info-icon{
+      	display: inline-block;
+				background-color: #f44336;
+				color: #fff;
+				width: 40px;
+				height: 40px;
+				line-height: 40px;
+      }
+      .info-text{
+      	display: inline-block;
+      	padding: 10px;
+      	color: #000;
+      }
 
-			}
-			span{
-				float: left;
-			}
 		}
 	}
 

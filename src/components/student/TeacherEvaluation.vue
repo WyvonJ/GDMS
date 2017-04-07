@@ -11,7 +11,10 @@
     </div>
     <div class="grade-content">
       <mu-slider v-model="grade" :step="1" @change="faceChange" class="grade-slider" />
-      <mu-flat-button label="提交分数" icon="star" @click="commitGrade" primary/>
+      <button @click="commitGrade" class="grade-button">
+          <i class="material-icons star-icon">star</i>
+          提交分数
+      </button>
     </div>
     </div>
   </div>
@@ -25,7 +28,7 @@ import {mapActions} from 'vuex'
 			return {
 				grade:60,
 				emoji:'sentiment_neutral',
-				name:'为人民服务'
+				name:'NULL'
 			}
 		},
 		methods:{
@@ -57,12 +60,6 @@ import {mapActions} from 'vuex'
 @import '../../style/variables.scss';
 .evaluation-card
 {
-    transition: $material-enter;
-
-    border-radius: 3px;
-    -webkit-box-shadow: $material-shadow-1dp;
-       -moz-box-shadow: $material-shadow-1dp;
-            box-shadow: $material-shadow-1dp;
     &:hover
     {
         -webkit-box-shadow: $material-shadow-6dp;
@@ -102,12 +99,25 @@ import {mapActions} from 'vuex'
         {
             margin-top: 16px;
         }
-        .mu-flat-button
-        {
-            margin-top: 16px;
-
-            color: #fff;
-            background-color: #03a9f4;
+        .grade-button{
+            outline: none;
+            background: transparent;
+            border: 1px #f44336 solid;
+            color: #f44336;
+            border-radius: 2px;
+            transition: $material-enter;
+            cursor: pointer;
+            padding: 0px 8px 8px 8px;
+            font-size: 16px;
+            vertical-align: text-top;
+            &:hover{
+                background-color: #f44336;
+                color: white;
+            }
+            .star-icon{
+                position: relative;
+                top: 4px;
+            }
         }
     }
 }

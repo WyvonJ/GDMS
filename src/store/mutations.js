@@ -43,5 +43,12 @@ export default {
   },
   LOADING_TOGGLE: (state, loading) => {
     state.loading = loading
+  },
+  RESET_STATE: (state) => {
+    state.selectedInCart = []
+  },
+  SET_SEARCH_STR: (state, str) => {
+    state.searchStr = str
+    console.log(str)
   }
 }

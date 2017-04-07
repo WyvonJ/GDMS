@@ -4,7 +4,7 @@ var db = require('../models/db')
 
 router.post('/stuCommitSelection',(req,res) => {
 	//var selections = req.body//获得创建新题目的数据
-	var studentId = req.body.studentId
+	var studentId = req.body._id
 	var first = req.body.first
 	var second = req.body.second
 	var third = req.body.third
@@ -12,8 +12,11 @@ router.post('/stuCommitSelection',(req,res) => {
 	db.students.findOne({_id: studentId}).exec(function(err,student){
 		if(err)res.send({state: 0})
 		else{
+			if(second!=-1)
 			student.selectTopic('second', second)
-			student.selectTopic('first', first)		    
+		    if(first!=-1)
+			student.selectTopic('first', first)
+			if(third!=-1)		    
 		    student.selectTopic('third', third)
 			res.send({state: 1})
 		}	
@@ -22,10 +25,12 @@ router.post('/stuCommitSelection',(req,res) => {
 
 //发送所有选题
 router.get('/stuGetTopics',(req, res) =>{
+	//var topic = {}
 	var query = db.topics.find()
 		//query.where('isselected',false)第二次选题的时候才给没有选完的题目
 		//第二次选题的时候要把每个题的第几志源选的学生删除了
-		query.select({_id: 1, categary: 1, title: 1, details: 1, available: 1, selected: 1})
+		query.select({_id: 1, categary: 1, title: 1, details: 1, restriction: 1, selected: 1,
+					  firststudents:1, secondstudents:1, thirdstudents: 1})
 		query.sort({'_id': 1})
 		query.exec((err,topics)=>{
 			if(err) {res.send(404),console.log(err)}
@@ -46,12 +51,16 @@ router.post('/stuSetContactData',(req,res) => {
 })
 
 /*得到学生选题结果*/
-router.post('/stuSelectionResult',(req,res) => {
-	var studentId = req.body.studentId
+router.get('/stuSelectionResult',(req,res) => {
+	//var studentId = req.body.studentId
+	var studentId = '1030513402'
 	console.log(studentId)
 	var finalData = {}
-	db.students.findOne({_id: studentId},['final','mentor', 'isselected'])
+	db.students.findOne({_id: studentId},['final','mentor', 'isselected', 'first', 'second', 'third'])
 	  .populate('final','_id title category details')
+	  .populate('first','_id title category details')
+	  .populate('second','_id title category details')
+	  .populate('third','_id title category details')
 	  .populate('mentor','name tel email qq wechat office')
 	  .exec()
 	  .then((student)=>{
@@ -75,7 +84,14 @@ router.post('/stuSelectionResult',(req,res) => {
 	  		console.log(finalData)
 	  	}
 	  	else
-	  		res.send('您还没有被一个老师选择')
+	  		{
+	  			finalData.first = student.first
+	  			finalData.second = student.second
+	  			finalData.third = student.third
+
+	  			res.send(finalData)
+	  			console.log(finalData)
+	  		}
 	  })
 })
 

@@ -6,6 +6,7 @@ Vue.use(Router)
 import Login from '../components/login/Login.vue'
 //Grouping
 import Grouping from '../components/utils/Grouping.vue'
+import Welcome from '../components/utils/Welcome.vue'
 
 //student panel
 import Student from '../components/student/Student.vue'
@@ -37,7 +38,7 @@ const router = new Router({
       path: '/student',
       component: Student,
       children: [
-        { path: '', component: Topics },
+        { path: 'welcome', name:'studentwelcome', component: Welcome },
 
         { path: 'topics', name: 'topics', component: Topics },
         { path: 'status', name: 'status', component: TopicsStatus },
@@ -50,7 +51,7 @@ const router = new Router({
       path: '/teacher',
       component: Teacher,
       children: [
-        { path: '', component: Creation },
+        { path: 'welcome', name:'teacherwelcome', component: Welcome },
         { path: 'creation', name: 'creation', component: Creation },
         { path: 'confirmation', name: 'confirmation', component: Confirmation },
         { path: 'selectionresult', name: 'selectionresult', component: SelectionResult },

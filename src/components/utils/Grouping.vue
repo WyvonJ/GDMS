@@ -1,18 +1,16 @@
 <template>
   <div class="grouping-container" v-if="gotGroup">
   <div class="sub-padding">
-
-    <div class="group-status-card">
-      
+    <div class="group-status-card card">
       <div class="teacher-wrapper">
       <mu-avatar backgroundColor="red500" class="group-id-icon">{{groupId}}</mu-avatar>
-      <span class="card-title">TEACHER</span>
+      <span class="card-title">Teacher</span>
         <div class="chip" v-for="(teacher,index) in teachers">
           <mu-icon value="account_circle" color="greenA700" :size="18" /> {{teacher.name}}
         </div>
       </div>
       <div class="student-wrapper">
-      <span class="card-title">STUDENT</span>
+      <span class="card-title">Student</span>
       <div class="chip" v-for="(student,index) in students">
           <mu-icon value="face" color="blue500" :size="18" /> 
           <span class="student-name">
@@ -57,7 +55,7 @@ import {mapActions,mapState} from 'vuex'
       ...mapActions(['tchGrouping'])
     },
     mounted(){
-      var user=this.$root.getCookie('user')
+      let user=this.$root.getCookie('user')
       if(!user){
             //alert('超时未操作，请重新登录')
            // return this.$router.push('/')
@@ -85,12 +83,6 @@ import {mapActions,mapState} from 'vuex'
 
     max-width: 480px;
 
-    transition: $material-enter;
-
-    border-radius: 3px;
-    -webkit-box-shadow: $material-shadow-1dp;
-       -moz-box-shadow: $material-shadow-1dp;
-            box-shadow: $material-shadow-1dp;
     &:hover
     {
         transform: translateY(-4px);
@@ -104,6 +96,7 @@ import {mapActions,mapState} from 'vuex'
       left: 12px;
       top: 12px;
       font-family: Century Gothic;
+      font-variant: small-caps;
     }
     .chip
     {

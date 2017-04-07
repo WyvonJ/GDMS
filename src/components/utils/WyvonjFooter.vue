@@ -7,22 +7,33 @@
 </template>
 
 <style lang="sass" rel="stylesheet/scss">
-	footer{
-		position: absolute;
-		width: 100%;
-		bottom: 0;
-		div.copyright{
-			text-align: center;
-			color: #aaa;
-			font-weight: 100;
-			font-size: 12px;
-			height: 18px;
-			border-top: 1px solid #ddd;
-			transition: all .8s cubic-bezier(.1,.1,.4,1);
-			a{
-				text-decoration: none !important;
-				color: #aaa !important;
-			}
-		}
-	}
+footer
+{
+    position: absolute;
+    bottom: 0;
+
+    width: 100%;
+    div.copyright
+    {
+        font-size: 12px;
+        font-weight: 100;
+        font-variant: small-caps;
+
+        height: 18px;
+
+        transition: all .8s cubic-bezier(.1,.1,.4,1);
+        text-align: center;
+
+        color: #aaa;
+        border-top: 1px solid #ddd;
+        a
+        {
+            transition: all .8s cubic-bezier(.1,.1,.4,1);
+            text-decoration: none !important;
+
+            color: #aaa !important;
+        }
+    }
+}
+
 </style>

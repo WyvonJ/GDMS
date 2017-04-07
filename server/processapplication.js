@@ -1,18 +1,18 @@
 var db = require('./models/db')
-const readline = require('readline');
+/*const readline = require('readline');
 
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
-});
-var fs = require('fs');  
+});*/
+//var fs = require('fs');  
   
-function readSyn() {  
+/*function readSyn() {  
    process.stdin.pause();  
    var response = fs.readSync(process.stdin.fd, 1000, 0, "utf8");  
    process.stdin.resume();  
    return response[0].trim();  
-}  
+}  */
 /*rl.question('What do you think of Node.js? ', (answer) => {
   // TODO: Log the answer in a database
   console.log(`Thank you for your valuable feedback: ${answer}`);
@@ -175,14 +175,7 @@ var manualProcessFirstApplication = function(){
 	                                console.log(`plese select ${topics[i].available}  students  for topic:${topics[i]._id}? `)
 	                                var ans = readSyn()
 	                                console.log(ans)
-	                   			 // for(var j in firststudents){
-	                   			  	//		if(firststudents.isselected)continue
-	                   			  			/*rl.question(`plese select ${topics[i].available}  students  for topic:${topics[i]._id}? `, (answer) => {
-                                            console.log(`Thank you for your valuable feedback: ${answer}`)
-                                            console.log(answer.lentgh)
-                                            rl.close();
-                                            })*/
-	                   			  //	}
+
 	                   			  	
 	                   		 	}
 	                   		}
@@ -202,5 +195,5 @@ var manualProcessApplication = function(tchId,stuId,cb){//老师进行选择学�
 }
 //autoProcessFirstApplication()
 //autoProcessSecondApplication()
-autoProcessThirdApplication()
+//autoProcessThirdApplication()
 //manualProcessFirstApplication()

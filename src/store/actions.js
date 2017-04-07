@@ -56,7 +56,8 @@ export default {
               commit('SET_USER', payload)
               commit('SET_USERINFO', {
                 userName: response.data.userName,
-                userType: response.data.userType
+                userType: response.data.userType,
+                isFirstLogin:response.data.isfirstlogin
               })
               commit('SET_NOTIFICATION', response.data.notification)
               break
@@ -82,10 +83,10 @@ export default {
   //学生获取题目
   stuGetTopics: ({ commit }) => {
     //设置进度条开始
-    const start = beginLoading({commit})
+   // const start = beginLoading({commit})
     return axios.get('/student/stuGetTopics')
     .then(response => {
-        stopLoading({commit}, start)
+        //stopLoading({commit}, start)
           //提交
         commit('SET_STU_TOPICS', response.data)
       })
@@ -114,6 +115,16 @@ export default {
         commit('SET_STU_FINAL_TOPIC', response.data)
       })
       .catch(error => {
+        showSnackbar({ commit }, '出了点小问题，再试试')
+        return Promise.reject(error)
+      })
+  },
+  stuGetSelectedTopics:({commit},payload)=>{
+    return axios.post('/student/stuGetSelectedTopics',payload)
+      .then(response=>{
+        commit('SET_TOPICS_IN_CART',response.data)
+      })
+      .catch(error=>{
         showSnackbar({ commit }, '出了点小问题，再试试')
         return Promise.reject(error)
       })

@@ -46,70 +46,11 @@ export default {
         gotTopic: true,
         showOverlay: false,
         showHelp: true,
-        currentRef: '',
-        cardData: [{
-          _id: 46,
-          title: '江南大学图书馆阅读信息的价值发掘与可视化表达',
-          available: 2,
-          students: [{
-            _id: '1030516410',
-            name: '陈奕迅',
-            gender: '男',
-            gpa: 3.6,
-            intro: 'wwwwwwwww'
-          }, {
-            _id: '1030516410',
-            name: '谭正岩',
-            gender: '男',
-            gpa: 3.5,
-            intro: 'wwwwwwwww'
-          }, {
-            _id: '1030516410',
-            name: '迟小秋',
-            gender: '女',
-            gpa: 2.9,
-            intro: 'wwwwwwwww'
-          }, {
-            _id: '1030516410',
-            name: '马晓曼',
-            gender: '女',
-            gpa: 3.1,
-            intro: 'wwwwwwwww'
-          }]
-        },{
-          _id: 46,
-          title: '江南大学图书馆阅读信息的价值发掘与可视化表达',
-          available: 2,
-          students: [{
-            _id: '1030516410',
-            name: '陈奕迅',
-            gender: '男',
-            gpa: 3.6,
-            intro: 'wwwwwwwww'
-          }, {
-            _id: '1030516410',
-            name: '谭正岩',
-            gender: '男',
-            gpa: 3.5,
-            intro: 'wwwwwwwww'
-          }, {
-            _id: '1030516410',
-            name: '迟小秋',
-            gender: '女',
-            gpa: 2.9,
-            intro: 'wwwwwwwww'
-          }, {
-            _id: '1030516410',
-            name: '马晓曼',
-            gender: '女',
-            gpa: 3.1,
-            intro: 'wwwwwwwww'
-          }]
-        }]
+        currentRef: ''
       }
     },
     computed: {
-      ...mapState(['user'])
+      ...mapState(['user','cardData'])
     },
     methods: {
       toggleEmpty() {
@@ -150,15 +91,15 @@ export default {
       ...mapActions(['tchConfirmStudent', 'tchGetTopics', 'showSnackbar'])
     },
     mounted() {
-      _.forEach(this.cardData, (value) => {
+      /*_.forEach(this.cardData, (value) => {
           value.count = 0
           //这个服务器发过来 。。。。。。现测试用
           _.forEach(value.students,student=>{
             student.isselected=false
           })
-        })
+        })*/
       //       正式接入服务器的时候 在mapState里面加cardData
-        //this.tchGetTopics({ teacherId: this.$root.getCookie('user') })
+        this.tchGetTopics({ teacherId: this.$root.getCookie('user') })
     },
     components: {
       IntroCard

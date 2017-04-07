@@ -10,8 +10,8 @@
         <mu-thead slot="header">
           <mu-tr>
             <mu-th width="8%">添加</mu-th>
-            <mu-th width="8%"><mu-flat-button class="category-sort" :iconClass="flatIcon" icon="arrow_upward" labelPosition="before">序号</mu-flat-button></mu-th>
-            <mu-th width="10%"><mu-flat-button class="category-sort" :iconClass="flatIcon" icon="arrow_upward" labelPosition="before">类别</mu-flat-button> </mu-th>
+            <mu-th width="8%"><mu-flat-button class="category-sort" :class="{'sort-category-icon':sortCategoryFlag}" disabled @click="sortCategory" labelPosition="before">序号</mu-flat-button></mu-th>
+            <mu-th width="10%"><mu-flat-button class="category-sort" disabled labelPosition="before">类别</mu-flat-button> </mu-th>
             <mu-th width="60%">课题名称</mu-th>
             <mu-th width="16%">已选/可选</mu-th>
           </mu-tr>
@@ -24,7 +24,7 @@
             <mu-td width="10%">{{topic.category===0?"论文":"设计"}}</mu-td>
             <mu-td width="60%">{{topic.title}}
               <md-tooltip md-direction="top" class="details-tooltip">
-                <div class="details-appbar">DESCRIPTION</div>
+                <div class="details-appbar">Description</div>
                 <div class="details-content">
                   {{topic.details}}
                 </div>
@@ -93,67 +93,47 @@ export default {
         fixedHeader: true,
         selectable: false,
         showCheckbox: false,
+        sortCategoryFlag:false,
         lastSelection: 0,
         tableTitle: '选题表',
-        flatIcon:{'icon-size':true},
         showDetails:[false,false,false],
         selectedBgc: ["red500", "lightBlueA700", "teal500"],
         topicsCart: [],
         topicsChunk: [],
         topicsSearch:[],
         topicsInDisplay: [{
-          _id: 4,
+          _id: 1,
           category: 1,
-          title: '444基于Unity的三维场景的交互设计与实现',
-          details: 'Vu能高效的渲染元素，通常会复用已有元素而不是从头开始渲染。这么做除了使 Vue 更快之外还可以得到一些好处。如下例，当允许用户在不同的登录方式之间切换',
+          title: '基于3ds max的城市小区动画漫游设计与实现',
+          details: '3ds max 是三维建模、动画制作的渲染软件，被广泛应用于制作角色动画、室内外效果图、游戏开发、建筑动画、影视动画、虚拟现实等领域。为了更好的让大众了解城市小区的建设和发展情况，我们可以用三维动画的形式来展示其全貌，本课题要求结合专业知识利用3ds max等软件实现虚拟城市小区动画漫游。',
           restriction: 3,
           selected:3,
           secondstudents:[],
           thirdstudents:[3]
         }, {
-          _id: 5,
-          category: 1,
-          title: '555基于Unity的三维场景的交互设计与实现',
-          details: 'Vue 尝试尽可能高效的渲染元素，通常会复用已有元素而不是从头开始渲染。这么做Vue 更快之外还可以得到一些好处。如下例，当允许用户在不同的登录方式之间切换',
+          _id: 2,
+          category: 0,
+          title: '基于Unity3D的VR项目设计与实现',
+          details: 'VR即虚拟现实，指综合利用计算机图形系统和各种实现及控制等接口设备，在计算机上生成的、可交互的三维环境中提供沉浸感觉的技术。虚拟现实技术实现的载体是虚拟现实仿真平台。VR技术可广泛的应用于规划展示、工业仿真、旅游教学等众多领域。利用Unity3D实现一个VR虚拟现实体验项目，给用户带来身临其境的感受。',
           selected: 0,
           firststudents:[1,3],
           secondstudents:[],
           thirdstudents:[3]
         }, {
-          _id: 6,
+          _id: 3,
           category: 0,
-          title: '666基于Unity的三维场景的交互设计与实现',
-          details: 'Vue 尝试尽可能高效的渲染元素，通常会复用已有元素而不是从头开始渲染。这么做除了使 Vue 更快之外还可以得到一些好处。如下例，当允许用户在不同的登录方式之间切换',
+          title: '图像的层次剖分算法及应用',
+          details: '对一张数字图像进行剖分，用一些基本的几何面片进行逼近。这样的做法其实建起了离散到连续、数字到矢量、图像到几何的桥梁。应用领域也很广泛，如图像去噪、图像缩放、图像编辑、图像信息安全等多方面。',
           restriction: 2,
           selected: 2,
-          firststudents:[1,3],
-          secondstudents:[],
-          thirdstudents:[3]
-        }, {
-          _id: 7,
-          category: 1,
-          title: '777基于Unity的三维场景的交互设计与实现',
-          details: 'Vue 尝试尽可能高效的4512445hh更快之外还可以得到一些好处。如下例，当允许用户在不同的登录方式之间切换',
-          restriction: 3,
-          selected: 2,
-          firststudents:[1,3],
-          secondstudents:[],
-          thirdstudents:[3]
-        }, {
-          _id: 8,
-          category: 1,
-          title: '888基于Unity的三维场景的交互设计与实现',
-          details: 'Vue 尝试尽可能高效的渲染元素，通常会复用已有元素而不是从头开始渲染。这么做除了使 Vue 更快之外还可以得到一些好处。如下例，之间切换',
-          restriction: 1,
-          selected: 1,
           firststudents:[1,3],
           secondstudents:[],
           thirdstudents:[3]
         }, {
           _id: 4,
           category: 1,
-          title: '江南大学图书馆阅读信息的价值发掘与可视化表达（与艺术系老师合作课题）',
-          details: 'Vu能高效的渲染元素，通常会复用已有元素而不是从头开始渲染。这么做除了使 Vue 更快之外还可以得到一些好处。如下例，当允许用户在不同的登录方式之间切换',
+          title: '安卓平台人类特征识别软件开发',
+          details: '基于安卓平台开发一个app可以实现人的年龄、情感、性别等特征的识别',
           restriction: 3,
           selected: 2,
           firststudents:[1,3],
@@ -162,19 +142,19 @@ export default {
         }, {
           _id: 5,
           category: 1,
-          title: '555基于Unity的三维场景的交互设计与实现',
-          details: 'Vue 尝试尽可能高效的渲染元素，通常会复用已有元素而不是从头开始渲染。这么做Vue 更快之外还可以得到一些好处。如下例，当允许用户在不同的登录方式之间切换',
-          restriction: 3,
-          selected: 0,
+          title: '货运配送物流管理系统的设计与实现',
+          details: '本本体主要研究如何开发一套货运配送物流管理系统，用来给供求方和需要方之外的货运配送物流管理企业来提供服务的一套管理系统，货运配送物流管理系统应用于物流相关的企业，提供物流和库存的服务。',
+          restriction: 1,
+          selected: 1,
           firststudents:[1,3],
           secondstudents:[],
           thirdstudents:[3]
         }, {
           _id: 6,
-          category: 0,
-          title: '666基于Unity的三维场景的交互设计与实现',
-          details: 'Vue 尝试尽可能高效的渲染元素，通常会复用已有元素而不是从头开始渲染。这么做除了使 Vue 更快之外还可以得到一些好处。如下例，当允许用户在不同的登录方式之间切换',
-          restriction: 2,
+          category: 1,
+          title: '面向医学图像的图像融合技术研究',
+          details: '为弥补解剖结构图像（CT, MRI, B超等）和功能图像（SPECT, PET等）的各自不足，图像融合技术能够有效地融合解剖结构图像和功能图像得到更全面的新图像，便于医师后期诊疗做参考。本研究主要致力于选择几种流行的图像融合方法，对医学图像进行融合已检验哪种方法更为有效并进行总结得出结论。',
+          restriction: 3,
           selected: 2,
           firststudents:[1,3],
           secondstudents:[],
@@ -182,20 +162,10 @@ export default {
         }, {
           _id: 7,
           category: 1,
-          title: '777基于Unity的三维场景的交互设计与实现',
-          details: 'Vue 尝试尽可能高效的4512445hh更快之外还可以得到一些好处。如下例，当允许用户在不同的登录方式之间切换',
+          title: '面向甲状腺癌诊断的智能识别技术探索',
+          details: '甲状腺癌作为早期发现最易根治的癌症，当前受到广泛的研究和关注。随着人工智能技术的发展，越来越多的学者发现，利用现有的算法对甲状腺癌进行建模分析，可以得到能够媲美专家医师的诊断结论。因此，本研究主要致力于选择几种流行的或传统的智能别方法为后人做进一步研究提供一些结论。',
           restriction: 3,
-          selected: 2,
-          firststudents:[1,3],
-          secondstudents:[],
-          thirdstudents:[3]
-        }, {
-          _id: 8,
-          category: 1,
-          title: '888基于Unity的三维场景的交互设计与实现',
-          details: 'Vue 尝试尽可能高效的渲染元素，通常会复用已有元素而不是从头开始渲染。这么做除了使 Vue 更快之外还可以得到一些好处。如下例，之间切换',
-          restriction: 1,
-          selected: 1,
+          selected: 0,
           firststudents:[1,3],
           secondstudents:[],
           thirdstudents:[3]
@@ -211,6 +181,9 @@ export default {
         this.topicsInDisplay = this.topicsChunk[newIndex - 1]
         this.currentPage = newIndex
       },
+      sortCategory(){
+        this.sortCategoryFlag=!this.sortCategoryFlag
+      },
       refreshTopics() {
         this.stuGetTopics()
           .then(() => {
@@ -220,32 +193,34 @@ export default {
           })
       },
       click(index, topic) {
-        var cart = this.selectedInCart
+        let cart = this.selectedInCart
         if (topic._id !== this.lastSelection) {
           this.toggleTableBar = false
           switch (cart.length) {
             case 0:
               {
                 cart.push(topic)
+                this.showSnackbar("请在已选课题中编辑或提交选择。")
                 break
               }
             case 1:
               {
                 if (topic._id !== cart[0]._id) {
-                  cart.push(topic)
+                  //cart.push(topic)
+                  this.showSnackbar("本次只可选择已确认课题，请在已选课题中编辑！")
                 } else {
-                  this.showSnackbar("不能选择相同志愿！")
+                  this.showSnackbar("不能选择相同志愿，请在已选课题中编辑！")
                 }
                 break
               }
             case 2:
               {
-                if (topic._id !== cart[0]._id && topic._id !== cart[1]._id) {
+                /*if (topic._id !== cart[0]._id && topic._id !== cart[1]._id) {
                   cart.push(topic)
                   this.showSnackbar("已经选满三个志愿，请在已选课题面板中编辑或提交。")
                 } else {
                   this.showSnackbar("不能选择相同志愿！不能选择相同志愿！不能选择相同志愿！")
-                }
+                }*/
                 break
               }
             case 3:
@@ -261,7 +236,7 @@ export default {
       //提交选题按钮
       commitSelectedTopics() {
         //-------放到全局去
-        if (this.selectedInCart.length === 0) return
+        //if (this.selectedInCart.length === 0) return
           /* if (!this.$root.getCookie('user')){
              alert('超时未操作，请重新登录')
              this.$router.push('/')
@@ -275,7 +250,6 @@ export default {
         this.stuCommitSelection(selectedInCartWrapper)
       },
       toggleDetails(index){
-        //console.log(index)
         this.$set(this.showDetails,index,!this.showDetails[index])
       },
       deleteTopic(index) {
@@ -289,7 +263,7 @@ export default {
       this.selectedInCart=[]
     },
     mounted() {
-      /*var id = this.$root.getCookie('user')
+      let id = this.$root.getCookie('user')
       this.stuGetTopics().then(()=>{
         this.total=this.topicsData.length
         this.topicsChunk = _.chunk(this.topicsData, this.pageSize)
@@ -299,8 +273,7 @@ export default {
         this.topicsInDisplay = _.sortBy(this.topicsInDisplay,(o)=>{
         return o._id
       })
-      }*/
-
+      }
     }
 }
 
@@ -343,10 +316,10 @@ export default {
     {
         padding: 4px;
         transition: $material-enter;
-
+        cursor: default;
         color: #42b983;
         border: 1px #42b983 solid;
-        border-radius: 8px;
+        border-radius: 2px;
     }
     .all-selected-warn
     {
@@ -385,10 +358,9 @@ export default {
             transition: $material-leave;
         } 
         .category-sort
-            {
-                min-width: 36px;
-
-            }
+          {
+              min-width: 36px;
+          }
         .mu-tr:nth-child(even)
         {
             background-color: #f4f4f4;
@@ -398,12 +370,12 @@ export default {
             background-color: #dedede;
 
             .selected-restriction{
-              color: #fff;
               background-color: #42b983;
+              color: #fff;
             }
             .all-selected-warn{
-              color: #fff;
               background-color: #f44336;
+              color: #fff;
             }
         }
     }
@@ -565,48 +537,43 @@ export default {
     }
 }
 
-
+.sort-category-icon{
+  .mu-icon{
+    transform: rotateZ(180deg) !important;
+  }
+  
+}
 @media (max-width: 993px)
 {
     .topics-cart{
       right: -270px;
     }
 }
-.md-tooltip.selected-tooltip
-{
-    font-family: $fontYahei;
-    font-size: 14px;
 
-    width: 100px;
-    height: auto;
-    padding: 8px;
+.md-tooltip{
+  height: auto;
     z-index: 248;
     white-space: normal;
-
+    font-family: $fontYahei;
+    font-size: 14px;
     color: #000;
-    border-radius: 5px;
+    border-radius: 2px;
     background-color: #fff;
+
     -webkit-box-shadow: $material-shadow-3dp;
        -moz-box-shadow: $material-shadow-3dp;
             box-shadow: $material-shadow-3dp;
 }
+
+.md-tooltip.selected-tooltip
+{
+    padding: 8px;
+    width: 100px;
+}
 .md-tooltip.details-tooltip
 {
-    font-family: $fontYahei;
-    font-size: 14px;
-
     width: 480px;
-    height: auto;
     padding: 0;
-    z-index: 248;
-    white-space: normal;
-
-    color: #000;
-    border-radius: 5px;
-    background-color: #fff;
-    -webkit-box-shadow: $material-shadow-3dp;
-       -moz-box-shadow: $material-shadow-3dp;
-            box-shadow: $material-shadow-3dp;
     .details-appbar
     {
         line-height: 16px;
@@ -614,10 +581,10 @@ export default {
         width: 100%;
         height: 24px;
         padding: 4px 8px;
-
+        font-variant: small-caps;
         color: #fff;
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
+        border-top-left-radius: 2px;
+        border-top-right-radius: 2px;
         background-color: #f44336;
     }
     .details-content

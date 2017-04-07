@@ -7,14 +7,16 @@
               <span>可选人数：{{available}}</span>
               <mu-slider v-model="available" :min="1" :max="10" :step="1" @change="availableChange" class="available-slider" />
               <br/>
-              <mu-select-field v-model="category" label="课题类别" @change="categoryChange">
+              <mu-select-field v-model="category" label="课题类别" @change="categoryChange" class="select-field">
                 <mu-menu-item value="0" title="论文" />
                 <mu-menu-item value="1" title="设计" />
               </mu-select-field>
-              <mu-select-field v-model="fields" multiple :labelFocusClass="['label-foucs']" :errorText="fieldsError" label="课题研究方向" @change="fieldsChange" labelFloat>
+              <br/>
+              <mu-select-field v-model="fields" multiple :labelFocusClass="['label-foucs']" :errorText="fieldsError" label="课题研究方向" @change="fieldsChange" class="select-field" labelFloat>
                 <mu-sub-header>可多选</mu-sub-header>
                 <mu-menu-item v-for="text,index in fieldsData" :value="text" :title="text" />
               </mu-select-field>
+              <br/>
               <mu-text-field label="课题名称" v-model.trim="titleText" :errorText="titleError" labelFloat/>
               <br/>
               <mu-text-field label="课题简介" v-model.trim="detailText" :errorText="detailError" multiLine labelFloat :rows="6" :rowsMax="20" />
@@ -88,7 +90,7 @@ export default {
       }
     },
     computed: {
-      ...mapState(['user', 'createdTopics'])
+      ...mapState(['user','userInfo', 'createdTopics'])
     },
     methods: {
       ...mapActions(['tchCreateTopic', 'tchDeleteTopic', 'tchGetCreatedTopics', 'showSnackbar']),
@@ -110,8 +112,6 @@ export default {
           details: this.detailText,
           available: this.available
         }
-
-
         //重新取得所有topics
         this.tchCreateTopic(currentTopic)
           .then(() => {
@@ -172,10 +172,8 @@ export default {
       fields: 'clearError',
       titleText: 'clearError',
       detailText: 'clearError'
-
     }
 }
-
 </script>
 
 <style lang="sass" rel="stylesheet/scss" scoped>
@@ -245,6 +243,10 @@ export default {
         {
             max-width: 50vw;
         }
+        .select-field{
+          width: 256px !important;
+        }
+
     }
     .created-topics
     {
@@ -263,6 +265,9 @@ export default {
             }
         }
     }
+}
+.mu-menu-destop .mu-menu-item-wrapper{
+  height: 28px !important;
 }
 
 </style>

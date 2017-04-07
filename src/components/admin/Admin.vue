@@ -10,7 +10,7 @@
 					<div class="console-panel">
 					 <div class="logo">
           <img src="../../assets/img/gd_logo.png">
-          <p class="jnudm">JNUDM</p>
+          <p class="jnudm">Jnudm</p>
         </div>
 						<mu-menu :autoWidth="false"
 										 :maxHeight="320"
