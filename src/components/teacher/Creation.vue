@@ -267,7 +267,7 @@ export default {
     }
 }
 .mu-menu-destop .mu-menu-item-wrapper{
-  height: 28px !important;
+  height: 24px !important;
 }
 
 </style>

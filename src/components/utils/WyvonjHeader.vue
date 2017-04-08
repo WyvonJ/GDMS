@@ -73,8 +73,7 @@ export default {
       this.searchFocus=false
     },
     search(){
-      this.$emit('search')
-      this.SET_SEARCH_STR(this.str)
+      this.$emit('search',this.str)
     },
     toggleNav() {
       this.$parent.toggleNav()

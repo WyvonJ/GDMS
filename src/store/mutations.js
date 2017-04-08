@@ -46,9 +46,5 @@ export default {
   },
   RESET_STATE: (state) => {
     state.selectedInCart = []
-  },
-  SET_SEARCH_STR: (state, str) => {
-    state.searchStr = str
-    console.log(str)
   }
 }

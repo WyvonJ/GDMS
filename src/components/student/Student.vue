@@ -49,8 +49,8 @@ export default {
       }
     },
     methods: {
-      search(){
-        
+      search(str){
+        this.$children[2].searchStr=str
       },
       topics() {
         this.$router.push('/student/topics')
