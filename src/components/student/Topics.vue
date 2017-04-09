@@ -30,7 +30,7 @@
                 </div>
               </md-tooltip>
             </mu-td>
-            <mu-td width="14%" ><span :class="{'all-selected-warn' : topic.selected >= topic.restriction}" class="selected-restriction">{{ topic.selected||0 }}/{{ topic.restriction ||0}}</span>
+            <mu-td width="14%" ><span :class="{'all-selected-warn' : topic.selected >= topic.restriction}" class="selected-restriction">{{ getTotal(topic) }}/{{ topic.restriction ||0}}</span>
               <md-tooltip md-direction="top" class="selected-tooltip">
                 <ul>
                   <li>第一志愿：{{topic.firststudents===undefined?0:topic.firststudents.length}}</li>
@@ -116,8 +116,10 @@ export default {
         this.sortCategoryFlag=!this.sortCategoryFlag
       },
       search(topics){
+        let reg = new RegExp(this.searchStr,'i')
+        //let isNum = this.searchStr.search(/^[0-9]*[1-9][0-9]*$/)
         return topics.filter((topics) => {
-          return topics.title.match(this.searchStr)
+          return (topics.title.match(reg)||topics._id.toString().match(reg))
         })
       },
       refreshTopics() {
@@ -127,6 +129,12 @@ export default {
             this.topicsChunk = _.chunk(this.topicsData, this.pageSize)
             this.topicsInDisplay = this.topicsChunk[0]
           })
+      },
+      getTotal(topic){
+        let t1=topic.firststudents===undefined?0:topic.firststudents.length
+        let t2=topic.secondstudents===undefined?0:topic.secondstudents.length
+        let t3=topic.thirdstudents===undefined?0:topic.thirdstudents.length
+        return t1+t2+t3
       },
       click(index, topic) {
         let cart = this.selectedInCart
@@ -230,6 +238,11 @@ export default {
     &.show-cart
     {
         width: calc(100% - 256px);
+        @media (max-width: 993px)
+        {
+          width: 100%;
+        }
+
     }
     .md-toolbar
     {

@@ -12,11 +12,11 @@
         <div class="login-outer" @click="openLogin" v-if="!openLoginToggle">
           Login
         </div>
-        <section class="container" v-if="showLoginPanel">
+        <section class="login-container" v-if="showLoginPanel">
           <div class="login-inner">
             Login
           </div>
-          <div>
+          <div class="input-items">
             <mu-text-field label="帐号" hintText="请输入帐号" :errorText="accountError" v-model.trim="account" labelFloat/>
             <br/>
             <mu-text-field label="密码" hintText="请输入密码" type="password" :errorText="passwordError" v-model.trim="password" labelFloat/>
@@ -77,6 +77,9 @@ export default {
               const date = new Date(Date.now() + 60000 * 30)
                 //设置cookie
               this.$root.setCookie('user', this.account, date, '/', location.hostname)
+              this.$root.setCookie('username',this.userInfo.userName , date, '/', location.hostname)
+              this.$root.setCookie('usertype',this.userInfo.userType , date, '/', location.hostname)
+
               if (this.userInfo.isFirstLogin) {
                 if (this.userInfo.userType < 2) {
                   this.$router.push({ path: '/entryinformation' })
@@ -85,9 +88,9 @@ export default {
                 }
               } else {
                 if (this.userInfo.userType === 0) {
-                  this.$router.push({ path: '/student' })
+                  this.$router.push({ path: '/student/welcome' })
                 } else if (this.userInfo.userType === 1) {
-                  this.$router.push({ path: '/teacher' })
+                  this.$router.push({ path: '/teacher/welcome' })
                 } else if (this.userInfo.userType === 2) {
                   this.$router.push({ path: '/admin' })
                 }
@@ -263,6 +266,10 @@ export default {
     height: 100vh;
 
     background-color: #efefef;
+    .input-items{
+      position: relative;
+      height: 218px;
+    }
     .openup
     {
         position: absolute;
@@ -342,12 +349,15 @@ export default {
         white-space: nowrap;
 
         color: #fff;
+        @media (max-width:993px){
+          font-size: 40px;
+        }
     }
     .login-outer
     {
-        font-size: 30px;
+        font-size: 40px;
 
-        padding-top: 28px;
+        padding-top: 36px;
 
         cursor: pointer;
 
@@ -370,8 +380,9 @@ export default {
     {
         margin-top: 10px;
     }
-    section.container
+    section.login-container
     {
+      height: 100%;
         position: relative;
         .mu-text-field
         {
@@ -379,23 +390,17 @@ export default {
 
             width: 200px;
             margin-bottom: 0;
-            .mu-text-field-label
-            {
-                color: #717171 !important;
-            }
         }
         .login-button
         {
             font-size: 16px;
 
             position: absolute;
-            bottom: 16px;
+            bottom: 0;
             left: 48px;
 
             width: 160px;
             height: 36px;
-
-            transition: $material-enter;
             word-spacing: 16px;
 
             color: #fff;
@@ -407,8 +412,8 @@ export default {
             font-size: 11px;
 
             position: absolute;
-            right: 96px;
-            bottom: -20px;
+            right: 0;
+            bottom: -12px;
 
             cursor: pointer;
             &:hover

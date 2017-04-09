@@ -90,6 +90,9 @@ export default {
   computed:{
     ...mapState(['user','username','searchStr'])
   },
+  watch:{
+    str:'search'
+  },
   mounted() {
     this.trigger = this.$refs.notify.$el
   }
@@ -118,6 +121,9 @@ export default {
         position: absolute;
         top: 8px;
         left: 188px;
+        @media (max-width:993px){
+          left: 8px;
+        }
     }
     .notify-button
     {
@@ -163,11 +169,25 @@ export default {
       background-color: transparent;
       width: 100%;
       height: 32px;
-      font-variant: small-caps;
        &.focused{
         width: 120%;
       }
     }
+    @media (max-width:993px){
+          display: none;
+        }
+    }
+    input::-webkit-input-placeholder{
+      font-variant: small-caps;
+    }
+    input::-moz-input-placeholder{
+      font-variant: small-caps;
+    }
+    input::-ms-input-placeholder{
+      font-variant: small-caps;
+    }
+    input::-o-input-placeholder{
+      font-variant: small-caps;
     }
     
     .noti-info
@@ -185,11 +205,13 @@ export default {
         margin: 20px;
 
         text-align: left;
-    }
+    }@media (max-width: 993px){
+  .logo{
+    display: none;
+  }
 }
-@media (max-width: 993px){
-  
 }
+
 
 //主内容区过渡动画
 .search-transition-enter-active

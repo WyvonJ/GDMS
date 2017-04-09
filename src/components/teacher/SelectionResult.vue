@@ -66,7 +66,7 @@ import { mapState ,mapActions,mapMutations} from 'vuex'
                         wechat:'donaldjtrump'
                     },{
                         _id:'1030515120',
-                        name:'铁警女',
+                        name:'佘赛花',
                         gender:'女',
                         tel:'18861853209',
                         email:'donaldjtrump@gmail.com',
@@ -118,7 +118,7 @@ import { mapState ,mapActions,mapMutations} from 'vuex'
                         wechat:'donaldjtrump'
                     },{
                         _id:'1030515120',
-                        name:'铁警女',
+                        name:'佘赛花',
                         gender:'女',
                         tel:'18861853209',
                         email:'donaldjtrump@gmail.com',

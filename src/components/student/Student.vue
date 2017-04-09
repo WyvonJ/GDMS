@@ -108,10 +108,10 @@ export default {
       window.removeEventListener('resize', this.handleResize)
     },
     mounted() {
-      if (!this.$root.getCookie('user'))
+      if (!this.$root.getCookie('usertype') != 0)
         //return this.$router.push('/')
       
-        this.userName = this.userInfo.userName
+        this.userName = this.$root.getCookie('username')
         this.notifyContent = this.notification
         this.changeNav()
         this.handleResize = () => {

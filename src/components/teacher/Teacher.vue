@@ -108,7 +108,7 @@ const desktop=isDesktop()
     	window.removeEventListener('resize', this.handleResize)
   	},
 		mounted(){
-			if (!this.$root.getCookie('user')||this.userInfo.userType!=1)
+			if (!this.$root.getCookie('usertype')!=1)
        // return this.$router.push('/')
      
         this.userName = this.userInfo.userName
