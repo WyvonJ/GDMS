@@ -22,9 +22,12 @@
     + 名单导出
     + 流程控制
 
+<<<<<<< HEAD
 ## UI界面 同届同学真实数据测试
 ![](/src/assets/img/main_ui.png)
 
+=======
+>>>>>>> 1b27c3577c529740eb4ae363a2612abdc6ddc074
 ## 组件框架 
 + UI组件
     + MuseUI, VueMaterial 基于Material Design原则设计的Vue 组件框架，
@@ -38,11 +41,20 @@
 ## 需要修复的
 + [x] 重复选题 每次应该得到 之前已选的题目 重复选题
 + [ ] 判断类型
+<<<<<<< HEAD
 + [ ] 搜索算法失灵
 + [ ] 降低外部UI组件需求
 + [ ] 整合CSS
 + [ ] 重新设计老师选择学生页面
 
+=======
++ [ ] 搜索框bug
++ [ ] 降低外部UI组件需求，提高浏览器兼容性
++ [ ] 整合CSS
++ [ ] 重新设计老师选择学生页面
+
+
+>>>>>>> 1b27c3577c529740eb4ae363a2612abdc6ddc074
 ## 项目构建设置
 
 ``` bash
@@ -61,5 +73,8 @@ npm run build:dev
 # 打开服务器 在3000端口进行监听 run server at localhost:3000
 npm run server
 ```
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1b27c3577c529740eb4ae363a2612abdc6ddc074
 For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
