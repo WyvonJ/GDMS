@@ -8,28 +8,35 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    //进度条显示
-    loading: false,
-    //展示snackbar
+    isProgressbar: false,
+    isSnackbar: false,
     snackbarText: '',
-    showSnackbar: false,
-    /***********Student************/
-    //设置现在的用户是谁
     user: {
       account: '',
-      password: ''
-    },
-    //用户名
-    userInfo: {
-      userName: '',
-      userType: -1,
+      password: '',
+      username: '',
+      usertype: '',
       isFirstLogin: true
     },
-    //notification信息
     notification: '',
-    //一次取过来所有选题数据
-    topicsData: [{
-      _id: 1,
+    _stu_TopicSelected: [{
+      _id: 16,
+      title: ' 元素用于在网页中包含对象',
+      details: 'form 返回对对象的父表单的引用。height  设置或返回对象的高度。hspace  设置或返回对象的水平外边距。name  设置或返回对象的名称。standby 设置或返回在加载对象时返回的消息。type  设置或返回通过 data 属性下载的数据的内容类型。',
+      category: 0
+    }, {
+      _id: 17,
+      title: ' 元素用于在网页中包含对象',
+      details: 'form 返回对对象的父表单的引用。height  设置或返回对象的高度。hspace  设置或返回对象的水平外边距。name  设置或返回对象的名称。standby 设置或返回在加载对象时返回的消息。type  设置或返回通过 data 属性下载的数据的内容类型。',
+      category: 1
+    }, {
+      _id: 18,
+      title: ' 元素用于在网页中包含对象',
+      details: 'form 返回对对象的父表单的引用。height  设置或返回对象的高度。hspace  设置或返回对象的水平外边距。name  设置或返回对象的名称。standby 设置或返回在加载对象时返回的消息。type  设置或返回通过 data 属性下载的数据的内容类型。',
+      category: 0
+    }],
+    _stu_TopicInTable: [{
+      _id: 9,
       category: 1,
       title: '基于3ds max的城市小区动画漫游设计与实现',
       details: '3ds max 是三维建模、动画制作的渲染软件，被广泛应用于制作角色动画、室内外效果图、游戏开发、建筑动画、影视动画、虚拟现实等领域。为了更好的让大众了解城市小区的建设和发展情况，我们可以用三维动画的形式来展示其全貌，本课题要求结合专业知识利用3ds max等软件实现虚拟城市小区动画漫游。',
@@ -54,7 +61,7 @@ const store = new Vuex.Store({
       secondstudents: [],
       thirdstudents: [3]
     }, {
-      _id: 4,
+      _id: 16,
       category: 1,
       title: '安卓平台人类特征识别软件开发',
       details: '基于安卓平台开发一个app可以实现人的年龄、情感、性别等特征的识别',
@@ -81,7 +88,7 @@ const store = new Vuex.Store({
       secondstudents: [],
       thirdstudents: [3]
     }, {
-      _id: 7,
+      _id: 8,
       category: 1,
       title: '面向甲状腺癌诊断的智能识别技术探索',
       details: '甲状腺癌作为早期发现最易根治的癌症，当前受到广泛的研究和关注。随着人工智能技术的发展，越来越多的学者发现，利用现有的算法对甲状腺癌进行建模分析，可以得到能够媲美专家医师的诊断结论。因此，本研究主要致力于选择几种流行的或传统的智能别方法为后人做进一步研究提供一些结论。',
@@ -90,28 +97,21 @@ const store = new Vuex.Store({
       secondstudents: [],
       thirdstudents: [3]
     }],
-    //存在cart中的课题 等待提交
-    selectedInCart: [],
-    //已确定的课题
-    //放在老师选择的卡片中的数据
-    cardData: [],
-    affirmativeTopic: {
+    _stu_TopicInCart: [],
+    _stu_TopicComfirmed: {
       name: '',
       tel: '',
-      email: '',
       office: '',
       qq: '',
       wechat: '',
       _id: -1,
       title: '',
       details: '',
-      category: -1
+      category: -1,
+      state: 1
     },
-    //获取答辩分组
-    grouping: {},
-    /************Teacher***************/
-    //创建的课题
-    createdTopic: {
+    _stu_Account: {},
+    _tch_TopicCreated: {
       account: '',
       fields: '',
       category: '',
@@ -119,19 +119,139 @@ const store = new Vuex.Store({
       detail: '',
       availableSum: ''
     },
-    //创建的所有课题 从服务器拿取
-    createdTopics: [],
-    resultData: [],
-    /************Admin***************/
-    //学生帐号管理
-    studentAccounts: [],
-    //导师帐号管理
-    teacherAccounts: []
+    _tch_TopicCreatedAll: [{
+      _id: 16,
+      category: 0,
+      title: '基于java的后端管理系统设计',
+      details: '每个 Vue 实例在被创建之前都要经过一系列的初始化过程。例如，实例需要配置数据观测(data observer)、编译模版、挂载实例到 DOM ，然后在数据变化时更新 DOM 。在这个过程中，实例也会调用一些 生命周期钩子',
+      available: 3
+    }],
+    _tch_StudentInCard: [{
+      _id: 1,
+      title: '基于java的后端管理系统设计',
+      available: 3,
+      students: [{
+        isselected: false,
+        _id: '1030513430',
+        name: '吴吉',
+        intro: '前端开发',
+        gender: '男',
+        gpa: '4.0',
 
+      },{
+        isselected: false,
+        _id: '1030513431',
+        name: '徐佳文',
+        intro: '终端开发',
+        gender: '男',
+        gpa: '4.0',
+
+      },{
+        isselected: false,
+        _id: '1030513432',
+        name: '杨浩天',
+        intro: '后埔段',
+        gender: '女',
+        gpa: '4.0',
+
+      },{
+        isselected: false,
+        _id: '1030513433',
+        name: '住匆匆',
+        intro: '傻逼',
+        gender: '女',
+        gpa: '4.0',
+
+      },{
+        isselected: false,
+        _id: '1030513433',
+        name: '住匆匆',
+        intro: '傻逼',
+        gender: '男',
+        gpa: '4.0',
+
+      }]
+    }],
+    _tch_StudentConfirmed: [{
+      _id: 46,
+      title: '江南大学图书馆阅读信息的价值发掘与可视化表达',
+      finalstudents: [{
+        _id: '1030515120',
+        name: '杨延昭',
+        gender: '男',
+        tel: '18861853209',
+        email: 'donaldjtrump@gmail.com',
+        qq: '852663214',
+        wechat: 'donaldjtrump'
+      }, {
+        _id: '1030515120',
+        name: '佘赛花',
+        gender: '女',
+        tel: '18861853209',
+        email: 'donaldjtrump@gmail.com',
+        qq: '852663214',
+        wechat: 'donaldjtrump'
+      }]
+    }, {
+      _id: 46,
+      title: '江南大学图书馆阅读信学图书馆阅读信息的价值发掘与可视化表达',
+      finalstudents: [{
+        _id: '1030515120',
+        name: '杨延昭',
+        gender: '男',
+        tel: '18861853209',
+        email: 'donaldjtrump@gmail.com',
+        qq: '852663214',
+        wechat: 'donaldjtrump'
+      }]
+    }, {
+      _id: 46,
+      title: '江南大学图书馆阅读信息的价值发掘与可视化表达',
+      finalstudents: [{
+        _id: '1030515120',
+        name: '铁警女',
+        gender: '女',
+        tel: '18861853209',
+        email: 'donaldjtrump@gmail.com',
+        qq: '852663214',
+        wechat: 'donaldjtrump'
+      }]
+    }, {
+      _id: 46,
+      title: '江南大学图书馆阅读信息的价值发掘与可视化表达',
+      finalstudents: [{
+        _id: '1030515120',
+        name: '杨延昭',
+        gender: '男',
+        tel: '18861853209',
+        email: 'donaldjtrump@gmail.com',
+        qq: '852663214',
+        wechat: 'donaldjtrump'
+      }, {
+        _id: '1030515120',
+        name: '杨延昭',
+        gender: '男',
+        tel: '18861853209',
+        email: 'donaldjtrump@gmail.com',
+        qq: '852663214',
+        wechat: 'donaldjtrump'
+      }, {
+        _id: '1030515120',
+        name: '佘赛花',
+        gender: '女',
+        tel: '18861853209',
+        email: 'donaldjtrump@gmail.com',
+        qq: '852663214',
+        wechat: 'donaldjtrump'
+      }]
+    }],
+    _tch_Account: {},
+    _stu_tch_Group: {}
   },
-  getters,
   mutations,
-  actions
+  actions,
+  getters,
+  strict: process.env.NODE_ENV !== 'production'
 })
 
 export default store

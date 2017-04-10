@@ -1,143 +1,127 @@
 <template>
   <div class="topics-table-container">
-  <div class="sub-padding">
-    <div class="table-container" :class="{'show-cart':selectedInCart[0]}">
-      <md-toolbar :class="{'md-warn':!selectedInCart[0]}">
-        <h2 class="md-title" style="flex: 1">{{tableTitle}}</h2>
-        <mu-icon-button icon="refresh" @click="refreshTopics" />
-      </md-toolbar>
-      <mu-table :fixedHeader="fixedHeader" :selectable="selectable" :showCheckbox="showCheckbox">
-        <mu-thead slot="header">
-          <mu-tr>
-            <mu-th width="8%">添加</mu-th>
-            <mu-th width="8%"><mu-flat-button class="category-sort" :class="{'sort-category-icon':sortCategoryFlag}" disabled @click="sortCategory" labelPosition="before">序号</mu-flat-button></mu-th>
-            <mu-th width="10%"><mu-flat-button class="category-sort" disabled labelPosition="before">类别</mu-flat-button> </mu-th>
-            <mu-th width="60%">课题名称</mu-th>
-            <mu-th width="16%">已选/可选</mu-th>
-          </mu-tr>
-        </mu-thead>
-        <transition-group name="list" tag="tbody" class="list-box">
-          <mu-tr v-for="(topic,index) in search(topicsInDisplay)" :key="topic._id">
-            <mu-td width="8%">
-              <mu-icon-button icon="add_circle_outline" @click="click(index,topic)" /></mu-td>
-            <mu-td width="8%">{{topic._id}}</mu-td>
-            <mu-td width="10%">{{topic.category===0?"论文":"设计"}}</mu-td>
-            <mu-td width="60%">{{topic.title}}
-              <md-tooltip md-direction="top" class="details-tooltip">
-                <div class="details-appbar">Description</div>
-                <div class="details-content">
-                  {{topic.details}}
-                </div>
-              </md-tooltip>
-            </mu-td>
-            <mu-td width="14%" ><span :class="{'all-selected-warn' : topic.selected >= topic.restriction}" class="selected-restriction">{{ getTotal(topic) }}/{{ topic.restriction ||0}}</span>
-              <md-tooltip md-direction="top" class="selected-tooltip">
-                <ul>
-                  <li>第一志愿：{{topic.firststudents===undefined?0:topic.firststudents.length}}</li>
-                  <li>第二志愿：{{topic.secondstudents===undefined?0:topic.secondstudents.length}}</li>
-                  <li>第三志愿：{{topic.thirdstudents===undefined?0:topic.thirdstudents.length}}</li>
-                </ul>
-              </md-tooltip>
-            </mu-td>
-          </mu-tr>
+    <div class="sub-padding">
+      <div class="table-container" :class="{'show-cart':_stu_TopicInCart[0]}">
+        <md-toolbar :class="{'md-warn':!_stu_TopicInCart[0]}">
+          <h2 class="md-title" style="flex: 1">{{tableTitle}}</h2>
+          <mu-icon-button icon="refresh" @click="refreshTopics" />
+        </md-toolbar>
+        <mu-table :fixedHeader="fixedHeader" :selectable="selectable" :showCheckbox="showCheckbox">
+          <mu-thead slot="header">
+            <mu-tr>
+              <mu-th width="8%">添加</mu-th>
+              <mu-th width="8%">
+                <mu-flat-button class="category-sort" :class="{'sort-category-icon':isCategorySorted}" disabled @click="sortCategory" labelPosition="before">序号</mu-flat-button>
+              </mu-th>
+              <mu-th width="10%">
+                <mu-flat-button class="category-sort" disabled labelPosition="before">类别</mu-flat-button>
+              </mu-th>
+              <mu-th width="60%">课题名称</mu-th>
+              <mu-th width="16%">已选/可选</mu-th>
+            </mu-tr>
+          </mu-thead>
+          <transition-group name="list" tag="tbody" class="list-box">
+            <mu-tr v-for="(topic,index) in search(_stu_TopicInTable)" :key="topic._id">
+              <mu-td width="8%">
+                <mu-icon-button icon="add_circle_outline" @click="click(index,topic)" /></mu-td>
+              <mu-td width="8%">{{topic._id}}</mu-td>
+              <mu-td width="10%">{{topic.category===0?"论文":"设计"}}</mu-td>
+              <mu-td width="60%">{{topic.title}}
+                <md-tooltip md-direction="top" class="details-tooltip">
+                  <div class="details-appbar">Description</div>
+                  <div class="details-content">
+                    {{topic.details}}
+                  </div>
+                </md-tooltip>
+              </mu-td>
+              <mu-td width="14%"><span :class="{'all-selected-warn' : getTotal(topic) >= topic.restriction}" class="selected-restriction">{{ getTotal(topic) }}/{{ topic.restriction ||0}}</span>
+                <md-tooltip md-direction="top" class="selected-tooltip">
+                  <ul>
+                    <li>第一志愿：{{topic.firststudents===undefined?0:topic.firststudents.length}}</li>
+                    <li>第二志愿：{{topic.secondstudents===undefined?0:topic.secondstudents.length}}</li>
+                    <li>第三志愿：{{topic.thirdstudents===undefined?0:topic.thirdstudents.length}}</li>
+                  </ul>
+                </md-tooltip>
+              </mu-td>
+            </mu-tr>
           </transition-group>
-      </mu-table>
-      <mu-content-block>
-        <mu-pagination :total="total" :current="currentPage" :pageSize="pageSize" @pageChange="handlePage">
-        </mu-pagination>
-      </mu-content-block>
-    </div>
-    <div class="topics-cart" :class="{'show-cart':selectedInCart[0]}">
-          <div class="chosen-topics-title">
-          已选课题
-          </div>
-        <div class="choice-cart">
-        
-        <div class="topic-level">
-          <transition-group tag="ul" name="slide-fade">
-            <li class="selected-item" v-for="(topic,index) in selectedInCart"  v-dragging="{ item: topic, list: selectedInCart, group: 'topic' }" :key="topic._id" :class="{'show-details':showDetails[index]}">
-              <mu-avatar :size="20" :backgroundColor="selectedBgc[index]">
-                {{index+1}}
-              </mu-avatar>
-               <mu-icon class="arrow-button" :class="{'show-details':showDetails[index]}" value="keyboard_arrow_right" @click="toggleDetails(index)"/>
-
-              <div class="selected-item-content">
-                <span class="title">{{topic._id}}.{{topic.title}}</span>
-                <p class="details" v-if="showDetails[index]">{{topic.details}}</p>
-              </div> 
-              <mu-icon-button class="delete-button" icon="clear" @click="deleteTopic(index)" />
-            </li>
-          </transition-group>
-              
-        </div>
-        <mu-raised-button label="提交" icon="check_circle" @click="commitSelectedTopics" color="#fff
-" backgroundColor="blue500"/>
+        </mu-table>
       </div>
-
+      <div class="topics-cart" :class="{'show-cart':_stu_TopicInCart[0]}">
+        <div class="chosen-topics-title">
+          已选课题
+        </div>
+        <div class="choice-cart">
+          <div class="topic-level">
+            <transition-group tag="ul" name="slide-fade">
+              <li class="selected-item" v-for="(topic,index) in _stu_TopicInCart" v-dragging="{ item: topic, list: _stu_TopicInCart, group: 'topic' }" :key="topic._id" :class="{'show-details':isDetails[index]}">
+                <mu-avatar :size="20" :backgroundColor="selectedBgc[index]">
+                  {{index+1}}
+                </mu-avatar>
+                <mu-icon class="arrow-button" :class="{'show-details':isDetails[index]}" value="keyboard_arrow_right" @click="toggleDetails(index)" />
+                <div class="selected-item-content">
+                  <span class="title">{{topic._id}}.{{topic.title}}</span>
+                  <p class="details" v-if="isDetails[index]">{{topic.details}}</p>
+                </div>
+                <mu-icon-button class="delete-button" icon="clear" @click="deleteTopic(index)" />
+              </li>
+            </transition-group>
+          </div>
+          <mu-raised-button label="提交" icon="check_circle" @click="commitSelectedTopics" color="#fff
+" backgroundColor="blue500" />
+        </div>
+      </div>
     </div>
-  </div>
-    
   </div>
 </template>
 
 
 <script>
 import { mapState, mapActions } from 'vuex'
-
 export default {
   data() {
       return {
-        total: 120,
-        currentPage: 1,
-        pageSize: 10,
         fixedHeader: true,
         selectable: false,
         showCheckbox: false,
-        sortCategoryFlag:false,
+        isCategorySorted: false,
         lastSelection: 0,
         tableTitle: '选题表',
-        showDetails:[false,false,false],
+        isDetails: [false, false, false],
         selectedBgc: ["red500", "lightBlueA700", "teal500"],
-        searchStr:'',
-        topicsChunk: [],
-        topicsInDisplay: []
+        searchStr: ''
       }
     },
     computed: {
-      ...mapState(['topicsData','selectedInCart'])
+      ...mapState(['_stu_TopicInTable', '_stu_TopicInCart'])
     },
     methods: {
-      handlePage(newIndex) {
+      /*handlePage(newIndex) {
         this.topicsInDisplay = []
         this.topicsInDisplay = this.topicsChunk[newIndex - 1]
         this.currentPage = newIndex
+      },*/
+      sortCategory() {
+        this.isCategorySorted = !this.isCategorySorted
       },
-      sortCategory(){
-        this.sortCategoryFlag=!this.sortCategoryFlag
-      },
-      search(topics){
-        let reg = new RegExp(this.searchStr,'i')
-        //let isNum = this.searchStr.search(/^[0-9]*[1-9][0-9]*$/)
+      search(topics) {
+        let reg = new RegExp(this.searchStr, 'i')
+          //let isNum = this.searchStr.search(/^[0-9]*[1-9][0-9]*$/)
         return topics.filter((topics) => {
-          return (topics.title.match(reg)||topics._id.toString().match(reg))
+          return (topics.title.match(reg) || topics._id.toString().match(reg))
         })
       },
       refreshTopics() {
         this.stuGetTopics()
-          .then(() => {
-            this.total = this.topicsData.length
-            this.topicsChunk = _.chunk(this.topicsData, this.pageSize)
-            this.topicsInDisplay = this.topicsChunk[0]
-          })
       },
-      getTotal(topic){
-        let t1=topic.firststudents===undefined?0:topic.firststudents.length
-        let t2=topic.secondstudents===undefined?0:topic.secondstudents.length
-        let t3=topic.thirdstudents===undefined?0:topic.thirdstudents.length
-        return t1+t2+t3
+      getTotal(topic) {
+        let t1 = topic.firststudents === undefined ? 0 : topic.firststudents.length
+        let t2 = topic.secondstudents === undefined ? 0 : topic.secondstudents.length
+        let t3 = topic.thirdstudents === undefined ? 0 : topic.thirdstudents.length
+        return t1 + t2 + t3
       },
       click(index, topic) {
-        let cart = this.selectedInCart
+        let cart = this._stu_TopicInCart
         if (topic._id !== this.lastSelection) {
           this.toggleTableBar = false
           switch (cart.length) {
@@ -179,45 +163,45 @@ export default {
       },
       //提交选题按钮
       commitSelectedTopics() {
-        //-------放到全局去
-        //if (this.selectedInCart.length === 0) return
-          /* if (!this.$root.getCookie('user')){
-             alert('超时未操作，请重新登录')
-             this.$router.push('/')
-           }*/
-        let selectedInCartWrapper = {
-          _id: this.$root.getCookie('user'),
-          first: this.selectedInCart[0]._id,
-          second: this.selectedInCart[1]===undefined?-1:this.selectedInCart[1]._id,
-          third: this.selectedInCart[2]===undefined?-1:this.selectedInCart[2]._id
+        //if (this._stu_TopicInCart.length === 0) return
+        /* if (!this.$root.getCookie('user')){
+           alert('超时未操作，请重新登录')
+           this.$router.push('/')
+         }*/
+        let _stu_TopicInCartWrapper = {
+          _id: _c.getCookie('user'),
+          first: this._stu_TopicInCart[0]._id,
+          second: this._stu_TopicInCart[1] === undefined ? -1 : this._stu_TopicInCart[1]._id,
+          third: this._stu_TopicInCart[2] === undefined ? -1 : this._stu_TopicInCart[2]._id
         }
-        this.stuCommitSelection(selectedInCartWrapper)
+        this.stuCommitSelection(_stu_TopicInCartWrapper)
       },
-      toggleDetails(index){
-        this.$set(this.showDetails,index,!this.showDetails[index])
+      toggleDetails(index) {
+        this.$set(this.isDetails, index, !this.isDetails[index])
       },
       deleteTopic(index) {
         //删除本条选题
-        this.selectedInCart.splice(index, 1)
+        this._stu_TopicInCart.splice(index, 1)
       },
-      ...mapActions(['stuGetTopics', 'showSnackbar','stuCommitSelection'])
+      ...mapActions(['stuGetTopics', 'showSnackbar', 'stuCommitSelection'])
     },
-    beforeDestroyed(){
+    beforeDestroy() {
       //切换路由时如果还没保存 就弹出提示
-      this.selectedInCart=[]
+      //this._stu_TopicInCart = []
     },
     mounted() {
-      let id = this.$root.getCookie('user')
-      //this.stuGetTopics().then(()=>{
-        this.total=this.topicsData.length
-        this.topicsChunk = _.chunk(this.topicsData, this.pageSize)
-        this.topicsInDisplay = this.topicsChunk[0]
-      //)
-      if (this.topicsInDisplay.length>0) {
-        this.topicsInDisplay = _.sortBy(this.topicsInDisplay,(o)=>{
-        return o._id
-      })
-      }
+      let id = _c.getCookie('user')
+      this.stuGetTopics()
+        //this.stuGetTopics().then(()=>{
+        /*  this.total=this._stu_TopicInTable.length
+          this.topicsChunk = _.chunk(this._stu_TopicInTable, this.pageSize)
+          this.topicsInDisplay = this.topicsChunk[0]
+        //)
+        if (this.topicsInDisplay.length>0) {
+          this.topicsInDisplay = _.sortBy(this.topicsInDisplay,(o)=>{
+          return o._id
+        })
+        }*/
     }
 }
 

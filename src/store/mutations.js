@@ -1,50 +1,44 @@
 export default {
-  SET_LOGIN_STATE: (state, loginState) => {
-    state.loginState = loginState
-  },
   SET_USER: (state, user) => {
     state.user = user
   },
-  SET_USERINFO: (state, userInfo) => {
-    state.userInfo = userInfo
+  SET_NOTIFICATION: (state, string) => {
+    state.notification = string
   },
-  SET_NOTIFICATION: (state, notification) => {
-    state.notification = notification
+  SHOW_SNACKBAR: (state, isShow) => {
+    state.isSnackbar = isShow
   },
-  SHOW_SNACKBAR: (state, showSnackbar) => {
-    state.showSnackbar = showSnackbar
+  SET_SNACKBAR_TEXT: (state, string) => {
+    state.snackbarText = string
   },
-  SET_SNACKBAR_CONTENT: (state, snackbarText) => {
-    state.snackbarText = snackbarText
+  STU_TOPIC_IN_TABLE: (state, topics) => {
+    state._stu_TopicInTable = topics
   },
-  SET_STU_TOPICS: (state, stuTopics) => {
-    state.topicsData = stuTopics
+  STU_TCH_GROUPING: (state, grouping) => {
+    state._stu_tch_Group = grouping
   },
-  SET_GROUPING: (state, grouping) => {
-    state.grouping = grouping
+  STU_FINAL_TOPIC: (state, topic) => {
+    state._stu_TopicComfirmed = topic
   },
-  SET_STU_FINAL_TOPIC: (state, affirmativeTopic) => {
-    state.affirmativeTopic = affirmativeTopic
+  STU_TOPIC_IN_CART: (state, topic) => {
+    state._stu_TopicInCart = topic
   },
-  SET_TOPICS_IN_CART: (state, selectedInCart) => {
-    state.selectedInCart = selectedInCart
+  TCH_TOPIC_CREATED_ALL: (state, topic) => {
+    state._tch_TopicCreatedAll = topic
   },
-  TCH_GET_CREATED_TOPICS: (state, createdTopics) => {
-    state.createdTopics = createdTopics
+  TCH_TOPIC_CREATED: (state, topic) => {
+    state._tch_TopicCreated = topic
   },
-  TCH_CREATE_TOPIC: (state, createdTopic) => {
-    state.createdTopic = createdTopic
+  TCH_STUDENT_IN_CARD: (state, student) => {
+    state._tch_StudentInCard = student
   },
-  SET_TCH_TOPIC_CARD: (state, tchTopics) => {
-    state.cardData = tchTopics
+  TCH_STUDENT_CONFIRMED: (state, student) => {
+    state._tch_StudentConfirmed = student
   },
-  SET_TCH_SELECTION_RESULT: (state, resultData) => {
-    state.resultData = resultData
-  },
-  LOADING_TOGGLE: (state, loading) => {
-    state.loading = loading
+  SET_PROGRESSBAR: (state, isShow) => {
+    state.isProgressbar = isShow
   },
   RESET_STATE: (state) => {
-    state.selectedInCart = []
+    state = null
   }
 }

@@ -4,7 +4,7 @@
 
     <div class="teacher-topics-status">
       <md-layout md-gutter="16">
-        <md-layout class="single-card" md-flex-small="100" md-flex-medium="50" v-for="(result,index) in resultData">
+        <md-layout class="single-card" md-flex-small="100" md-flex-medium="50" v-for="(result,index) in _tch_StudentConfirmed">
           <mu-paper>
             <div class="result-title">
               {{result._id}}. {{result.title}}
@@ -44,107 +44,30 @@
   </div>
 </template>
 
-
 <script>
+import { mapState, mapActions } from 'vuex'
+export default {
+  data() {
+      return {
+        gotResult: true,
+      }
+    },
+    computed: mapState(['_tch_StudentConfirmed']),
+    methods: {
+      ...mapActions(['tchSelectionResult'])
+      //一键导出excel表格功能实现
+    },
+    mounted() {
+      let id = _c.getCookie('user')
 
-import { mapState ,mapActions,mapMutations} from 'vuex'
+      if (id) {
+        this.tchSelectionResult({ teacherId: user })
+      } else {
+        //this.$router.push('/')
+      }
+    }
+}
 
-	export default{
-		data(){
-			return {
-				gotResult:true,
-				resultData:[{
-                    _id:46,
-                    title:'江南大学图书馆阅读信息的价值发掘与可视化表达',
-                    finalstudents:[{
-                        _id:'1030515120',
-                        name:'杨延昭',
-                        gender:'男',
-                        tel:'18861853209',
-                        email:'donaldjtrump@gmail.com',
-                        qq:'852663214',
-                        wechat:'donaldjtrump'
-                    },{
-                        _id:'1030515120',
-                        name:'佘赛花',
-                        gender:'女',
-                        tel:'18861853209',
-                        email:'donaldjtrump@gmail.com',
-                        qq:'852663214',
-                        wechat:'donaldjtrump'
-                    }]
-                },{
-                    _id:46,
-                    title:'江南大学图书馆阅读信学图书馆阅读信息的价值发掘与可视化表达',
-                    finalstudents:[{
-                        _id:'1030515120',
-                        name:'杨延昭',
-                        gender:'男',
-                        tel:'18861853209',
-                        email:'donaldjtrump@gmail.com',
-                        qq:'852663214',
-                        wechat:'donaldjtrump'
-                    }]
-                },{
-                    _id:46,
-                    title:'江南大学图书馆阅读信息的价值发掘与可视化表达',
-                    finalstudents:[{
-                        _id:'1030515120',
-                        name:'铁警女',
-                        gender:'女',
-                        tel:'18861853209',
-                        email:'donaldjtrump@gmail.com',
-                        qq:'852663214',
-                        wechat:'donaldjtrump'
-                    }]
-                },{
-                    _id:46,
-                    title:'江南大学图书馆阅读信息的价值发掘与可视化表达',
-                    finalstudents:[{
-                        _id:'1030515120',
-                        name:'杨延昭',
-                        gender:'男',
-                        tel:'18861853209',
-                        email:'donaldjtrump@gmail.com',
-                        qq:'852663214',
-                        wechat:'donaldjtrump'
-                    },{
-                        _id:'1030515120',
-                        name:'杨延昭',
-                        gender:'男',
-                        tel:'18861853209',
-                        email:'donaldjtrump@gmail.com',
-                        qq:'852663214',
-                        wechat:'donaldjtrump'
-                    },{
-                        _id:'1030515120',
-                        name:'佘赛花',
-                        gender:'女',
-                        tel:'18861853209',
-                        email:'donaldjtrump@gmail.com',
-                        qq:'852663214',
-                        wechat:'donaldjtrump'
-                    }]
-                }]
-			}
-		},
-		computed:{
-			...mapState(['user','resultData'])
-		},
-		methods:{
-			...mapActions(['tchSelectionResult'])
-			//一键导出excel表格功能实现
-		},
-		mounted(){
-	   if(this.$root.getCookie('user')){
-       var user=this.$root.getCookie('user')
-        this.tchSelectionResult({teacherId:user})
-     }else{
-       //this.$router.push('/')
-     }
-			
-		}
-	}
 </script>
 
 <style lang="sass" rel="stylesheet/scss">

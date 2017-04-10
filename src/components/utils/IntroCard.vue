@@ -13,7 +13,7 @@
         <transition name="confirm-slide" mode="out-in">
           <div class="confirm" v-if="toggleConfirmation">
             <mu-divider/>
-            <div class="no-regret">确定要选择{{student.gender=="女"?"她":"他"}}吗？
+            <div class="no-regret">确定要选择{{student.gender==="女"?"她":"他"}}吗？
             </div>
             <mu-raised-button @click.native="toggleFinal">确定</mu-raised-button>
           </div>
@@ -63,7 +63,6 @@ export default{
       	this.$emit('confirm')
       	this.toggleIntro=!this.toggleIntro
       	this.$emit('overlay')
-
       }
 	}
 
@@ -77,7 +76,7 @@ export default{
     position: relative;
 
     display: inline-block;
-    margin: 12px 30%;
+    margin: 12px 0;
     &.active{
     	z-index: 3000;//超过遮罩层的z-index
     }

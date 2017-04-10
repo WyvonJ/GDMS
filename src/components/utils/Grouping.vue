@@ -1,5 +1,5 @@
 <template>
-  <div class="grouping-container" v-if="gotGroup">
+  <div class="group-container">
   <div class="sub-padding">
     <div class="group-status-card card">
       <div class="teacher-wrapper">
@@ -24,53 +24,43 @@
       </div>
       </div>
   </div>
-  <div class="main-content" v-else>
-    <div class="empty-card-title" :class="{'hide':open}" @click="toggleEmpty">
-      这里空空如也！
-      <p class="intrgging">不是说了啥都没有么 (゜-゜)つロ。</p>
-    </div>
-  </div>
 </template>
 
 
 <script>
-import {mapActions,mapState} from 'vuex'
-  export default{
-    data(){
+import { mapActions, mapState } from 'vuex'
+export default {
+  data() {
       return {
-        open:false,
-        gotGroup:true,
-        groupId:'',
-        students:[],
-        teachers:[]
+        groupId: '',
+        students: [],
+        teachers: []
       }
     },
-    computed:{
-      ...mapState(['grouping'])
+    computed: {
+      ...mapState(['_stu_tch_Group'])
     },
-    methods:{
-      toggleEmpty(){
-        this.open=!this.open
-      },
+    methods: {
       ...mapActions(['tchGrouping'])
     },
-    mounted(){
-      let user=this.$root.getCookie('user')
-      if(!user){
-            //alert('超时未操作，请重新登录')
-           // return this.$router.push('/')
+    mounted() {
+      let user = _c.getCookie('user')
+      if (!user) {
+        //alert('超时未操作，请重新登录')
+        // return this.$router.push('/')
       }
-      this.tchGrouping({account:user})
-        .then(()=>{
-        if (this.grouping.length!=0) {
-          this.gotGroup=true
-          this.groupId=this.grouping._id
-          this.teachers=this.grouping.teachers
-          this.students=this.grouping.students
-        }
-      })
+      this.tchGrouping({ account: user })
+        .then(() => {
+          if (this._stu_tch_Group.length !== 0) {
+            this.gotGroup = true
+            this.groupId = this._stu_tch_Group._id
+            this.teachers = this._stu_tch_Group.teachers
+            this.students = this._stu_tch_Group.students
+          }
+        })
     }
-  }
+}
+
 </script>
 
 <style lang="sass" rel="stylesheet/scss" scoped>

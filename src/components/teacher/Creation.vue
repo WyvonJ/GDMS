@@ -41,7 +41,7 @@
                   </mu-tr>
                 </mu-thead>
                 <mu-tbody>
-                  <mu-tr v-for="(topic,index) in createdTopics">
+                  <mu-tr v-for="(topic,index) in _tch_TopicCreatedAll">
                     <mu-td width="4%">{{topic._id}}</mu-td>
                     <mu-td width="7%">{{topic.category===0?"论文":"设计"}}</mu-td>
                     <mu-td width="20%">{{topic.title}}
@@ -63,11 +63,10 @@
 
 
 <script type="text/javascript">
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   data() {
       return {
-        snackbarText: '', //snackbar提示条文字
         available: 1, //初始可选人数
         category: '0', //初始类别 论文 
         titleText: '', //课题名称
@@ -76,25 +75,24 @@ export default {
         titleError: '',
         detailError: '',
         fields: [],
-        fieldsData: ["计算机视觉", "iOS开发", "Android开发", "前端开发", "计算机图形学", "信息可视化", "云计算", "计算机网络", "人工智能"],
-        topicsData: [{
-            _id:16,
-            category:0,
-            title:'基于java的后端管理系统设计',
-            details:'每个 Vue 实例在被创建之前都要经过一系列的初始化过程。例如，实例需要配置数据观测(data observer)、编译模版、挂载实例到 DOM ，然后在数据变化时更新 DOM 。在这个过程中，实例也会调用一些 生命周期钩子',
-            available:3
-        }],
-        fixedHeader:true,
-        selectable:false,
-        showCheckbox:false,
+        fieldsData: [
+        "图形图像处理", "游戏开发设计", "信息可视化", 
+        "数字视音频处理", "移动互联网", "软件工程", 
+        "Web开发", "人机交互", "虚拟现实&增强现实", 
+        "文化传媒","信息安全","信号处理", 
+        "云计算","大数据","机器学习&深度学习",
+        "算法研究","其他"],
+        fixedHeader: true,
+        selectable: false,
+        showCheckbox: false,
       }
     },
     computed: {
-      ...mapState(['user','userInfo', 'createdTopics'])
+      ...mapState(['_tch_TopicCreatedAll'])
     },
     methods: {
-      ...mapActions(['tchCreateTopic', 'tchDeleteTopic', 'tchGetCreatedTopics', 'showSnackbar']),
       createTopic() {
+        let id = _c.getCookie('user')
         if (this.fields.length == 0) {
           return this.fieldsError = "还没选择课题研究方向！"
         }
@@ -105,36 +103,35 @@ export default {
           return this.detailError = "随便写点介绍吧！"
         }
         let currentTopic = {
-          mentor: this.$root.getCookie('user'),
-          category: this.category,
-          fields: this.fields,
-          title: this.titleText,
-          details: this.detailText,
-          available: this.available
-        }
-        //重新取得所有topics
+            mentor: id,
+            category: this.category,
+            fields: this.fields,
+            title: this.titleText,
+            details: this.detailText,
+            available: this.available
+          }
+          //重新取得所有topics
         this.tchCreateTopic(currentTopic)
           .then(() => {
             this.tchGetCreatedTopics({
-              teacherId: this.$root.getCookie('user'),
+              teacherId: id,
             })
             this.fields = []
             this.titleText = ''
             this.detailText = ''
             this.available = '1'
             this.showSnackbar("课题创建成功")
-//--------没有触发视图更新？？？？
           })
       },
       deleteTopic(topic, index) {
-        //删除已创建的课题
+        let id = _c.getCookie('user')
         this.tchDeleteTopic({
-            teacherId: this.$root.getCookie('user'),
+            teacherId: id,
             topicId: topic._id
           })
           .then(() => {
             this.tchGetCreatedTopics({
-                teacherId: this.$root.getCookie('user'),
+                teacherId: id,
               })
               .then(() => {
                 this.showSnackbar("课题已删除")
@@ -142,31 +139,34 @@ export default {
           })
       },
       availableChange(value) {
-        //选中后的值
         this.available = value;
       },
       categoryChange(value) {
         this.category = value
       },
       fieldsChange(value) {
-        //得到value对应的index
         this.fields = value
       },
       clearError() {
         this.fieldsError = ''
         this.titleError = ''
         this.detailError = ''
-      }
+      },
+      ...mapActions([
+        'tchCreateTopic',
+        'tchDeleteTopic',
+        'tchGetCreatedTopics',
+        'showSnackbar'
+      ])
     },
     mounted() {
       //如果cookie过期则跳转到登录界面------------------
-      if(this.$root.getCookie('user')){
+      let id = _c.getCookie('user')
+        //if (!id) 
+        //return this.$router.push('/')
       this.tchGetCreatedTopics({
-          teacherId: this.$root.getCookie('user'),
-        })
-        }else{
-          //this.$router.push('/')
-        }
+        teacherId: id
+      })
     },
     watch: {
       fields: 'clearError',
@@ -174,6 +174,7 @@ export default {
       detailText: 'clearError'
     }
 }
+
 </script>
 
 <style lang="sass" rel="stylesheet/scss" scoped>

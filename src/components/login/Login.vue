@@ -1,29 +1,29 @@
 <template>
   <div class="login-panel" @keyup.enter="doLogin">
   
-    <div class="openup" :class="{'opened':showLoginPanel}">
-    <canvas id="canvas"></canvas>
+    <div class="openup" :class="{'opened':isLoginPanel}">
+    <wyvonj-canvas></wyvonj-canvas>
       <header class="header">
         <mu-icon id="school-icon" color="#fff" :size="90" value="school" />
         <h1 class="headline">毕业设计管理系统</h1>
       </header>
-      <div class="open-button" :class="{'opened':showLoginPanel}">
-        <mu-circular-progress :size="70" color="red" v-if="loading"/>
-        <div class="login-outer" @click="openLogin" v-if="!openLoginToggle">
+      <div class="open-button" :class="{'opened':isLoginPanel}">
+        <mu-circular-progress :size="70" color="red" v-if="isProgressbar"/>
+        <div class="login-outer" @click="openLoginPanel" v-if="!isLoginOpen">
           Login
         </div>
-        <section class="login-container" v-if="showLoginPanel">
+        <section class="login-container" v-if="isLoginPanel">
           <div class="login-inner">
             Login
           </div>
           <div class="input-items">
-            <mu-text-field label="帐号" hintText="请输入帐号" :errorText="accountError" v-model.trim="account" labelFloat/>
+            <mu-text-field label="帐号" hintText="请输入帐号" :errorText="errorAccount" v-model.trim="account" labelFloat/>
             <br/>
-            <mu-text-field label="密码" hintText="请输入密码" type="password" :errorText="passwordError" v-model.trim="password" labelFloat/>
+            <mu-text-field label="密码" hintText="请输入密码" type="password" :errorText="errorPassword" v-model.trim="password" labelFloat/>
             <mu-raised-button label="登 录" class="login-button" v-on:click="doLogin" />
           </div>
           <span class="pw-forget" @click="passwordForget">忘记密码？</span>
-          <p class="pw-forget-content" v-show="showPasswordForget">学生初始密码都为学号，<br/>如果修改密码后忘记密码，<br/>请咨询管理员修改密码。</p>
+          <p class="pw-forget-content" v-show="isForgot">学生初始密码都为学号，<br/>如果修改密码后忘记密码，<br/>请咨询管理员修改密码。</p>
         </section>
       </div>
     </div>
@@ -31,229 +31,109 @@
   </div>
 </template>
 
-
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
+import WyvonjCanvas from '../utils/WyvonjCanvas.vue'
 import WyvonjFooter from '../utils/WyvonjFooter.vue'
 export default {
   data() {
       return {
-
-        showLoginPanel: false,
-        openLoginToggle: false,
-        showPasswordForget: false,
+        isLoginPanel: false,
+        isLoginOpen: false,
+        isForgot: false,
         account: '',
         password: '',
-        accountError: '',
-        passwordError: ''
+        errorAccount: '',
+        errorPassword: ''
       }
     },
     computed: {
-      ...mapState(['userInfo', 'loading'])
+      ...mapState(['user', 'isProgressbar'])
     },
     components: {
-      WyvonjFooter
+      WyvonjFooter,
+      WyvonjCanvas
     },
     methods: {
-      openLogin() {
-        this.openLoginToggle = true
-        this.showLoginPanel = true
+      openLoginPanel() {
+        this.isLoginOpen = true
+        this.isLoginPanel = true
       },
       //登录方法
       doLogin() {
+        if (!this.account.length) 
+          return this.errorAccount = '请输入帐号！'
+        if (!this.password.length) 
+          return this.errorPassword = '请输入密码！'
+        this.isLoginPanel = false
+        this.progressbarStart()
+        let timer = window.setTimeout(() => {
+          this.login({ 
+            account: this.account, 
+            password: this.password 
+          })
+          .then(() => {
+            this.progressbarStop()
+              let date = new Date(Date.now() + 60000 * 30)
+              let usertype=this.user.usertype
+              _c.setCookie('user', this.account, date, '/', location.hostname)
+              _c.setCookie('username',this.user.username , date, '/', location.hostname)
+              _c.setCookie('usertype',usertype , date, '/', location.hostname)
 
-
-        if (!this.account.length) return this.accountError = '请输入帐号！'
-        if (!this.password.length) return this.passwordError = '请输入密码！'
-
-        this.showLoginPanel = false
-        this.beginLoading()
-          //路由跳转
-        setTimeout(() => {
-          this.login({ account: this.account, password: this.password })
-            .then(() => {
-              //设置cookie有效时间为半小时
-              this.stopLoading()
-              const date = new Date(Date.now() + 60000 * 30)
-                //设置cookie
-              this.$root.setCookie('user', this.account, date, '/', location.hostname)
-              this.$root.setCookie('username',this.userInfo.userName , date, '/', location.hostname)
-              this.$root.setCookie('usertype',this.userInfo.userType , date, '/', location.hostname)
-
-              if (this.userInfo.isFirstLogin) {
-                if (this.userInfo.userType < 2) {
-                  this.$router.push({ path: '/entryinformation' })
-                } else if (this.userInfo.userType === 2) {
-                  this.$router.push({ path: '/admin' })
+              if (this.user.isFirstLogin) {
+                if (usertype < 2) {
+                  this.$router.push('/entryinformation')
+                } else if (usertype === 2) {
+                  this.$router.push( '/admin')
                 }
               } else {
-                if (this.userInfo.userType === 0) {
-                  this.$router.push({ path: '/student/welcome' })
-                } else if (this.userInfo.userType === 1) {
-                  this.$router.push({ path: '/teacher/welcome' })
-                } else if (this.userInfo.userType === 2) {
-                  this.$router.push({ path: '/admin' })
+                if (usertype === 0) {
+                  this.$router.push('/student/welcome')
+                } else if (usertype === 1) {
+                  this.$router.push('/teacher/welcome')
+                } else if (usertype === 2) {
+                  this.$router.push('/admin')
                 }
               }
-
             })
             .catch((error) => {
-              this.showLoginPanel = true
-              this.stopLoading()
+              this.isLoginPanel = true
+              this.progressbarStop()
               switch (error) {
                 case 0:
-                  {
-                    this.accountError = '找不到该账户'
+                    this.errorAccount = '找不到该账号'
                     break
-                  }
                 case 2:
-                  {
-                    this.passwordError = '密码错误'
+                    this.errorPassword = '密码错误'
                     break
-                  }
                 case 3:
                 default:
-                  this.accountError = '未知错误，请重试'
+                  this.errorAccount = '未知错误，请重试'
               }
             })
-        }, 700)
+        }, 300)
+        window.clearTimeout(timer)
       },
-      //清除错误信息
-      clearError() {
-        this.accountError = ''
-        this.passwordError = ''
+      errorClear() {
+        this.errorAccount = ''
+        this.errorPassword = ''
       },
       passwordForget() {
-        this.showPasswordForget = !this.showPasswordForget
+        this.isForgot = !this.isForgot
       },
-      ...mapActions(['login', 'beginLoading', 'stopLoading'])
+      ...mapActions(['login', 'progressbarStart', 'progressbarStop'])
     },
     watch: {
-      account: 'clearError',
-      password: 'clearError'
+      account: 'errorClear',
+      password: 'errorClear'
     },
     mounted() {
-      let WIDTH = window.innerWidth,
-        HEIGHT = window.innerHeight,
-        POINT = 30
-      let canvas = document.getElementById('canvas')
-      canvas.width = WIDTH
-      canvas.height = HEIGHT / 2
-      let context = canvas.getContext('2d')
-      context.strokeStyle = 'rgba(123,152,196,0.8)'
-      context.strokeWidth = 3
-      context.fillStyle = 'rgba(121,134,203,0.3)'
-      let circleArr = []
-
-      function Line(x, y, _x, _y, o) {
-        this.beginX = x
-        this.beginY = y
-        this.closeX = _x
-        this.closeY = _y
-        this.o = o
-      }
-      //点：圆心xy坐标，半径，每帧移动xy的距离
-      function Circle(x, y, r, moveX, moveY) {
-        this.x = x
-        this.y = y
-        this.r = r
-        this.moveX = moveX
-        this.moveY = moveY
-      }
-      function num(max, _min) {
-        let min = arguments[1] || 0
-        return Math.floor(Math.random() * (max - min + 1) + min)
-      }
-      // 绘制原点
-      function drawCricle(cxt, x, y, r, moveX, moveY) {
-        let circle = new Circle(x, y, r, moveX, moveY)
-        cxt.beginPath()
-        cxt.arc(circle.x, circle.y, circle.r, 0, 2 * Math.PI)
-        cxt.closePath()
-        cxt.fill()
-        return circle
-      }
-      function drawLine(cxt, x, y, _x, _y, o) {
-        let line = new Line(x, y, _x, _y, o)
-        cxt.beginPath()
-        cxt.strokeStyle = 'rgba(196,193,216,' + o + ')'
-        cxt.moveTo(line.beginX, line.beginY)
-        cxt.lineTo(line.closeX, line.closeY)
-        cxt.closePath()
-        cxt.stroke()
-      }
-      function init() {
-        circleArr = []
-        for (let i = 0; i < POINT; i++) {
-          circleArr.push(drawCricle(context, num(WIDTH), num(HEIGHT), num(15, 2), num(10, -10) / 40, num(10, -10) / 40))
-        }
-        draw()
-      }
-      //每帧绘制
-      function draw() {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        for (let i = 0; i < POINT; i++) {
-          drawCricle(context, circleArr[i].x, circleArr[i].y, circleArr[i].r)
-        }
-        for (let i = 0; i < POINT; i++) {
-          for (let j = 0; j < POINT; j++) {
-            if (i + j < POINT) {
-              let A = Math.abs(circleArr[i + j].x - circleArr[i].x)
-              let B = Math.abs(circleArr[i + j].y - circleArr[i].y)
-              let lineLength = Math.sqrt(A * A + B * B)
-              let C = 1 / lineLength * 7 - 0.009
-              let lineOpacity = C > 0.4 ? 0.44 : C
-              if (lineOpacity > 0) {
-                drawLine(context, circleArr[i].x, circleArr[i].y, circleArr[i + j].x, circleArr[i + j].y, lineOpacity)
-              }
-            }
-          }
-        }
-      }
-      window.onload = function() {
-        init()
-        setInterval(function() {
-          for (let i = 0; i < POINT; i++) {
-            //边界检测
-            let cir = circleArr[i]
-            cir.x += cir.moveX
-            cir.y += cir.moveY
-            if (cir.x > WIDTH)
-              cir.x = 0
-            else if (cir.x < 0)
-              cir.x = WIDTH
-            if (cir.y > HEIGHT)
-              cir.y = 0
-            else if (cir.y < 0)
-              cir.y = HEIGHT
-          }
-          draw()
-        }, 16)
-      }  
-      //canvas.addEventListener('mousemove', eve => {
-        //console.log(eve.x,eve.y)
-      //})
     }
 }
 </script>
 
 <style lang="sass" rel="stylesheet/scss" scoped>
 @import "../../style/variables.scss";
-@keyframes typing
-{
-    from
-    {
-        width: 0;
-    }
-}
-
-@keyframes blink-caret
-{
-    50%
-    {
-        border-color: transparent;
-    }
-}
 .canvas{
   width: 100vw;
   height: 50vh;
@@ -431,5 +311,4 @@ export default {
         }
     }
 }
-
 </style>

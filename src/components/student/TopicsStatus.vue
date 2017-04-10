@@ -1,12 +1,12 @@
 <template>
-  <div class="topic-status-container" v-if="gotTopic">
+  <div class="topic-status-container" v-if="isTopicConfirmed">
     <div class="sub-padding">
       <div class="student-status-card card">
         <div class="teacher-info">
           <div class="teacher-name">
             <mu-avatar icon="face" backgroundColor="deepOrange500" :size="44" :iconSize="36" />
             <div class="name">
-              {{affirmativeTopic.name}} 老师
+              {{_stu_TopicComfirmed.name}} 老师
             </div>
             <mu-avatar icon="check" backgroundColor="greenA700" :size="36" :iconSize="24" class="check-icon" />
           </div>
@@ -15,36 +15,36 @@
           </div>
           <div class="email chip">
             <mu-icon value="mail" :size="18" />
-            <a :href="'mailto:'+affirmativeTopic.email">{{affirmativeTopic.email}}</a>
+            <a :href="'mailto:'+_stu_TopicComfirmed.email">{{_stu_TopicComfirmed.email}}</a>
           </div>
           <div class="office chip">
-            <mu-icon value="desktop_mac" :size="18" /> {{affirmativeTopic.office}}
+            <mu-icon value="desktop_mac" :size="18" /> {{_stu_TopicComfirmed.office}}
           </div>
           <div class="qq chip">
-            <img src="../../assets/icon/qq.svg" alt="QQ" /> {{affirmativeTopic.qq}}
+            <img src="../../assets/icon/qq.svg" alt="QQ" /> {{_stu_TopicComfirmed.qq}}
           </div>
           <div class="wechat chip">
-            <img src="../../assets/icon/wechat.svg" alt="WECHAT" /> {{affirmativeTopic.wechat}}
+            <img src="../../assets/icon/wechat.svg" alt="WECHAT" /> {{_stu_TopicComfirmed.wechat}}
           </div>
         </div>
         <div class="topic-wrapper">
           <div class="topic-info">
-            {{affirmativeTopic._id}}
+            {{_stu_TopicComfirmed._id}}
           </div>
           <div class="topic-info">
-            {{affirmativeTopic.title}}
+            {{_stu_TopicComfirmed.title}}
           </div>
           <div class="topic-info">
-            {{affirmativeTopic.details}}
+            {{_stu_TopicComfirmed.details}}
           </div>
-          <span class="category-tag">{{affirmativeTopic.category===0?'论文':'设计'}}
+          <span class="category-tag">{{_stu_TopicComfirmed.category===0?'论文':'设计'}}
         </span>
         </div>
       </div>
     </div>
   </div>
   <div class="main-content" v-else>
-      <ul class="selected-topic-list" v-for="(topic,index) in cardData">
+      <ul class="selected-topic-list" v-for="(topic,index) in _stu_TopicSelected">
         <li class="card">
           <div class="topic-title">
             {{topic._id}}.{{topic.title}}
@@ -64,53 +64,36 @@ import {mapActions,mapState} from 'vuex'
   export default{
     data(){
       return {
-        open:false,
-        gotTopic:false,
-        cardData:[{
-          _id:16,
-          title:' 元素用于在网页中包含对象',
-          details:'form 返回对对象的父表单的引用。height  设置或返回对象的高度。hspace  设置或返回对象的水平外边距。name  设置或返回对象的名称。standby 设置或返回在加载对象时返回的消息。type  设置或返回通过 data 属性下载的数据的内容类型。'
-        },{
-          _id:16,
-          title:' 元素用于在网页中包含对象',
-          details:'form 返回对对象的父表单的引用。height  设置或返回对象的高度。hspace  设置或返回对象的水平外边距。name  设置或返回对象的名称。standby 设置或返回在加载对象时返回的消息。type  设置或返回通过 data 属性下载的数据的内容类型。'
-        },{
-          _id:16,
-          title:' 元素用于在网页中包含对象',
-          details:'form 返回对对象的父表单的引用。height  设置或返回对象的高度。hspace  设置或返回对象的水平外边距。name  设置或返回对象的名称。standby 设置或返回在加载对象时返回的消息。type  设置或返回通过 data 属性下载的数据的内容类型。'
-        }]
+        isTopicConfirmed:false
       }
     },
     computed:{
-      ...mapState(['affirmativeTopic']),
+      ...mapState(['_stu_TopicComfirmed','_stu_TopicSelected']),
       tele(){
         //手机号码转换
         let tel=''
-        for (let i = 0; i < this.affirmativeTopic.tel.length; i++) {
+        for (let i = 0; i < this._stu_TopicComfirmed.tel.length; i++) {
           if (i===3 || i===7) {
             tel+='-'
           }
-          tel+=this.affirmativeTopic.tel[i]
+          tel+=this._stu_TopicComfirmed.tel[i]
         }
         return tel
-      }//*********************添加三个课题显示
+      }
     },
     methods:{
-      toggleEmpty(){
-        this.open=!this.open
-      },
       ...mapActions(['stuSelectionResult'])
     },
     mounted(){
-      var user=this.$root.getCookie('user')
-      /*if (!user){
+      let id=_c.getCookie('user')
+      /*if (!id){
                 alert('超时未操作，请重新登录')
                 return this.$router.push('/')
               }*/
-      this.stuSelectionResult({studentId:user})
+      this.stuSelectionResult({studentId: id})
         .then(()=>{
-        if (this.affirmativeTopic.length!=0) {
-          this.gotTopic=true
+        if (this._stu_TopicComfirmed.name.length!=0) {
+          this.isTopicConfirmed=true
         }
       })
     }

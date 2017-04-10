@@ -107,7 +107,7 @@ var testSelectTopic = function(){
 
 //setTimeout(initialTopics, 1000)
 
-//initialStudentsAndMentors('../initialdata/测试数据.xlsx')
+initialStudentsAndMentors('../initialdata/测试数据.xlsx')
 //initialTopics()
 //testSelectTopic()
 exports.initialStudentsAndMentors = initialStudentsAndMentors

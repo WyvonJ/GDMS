@@ -1,7 +1,6 @@
 <template>
   <div class="evaluation-card">
   <div class="sub-padding">
-
     <div class="teacher-info">
       <mu-avatar :icon="emoji" :size="44" :iconSize="36" />
       <div class="name">
@@ -47,7 +46,7 @@ import {mapActions} from 'vuex'
 			},
 			commitGrade(){
 				this.stuEvaluationToTch({
-					studentId:this.$root.getCookie('user'),
+					studentId:_c.getCookie('user'),
 					grade:this.grade
 				})
 			},

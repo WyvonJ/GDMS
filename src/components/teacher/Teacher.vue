@@ -1,6 +1,6 @@
 <template>
 	<div class="container">
-    <wyvonj-header :class="{'nav-hide': !openDrawer}" :userName="userName" :notifyContent="notifyContent"></wyvonj-header>
+    <wyvonj-header :class="{'nav-hide': !openDrawer}" :username="username" :notification="notification"></wyvonj-header>
     <mu-drawer @close="handleClose" :open="openDrawer" :docked="docked" class="sidebar-drawer" :zDepth="1">
         <div class="console-panel">
         <div class="logo">
@@ -9,7 +9,7 @@
             Jnudm
           </p>
         </div>
-            <mu-menu :desktop="true" :value="menuValue" @change="menuChange">
+            <mu-menu :desktop="true" :value="currentMenu" @change="menuChange">
                 <mu-menu-item title="创建选题" value="1" leftIcon="playlist_add" @click="createTopics" />
                 <mu-menu-item title="选择学生" value="2" leftIcon="check_circle" @click="confirmTopics" />
                 <mu-menu-item title="选题结果" value="3" leftIcon="local_library" @click="confirmResult" />
@@ -39,17 +39,16 @@ const desktop=isDesktop()
 	export default {
 		data(){
 			return{
-				openDrawer:true,
+				openDrawer:desktop,
 				docked:desktop,
 				desktop:desktop,
-				firstEdit:true,
-				menuValue:1,
-				userName:'',
-				notifyContent:''
+				currentMenu:1,
+				username:'UNKNOW',
+				notification:''
 			}
 		},
     computed:{
-      ...mapState(['userInfo'])
+      ...mapState(['user','notification'])
     },
 		methods:{
 			createTopics(){
@@ -74,15 +73,15 @@ const desktop=isDesktop()
 				this.$router.push('/teacher/account')
 			},
 			menuChange(val){
-				this.menuValue=val
+				this.currentMenu=val
 				if(!isDesktop())
         	this.handleClose()
-
 			},
 			changeNav () {
      		const desktop = isDesktop()
      		this.docked = desktop
-     		if (desktop === this.desktop) return
+     		if (desktop === this.desktop) 
+          return
      		if (!desktop && this.desktop && this.openDrawer) {
      		  this.openDrawer = false
      		}
@@ -102,23 +101,18 @@ const desktop=isDesktop()
 			WyvonjHeader,
 			WyvonjFooter
 		},
-		watch:{
-		},
 		destroyed(){
     	window.removeEventListener('resize', this.handleResize)
   	},
 		mounted(){
-			if (!this.$root.getCookie('usertype')!=1)
+			if (_c.getCookie('usertype')!=1)
        // return this.$router.push('/')
      
-        this.userName = this.userInfo.userName
-        this.notifyContent = this.notification
-        this.changeNav()
+        this.username = _c.getCookie('username')
         this.handleResize = () => {
           this.changeNav()
         }
         window.addEventListener('resize', this.handleResize)
-        this.$emit('resize')
     }
 		}
 

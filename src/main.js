@@ -1,6 +1,5 @@
 import Vue from 'vue'
-import VueResource from 'vue-resource'
-import { mapState ,mapActions,mapMutations} from 'vuex'
+import {mapState} from 'vuex'
 import MuseUI from 'muse-ui'
 import VueDND from 'awe-dnd'
 import VueMaterial from 'vue-material'
@@ -9,17 +8,16 @@ import 'muse-ui/dist/theme-carbon.css'
 import 'vue-material/dist/vue-material.css'
 
 import StyleInjector from './components/utils/StyleInjector.vue'
-import WyvonjCanvas from './components/utils/WyvonjCanvas.vue'
 import WyvonjSnackbar from './components/utils/WyvonjSnackbar.vue'
 
 import store from './store'
 import router from './router'
-var _ = require('lodash')
-var CookieUtil = require('./utils/cookieUtil')
-//var TWEEN = require('tween.js')
+import cookie from './utils/cookieUtil'
+let _ = require('lodash')
+global._c = cookie
+
 Vue.use(MuseUI)
 Vue.use(VueDND)
-Vue.use(VueResource)
 Vue.use(VueMaterial)
 Vue.material.registerTheme('default', {
   primary: 'red',
@@ -27,16 +25,12 @@ Vue.material.registerTheme('default', {
   warn: 'white',
   background: 'white'
 })
-var vm = new Vue({
+let vm = new Vue({
   router,
   store,
-  components: { 
-  	StyleInjector,
-    WyvonjCanvas,
+  components: {
+    StyleInjector,
     WyvonjSnackbar
-   },
-   methods:{
-    ...CookieUtil
-   },
-   computed:mapState(['isLoading','snackbarText','showSnackbar'])
+  },
+  computed: mapState(['isProgressbar', 'snackbarText', 'isSnackbar'])
 }).$mount('#GDMS')

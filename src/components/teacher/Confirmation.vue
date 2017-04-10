@@ -1,7 +1,7 @@
 <template>
-  <div class="confirmation-container" v-if="gotTopic">
+  <div class="confirmation-container">
   <div class="sub-padding">
-     <mu-paper :zDepth="1" class="help" v-if="showHelp">
+     <mu-paper :zDepth="1" class="help" v-if="isHelp">
       <div class="help-title">帮助</div>
       <mu-icon-button icon="clear" @click="closeHelp" />
       <p class="help-content">
@@ -13,23 +13,23 @@
     </mu-paper>
     <div class="teacher-status-card">
       <md-layout md-gutter="16">
-        <md-layout class="single-card" md-flex-small="50" md-flex-medium="33" v-for="(topic,index) in cardData">
+        <md-layout class="single-card" md-flex-small="50" md-flex-medium="33" v-for="(topic,index) in _tch_StudentInCard">
           <mu-paper :zDepth="2">
             <div class="card-title">
               {{topic._id}}. {{topic.title}}
               <mu-avatar slot="right" backgroundColor="red500" :size="24">{{topic.available}}</mu-avatar>
             </div>
-
-            <div v-for="(student,i) in topic.students" class="a-student-button">
-              <intro-card :student="student" :isselected="student.isselected" @overlay="toggleOverlay" @confirm="final(student,topic)" @current="currentOpen('stu'+topic._id+i)" :ref="'stu'+topic._id+i"/>
-            </div>
-
+            <ul>
+              <li v-for="(student,i) in topic.students">
+                <student-card :student="student"></student-card>
+              </li>
+            </ul>
           </mu-paper>
         </md-layout>
       </md-layout>
     </div>
     <transition name="overlay-fade">
-      <div class="overlay" v-if="showOverlay" @click="toggleOverlayDiv"></div>
+      <div class="overlay" v-if="isOverlay" @click="toggleOverlayDiv"></div>
     </transition>
   </div>
   </div>
@@ -37,42 +37,37 @@
 
 
 <script>
-import IntroCard from '../utils/IntroCard.vue'
-import { mapActions, mapState, mapMutations } from 'vuex'
+import StudentCard from '../utils/StudentCard.vue'
+import { mapActions, mapState } from 'vuex'
 export default {
   data() {
       return {
-        open: false,
-        gotTopic: true,
-        showOverlay: false,
-        showHelp: true,
+        isOverlay: false,
+        isHelp: true,
         currentRef: ''
       }
     },
     computed: {
-      ...mapState(['user','cardData'])
+      ...mapState(['_tch_StudentInCard'])
     },
     methods: {
-      toggleEmpty() {
-        this.open = !this.open
-      },
       toggleOverlay(student) {
-        this.showOverlay = !this.showOverlay
+        this.isOverlay = !this.isOverlay
       },
       currentOpen(refs) {
         this.currentRef = refs
       },
       toggleOverlayDiv() {
         _.head(this.$refs[this.currentRef]).toggleIntro = false
-        this.showOverlay = !this.showOverlay
+        this.isOverlay = !this.isOverlay
       },
-      final(student, topic) {
+      finalConfirm(student, topic) {
         this.currentOpenItem = student
         //小于可选人数
         let tchSelection = {
-            teacherId: this.$root.getCookie('user'), //String
-            studentId: student._id, //String
-            topicId: topic._id //Number
+            teacherId: _c.getCookie('user'),
+            studentId: student._id, 
+            topicId: topic._id 
           }
         this.tchConfirmStudent(tchSelection)
         this.$set(student, 'isselected', true)
@@ -83,26 +78,17 @@ export default {
             this.$delete(sorted , false)
             topic.students=sorted[true]
           }
-
       },
       closeHelp() {
-        this.showHelp = false
+        this.isHelp = false
       },
       ...mapActions(['tchConfirmStudent', 'tchGetTopics', 'showSnackbar'])
     },
     mounted() {
-      /*_.forEach(this.cardData, (value) => {
-          value.count = 0
-          //这个服务器发过来 。。。。。。现测试用
-          _.forEach(value.students,student=>{
-            student.isselected=false
-          })
-        })*/
-      //       正式接入服务器的时候 在mapState里面加cardData
-        this.tchGetTopics({ teacherId: this.$root.getCookie('user') })
+        this.tchGetTopics({ teacherId: _c.getCookie('user') })
     },
     components: {
-      IntroCard
+      StudentCard
     }
 }
 
@@ -124,7 +110,7 @@ export default {
         padding: 8px;
 
         color: #fff;
-        background-color: #2196f3;
+        background-color: $indigo;
     }
     .help-content
     {
@@ -180,14 +166,14 @@ export default {
             font-size: 16px;
             border-top-left-radius: 4px;
             border-top-right-radius: 4px;
-            background-color: #2196f3;
+            background-color: $indigo;
             .mu-avatar
             {
                 font-family: $fontCenturyGothic;
 
                 position: absolute;
                 right: -12px;
-                bottom: -12px;
+                top: -12px;
                 //关闭文本选择
                  -khtml-user-select:      none;
                 -webkit-user-select:      none;
@@ -202,7 +188,7 @@ export default {
 .a-student-button
 {
     display: inline-block;
-    width: 68px;
+    width: 82px;
 }
 .overlay
 {
