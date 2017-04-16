@@ -83,7 +83,7 @@
         </mu-step-label>
         <mu-step-content>
           <div>
-            <mu-text-field hintText="自我介绍" v-model.trim="intro" multiLine @textOverflow="handleOverflow" :errorText="introError" :rows="3" :rowsMax="6" :maxLength="80" />
+            <mu-text-field hintText="自我介绍" v-model.trim="intro" multiLine @textOverflow="handleOverflow" :errorText="introError" :rows="3" :rowsMax="6" :maxLength="60" />
           </div>
           <mu-raised-button label="下一步" class="step-button" @click="handleIntro" secondary/>
           <mu-flat-button label="上一步" class="step-button" @click="handlePrev" />
@@ -186,7 +186,7 @@ export default {
         this.activeStep++
       },
       handleIntro() {
-        if (this.intro.length <= 80)
+        if (this.intro.length <= 60)
           this.activeStep++
       },
       handleOverflow() {

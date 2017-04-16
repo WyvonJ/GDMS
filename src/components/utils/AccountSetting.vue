@@ -1,8 +1,10 @@
 <template>
-<div class="contact-input-container">
+<div class="contact-container">
+<wyvonj-canvas></wyvonj-canvas>
   <div class="sub-padding">
-
-    <div class="contact-input">
+  
+<div>
+  <div class="contact-input">
     <mu-icon value="lock" :size="18" />
     <mu-text-field type="password" :errorText="originalError" hintText="请输入原密码" v-model.trim="original" />
   </div>
@@ -16,12 +18,16 @@
   </div>
   <mu-raised-button labelPosition="before" label="确认更改" icon="check" @click="commitPassword" />
 </div>
+    
+</div>
   </div>
 </template>
 
 
 <script>
 import {mapActions} from 'vuex'
+import WyvonjCanvas from '../utils/WyvonjCanvas.vue'
+
 	export default{
 		data(){
 			return{
@@ -48,14 +54,22 @@ import {mapActions} from 'vuex'
 		watch:{
 			original:'clearError',
 			passwordRepeat:'clearError'
-		}
+		},
+    components:{
+      WyvonjCanvas
+    }
 	}
 </script>
 
 
 <style lang="sass" rel="stylesheet/scss" scoped>
 @import '../../style/variables.scss';
+.contact-container
+{
+    display: flex;
 
+    align-items: center;
+    justify-content: center;
     .contact-input
     {
         width: 332px;
@@ -67,7 +81,7 @@ import {mapActions} from 'vuex'
         white-space: nowrap;
 
         border: 1px #3f51b5 solid;
-        border-radius: 5px;
+        border-radius: 2px;
         .mu-icon
         {
             position: relative;
@@ -79,12 +93,13 @@ import {mapActions} from 'vuex'
             margin-left: 12px;
         }
     }
-.mu-raised-button
-{
-    margin: 16px;
+    .mu-raised-button
+    {
+        margin: 16px;
 
-    color: #fff;
-    background-color: #03a9f4;
+        color: #fff;
+        background-color: #03a9f4;
+    }
 }
 
 </style>

@@ -25,7 +25,8 @@ var mentorsSchema = new Schema
     qq:             {type: String},
     wechat:         {type: String},
     eventstack:     [{type: Number, ref: 'topics'}],//导师需要人工选择学生的题，如果stack里有题的话，就要取stack里题处理
-    classratio:     {type: Number,default: 0.5}//技术与艺术类别比例：0为偏向艺术,1为偏向技术,默认是不偏不椅
+    classratio:     {type: Number,default: 0.5},//技术与艺术类别比例：0为偏向艺术,1为偏向技术,默认是不偏不椅
+    isfirstlogin: {type:Boolean, default:true}
 },{colletion: 'mentors' })
 
 const mentors = mongoose.model('mentors',mentorsSchema)

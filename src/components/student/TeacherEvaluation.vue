@@ -1,7 +1,8 @@
 <template>
   <div class="evaluation-card">
   <div class="sub-padding">
-    <div class="teacher-info">
+  <div class="teacher-wrapper">
+       <div class="teacher-info">
       <mu-avatar :icon="emoji" :size="44" :iconSize="36" />
       <div class="name">
         {{name}}
@@ -15,6 +16,8 @@
           提交分数
       </button>
     </div>
+  </div>
+   
     </div>
   </div>
 </template>
@@ -27,7 +30,7 @@ import {mapActions} from 'vuex'
 			return {
 				grade:60,
 				emoji:'sentiment_neutral',
-				name:'NULL'
+				name:'导师'
 			}
 		},
 		methods:{
@@ -59,11 +62,10 @@ import {mapActions} from 'vuex'
 @import '../../style/variables.scss';
 .evaluation-card
 {
-    &:hover
-    {
-        -webkit-box-shadow: $material-shadow-6dp;
-           -moz-box-shadow: $material-shadow-6dp;
-                box-shadow: $material-shadow-6dp;
+    .teacher-wrapper{
+        border: 1px $indigo400 solid;
+        border-radius: 3px;
+        width: 480px;
     }
     .teacher-info
     {
@@ -71,7 +73,6 @@ import {mapActions} from 'vuex'
 
         padding: 8px 16px;
         width: 480px;
-        background-color: #dedede;
         .name
         {
             font-size: 24px;

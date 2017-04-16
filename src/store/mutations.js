@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 export default {
   SET_USER: (state, user) => {
     state.user = user
@@ -23,6 +25,13 @@ export default {
   STU_TOPIC_IN_CART: (state, topic) => {
     state._stu_TopicInCart = topic
   },
+  STU_SELECT_TOPIC:(state,topic)=>{
+    if(topic)
+      state._stu_TopicInCart.push(topic)
+  },
+  STU_DELTED_TOPIC:(state,index)=>{ 
+      state._stu_TopicInCart.splice(index,1)
+  },
   TCH_TOPIC_CREATED_ALL: (state, topic) => {
     state._tch_TopicCreatedAll = topic
   },
@@ -34,6 +43,13 @@ export default {
   },
   TCH_STUDENT_CONFIRMED: (state, student) => {
     state._tch_StudentConfirmed = student
+  },
+  TCH_SET_STU_SELECTED: (state, student) => {
+    student.isselected = true
+  },
+  TCH_DELETE_STUDENT: (state, topic) => {
+    let sorted=_.groupBy(topic.students,'isselected')
+    topic.students=sorted[true]
   },
   SET_PROGRESSBAR: (state, isShow) => {
     state.isProgressbar = isShow

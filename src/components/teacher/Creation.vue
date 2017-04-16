@@ -1,6 +1,7 @@
 <template>
-    <div class="layout">
-      <md-tabs md-fixed class="md-transparent" md-centerd>
+    <div class="creation-container">
+    <div class="creation-width">
+       <md-tabs md-fixed class="md-transparent">
         <md-tab id="teacher-account-upload" md-label="课题创建" md-icon="library_add">
           <mu-card class="creation-card">
             <mu-card-text>
@@ -22,7 +23,9 @@
               <mu-text-field label="课题简介" v-model.trim="detailText" :errorText="detailError" multiLine labelFloat :rows="6" :rowsMax="20" />
             </mu-card-text>
             <mu-card-actions>
-              <mu-raised-button icon="add" label="创建" @click="createTopic" secondary/>
+              <mu-raised-button label="创建" @click="createTopic" secondary>
+                <i class="material-icons">add</i>
+              </mu-raised-button>
             </mu-card-actions>
           </mu-card>
         </md-tab>
@@ -59,6 +62,9 @@
         </md-tab>
       </md-tabs>
     </div>
+      
+     
+    </div>
 </template>
 
 
@@ -93,13 +99,13 @@ export default {
     methods: {
       createTopic() {
         let id = _c.getCookie('user')
-        if (this.fields.length == 0) {
+        if (this.fields.length === 0) {
           return this.fieldsError = "还没选择课题研究方向！"
         }
-        if (this.titleText.length == 0) {
+        if (this.titleText.length === 0) {
           return this.titleError = "好像还没写名字？"
         }
-        if (this.detailText.length == 0) {
+        if (this.detailText.length === 0) {
           return this.detailError = "随便写点介绍吧！"
         }
         let currentTopic = {
@@ -135,6 +141,9 @@ export default {
               })
               .then(() => {
                 this.showSnackbar("课题已删除")
+              })
+              .catch(err=>{
+                console.log('课题删除出错'+err)
               })
           })
       },
@@ -178,11 +187,17 @@ export default {
 </script>
 
 <style lang="sass" rel="stylesheet/scss" scoped>
-.layout
+.creation-container
 {
     z-index: 0;
 
     width: 100%;
+    .md-tab{
+
+    }
+    .creation-width{
+      width: 100%;
+    }
     .md-tabs-navigation{
         min-height: 60px;
     }
@@ -267,8 +282,4 @@ export default {
         }
     }
 }
-.mu-menu-destop .mu-menu-item-wrapper{
-  height: 24px !important;
-}
-
 </style>

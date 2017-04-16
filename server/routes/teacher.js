@@ -22,9 +22,9 @@ router.post('/tchConfirmStudent', (req, res) => {
   let tchId = req.body.teacherId
   let stuId = req.body.studentId
   let topicId = req.body.topicId
-  console.log(tchId)
-  console.log(stuId)
-  console.log(topicId)
+  //console.log(tchId)
+ // console.log(stuId)
+ // console.log(topicId)
   db.mentors.find({ _id: tchId }, ['notification']).exec()
     .then((notification) => console.log(`${tchId}: ${notification}`))
     .catch((err) => console.log(err))
@@ -63,7 +63,7 @@ router.post('/tchGetTopics', (req, res) => {
       Promise.all(mentor.eventstack.map(topicId => fillCardData(topicId, cardData)))
         .then(() => {
           res.send(cardData)
-          console.log(cardData)
+         // console.log(cardData)
         })
     })
 
@@ -106,7 +106,11 @@ router.post('/tchDeleteTopic', (req, res) => {
   let topicId = req.body.topicId
 
   db.topics.removeTopic(topicId)
-  db.mentors.findOneAndUpdate({ _id: tchId }, { $pull: { topics: topicId } }, { new: true }).exec((err, mentor) => {
+  db.mentors.findOneAndUpdate({ _id: tchId }, {
+    $pull: {
+      topics: topicId
+    }
+  }, { new: true }).exec((err, mentor) => {
     if (err) res.send(404)
     if (mentor) res.send('delete topic success')
   })
@@ -116,7 +120,7 @@ router.post('/tchDeleteTopic', (req, res) => {
 router.post('/tchSelectionResult', (req, res) => {
   let tchId = req.body.teacherId
   let cardData = []
-  console.log(tchId)
+ // console.log(tchId)
   db.mentors.findOne({ _id: tchId })
     .populate('topics')
     .exec()
@@ -153,10 +157,10 @@ router.post('/tchGetCreatedTopics', (req, res) => {
   db.mentors.findOne({ _id: tchId }, 'topics')
     .populate('topics', '_id category title details restriction')
     .exec((err, mentor) => {
-      console.log(mentor.topics)
       if (mentor)
         res.send(mentor.topics)
-      else res.send(404)
+      else 
+        res.sendStatus({state:0})
 
     })
 
@@ -201,7 +205,8 @@ router.post('/tchGrouping', (req, res) => {
   mydb[type].findOne({ _id: account }, 'group')
     .exec()
     .then((doc) => {
-      db.groups.findOne({ _id: doc.group }, ['mentors', 'students'])
+      if(doc.group){
+        db.groups.findOne({ _id: doc.group }, ['mentors', 'students'])
         .populate('mentors', 'name')
         .populate('students', 'name final')
         .exec()
@@ -211,10 +216,12 @@ router.post('/tchGrouping', (req, res) => {
           Promise.all(group.students.map((student) => fillCardData(student, cardData)))
             .then(() => {
               res.send(cardData)
-              console.log(cardData)
+         //     console.log(cardData)
             })
-
         })
+      }else{
+        res.sendStatus(403)
+      }
     })
 
   function fillCardData(student, cardData) {

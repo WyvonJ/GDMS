@@ -9,16 +9,33 @@
             Jnudm
           </p>
         </div>
-        <mu-menu :autoWidth="false" :desktop="true" :value="currentMenu" @change="handleMenuChange">
-          <mu-menu-item title="学生选题" value="1" leftIcon="description" @click="topics" />
-          <mu-menu-item title="选题结果" value="2" leftIcon="beenhere" @click="status" />
-          <mu-menu-item title="答辩分组" value="3" leftIcon="group" @click="grouping" />
-          <mu-menu-item title="教师评价" value="4" leftIcon="star_half" @click="evaluation" />
-          <mu-menu-item title="联系信息" value="5" leftIcon="contact_phone" @click="contact" />
-          <mu-menu-item title="帐号管理" value="6" leftIcon="settings" @click="account"/>
-        </mu-menu>
+        <ul class="sidebar-menu no-selection">
+              <li @click="topics">
+                <img src="../../assets/icon/description.svg" alt="create">
+                <span>学生选题</span>
+              </li>
+              <li @click="status">
+                <img src="../../assets/icon/beenhere.svg" alt="create">
+                <span>选题结果</span>
+              </li>
+              <li @click="grouping">
+                <img src="../../assets/icon/group.svg" alt="create">
+                <span>答辩分组</span>
+              </li>
+              <li @click="evaluation">
+                <img src="../../assets/icon/star_half.svg" alt="create">
+                <span>教师评价</span>
+              </li>
+              <li @click="contact">
+                <img src="../../assets/icon/contact_phone.svg" alt="create">
+                <span>联系信息</span>
+              </li>
+              <li @click="account">
+                <img src="../../assets/icon/settings.svg" alt="create">
+                <span>帐号管理</span>
+              </li>
+            </ul>
       </div>
-      <mu-divider/>
     </mu-drawer>
     
     <transition name="main-transition" appear>
@@ -103,11 +120,9 @@ export default {
       window.removeEventListener('resize', this.handleResize)
     },
     mounted() {
-      if (_c.getCookie('usertype') != 0)
+      //if (_c.getCookie('usertype') != 0)
       //return this.$router.push('/')
-
       this.username = _c.getCookie('username')
-      //this.changeNav()
       this.handleResize = () => {
         this.changeNav()
       }

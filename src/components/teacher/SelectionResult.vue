@@ -44,6 +44,7 @@
   </div>
 </template>
 
+
 <script>
 import { mapState, mapActions } from 'vuex'
 export default {
@@ -58,10 +59,9 @@ export default {
       //一键导出excel表格功能实现
     },
     mounted() {
-      let id = _c.getCookie('user')
-
-      if (id) {
-        this.tchSelectionResult({ teacherId: user })
+      let tchId = _c.getCookie('user')
+      if (tchId) {
+        this.tchSelectionResult({ teacherId: tchId })
       } else {
         //this.$router.push('/')
       }
@@ -76,21 +76,13 @@ export default {
 
 .teacher-topics-status
 {
+        display: flex;
     margin: 8px 0;
-    .mu-paper
-    {
-        transition: $material-enter;
-
-        background-color: #f6f6f6;
-    }
     .single-card
     {
         margin: 8px 0;
-
-        flex: 0 1 10%;
-        .mu-paper
-        {
-            width: 100%;
+        .paper{
+          padding: 0;
         }
         .result-title
         {
@@ -99,25 +91,17 @@ export default {
             color: #fff;
             border-top-left-radius: 2px;
             border-top-right-radius: 2px;
-            background-color: #2196f3 ;
+            background-color: $indigo400 ;
         }
-        .a-student
-        {
-            width: 256px;
-            margin: 12px;
 
-            border-radius: 24px;
-            background-color: #fff;
-            -webkit-box-shadow: $material-shadow-1dp;
-               -moz-box-shadow: $material-shadow-1dp;
-                    box-shadow: $material-shadow-1dp;
+            .student-list{
+
+            }
             .student-details
             {
                 font-size: 16px;
 
                 overflow: hidden;
-
-                height: 200px;
                 padding: 8px;
 
                 cursor: default;
@@ -131,22 +115,13 @@ export default {
 
                     vertical-align: middle;
                 }
-                .chip
-                {
-                    margin: 2px;
+                .mail-link{
+                  color: rgba(0,0,0,.7) !important;
+                  &:hover{
+                    text-decoration: none !important;
+                  }
                 }
-                a
-                {
-                    color: #000;
-                    &:hover
-                    {
-                        text-decoration: none;
-
-                        color: #888;
-                    }
-                }
-            }
-        }
+              }
     }
 }
 

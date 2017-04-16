@@ -18,7 +18,7 @@ router.post('/login',(req,res) => {
     else console.log('err in lonin')
   //  console.log(type)
 
-	models[type].findOne({_id: account},['password', 'name', 'notification'],(err,doc)=>{
+	models[type].findOne({_id: account},['password', 'name', 'notification','isfirstlogin'],(err,doc)=>{
 		switch(true){
 			case !!err:
 				console.log(err)
@@ -28,8 +28,13 @@ router.post('/login',(req,res) => {
 				break
 			case doc.password===password:
 				{
-					res.send({state:1, userType: type, userName: doc.name, notification: doc.notification})
-				//	console.log(doc.name)
+					let t=new Date()
+					res.send({state:1, userType: type, userName: doc.name, notification: doc.notification, isfirstlogin:doc.isfirstlogin})
+					models[type].findOneAndUpdate({_id: account},
+						                          {$set: {isfirstlogin: false}},
+						                          {new: true}).exec()
+					console.log(doc.name+'SignedIn')
+					console.log('At '+t.getHours()+':'+t.getMinutes())
 					break
 				}
 			case doc.password!==password:

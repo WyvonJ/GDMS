@@ -9,17 +9,37 @@
             Jnudm
           </p>
         </div>
-            <mu-menu :desktop="true" :value="currentMenu" @change="menuChange">
-                <mu-menu-item title="创建选题" value="1" leftIcon="playlist_add" @click="createTopics" />
-                <mu-menu-item title="选择学生" value="2" leftIcon="check_circle" @click="confirmTopics" />
-                <mu-menu-item title="选题结果" value="3" leftIcon="local_library" @click="confirmResult" />
-          			<mu-menu-item title="答辩分组" value="4" leftIcon="group" @click="grouping" />
-                <mu-menu-item title="学生评价" value="5" leftIcon="star_half" @click="studentEvaluation" />
-                <mu-menu-item title="联系信息" value="6" leftIcon="contact_phone" @click="contact" />
-                <mu-menu-item title="帐号管理" value="7" leftIcon="settings" @click="account" />
-            </mu-menu>
+            <ul class="sidebar-menu no-selection">
+              <li @click="createTopics">
+                <img src="../../assets/icon/playlist_add.svg" alt="create">
+                <span>创建选题</span>
+              </li>
+              <li @click="confirmTopics">
+                <img src="../../assets/icon/check_circle.svg" alt="create">
+                <span>选择学生</span>
+              </li>
+              <li @click="confirmResult">
+                <img src="../../assets/icon/local_library.svg" alt="create">
+                <span>选题结果</span>
+              </li>
+              <li @click="grouping">
+                <img src="../../assets/icon/group.svg" alt="create">
+                <span>答辩分组</span>
+              </li>
+              <li @click="studentEvaluation">
+                <img src="../../assets/icon/star_half.svg" alt="create">
+                <span>学生评价</span>
+              </li>
+              <li @click="contact">
+                <img src="../../assets/icon/contact_phone.svg" alt="create">
+                <span>联系信息</span>
+              </li>
+              <li @click="account">
+                <img src="../../assets/icon/settings.svg" alt="create">
+                <span>帐号管理</span>
+              </li>
+            </ul>
         </div>
-        <mu-divider/>
     </mu-drawer>
 
      <transition name="main-transition" appear>
@@ -117,3 +137,7 @@ const desktop=isDesktop()
 		}
 
 </script>
+
+<style lang="sass" rel="stylesheet/scss">
+@import '../../style/variables.scss';
+</style>

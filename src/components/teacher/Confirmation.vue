@@ -1,7 +1,7 @@
 <template>
   <div class="confirmation-container">
   <div class="sub-padding">
-     <mu-paper :zDepth="1" class="help" v-if="isHelp">
+     <div class="help paper" v-if="isHelp">
       <div class="help-title">帮助</div>
       <mu-icon-button icon="clear" @click="closeHelp" />
       <p class="help-content">
@@ -10,27 +10,30 @@
         <br/> 红色代表女生 蓝色代表男生
         <br/> 一旦确认选择后无法更改</p>
       <mu-icon value="help" :size="36" />
-    </mu-paper>
+    </div>
     <div class="teacher-status-card">
       <md-layout md-gutter="16">
         <md-layout class="single-card" md-flex-small="50" md-flex-medium="33" v-for="(topic,index) in _tch_StudentInCard">
-          <mu-paper :zDepth="2">
+          <div class="paper">
             <div class="card-title">
               {{topic._id}}. {{topic.title}}
               <mu-avatar slot="right" backgroundColor="red500" :size="24">{{topic.available}}</mu-avatar>
             </div>
             <ul>
-              <li v-for="(student,i) in topic.students">
-                <student-card :student="student"></student-card>
+              <li v-for="(student,i) in topic.students" class="student-list">
+                <student-card :student="student" @select="selectStudent(student,topic)" :isSelected="student.isselected"></student-card>
               </li>
             </ul>
-          </mu-paper>
+          </div>
         </md-layout>
       </md-layout>
     </div>
-    <transition name="overlay-fade">
-      <div class="overlay" v-if="isOverlay" @click="toggleOverlayDiv"></div>
-    </transition>
+    <mu-dialog :open="openDialog" title="确认选择" @close="closeDialog">
+      你确定要选择{{currentStudent.name}}吗？
+    <mu-flat-button slot="actions" @click="closeDialog" accent label="取消"/>
+    <mu-flat-button slot="actions" secondary @click.native="finalConfirm" label="确定"/>
+    </mu-dialog>
+
   </div>
   </div>
 </template>
@@ -38,54 +41,67 @@
 
 <script>
 import StudentCard from '../utils/StudentCard.vue'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState ,mapMutations } from 'vuex'
 export default {
   data() {
       return {
-        isOverlay: false,
         isHelp: true,
-        currentRef: ''
+        openDialog:false,
+        currentStudent:{},
+        currentTopic:{},
       }
     },
     computed: {
       ...mapState(['_tch_StudentInCard'])
     },
     methods: {
-      toggleOverlay(student) {
-        this.isOverlay = !this.isOverlay
+      selectStudent(student,topic){
+        this.openDialog=true
+        this.currentStudent=student
+        this.currentTopic=topic
       },
-      currentOpen(refs) {
-        this.currentRef = refs
-      },
-      toggleOverlayDiv() {
-        _.head(this.$refs[this.currentRef]).toggleIntro = false
-        this.isOverlay = !this.isOverlay
-      },
-      finalConfirm(student, topic) {
-        this.currentOpenItem = student
-        //小于可选人数
-        let tchSelection = {
-            teacherId: _c.getCookie('user'),
-            studentId: student._id, 
-            topicId: topic._id 
+      finalConfirm(){
+        let tchId=_c.getCookie('user') 
+        //this.$set(this.currentStudent, 'isselected', true)
+        
+        if (!tchId) {
+          let tchSelection = {
+            teacherId:tchId,
+            studentId: this.currentStudent._id, 
+            topicId: this.currentTopic._id 
           }
-        this.tchConfirmStudent(tchSelection)
-        this.$set(student, 'isselected', true)
-        topic.count++
-          if (topic.count === topic.available) {
-            let sub=topic.students.length - topic.available
-            let sorted=_.groupBy(topic.students,'isselected')
-            this.$delete(sorted , false)
-            topic.students=sorted[true]
-          }
+          this.tchConfirmStudent(tchSelection)
+          .then(()=>{
+            this.showSnackbar('成功选择了'+this.currentStudent.name)
+            this.TCH_SET_STU_SELECTED(this.currentStudent)
+            this.openDialog=false
+            this.currentTopic.count++
+            if(this.currentTopic.count===this.currentTopic.available){
+              this.TCH_DELETE_STUDENT(this.currentTopic)
+            }
+          })
+          .catch(err=>{
+            console.log('选择学生出错了'+err)
+          })
+        }
+      },
+      closeDialog(){
+        this.openDialog=false
       },
       closeHelp() {
         this.isHelp = false
       },
-      ...mapActions(['tchConfirmStudent', 'tchGetTopics', 'showSnackbar'])
+      ...mapActions(['tchConfirmStudent', 'tchGetTopics', 'showSnackbar']),
+      ...mapMutations(['TCH_SET_STU_SELECTED','TCH_DELETE_STUDENT'])
     },
-    mounted() {
+    created() {
         this.tchGetTopics({ teacherId: _c.getCookie('user') })
+          .catch(err=>{
+            console.log('获取题目和选题学生错误'+err)
+          })
+        _.forEach(this._tch_StudentInCard,(topic)=>{
+          topic.count=0
+        })
     },
     components: {
       StudentCard
@@ -110,7 +126,7 @@ export default {
         padding: 8px;
 
         color: #fff;
-        background-color: $indigo;
+        background-color: $indigo400;
     }
     .help-content
     {
@@ -136,9 +152,8 @@ export default {
 .teacher-status-card
 {
     margin: 8px 0;
-    padding-right: 180px;
-    transition: all .4s cubic-bezier(.2,.2,.4,1);
-    .mu-paper
+    transition: $material-enter;
+    .div
     {
         transition: $material-enter;
         border-radius: 4px;
@@ -149,12 +164,15 @@ export default {
                     box-shadow: $material-shadow-9dp;
         }
     }
+    .student-list{
+      margin: 0;
+    }
     .single-card
     {
         margin: 8px 0;
         flex: initial;
         -ms-flex: initial;
-        .mu-paper{
+        .div{
           width: 100%;
         }
         .card-title
@@ -166,7 +184,7 @@ export default {
             font-size: 16px;
             border-top-left-radius: 4px;
             border-top-right-radius: 4px;
-            background-color: $indigo;
+            background-color: $indigo400;
             .mu-avatar
             {
                 font-family: $fontCenturyGothic;
@@ -174,7 +192,6 @@ export default {
                 position: absolute;
                 right: -12px;
                 top: -12px;
-                //关闭文本选择
                  -khtml-user-select:      none;
                 -webkit-user-select:      none;
                    -moz-user-select: -moz-none;
@@ -184,24 +201,6 @@ export default {
         }
     }
 }
-
-.a-student-button
-{
-    display: inline-block;
-    width: 82px;
-}
-.overlay
-{
-    position: fixed;
-    z-index: 1000;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    opacity: .5;
-    background-color: #000;
-}
-
 .overlay-fade-enter-active,
 .overlay-fade-leave-active
 {

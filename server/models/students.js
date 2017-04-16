@@ -29,7 +29,8 @@ var studentsSchema = new Schema
 	group: 		{type: Number, ref: 'groups'},
 	finalscore: {type: Number},
 	isselected: {type: Boolean, default:false},//这个学生是不是已经选择了题目
-	notification: {type: String}//这个学生是不是已经选择了题目
+	notification: {type: String},//这个学生是不是已经选择了题目
+	isfirstlogin: {type:Boolean, default:true}
 },{colletion: 'students' })
 
 /*学生选题方法*/
@@ -42,21 +43,21 @@ studentsSchema.methods.selectTopic = function(whichApplication,topicid){//这样
 		                  						case 'first':
 		                  						this.first = topic._id
 		         								this.model('topics').findOneAndUpdate({_id: topicid}, 
-		         								/*这说明这个题目的第一志愿人是这个人*/{$push: {firststudents: this._id}, $inc:{selected: 1}},
+		         								/*这说明这个题目的第一志愿人是这个人*/{$addToSet: {firststudents: this._id}, $inc:{selected: 1}},
 		         																	  {new: true}).exec();
 		         								break
 		                  					
 		                  					    case 'second':
 		                  						this.second = topic._id
 		                  					    this.model('topics').findOneAndUpdate({_id: topicid}, 
-		         								/*这说明这个题目的第二志愿人是这个人*/{$push: {secondstudents: this._id}, $inc:{selected: 1}},
+		         								/*这说明这个题目的第二志愿人是这个人*/{$addToSet: {secondstudents: this._id}, $inc:{selected: 1}},
 		         																	  {new: true}).exec()
 		                  					    break
 
 		                  					    case 'third': 
 		                  						this.third = topic._id
 		                  					    this.model('topics').findOneAndUpdate({_id: topicid}, 
-		         								/*这说明这个题目的第三志愿人是这个人*/{$push: {thirdstudents: this._id}, $inc:{selected: 1}},
+		         								/*这说明这个题目的第三志愿人是这个人*/{$addToSet: {thirdstudents: this._id}, $inc:{selected: 1}},
 		         																	  {new: true}).exec()
 		                  					    break
 		                  					}

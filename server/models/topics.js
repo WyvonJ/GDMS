@@ -54,7 +54,7 @@ topicsSchema.methods.createTopic = function(cb) {
       this.restriction = this.available
       this.save((err, topic) => {
         getNewId(err, this._id)
-        mentors.findOneAndUpdate({ _id: topic.mentor }, { $push: { topics: topic._id } }, { new: true }).exec((err, mentor) => {
+        mentors.findOneAndUpdate({ _id: topic.mentor }, { $addToSet: { topics: topic._id } }, { new: true }).exec((err, mentor) => {
 
         })
       })
@@ -91,14 +91,28 @@ topicsSchema.statics.removeTopic = function(topicId, cb) {
       this.model('autoIncModel').findOneAndUpdate({ collectionName: 'topics' }, { $inc: { topicsSeq: -1 } }, { new: true }).exec()
         .then((doc) => {
           if (doc.topicsSeq + 1 == deletedTopic._id) return //如果要删除的是最后一个题目 就直接删除了
-          this.findOneAndRemove({ _id: doc.topicsSeq + 1 }).exec((err, doc) => {
+          this.findOneAndRemove({ _id: doc.topicsSeq + 1 }).exec((err, lastdoc) => {
 
             var deletedId = deletedTopic._id
-            db.mentors.findOneAndUpdate({ _id: doc.mentors }, { $pull: { topics: doc._id }, $push: { topics: deletedId } })
-              .exec()
-            doc._id = deletedId //删除的题目
+            console.log(`deletedTopicId + ${deletedId}`)
+            console.log(`lastTopicId + ${lastdoc._id}`)
+              //   if (lastdoc.mentors != deletedTopic.mentors)
+            mentors.findOneAndUpdate({ _id: lastdoc.mentor }, {
+                $pull: { topics: lastdoc._id }
+              }, { new: true })
+              .exec(() => {
+                mentors.findOneAndUpdate({ _id: lastdoc.mentor }, {
+                    //  $pull: { topics: lastdoc._id },
+                    $addToSet: { topics: deletedId }
+                  }, { new: true })
+                  .exec()
+              })
+              //  console.log(lastdoc)
 
-            this.collection.insert(doc) //插入最后一个题
+
+            lastdoc._id = deletedId //删除的题目
+
+            this.collection.insert(lastdoc) //插入最后一个题
 
           })
         })

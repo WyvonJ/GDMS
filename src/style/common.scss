@@ -16,6 +16,7 @@ body
     font-weight: lighter;
 
     width: 100%;
+    min-height: 99% !important;
 
     letter-spacing: .05em;
 
@@ -57,20 +58,20 @@ body::-webkit-scrollbar-thumb:hover
 html,
 body
 {
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden !important;
 }
 
 a
 {
     text-decoration: none;
 
-    color: #fff;
+    color: rgba(0,0,0,.7) !important;
 }
 
 a:hover
 {
-    text-decoration: none;
+    text-decoration: none !important;
+    color: $red !important;
 }
 
 ul,
@@ -78,6 +79,14 @@ ol,
 li
 {
     list-style: none;
+}
+button{
+    outline: none;
+            background: transparent;
+            border: 1px #f44336 solid;
+            color: #f44336;
+            border-radius: 2px;
+            transition: $material-enter;
 }
 
 #GDMS
@@ -87,7 +96,6 @@ li
 
     overflow: hidden;
 
-    min-height: 100vh;
 
     text-align: center;
 
@@ -115,10 +123,6 @@ li
     background: $red;
 }
 
-.icon-size
-{
-    font-size: 14px !important;
-}
 
 .md-tooltip
 {
@@ -127,12 +131,17 @@ li
 
 .sub-padding
 {
-    padding: 12px 0 18px 12px;
+    padding: 8px 8px 16px 12px;
 }
 
-.mu-pagination-item.active
+.no-selection
 {
-    background-color: $red !important;
+    -webkit-user-select:      none;
+       -moz-user-select: -moz-none;
+        -ms-user-select:      none;
+            user-select:      none;
+
+    -khtml-user-select: none;
 }
 
 .card
@@ -144,7 +153,14 @@ li
        -moz-box-shadow: $material-shadow-1dp;
             box-shadow: $material-shadow-1dp;
 }
-
+.paper{
+    transition: $material-enter;
+    background-color: white;
+    border-radius: 3px;
+    -webkit-box-shadow: $material-shadow-2dp;
+       -moz-box-shadow: $material-shadow-2dp;
+            box-shadow: $material-shadow-2dp;
+}
 .logo
 {
     position: relative;
@@ -178,53 +194,69 @@ li
 
 .container
 {
+    overflow: auto;
+
     height: 100%;
 
     transition: $material-enter;
     .sidebar-drawer
     {
         max-width: $sidebar-size;
-
-        -webkit-user-select:      none;
-           -moz-user-select: -moz-none;
-            -ms-user-select:      none;
-                user-select:      none;
-
-        -khtml-user-select: none;
-        .mu-menu-item-wrapper.hover
+        .sidebar-menu
         {
-            .mu-menu-item-left-icon
+            margin-top: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px rgba(0,0,0,.3) solid;
+            li
             {
-                left: 16px;
-            }
-        }
-        .mu-menu-item
-        {
-            padding-left: 72px;
-            .mu-menu-item-left-icon
-            {
-                left: 40px;
+                position: relative;
 
+                height: 32px;
+                margin: 3px 0;
+
+                cursor: pointer;
                 transition: $material-enter;
+                &.current-menu-item{
+                    color: $red;
+                }
+                img
+                {
+                    position: absolute;
+                    top: 4px;
+                    left: 40px;
+
+                    transition: inherit;
+                }
+                span
+                {
+                    font-size: 18px;
+
+                    position: absolute;
+                    top: 6px;
+                    right: 46px;
+                }
+                &:hover
+                {
+                    background-color: #dedede;
+                    img
+                    {
+                        left: 16px;
+                    }
+                }
             }
-        }
-        .mu-menu-item-title
-        {
-            font-size: 16px;
         }
     }
     .main-content
     {
-        height: 100%;
-        padding: 64px 8px 18px 188px;
-
+        height: 100vh;
+        padding: 64px 0 18px 188px;
         transition: $material-enter;
         text-align: left;
 
         background-color: #f6f6f6;
         &.nav-hide
         {
-            padding-left: 16px;
+            padding-left: 0;
         }
     }
 }
@@ -251,7 +283,7 @@ li
 .main-transition-enter-active
 {
     transition: $material-enter;
-    transition-delay: .3s !important; 
+    transition-delay: .3s !important;
     //元素进来时给大于等于离开动画的延迟
     //就能避免两个元素同时在画内
 }

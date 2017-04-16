@@ -7,13 +7,12 @@ import Login from '../components/login/Login.vue'
 //Grouping
 import Grouping from '../components/utils/Grouping.vue'
 import Welcome from '../components/utils/Welcome.vue'
-
+import AccountSetting from '../components/utils/AccountSetting.vue'
 //student panel
 import Student from '../components/student/Student.vue'
 import Topics from '../components/student/Topics.vue'
 import TopicsStatus from '../components/student/TopicsStatus.vue'
 import TeacherEvaluation from '../components/student/TeacherEvaluation.vue'
-import StudentAccount from '../components/student/StudentAccount.vue'
 import StudentContact from "../components/student/StudentContact.vue"
 import EntryInformation from '../components/utils/EntryInformation.vue'
 //admin panel
@@ -27,7 +26,6 @@ import Confirmation from '../components/teacher/Confirmation.vue'
 import Creation from '../components/teacher/Creation.vue'
 import StudentEvaluation from '../components/teacher/StudentEvaluation.vue'
 import TeacherContact from '../components/teacher/TeacherContact.vue'
-import TeacherAccount from '../components/teacher/TeacherAccount.vue'
 import SelectionResult from '../components/teacher/SelectionResult.vue'
 
 const router = new Router({
@@ -38,27 +36,28 @@ const router = new Router({
       path: '/student',
       component: Student,
       children: [
-        { path: 'welcome', name:'studentwelcome', component: Welcome },
+        { path: '', component: Topics },
+        { path: 'welcome', name: 'studentwelcome', component: Welcome },
 
         { path: 'topics', name: 'topics', component: Topics },
         { path: 'status', name: 'status', component: TopicsStatus },
         { path: 'grouping', name: 'grouping', component: Grouping },
-        { path: 'evaluation', name: 'studentevaluation', component: TeacherEvaluation },
-        { path: 'account', name: 'studentaccount', component: StudentAccount },
-        { path: 'contact', name: 'studentcontact', component: StudentContact }
+        { path: 'evaluation', name: 'studentevaluation', component: TeacherEvaluation },{ path: 'contact', name: 'studentcontact', component: StudentContact }, 
+        { path: 'account', name: 'account', component: AccountSetting }
       ]
     }, {
       path: '/teacher',
       component: Teacher,
       children: [
-        { path: 'welcome', name:'teacherwelcome', component: Welcome },
+        { path: '', component: Creation },
+        { path: 'welcome', name: 'teacherwelcome', component: Welcome },
         { path: 'creation', name: 'creation', component: Creation },
         { path: 'confirmation', name: 'confirmation', component: Confirmation },
         { path: 'selectionresult', name: 'selectionresult', component: SelectionResult },
         { path: 'grouping', component: Grouping },
         { path: 'evaluation', name: 'teacherevaluation', component: StudentEvaluation },
         { path: 'contact', name: 'teachercontact', component: TeacherContact },
-        { path: 'account', name: 'teacheraccount', component: TeacherAccount }
+        { path: 'account', component: AccountSetting }
       ]
     }, {
       path: '/admin',
@@ -73,8 +72,8 @@ const router = new Router({
   ]
 })
 
-router.beforeEach((to,from,next)=>{
-  window.scrollTo(0,0)
+router.beforeEach((to, from, next) => {
+  window.scrollTo(0, 0)
   next()
 })
 

@@ -44,8 +44,8 @@
     </div>
   </div>
   <div class="main-content" v-else>
-      <ul class="selected-topic-list" v-for="(topic,index) in _stu_TopicSelected">
-        <li class="card">
+      <ul class="selected-topic-list">
+        <li class="card"  v-for="(topic,index) in _stu_TopicInCart">
           <div class="topic-title">
             {{topic._id}}.{{topic.title}}
             <span class="topic-level">{{index+1}}</span>
@@ -68,10 +68,11 @@ import {mapActions,mapState} from 'vuex'
       }
     },
     computed:{
-      ...mapState(['_stu_TopicComfirmed','_stu_TopicSelected']),
+      ...mapState(['_stu_TopicComfirmed','_stu_TopicInCart']),
       tele(){
         //手机号码转换
-        let tel=''
+        if (isTopicConfirmed) {
+          let tel=''
         for (let i = 0; i < this._stu_TopicComfirmed.tel.length; i++) {
           if (i===3 || i===7) {
             tel+='-'
@@ -79,6 +80,7 @@ import {mapActions,mapState} from 'vuex'
           tel+=this._stu_TopicComfirmed.tel[i]
         }
         return tel
+        }
       }
     },
     methods:{
@@ -108,7 +110,7 @@ import {mapActions,mapState} from 'vuex'
 
     position: relative;
 
-    max-width: 480px;
+    width: 320px;
 
     &:hover
     {
@@ -223,9 +225,7 @@ import {mapActions,mapState} from 'vuex'
   align-items: center;
   justify-items:center;
   li{
-    width: 320px;
-    height: 240px;
-    margin: 0 8px 0 0;
+    margin-right: 20px;
     border-radius: 3px;
     display: inline-block;
     &:hover

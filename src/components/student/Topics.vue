@@ -77,7 +77,7 @@
 
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions ,mapMutations } from 'vuex'
 export default {
   data() {
       return {
@@ -93,7 +93,7 @@ export default {
       }
     },
     computed: {
-      ...mapState(['_stu_TopicInTable', '_stu_TopicInCart'])
+      ...mapState(['_stu_TopicInTable','_stu_TopicInCart'])
     },
     methods: {
       /*handlePage(newIndex) {
@@ -127,15 +127,14 @@ export default {
           switch (cart.length) {
             case 0:
               {
-                cart.push(topic)
+                this.STU_SELECT_TOPIC(topic)
                 this.showSnackbar("请在已选课题中编辑或提交选择。")
                 break
               }
             case 1:
               {
                 if (topic._id !== cart[0]._id) {
-                  //cart.push(topic)
-                  this.showSnackbar("本次只可选择已确认课题，请在已选课题中编辑！")
+                  this.STU_SELECT_TOPIC(topic)
                 } else {
                   this.showSnackbar("不能选择相同志愿，请在已选课题中编辑！")
                 }
@@ -143,18 +142,16 @@ export default {
               }
             case 2:
               {
-                /*if (topic._id !== cart[0]._id && topic._id !== cart[1]._id) {
-                  cart.push(topic)
+                if (topic._id !== cart[0]._id && topic._id !== cart[1]._id) {
+                  this.STU_SELECT_TOPIC(topic)
                   this.showSnackbar("已经选满三个志愿，请在已选课题面板中编辑或提交。")
                 } else {
                   this.showSnackbar("不能选择相同志愿！不能选择相同志愿！不能选择相同志愿！")
-                }*/
+                }
                 break
               }
             case 3:
-              {
                 this.showSnackbar("只能选取三个志愿，请在已选课题中编辑。")
-              }
           }
         } else {
           this.lastSelection = topic._id
@@ -181,9 +178,10 @@ export default {
       },
       deleteTopic(index) {
         //删除本条选题
-        this._stu_TopicInCart.splice(index, 1)
+        this.STU_DELTED_TOPIC(index)
       },
-      ...mapActions(['stuGetTopics', 'showSnackbar', 'stuCommitSelection'])
+      ...mapActions(['stuGetTopics', 'showSnackbar', 'stuCommitSelection','stuSelectionResult']),
+      ...mapMutations(['STU_SELECT_TOPIC','STU_DELTED_TOPIC'])
     },
     beforeDestroy() {
       //切换路由时如果还没保存 就弹出提示
@@ -192,6 +190,8 @@ export default {
     mounted() {
       let id = _c.getCookie('user')
       this.stuGetTopics()
+      this.stuSelectionResult({studentId:id})
+
         //this.stuGetTopics().then(()=>{
         /*  this.total=this._stu_TopicInTable.length
           this.topicsChunk = _.chunk(this._stu_TopicInTable, this.pageSize)

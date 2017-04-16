@@ -1,13 +1,13 @@
-var db = require('../models/db')
+//var db = require('../models/db')
 
-var topicData ={
+/*var topicData ={
 	    1:1,
 		2:"云计算研究",
 		"details":"云计算，新的未来",
 		"available":2,
 		"selected":0,
 		"fields":"云计算"
-}
+}*/
 //console.log(topicData[2])
 //var newTopic = new db.topics(topicData)
 
@@ -68,7 +68,7 @@ transporter.sendMail(mailOptions, function(error, info){
     rec_num: '18861823231',
     sms_template_code: 'SMS_53770189'
 });*/
-db.students.find({}).exec()
+/*db.students.find({}).exec()
   .then((students)=>{
     var record = []
     for(var i=0;i<students.length;i++)
@@ -78,4 +78,4 @@ db.students.find({}).exec()
        // record[i].a =
     }
     console.log(record)
-  })
+  })*/

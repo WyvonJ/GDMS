@@ -1,10 +1,10 @@
 <template>
   <div class="login-panel" @keyup.enter="doLogin">
   
-    <div class="openup" :class="{'opened':isLoginPanel}">
+    <div class="openup" id="openup" :class="{'opened':isLoginPanel}">
     <wyvonj-canvas></wyvonj-canvas>
       <header class="header">
-        <mu-icon id="school-icon" color="#fff" :size="90" value="school" />
+        <img width="110" height="110" src="../../assets/img/gd_logo.png" alt="GDMS">
         <h1 class="headline">毕业设计管理系统</h1>
       </header>
       <div class="open-button" :class="{'opened':isLoginPanel}">
@@ -67,7 +67,7 @@ export default {
           return this.errorPassword = '请输入密码！'
         this.isLoginPanel = false
         this.progressbarStart()
-        let timer = window.setTimeout(() => {
+        window.setTimeout(() => {
           this.login({ 
             account: this.account, 
             password: this.password 
@@ -76,10 +76,10 @@ export default {
             this.progressbarStop()
               let date = new Date(Date.now() + 60000 * 30)
               let usertype=this.user.usertype
+              console.log(this.user)
               _c.setCookie('user', this.account, date, '/', location.hostname)
               _c.setCookie('username',this.user.username , date, '/', location.hostname)
               _c.setCookie('usertype',usertype , date, '/', location.hostname)
-
               if (this.user.isFirstLogin) {
                 if (usertype < 2) {
                   this.$router.push('/entryinformation')
@@ -87,6 +87,7 @@ export default {
                   this.$router.push( '/admin')
                 }
               } else {
+
                 if (usertype === 0) {
                   this.$router.push('/student/welcome')
                 } else if (usertype === 1) {
@@ -112,7 +113,6 @@ export default {
               }
             })
         }, 300)
-        window.clearTimeout(timer)
       },
       errorClear() {
         this.errorAccount = ''

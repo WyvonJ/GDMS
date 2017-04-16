@@ -19,7 +19,7 @@ const store = new Vuex.Store({
       isFirstLogin: true
     },
     notification: '',
-    _stu_TopicSelected: [{
+    _stu_TopicSelected: [/*{
       _id: 16,
       title: ' 元素用于在网页中包含对象',
       details: 'form 返回对对象的父表单的引用。height  设置或返回对象的高度。hspace  设置或返回对象的水平外边距。name  设置或返回对象的名称。standby 设置或返回在加载对象时返回的消息。type  设置或返回通过 data 属性下载的数据的内容类型。',
@@ -34,7 +34,7 @@ const store = new Vuex.Store({
       title: ' 元素用于在网页中包含对象',
       details: 'form 返回对对象的父表单的引用。height  设置或返回对象的高度。hspace  设置或返回对象的水平外边距。name  设置或返回对象的名称。standby 设置或返回在加载对象时返回的消息。type  设置或返回通过 data 属性下载的数据的内容类型。',
       category: 0
-    }],
+    }*/],
     _stu_TopicInTable: [{
       _id: 9,
       category: 1,
@@ -122,19 +122,19 @@ const store = new Vuex.Store({
     _tch_TopicCreatedAll: [{
       _id: 16,
       category: 0,
-      title: '基于java的后端管理系统设计',
+      title: '基于java的后端管理系统设计，使用Vuejs技术栈实现',
       details: '每个 Vue 实例在被创建之前都要经过一系列的初始化过程。例如，实例需要配置数据观测(data observer)、编译模版、挂载实例到 DOM ，然后在数据变化时更新 DOM 。在这个过程中，实例也会调用一些 生命周期钩子',
-      available: 3
+      restriction: 3
     }],
     _tch_StudentInCard: [{
       _id: 1,
-      title: '基于java的后端管理系统设计',
+      title: '基于java的后端管理系统设计，使用Vuejs技术栈实现',
       available: 3,
       students: [{
         isselected: false,
         _id: '1030513430',
         name: '吴吉',
-        intro: '前端开发',
+        intro: '每个实例在被创建之前都要经过一系列的初始化过程。例如，实例需',
         gender: '男',
         gpa: '4.0',
 
@@ -142,7 +142,7 @@ const store = new Vuex.Store({
         isselected: false,
         _id: '1030513431',
         name: '徐佳文',
-        intro: '终端开发',
+        intro: '每个 Vue 实例在被创建之前都要经过一系列的初始化过程。例如，实例需要配置数据观测(data observer)',
         gender: '男',
         gpa: '4.0',
 
@@ -158,7 +158,36 @@ const store = new Vuex.Store({
         isselected: false,
         _id: '1030513433',
         name: '住匆匆',
-        intro: '傻逼',
+        intro: 'wusdfhj',
+        gender: '女',
+        gpa: '4.0',
+
+      },{
+        isselected: false,
+        _id: '1030513433',
+        name: '住匆匆',
+        intro: '66666',
+        gender: '男',
+        gpa: '4.0',
+
+      }]
+    },{
+      _id: 2,
+      title: '基于java的后端管理系统设计，使用Vuejs技术栈实现',
+      available: 3,
+      students: [{
+        isselected: false,
+        _id: '1030513430',
+        name: '吴吉',
+        intro: '每个 Vue 实例在被创建之前',
+        gender: '男',
+        gpa: '4.0',
+
+      },{
+        isselected: true,
+        _id: '1030513433',
+        name: '住匆匆',
+        intro: 'henhao',
         gender: '女',
         gpa: '4.0',
 
@@ -177,7 +206,7 @@ const store = new Vuex.Store({
       title: '江南大学图书馆阅读信息的价值发掘与可视化表达',
       finalstudents: [{
         _id: '1030515120',
-        name: '杨延昭',
+        name: '异步',
         gender: '男',
         tel: '18861853209',
         email: 'donaldjtrump@gmail.com',
@@ -185,7 +214,7 @@ const store = new Vuex.Store({
         wechat: 'donaldjtrump'
       }, {
         _id: '1030515120',
-        name: '佘赛花',
+        name: '样式表',
         gender: '女',
         tel: '18861853209',
         email: 'donaldjtrump@gmail.com',
@@ -197,7 +226,7 @@ const store = new Vuex.Store({
       title: '江南大学图书馆阅读信学图书馆阅读信息的价值发掘与可视化表达',
       finalstudents: [{
         _id: '1030515120',
-        name: '杨延昭',
+        name: '异步',
         gender: '男',
         tel: '18861853209',
         email: 'donaldjtrump@gmail.com',
@@ -209,7 +238,7 @@ const store = new Vuex.Store({
       title: '江南大学图书馆阅读信息的价值发掘与可视化表达',
       finalstudents: [{
         _id: '1030515120',
-        name: '铁警女',
+        name: '延时',
         gender: '女',
         tel: '18861853209',
         email: 'donaldjtrump@gmail.com',
@@ -221,7 +250,7 @@ const store = new Vuex.Store({
       title: '江南大学图书馆阅读信息的价值发掘与可视化表达',
       finalstudents: [{
         _id: '1030515120',
-        name: '杨延昭',
+        name: '异步',
         gender: '男',
         tel: '18861853209',
         email: 'donaldjtrump@gmail.com',
@@ -229,7 +258,7 @@ const store = new Vuex.Store({
         wechat: 'donaldjtrump'
       }, {
         _id: '1030515120',
-        name: '杨延昭',
+        name: '异步',
         gender: '男',
         tel: '18861853209',
         email: 'donaldjtrump@gmail.com',
@@ -237,7 +266,7 @@ const store = new Vuex.Store({
         wechat: 'donaldjtrump'
       }, {
         _id: '1030515120',
-        name: '佘赛花',
+        name: '样式表',
         gender: '女',
         tel: '18861853209',
         email: 'donaldjtrump@gmail.com',

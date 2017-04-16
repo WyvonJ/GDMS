@@ -8,17 +8,45 @@ router.post('/stuCommitSelection', (req, res) => {
   var first = req.body.first
   var second = req.body.second
   var third = req.body.third
-  console.log(req.body)
+    //console.log(req.body)
+  console.log(studentId + '选择了' + first + '题')
+  let t = new Date()
+  console.log('At ' + t.getHours() + ':' + t.getMinutes())
+
   db.students.findOne({ _id: studentId }).exec(function(err, student) {
     if (err) res.send({ state: 0 })
     else {
-      if (second != -1)
-        student.selectTopic('second', second)
-      if (first != -1)
-        student.selectTopic('first', first)
-      if (third != -1)
-        student.selectTopic('third', third)
+      /*	if(second!=-1)
+      	student.selectTopic('second', second)
+          if(first!=-1)
+      	student.selectTopic('first', first)
+      	if(third!=-1)		    
+          student.selectTopic('third', third)
+      	res.send({state: 1})*/
+
+      if (second != -1) {
+        db.topics.findOneAndUpdate({ _id: student.second }, { $pull: { secondstudents: studentId } }, { new: true }).exec()
+          .then(student.selectTopic('second', second))
+        console.log(studentId)
+
+
+      }
+
+      if (first != -1) //如果有选题
+      {
+        db.topics.findOneAndUpdate({ _id: student.first }, { $pull: { firststudents: studentId } }, { new: true }).exec()
+          .then(student.selectTopic('first', first))
+
+      }
+
+      if (third != -1) //如果有选题
+      {
+        db.topics.findOneAndUpdate({ _id: student.third }, { $pull: { thirdstudents: studentId } }, { new: true }).exec()
+          .then(student.selectTopic('third', third))
+
+      }
       res.send({ state: 1 })
+
     }
   })
 })
@@ -57,10 +85,10 @@ router.post('/stuSetContactData', (req, res) => {
 })
 
 /*得到学生选题结果*/
-router.get('/stuSelectionResult', (req, res) => {
-  //var studentId = req.body.studentId
-  var studentId = '1030513402'
-  console.log(studentId)
+router.post('/stuSelectionResult', (req, res) => {
+  var studentId = req.body.studentId
+    //var studentId = '1030513402'
+    //console.log(studentId)
   var finalData = {}
   db.students.findOne({ _id: studentId }, ['final', 'mentor', 'isselected', 'first', 'second', 'third'])
     .populate('final', '_id title category details')
@@ -81,18 +109,18 @@ router.get('/stuSelectionResult', (req, res) => {
           email: student.mentor.email,
           qq: student.mentor.qq,
           wechat: student.mentor.wechat,
-          office: student.mentor.office
-
+          office: student.mentor.office,
+          state: 1
         }
         res.send(finalData)
-        console.log(finalData)
+          //	console.log(finalData)
       } else {
-        finalData.first = student.first
-        finalData.second = student.second
-        finalData.third = student.third
+        /******************************************************/
 
+        finalData.topics = [student.first,student.second,student.third]
+        finalData.state = 0
         res.send(finalData)
-        console.log(finalData)
+          //	console.log(finalData)
       }
     })
 })
