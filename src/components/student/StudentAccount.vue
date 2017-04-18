@@ -1,6 +1,5 @@
 <template>
 <div class="contact-input-container">
-  <div class="sub-padding">
 
     <div class="contact-input">
     <mu-icon value="lock" :size="18" />
@@ -15,7 +14,6 @@
     <mu-text-field type="password" hintText="请再输入一遍新密码" :errorText="repeatError" v-model.trim="passwordRepeat" />
   </div>
   <mu-raised-button labelPosition="before" label="确认更改" icon="check" @click="commitPassword" />
-</div>
   </div>
 </template>
 

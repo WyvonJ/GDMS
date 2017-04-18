@@ -1,6 +1,5 @@
 <template>
   <div class="confirmation-container">
-  <div class="sub-padding">
      <div class="help paper" v-if="isHelp">
       <div class="help-title">帮助</div>
       <mu-icon-button icon="clear" @click="closeHelp" />
@@ -34,7 +33,6 @@
     <mu-flat-button slot="actions" secondary @click.native="finalConfirm" label="确定"/>
     </mu-dialog>
 
-  </div>
   </div>
 </template>
 

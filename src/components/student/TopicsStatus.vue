@@ -1,6 +1,5 @@
 <template>
   <div class="topic-status-container" v-if="isTopicConfirmed">
-    <div class="sub-padding">
       <div class="student-status-card card">
         <div class="teacher-info">
           <div class="teacher-name">
@@ -41,7 +40,6 @@
         </span>
         </div>
       </div>
-    </div>
   </div>
   <div class="main-content" v-else>
       <ul class="selected-topic-list">

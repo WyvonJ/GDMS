@@ -65,12 +65,13 @@ a
 {
     text-decoration: none;
 
-    color: rgba(0,0,0,.7) !important;
+    color: rgba(0, 0, 0, .7) !important;
 }
 
 a:hover
 {
     text-decoration: none !important;
+
     color: $red !important;
 }
 
@@ -80,13 +81,115 @@ li
 {
     list-style: none;
 }
-button{
+
+button
+{
+    font-size: 16px;
+
+    position: relative;
+
+    padding: 6px 12px;
+
+    cursor: pointer;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+    transition: $material-enter;
+    text-align: center;
+    white-space: nowrap;
+
+    color: white;
+    border-color: transparent;
+    border-radius: 3px;
     outline: none;
-            background: transparent;
-            border: 1px #f44336 solid;
-            color: #f44336;
-            border-radius: 2px;
-            transition: $material-enter;
+    span
+    {
+        margin-left: 4px;
+
+        cursor: inherit;
+    }
+    i
+    {
+        position: relative;
+        top: 4px;
+    }
+    &.red
+    {
+        background-color: $red;
+        &:hover
+        {
+            background-color: $red600;
+        }
+    }
+    &.indigo
+    {
+        background-color: $indigo;
+        &:hover
+        {
+            background-color: $indigo600;
+        }
+    }
+    &.green-vue
+    {
+        background-color: $greenVue;
+        &:hover
+        {
+            background-color: $greenVue;
+        }
+    }
+    &.blue
+    {
+        background-color: $lightBlue;
+        &:hover
+        {
+            background-color: $lightBlue600;
+        }
+    }
+}
+
+table
+{
+    font-size: 16px;
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+caption
+{
+    font-size: 20px;
+}
+th
+{
+    font-weight: lighter;
+
+    padding: 8px 0;
+}
+th:first-child
+{
+    padding-left: 24px;
+
+}
+tr
+{
+    transition: all .3s cubic-bezier(.2,.1,.6,1);
+    border-bottom: 1px solid #ececec;
+    &:hover
+    {
+        background-color: #efefef;
+    }
+}
+
+td
+{
+    padding: 3px 0;
+    height: 32px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+td:first-child
+{
+    padding-left: 16px;
 }
 
 #GDMS
@@ -95,7 +198,6 @@ button{
     font-weight: lighter;
 
     overflow: hidden;
-
 
     text-align: center;
 
@@ -123,15 +225,9 @@ button{
     background: $red;
 }
 
-
 .md-tooltip
 {
     font-weight: lighter;
-}
-
-.sub-padding
-{
-    padding: 8px 8px 16px 12px;
 }
 
 .no-selection
@@ -153,21 +249,23 @@ button{
        -moz-box-shadow: $material-shadow-1dp;
             box-shadow: $material-shadow-1dp;
 }
-.paper{
+
+.paper
+{
     transition: $material-enter;
-    background-color: white;
+
     border-radius: 3px;
+    background-color: white;
     -webkit-box-shadow: $material-shadow-2dp;
        -moz-box-shadow: $material-shadow-2dp;
             box-shadow: $material-shadow-2dp;
 }
+
 .logo
 {
     position: relative;
 
     height: 64px;
-
-    background-color: $indigo;
     img
     {
         position: absolute;
@@ -192,7 +290,7 @@ button{
     }
 }
 
-.container
+.main-container
 {
     overflow: auto;
 
@@ -202,72 +300,28 @@ button{
     .sidebar-drawer
     {
         max-width: $sidebar-size;
-        .sidebar-menu
+        .menu-border{
+          border-bottom: 1px solid #dedede;
+        }
+        .mu-item-left
         {
-            margin-top: 16px;
-            padding-bottom: 16px;
-            border-bottom: 1px rgba(0,0,0,.3) solid;
-            li
-            {
-                position: relative;
-
-                height: 32px;
-                margin: 3px 0;
-
-                cursor: pointer;
-                transition: $material-enter;
-                &.current-menu-item{
-                    color: $red;
-                }
-                img
-                {
-                    position: absolute;
-                    top: 4px;
-                    left: 40px;
-
-                    transition: inherit;
-                }
-                span
-                {
-                    font-size: 18px;
-
-                    position: absolute;
-                    top: 6px;
-                    right: 46px;
-                }
-                &:hover
-                {
-                    background-color: #dedede;
-                    img
-                    {
-                        left: 16px;
-                    }
-                }
-            }
+            left: 32px;
         }
     }
     .main-content
     {
         height: 100vh;
-        padding: 64px 0 18px 188px;
+        margin: 64px 0 18px 188px;
+        padding: 8px 8px 16px 12px;
+
         transition: $material-enter;
         text-align: left;
 
         background-color: #f6f6f6;
         &.nav-hide
         {
-            padding-left: 0;
+            margin-left: 0;
         }
-    }
-}
-
-.mu-th
-{
-    height: 36px !important;
-    .mu-th-wrapper
-    {
-        padding-top: 0;
-        padding-bottom: 0;
     }
 }
 
@@ -275,14 +329,14 @@ button{
 {
     .main-content
     {
-        padding-left: 0 !important;
+        margin-left: 0 !important;
     }
 }
 
 //主内容区过渡动画
 .main-transition-enter-active
 {
-    transition: $material-enter;
+    transition: all .2s cubic-bezier(0, .87, .21, 1.1);
     transition-delay: .3s !important;
     //元素进来时给大于等于离开动画的延迟
     //就能避免两个元素同时在画内
@@ -292,6 +346,8 @@ button{
 //因为元素的opacity本来为1 所以会渐变化成1
 .main-transition-enter
 {
+    position: absolute;
+
     transform: translateY(-40px); //这个是执行函数
 
     opacity: 0; //而这个是直接设置
@@ -299,6 +355,8 @@ button{
 
 .main-transition-leave-active
 {
+    position: absolute;
+
     transform: translateY(40px);
 
     opacity: 0;
@@ -339,54 +397,5 @@ button{
         bottom: 2px;
 
         height: 30px;
-    }
-}
-
-//如果要实现当前page切出时过渡？？？上面的leave-active设置无效？？？
-//还没有内容时的提示卡片样式
-.empty-card-title
-{
-    font-size: 24px;
-
-    position: relative;
-
-    overflow: hidden;
-
-    height: 48px;
-    padding: 16px;
-
-    transition: $material-enter;
-    text-align: center;
-
-    color: white;
-    border-radius: 2px;
-    background-color: $red;
-    -webkit-box-shadow: $material-shadow-1dp;
-       -moz-box-shadow: $material-shadow-1dp;
-            box-shadow: $material-shadow-1dp;
-    .intrgging
-    {
-        position: absolute;
-        bottom: 24px;
-        left: 40%;
-
-        display: none;
-    }
-    &:hover
-    {
-        cursor: pointer;
-
-        background-color: rgba(244, 67, 54, .8);
-    }
-    &.hide
-    {
-        height: 720px;
-
-        color: black;
-        background-color: white;
-        .intrgging
-        {
-            display: inline-block;
-        }
     }
 }

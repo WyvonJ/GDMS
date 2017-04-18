@@ -1,6 +1,5 @@
 <template>
   <div class="evaluation-card">
-  <div class="sub-padding">
   <div class="teacher-wrapper">
        <div class="teacher-info">
       <mu-avatar :icon="emoji" :size="44" :iconSize="36" />
@@ -18,7 +17,6 @@
     </div>
   </div>
    
-    </div>
   </div>
 </template>
 

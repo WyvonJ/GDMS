@@ -1,29 +1,30 @@
 <template>
-			<div class="contact-content">
-  <div class="sub-padding">
-
-				<div class="contact-input">
-          <mu-icon value="call" :size="18" />
-          <mu-text-field type="number" v-model.trim="card.tel"/>
-        </div>
-        <div class="contact-input">
-        	<mu-icon value="mail" :size="18" />
-          <mu-text-field type="email" v-model.trim="card.email"/>
-        </div>
-        <div class="contact-input">
-          <img src="../../assets/icon/qq.svg" alt="QQ" /> 
-          <mu-text-field type="number" v-model.trim="card.qq"/>
-        </div>
-        <div class="contact-input">
-          <img src="../../assets/icon/wechat.svg" alt="WECHAT" /> 
-          <mu-text-field v-model.trim="card.wechat"/>
-        </div>
-        <br/>
-        <mu-raised-button labelPosition="before" label="确认更改" icon="check" @click="commitContact"/>
-				</div>
-			</div>
-            </div>
+  <div class="contact-content">
+    <div class="contact-input">
+      <mu-icon value="call" :size="18" />
+      <mu-text-field type="number" v-model.trim="card.tel" />
+    </div>
+    <div class="contact-input">
+      <mu-icon value="mail" :size="18" />
+      <mu-text-field type="email" v-model.trim="card.email" />
+    </div>
+    <div class="contact-input">
+      <img src="../../assets/icon/qq.svg" alt="QQ" />
+      <mu-text-field type="number" v-model.trim="card.qq" />
+    </div>
+    <div class="contact-input">
+      <img src="../../assets/icon/wechat.svg" alt="WECHAT" />
+      <mu-text-field v-model.trim="card.wechat" />
+    </div>
+    <br/>
+    <button class="blue" @click="commitContact">
+      <img src="../../assets/icon/check.svg" alt="QQ" />
+      <span>确认更改</span>
+    </button>
+  </div>
+  </div>
 </template>
+
 
 <script>
 

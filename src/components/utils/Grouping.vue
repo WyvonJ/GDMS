@@ -1,6 +1,5 @@
 <template>
   <div class="group-container">
-  <div class="sub-padding">
     <div class="group-status-card card">
       <div class="teacher-wrapper">
       <mu-avatar backgroundColor="red500" class="group-id-icon">{{groupId}}</mu-avatar>
@@ -21,7 +20,6 @@
           </div>
         </div>
     </div>
-      </div>
       </div>
   </div>
 </template>

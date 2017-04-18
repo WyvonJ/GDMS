@@ -1,40 +1,42 @@
 <template>
   <div class="topics-table-container">
-    <div class="sub-padding">
-      <div class="table-container" :class="{'show-cart':_stu_TopicInCart[0]}">
-        <md-toolbar :class="{'md-warn':!_stu_TopicInCart[0]}">
-          <h2 class="md-title" style="flex: 1">{{tableTitle}}</h2>
+    <div class="table-container" :class="{'show-cart':_stu_TopicInCart[0]}">
+      <table>
+        <caption>
+          <span class="table-title">选题表</span>
           <mu-icon-button icon="refresh" @click="refreshTopics" />
-        </md-toolbar>
-        <mu-table :fixedHeader="fixedHeader" :selectable="selectable" :showCheckbox="showCheckbox">
-          <mu-thead slot="header">
-            <mu-tr>
-              <mu-th width="8%">添加</mu-th>
-              <mu-th width="8%">
-                <mu-flat-button class="category-sort" :class="{'sort-category-icon':isCategorySorted}" disabled @click="sortCategory" labelPosition="before">序号</mu-flat-button>
-              </mu-th>
-              <mu-th width="10%">
-                <mu-flat-button class="category-sort" disabled labelPosition="before">类别</mu-flat-button>
-              </mu-th>
-              <mu-th width="60%">课题名称</mu-th>
-              <mu-th width="16%">已选/可选</mu-th>
-            </mu-tr>
-          </mu-thead>
-          <transition-group name="list" tag="tbody" class="list-box">
-            <mu-tr v-for="(topic,index) in search(_stu_TopicInTable)" :key="topic._id">
-              <mu-td width="8%">
-                <mu-icon-button icon="add_circle_outline" @click="click(index,topic)" /></mu-td>
-              <mu-td width="8%">{{topic._id}}</mu-td>
-              <mu-td width="10%">{{topic.category===0?"论文":"设计"}}</mu-td>
-              <mu-td width="60%">{{topic.title}}
+        </caption>
+        <thead>
+          <tr>
+            <th width="8%">添加</th>
+            <th width="8%">
+              <mu-flat-button class="category-sort" :class="{'sort-category-icon':isCategorySorted}" disabled @click="sortCategory" labelPosition="before">序号</mu-flat-button>
+            </th>
+            <th width="10%">
+              <mu-flat-button class="category-sort" disabled labelPosition="before">类别</mu-flat-button>
+            </th>
+            <th width="60%">课题名称</th>
+            <th width="16%">已选/可选</th>
+          </tr>
+        </thead>
+        <transition-group name="list" tag="tbody" class="list-box">
+            <tr v-for="(topic,index) in search(_stu_TopicInTable)" :key="topic._id">
+              <td width="10%">
+                <span class="add-topic-button" @click="addTopic(index,topic)">
+                <i class="material-icons">add_circle_outline</i>
+              </span>
+              </td>
+              <td width="10%">{{topic._id}}</td>
+              <td width="10%">{{topic.category===0?"论文":"设计"}}</td>
+              <td width="52%">{{topic.title}}
                 <md-tooltip md-direction="top" class="details-tooltip">
                   <div class="details-appbar">Description</div>
                   <div class="details-content">
                     {{topic.details}}
                   </div>
                 </md-tooltip>
-              </mu-td>
-              <mu-td width="14%"><span :class="{'all-selected-warn' : getTotal(topic) >= topic.restriction}" class="selected-restriction">{{ getTotal(topic) }}/{{ topic.restriction ||0}}</span>
+              </td>
+              <td width="14%"><span :class="{'selected-all' : getTotal(topic) >= topic.restriction}" class="selected-restriction">{{ getTotal(topic) }}/{{ topic.restriction ||0}}</span>
                 <md-tooltip md-direction="top" class="selected-tooltip">
                   <ul>
                     <li>第一志愿：{{topic.firststudents===undefined?0:topic.firststudents.length}}</li>
@@ -42,34 +44,35 @@
                     <li>第三志愿：{{topic.thirdstudents===undefined?0:topic.thirdstudents.length}}</li>
                   </ul>
                 </md-tooltip>
-              </mu-td>
-            </mu-tr>
-          </transition-group>
-        </mu-table>
+              </td>
+            </tr>
+        </transition-group>
+      </table>
+    </div>
+    <div class="topics-cart" :class="{'show-cart':_stu_TopicInCart[0]}">
+      <div class="chosen-topics-title">
+        已选课题
       </div>
-      <div class="topics-cart" :class="{'show-cart':_stu_TopicInCart[0]}">
-        <div class="chosen-topics-title">
-          已选课题
+      <div class="choice-cart">
+        <div class="topic-level">
+          <transition-group tag="ul" name="slide-fade">
+            <li class="selected-item" v-for="(topic,index) in _stu_TopicInCart" v-dragging="{ item: topic, list: _stu_TopicInCart, group: 'topic' }" :key="topic._id" :class="{'show-details':isDetails[index]}">
+              <mu-avatar :size="20" :backgroundColor="selectedBgc[index]">
+                {{index+1}}
+              </mu-avatar>
+              <mu-icon class="arrow-button" :class="{'show-details':isDetails[index]}" value="keyboard_arrow_right" @click="toggleDetails(index)" />
+              <div class="selected-item-content">
+                <span class="title">{{topic._id}}.{{topic.title}}</span>
+                <p class="details" v-if="isDetails[index]">{{topic.details}}</p>
+              </div>
+              <mu-icon-button class="delete-button" icon="clear" @click="deleteTopic(index)" />
+            </li>
+          </transition-group>
         </div>
-        <div class="choice-cart">
-          <div class="topic-level">
-            <transition-group tag="ul" name="slide-fade">
-              <li class="selected-item" v-for="(topic,index) in _stu_TopicInCart" v-dragging="{ item: topic, list: _stu_TopicInCart, group: 'topic' }" :key="topic._id" :class="{'show-details':isDetails[index]}">
-                <mu-avatar :size="20" :backgroundColor="selectedBgc[index]">
-                  {{index+1}}
-                </mu-avatar>
-                <mu-icon class="arrow-button" :class="{'show-details':isDetails[index]}" value="keyboard_arrow_right" @click="toggleDetails(index)" />
-                <div class="selected-item-content">
-                  <span class="title">{{topic._id}}.{{topic.title}}</span>
-                  <p class="details" v-if="isDetails[index]">{{topic.details}}</p>
-                </div>
-                <mu-icon-button class="delete-button" icon="clear" @click="deleteTopic(index)" />
-              </li>
-            </transition-group>
-          </div>
-          <mu-raised-button label="提交" icon="check_circle" @click="commitSelectedTopics" color="#fff
-" backgroundColor="blue500" />
-        </div>
+        <button class="blue submit-button" @click="commitSelectedTopics">
+          <img src="../../assets/icon/check_circle.svg" alt="check" />
+          <span>提交</span>
+        </button>
       </div>
     </div>
   </div>
@@ -86,7 +89,6 @@ export default {
         showCheckbox: false,
         isCategorySorted: false,
         lastSelection: 0,
-        tableTitle: '选题表',
         isDetails: [false, false, false],
         selectedBgc: ["red500", "lightBlueA700", "teal500"],
         searchStr: ''
@@ -120,7 +122,7 @@ export default {
         let t3 = topic.thirdstudents === undefined ? 0 : topic.thirdstudents.length
         return t1 + t2 + t3
       },
-      click(index, topic) {
+      addTopic(index, topic) {
         let cart = this._stu_TopicInCart
         if (topic._id !== this.lastSelection) {
           this.toggleTableBar = false
@@ -228,114 +230,90 @@ export default {
         }
 
     }
-    .md-toolbar
+    caption
     {
-        min-height: 40px;
-
         border-top-left-radius: 3px;
         border-top-right-radius: 3px;
-        h2.md-title
+        position: relative;
+        height: 36px;
+        span.table-title
         {
+          position: absolute;
+          left: 16px;
+          top:8px;
             font-weight: lighter;
         }
         .mu-icon-button
         {
+          position: absolute;
+          right: 64px;
             width: 36px;
             height: 36px;
             padding: 0;
         }
     }
+
     .selected-restriction
     {
         padding: 4px;
         transition: $material-enter;
         cursor: default;
-        color: #42b983;
-        border: 1px #42b983 solid;
+        color: $greenVue;
+        border: 1px $greenVue solid;
         border-radius: 2px;
     }
-    .all-selected-warn
+    .selected-all
     {
-        color: #f44336;
-        border-color: #f44336;
+        color: $red;
+        border-color: $red;
     }
-    .mu-table
+    table
     {
-      .mu-th{
-        padding-left: 18px;
-        padding-right: 0;
-      }
-        .mu-td:first-child
+        td:first-child
         {
-            padding-right: 8px;
+            padding-right: 32px;
             padding-left: 16px;
         }
-        .mu-td:nth-child(4)
+        td:nth-child(4)
         {
             cursor: help;
             white-space: normal;
         }
-        .mu-td
+        td
         {
+          height: 40px;
             font-size: 14px;
-            .mu-icon-button
-            {
-                &:hover
-                {
-                    color: #f44336;
-                }
-            }
-        }
-        .mu-tr
+            padding: 2px 0;
+        .add-topic-button
         {
-            transition: $material-leave;
-        } 
-        .category-sort
-          {
-              min-width: 36px;
+          width: 32px;
+            height: 32px;
+            cursor: pointer;
+            margin-left: 12px;
+    transition: $material-enter;
+
+          &:hover{
+            color: $red;
           }
-        .mu-tr:nth-child(even)
-        {
-            background-color: #f4f4f4;
+            
+            
         }
-        .mu-tr.hover
+        }
+        .category-sort
+        {
+            min-width: 36px;
+        }
+        tr:hover
         {
             background-color: #dedede;
 
             .selected-restriction{
-              background-color: #42b983;
+              background-color: $greenVue;
               color: #fff;
             }
-            .all-selected-warn{
-              background-color: #f44336;
+            .selected-all{
+              background-color: $red;
               color: #fff;
-            }
-        }
-    }
-    .mu-content-block
-    {
-        max-height: 48px;
-        padding-left: calc(50% - 200px);
-    }
-    @media (max-width: 1366px)
-    {
-        .mu-table
-        {
-            .mu-td
-            {
-                font-size: 13px;
-
-                height: 40px;
-            }
-            .mu-tr
-            {
-                height: 40px;
-            }
-            .mu-icon-button
-            {
-                width: 36px;
-                height: 36px;
-                padding: 0;
             }
         }
     }
@@ -354,7 +332,7 @@ export default {
 
     transition: $material-enter;
 
-    background-color: #fff;
+    background-color: white;
     -webkit-box-shadow: $material-shadow-3dp;
        -moz-box-shadow: $material-shadow-3dp;
             box-shadow: $material-shadow-3dp;
@@ -370,8 +348,8 @@ export default {
         margin: 16px auto;
         padding: 8px;
 
-        color: #3f51b5;
-        border: 1px solid #3f51b5;
+        color: $indigo;
+        border: 1px solid $indigo;
         border-radius: 3px;
     }
     .dragging
@@ -398,7 +376,7 @@ export default {
             transition: $material-enter;
 
             border: 1px #dedede solid;
-            border-radius: 6px;
+            border-radius: 3px;
             &.show-details
             {
                 min-height: 256px;
@@ -409,7 +387,7 @@ export default {
             }
             .mu-avatar
             {
-                font-family: $fontCenturyGothic;
+                font-family: $fontSansSerif;
 
                 position: absolute;
                 z-index: 100;
@@ -441,7 +419,7 @@ export default {
                 height: 36px;
                 padding: 0;
 
-                color: #f44336;
+                color: $red;
             }
             .selected-item-content
             {
@@ -464,21 +442,23 @@ export default {
                 }
             }
         }
-    .mu-raised-button
+    .submit-button
     {
-        left: 84px;
+        margin: 0 auto;
+        width: 84px;
+        position: relative;
+       left: 84px;
     }
 }
 
 .list-box{
   width: 100%;
+  overflow-x: hidden!important;
+  overflow-y: scroll!important;
   height: 100%;
 }
 
 .sort-category-icon{
-  .mu-icon{
-    transform: rotateZ(180deg) !important;
-  }
   
 }
 @media (max-width: 993px)
@@ -523,7 +503,7 @@ export default {
         color: #fff;
         border-top-left-radius: 2px;
         border-top-right-radius: 2px;
-        background-color: #f44336;
+        background-color: $red;
     }
     .details-content
     {

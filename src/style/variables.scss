@@ -9,20 +9,27 @@ $orange:#e96900;
 $white:#f8f8f8;
 $red:#f44336;
 $red400:#ef5350;
+$red600:#e53935;
+$red700:#d32f2f;
 $pink:#e91e63;
 $purple:#9c27b0;
 $deepPurple:#673ab7;
 $indigo:#3f51b5;
 $indigo400:#5c6bc0;
+$indigo600:#3949ab;
+$indigo700:#303f9f;
 $blue:#2196f3;
 $lightBlue:#03a9f4;
+$lightBlue600:#039be5;
 $cyan:#00bcd4;
 $teal:#009688;
 $green:#4caf50;
 $greenA200:#69f0ae;
 $greenA400:#00e676;
 $greenV:#42b983;
+$greenVue:#42b983;
 $selectionColor:#f44336;
+//Font
 $fontYahei:"Microsoft Yahei",
 "Helvetica Neue",
 Helvetica,
@@ -32,9 +39,6 @@ $fontHelvetica:"Helvetica Neue",
 Helvetica,
 Arial,
 sans-serif;
-
-/* Common */
-
 $font-roboto: Roboto,
 'Noto Sans',
 Noto,
@@ -43,6 +47,9 @@ $fontCenturyGothic: 'Century Gothic',
 Roboto,
 'Noto Sans',
 'sans-serif';
+$fontSansSerif: sans-serif,
+Roboto,
+'Noto Sans';
 
 /* 响应式布局断点位置 */
 
@@ -71,9 +78,6 @@ $material-enter: all $material-enter-duration $material-enter-timing-function;
 $material-leave-duration: .3s;
 $material-leave-timing-function: cubic-bezier(.4, .0, 1, 1);
 $material-leave: all $material-leave-duration $material-leave-timing-function;
-
-/* Elevation - Based on Angular Material */
-
 $shadow-key-umbra-opacity: .2 !default;
 $shadow-key-penumbra-opacity: .14 !default;
 $shadow-ambient-shadow-opacity: .12 !default;

@@ -1,26 +1,24 @@
 <template>
-<div class="contact-container">
-<wyvonj-canvas></wyvonj-canvas>
-  <div class="sub-padding">
-  
+<div class="account-container">
 <div>
-  <div class="contact-input">
+  <div class="account-input">
     <mu-icon value="lock" :size="18" />
     <mu-text-field type="password" :errorText="originalError" hintText="请输入原密码" v-model.trim="original" />
   </div>
-  <div class="contact-input">
+  <div class="account-input">
     <mu-icon value="lock_outline" :size="18" />
     <mu-text-field type="password" hintText="请输入新密码" v-model.trim="password" />
   </div>
-  <div class="contact-input">
+  <div class="account-input">
     <mu-icon value="lock_outline" :size="18" />
     <mu-text-field type="password" hintText="请再输入一遍新密码" :errorText="repeatError" v-model.trim="passwordRepeat" />
   </div>
-  <mu-raised-button labelPosition="before" label="确认更改" icon="check" @click="commitPassword" />
+  <button class="red" @click="commitPassword" >
+    <img src="../../assets/icon/check.svg" alt="Y" />
+    <span>确认更改</span>
+  </button>
 </div>
-    
 </div>
-  </div>
 </template>
 
 
@@ -64,13 +62,13 @@ import WyvonjCanvas from '../utils/WyvonjCanvas.vue'
 
 <style lang="sass" rel="stylesheet/scss" scoped>
 @import '../../style/variables.scss';
-.contact-container
+.account-container
 {
     display: flex;
 
     align-items: center;
     justify-content: center;
-    .contact-input
+    .account-input
     {
         width: 332px;
         height: 64px;

@@ -1,5 +1,5 @@
 <template>
-  <header class="nav-bar">
+  <nav class="nav-bar" :style="bgColor">
     <div class="logo">
       <img src="../../assets/img/gd_logo.png" alt="GDMS">
       <p class="jnudm">Jnudm</p>
@@ -11,7 +11,7 @@
       <input type="text" @focus="focus" :class="{'focused':searchFocus}" @blur="blur" @keyup.enter="search" v-model.trim="str" placeholder="Search" class="search-input" name="search">
     </div>
     </transition>
-    <div class="noti-info">
+    <div class="notification-info">
       <mu-icon-button tooltip="通知" class="notify-button" ref="notify" icon="notifications" @click="showNotification" />
       <mu-icon-button tooltip="注销" class="logout-button" ref="button" icon="exit_to_app" @click="logout" />
       </mu-badge>
@@ -26,7 +26,7 @@
         </mu-card>
       </mu-popover>
     </div>
-  </header>
+  </nav>
 </template>
 
 
@@ -55,7 +55,7 @@ export default {
       openNotification: false,
       trigger: null,
       searchFocus:false,
-      str:''
+      str:'',
     }
   },
   methods: {
@@ -87,6 +87,20 @@ export default {
     ...mapMutations(['SET_USER','RESET_STATE'])
   },
   computed:{
+    bgColor(){
+      let type=window.location.pathname.match(/^\/[a-z]{1}/)[0]
+      type=type.substring(1)
+      switch(type){
+        case 's':
+          return {backgroundColor:'#3f51b5'}
+          break
+        case 't':
+          return {backgroundColor:'#009688'}
+          break
+        case 'a':
+          return {backgroundColor:'#f44336'}
+      }
+    },
     ...mapState(['user'])
   },
   watch:{
@@ -114,8 +128,7 @@ export default {
 
     transition: $material-enter;
 
-    color: #fff;
-    background-color: #3f51b5;
+    color: white;
     > .mu-icon-button
     {
         position: absolute;
@@ -153,7 +166,7 @@ export default {
         white-space: nowrap;
         border: 1px white solid;
         border-radius: 3px;
-        background-color: $indigo;
+        background-color: transparent;
         .search-icon
         {
             position: absolute;
@@ -202,7 +215,7 @@ export default {
     {
         font-variant: small-caps;
     }
-    .noti-info
+    .notification-info
     {
         position: absolute;
         top: 0;

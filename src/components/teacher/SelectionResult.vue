@@ -1,6 +1,5 @@
 <template>
   <div class="result-container" v-if="gotResult">
-  <div class="sub-padding">
 
     <div class="teacher-topics-status">
       <md-layout md-gutter="16">
@@ -34,7 +33,6 @@
         </md-layout>
       </md-layout>
     </div>
-  </div>
   </div>
   <div class="main-content" v-else>
     <div class="empty-card-title" :class="{'hide':open}">

@@ -3,10 +3,19 @@
   "description": "A Vue.js App For Graduation Project",
   "author": "WyvonJ <wyvonj@gmail.com>",
   "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wyvonj/gdms.git"
+  },
+  "keywords": [
+    "vue 2",
+    "SPA"
+  ],
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --inline --hot",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
-    "start":"node ./server/index.js",
+    "start": "node ./server/index.js",
     "server": "node ./server/index --inline --hot",
     "lint": "eslint --ext .js,.vue ."
   },
@@ -44,11 +53,12 @@
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
     "node-sass": "^4.1.1",
-    "node-xlsx":"0.7.4",
+    "node-xlsx": "0.7.4",
     "sass": "^0.5.0",
     "sass-loader": "^4.1.0",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
+    "vue-bulma-tooltip": "^1.0.3",
     "vue-hot-reload-api": "^1.2.0",
     "vue-html-loader": "^1.2.3",
     "vue-loader": "^10.0.0",

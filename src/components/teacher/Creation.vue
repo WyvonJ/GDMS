@@ -1,7 +1,6 @@
 <template>
-    <div class="creation-container">
-    <div class="creation-width">
-       <md-tabs md-fixed class="md-transparent">
+    <div class="creation-container sub-padding">
+       <md-tabs md-fixed md-centerd class="md-transparent">
         <md-tab id="teacher-account-upload" md-label="课题创建" md-icon="library_add">
           <mu-card class="creation-card">
             <mu-card-text>
@@ -30,40 +29,35 @@
           </mu-card>
         </md-tab>
         <md-tab id="teacher-topic-admin" md-label="课题管理" md-icon="subject">
-          <mu-card class="created-topics">
-            <div class="table-container">
-              <mu-table :fixedHeader="fixedHeader" :selectable="selectable" :showCheckbox="showCheckbox">
-                <mu-thead slot="header">
-                  <mu-tr>
-                    <mu-th width="4%">序号</mu-th>
-                    <mu-th width="8%">类别</mu-th>
-                    <mu-th width="20%">课题名称</mu-th>
-                    <mu-th width="42%">课题简介</mu-th>
-                    <mu-th width="12%">可选人数</mu-th>
-                    <mu-th width="9%">删除</mu-th>
-                  </mu-tr>
-                </mu-thead>
-                <mu-tbody>
-                  <mu-tr v-for="(topic,index) in _tch_TopicCreatedAll">
-                    <mu-td width="4%">{{topic._id}}</mu-td>
-                    <mu-td width="7%">{{topic.category===0?"论文":"设计"}}</mu-td>
-                    <mu-td width="20%">{{topic.title}}
-                    </mu-td>
-                    <mu-td width="44%">{{ topic.details }}</mu-td>
-                    <mu-td width="10%">{{ topic.restriction }}</mu-td>
-                    <mu-td width="10%">
+            <div class="table-container paper">
+              <table>
+                <thead slot="header">
+                  <tr>
+                    <th width="4%">序号</th>
+                    <th width="8%">类别</th>
+                    <th width="20%">课题名称</th>
+                    <th width="42%">课题简介</th>
+                    <th width="12%">可选人数</th>
+                    <th width="9%">删除</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(topic,index) in _tch_TopicCreatedAll">
+                    <td width="4%">{{topic._id}}</td>
+                    <td width="7%">{{topic.category===0?"论文":"设计"}}</td>
+                    <td width="20%">{{topic.title}}
+                    </td>
+                    <td width="44%">{{ topic.details }}</td>
+                    <td width="10%">{{ topic.restriction }}</td>
+                    <td width="10%">
                       <mu-icon-button @click="deleteTopic(topic , index)" icon="cancel"></mu-icon-button>
-                    </mu-td>
-                  </mu-tr>
-                </mu-tbody>
-              </mu-table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-          </mu-card>
         </md-tab>
       </md-tabs>
-    </div>
-      
-     
     </div>
 </template>
 
@@ -191,16 +185,6 @@ export default {
 {
     z-index: 0;
 
-    width: 100%;
-    .md-tab{
-
-    }
-    .creation-width{
-      width: 100%;
-    }
-    .md-tabs-navigation{
-        min-height: 60px;
-    }
     .creation-card
     {
         text-align: left;

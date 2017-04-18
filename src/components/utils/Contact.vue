@@ -1,7 +1,7 @@
 <template>
-  <div class="contact-content">
-    <div class="sub-padding">
-      <div class="contact-input">
+  <div class="contact-container">
+  <div>
+    <div class="contact-input">
         <img src="../../assets/icon/call.svg" alt="WECHAT" />
         <mu-text-field type="number" v-model.trim="card.tel" />
       </div>
@@ -18,7 +18,10 @@
         <mu-text-field v-model.trim="card.wechat" />
       </div>
       <br/>
-      <mu-raised-button labelPosition="before" label="确认更改" icon="check" @click="commitContact" />
+      <button class="blue" @click="commitContact" >
+        <img src="../../assets/icon/check.svg" alt="QQ" />
+        <span>确认更改</span>
+      </button>
     </div>
   </div>
   </div>
@@ -39,7 +42,7 @@
     },
     methods:{
       commitContact(){
-
+        console.log(0)
       }
     }
   }
@@ -47,12 +50,12 @@
 
 <style lang="sass" rel="stylesheet/scss" scoped>
 @import '../../style/variables.scss';
+.contact-container
+{
+    display: flex;
 
-.contact-content
-{ display: flex;
-
-  align-items:center;
-  justify-content:center;
+    align-items: center;
+    justify-content: center;
     .contact-input
     {
         width: 332px;
@@ -77,12 +80,4 @@
         }
     }
 }
-.mu-raised-button
-{
-    margin: 16px;
-
-    color: #fff;
-    background-color: #03a9f4;
-}
-
 </style>
