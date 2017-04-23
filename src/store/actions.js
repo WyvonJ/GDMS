@@ -81,12 +81,12 @@ export default {
   stuSelectionResult: ({ commit }, payload) => {
     return axios.post('/student/stuSelectionResult', payload)
       .then(response => {
-        if (response.data.state===1) {
+        if (response.data.state === 1) {
           commit('STU_FINAL_TOPIC', response.data)
-        }else{
-          let wrapper=[]
+        } else {
+          let wrapper = []
           for (let i = 0; i < response.data.topics.length; i++) {
-            if(response.data.topics[i])
+            if (response.data.topics[i])
               wrapper.push(response.data.topics[i])
           }
           console.log(wrapper)
@@ -177,7 +177,14 @@ export default {
       })
   },
   tchContactInfo: ({ commit }, payload) => {
-    return axios.post('/teacher/tchContactInfo', payload)
+    return axios.get('/teacher/tchContactInfo', payload)
+      .then(response => {
+        if (response.data === 0) {
+          return Promise.reject('no')
+        } else {
+          return Promise.reject('yes')
+        }
+      })
       .catch(err => {
         showSnackbar({ commit }, '出了点小问题，再试试')
         return Promise.reject(err)
@@ -245,5 +252,52 @@ export default {
       .catch(err => {
         return Promise.reject(err)
       })
-  }
+  },
+  tchAccountInfo: ({ commit }, payload) => {
+    return axios.post('/teacher/tchAccountInfo', payload)
+      .then(response => {
+        //0 
+      })
+      .catch((err) => {
+        showSnackbar({ commit }, '出了点小问题，再试试')
+        return Promise.reject(err)
+      })
+  },
+  admTchAccount: ({ commit }) => {
+    return axios.get('/admin/admTchAccount')
+      .then(response => {
+        commit('ADM_SET_TCH_ACCOUNT', response.data)
+      })
+  },
+  admUpTchAccounts: ({ commit }, payload) => {
+    return axios.post('/admin/admUpTchAccounts', payload)
+      .then(response => {
+        commit('ADM_SET_STU_ACCOUNT', response.data)
+      })
+  },
+  admStuAccount: ({ commit }) => {
+    return axios.get('/admin/admStuAccount')
+      .then(response => {
+        commit('ADM_SET_STU_ACCOUNT', response.data)
+      })
+  },
+  admFnlGroup: ({ commit }) => {
+    return axios.get('/admin/admFnlGroup')
+      .then(response => {
+
+      })
+  },
+  admMidGrade: ({ commit }) => {
+    return axios.get('/admin/admMidGrade')
+      .then(response => {
+
+      })
+  },
+  admFnlGrade: ({ commit }) => {
+    return axios.get('/admin/admFnlGrade')
+      .then(response => {
+
+      })
+  },
+
 }

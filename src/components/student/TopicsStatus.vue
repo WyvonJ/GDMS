@@ -69,7 +69,7 @@ import {mapActions,mapState} from 'vuex'
       ...mapState(['_stu_TopicComfirmed','_stu_TopicInCart']),
       tele(){
         //手机号码转换
-        if (isTopicConfirmed) {
+        if (this.isTopicConfirmed) {
           let tel=''
         for (let i = 0; i < this._stu_TopicComfirmed.tel.length; i++) {
           if (i===3 || i===7) {
@@ -86,10 +86,6 @@ import {mapActions,mapState} from 'vuex'
     },
     mounted(){
       let id=_c.getCookie('user')
-      /*if (!id){
-                alert('超时未操作，请重新登录')
-                return this.$router.push('/')
-              }*/
       this.stuSelectionResult({studentId: id})
         .then(()=>{
         if (this._stu_TopicComfirmed.name.length!=0) {

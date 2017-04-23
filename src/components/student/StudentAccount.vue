@@ -35,6 +35,11 @@ import {mapActions} from 'vuex'
 				if (this.password!==this.passwordRepeat) {
 					return this.repeatError='两次输入的密码不一样'
 				}else{
+          let n={
+            studentId:'565566',
+            oldPassword:'54155',
+            newPassword:'65465',
+          }
 					
 				}
 			},

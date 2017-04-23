@@ -1,5 +1,9 @@
 <template>
   <div class="topics-table-container">
+    <div class="search-bar-wrapper">
+      <mu-icon class="search-icon" value="search"/>
+      <input type="text" @keyup.enter="search" v-model.trim="searchStr" placeholder="Search for topics" class="search-input" name="search">
+    </div>
     <div class="table-container" :class="{'show-cart':_stu_TopicInCart[0]}">
       <table>
         <caption>
@@ -110,7 +114,11 @@ export default {
         let reg = new RegExp(this.searchStr, 'i')
           //let isNum = this.searchStr.search(/^[0-9]*[1-9][0-9]*$/)
         return topics.filter((topics) => {
-          return (topics.title.match(reg) || topics._id.toString().match(reg))
+          if ((topics.title.match(reg) || topics._id.toString().match(reg))) {
+            return true
+          } else {
+
+          }
         })
       },
       refreshTopics() {
@@ -162,11 +170,6 @@ export default {
       },
       //提交选题按钮
       commitSelectedTopics() {
-        //if (this._stu_TopicInCart.length === 0) return
-        /* if (!this.$root.getCookie('user')){
-           alert('超时未操作，请重新登录')
-           this.$router.push('/')
-         }*/
         let _stu_TopicInCartWrapper = {
           _id: _c.getCookie('user'),
           first: this._stu_TopicInCart[0]._id,
@@ -210,6 +213,70 @@ export default {
 </script>
 <style lang="sass" rel="stylesheet/scss" scoped>
 @import '../../style/variables.scss';
+
+    .search-bar-wrapper
+    {
+        position: relative;
+        top: 8px;
+
+        width: 40%;
+        height: 48px;
+        padding-left: 48px;
+
+        cursor: text;
+        white-space: nowrap;
+        border-radius: 3px;
+        background-color: transparent;
+        margin-bottom: 16px;
+        .search-icon
+        {
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            margin: 12px;
+        }
+        .search-input
+        {
+            font-size: 20px;
+
+            position: relative;
+            top: 8px;
+
+            width: 100%;
+            height: 32px;
+            border: 0;
+            outline: none;
+        border-bottom: 2px $indigo solid;
+        transition: $material-enter;
+
+            background-color: transparent;
+            &:focus{
+              border-bottom-color: $red;
+            }
+            @media (max-width:993px)
+        {
+            display: none;
+        }
+        }
+        
+    }
+    input::-webkit-input-placeholder
+    {
+        font-variant: small-caps;
+    }
+    input::-moz-input-placeholder
+    {
+        font-variant: small-caps;
+    }
+    input::-ms-input-placeholder
+    {
+        font-variant: small-caps;
+    }
+    input::-o-input-placeholder
+    {
+        font-variant: small-caps;
+    }
 .table-container
 {
     display: inline-block;
@@ -236,11 +303,12 @@ export default {
         border-top-right-radius: 3px;
         position: relative;
         height: 36px;
+            background: #7986CB;
+    color: white;
         span.table-title
         {
-          position: absolute;
-          left: 16px;
-          top:8px;
+          float: left;
+          margin: 8px;
             font-weight: lighter;
         }
         .mu-icon-button
@@ -269,6 +337,7 @@ export default {
     }
     table
     {
+
         td:first-child
         {
             padding-right: 32px;
@@ -456,11 +525,10 @@ export default {
   overflow-x: hidden!important;
   overflow-y: scroll!important;
   height: 100%;
+    transition: $material-enter;
+
 }
 
-.sort-category-icon{
-  
-}
 @media (max-width: 993px)
 {
     .topics-cart{
@@ -532,11 +600,11 @@ export default {
 }
 
 .list-enter-active, .list-leave-active {
-  transition: $material-enter;
+  transition: all .4s cubic-bezier(0, 0.68, 0, 1.04);
 }
 .list-enter, .list-leave-active {
   opacity: 0;
-  transform: translateZ(30px);
+  transform: translateX(30px);
 }
 
 </style>

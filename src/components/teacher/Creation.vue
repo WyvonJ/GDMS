@@ -2,8 +2,7 @@
     <div class="creation-container sub-padding">
        <md-tabs md-fixed md-centerd class="md-transparent">
         <md-tab id="teacher-account-upload" md-label="课题创建" md-icon="library_add">
-          <mu-card class="creation-card">
-            <mu-card-text>
+          <div class="creation-card paper">
               <span>可选人数：{{available}}</span>
               <mu-slider v-model="available" :min="1" :max="10" :step="1" @change="availableChange" class="available-slider" />
               <br/>
@@ -20,35 +19,34 @@
               <mu-text-field label="课题名称" v-model.trim="titleText" :errorText="titleError" labelFloat/>
               <br/>
               <mu-text-field label="课题简介" v-model.trim="detailText" :errorText="detailError" multiLine labelFloat :rows="6" :rowsMax="20" />
-            </mu-card-text>
-            <mu-card-actions>
-              <mu-raised-button label="创建" @click="createTopic" secondary>
-                <i class="material-icons">add</i>
-              </mu-raised-button>
-            </mu-card-actions>
-          </mu-card>
+              <br/>
+              <button @click="createTopic" class="red">
+               <img src="../../assets/icon/add.svg" alt="add" /> 
+                <span>发布课题</span>
+              </button>
+          </div>
         </md-tab>
         <md-tab id="teacher-topic-admin" md-label="课题管理" md-icon="subject">
             <div class="table-container paper">
               <table>
                 <thead slot="header">
                   <tr>
-                    <th width="4%">序号</th>
-                    <th width="8%">类别</th>
-                    <th width="20%">课题名称</th>
-                    <th width="42%">课题简介</th>
-                    <th width="12%">可选人数</th>
-                    <th width="9%">删除</th>
+                    <th>序号</th>
+                    <th>类别</th>
+                    <th>课题名称</th>
+                    <th>课题简介</th>
+                    <th>可选人数</th>
+                    <th>删除</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="(topic,index) in _tch_TopicCreatedAll">
-                    <td width="4%">{{topic._id}}</td>
-                    <td width="7%">{{topic.category===0?"论文":"设计"}}</td>
-                    <td width="20%">{{topic.title}}
+                    <td width="6%">{{topic._id}}</td>
+                    <td width="6%">{{topic.category===0?"论文":"设计"}}</td>
+                    <td width="25%">{{topic.title}}
                     </td>
-                    <td width="44%">{{ topic.details }}</td>
-                    <td width="10%">{{ topic.restriction }}</td>
+                    <td width="50%" class="topic-details">{{ topic.details }}</td>
+                    <td width="8%" class="topic-restriction">{{ topic.restriction }}</td>
                     <td width="10%">
                       <mu-icon-button @click="deleteTopic(topic , index)" icon="cancel"></mu-icon-button>
                     </td>
@@ -188,8 +186,6 @@ export default {
     .creation-card
     {
         text-align: left;
-        .mu-card-text
-        {
             padding: 8px 24px;
             .available-slider{
               width: 256px;
@@ -208,30 +204,6 @@ export default {
                     padding-top: 24px;
                 }
             }
-        }
-        .mu-card-actions
-        {
-            height: 48px;
-            padding: 0 8px;
-            .mu-raised-button
-            {
-                margin-bottom: 8px;
-            }
-        }
-        .md-input-container
-        {
-            max-width: 200px;
-            margin-bottom: 6px;
-            padding-top: 14px;
-            .md-select-value
-            {
-                font-size: 14px;
-            }
-            + .md-input-container
-            {
-                margin-left: 4px;
-            }
-        }
         .available,
         .category
         {
@@ -248,22 +220,17 @@ export default {
         }
 
     }
-    .created-topics
-    {
-        .mu-table{
-            .mu-td{
-                white-space: normal;
-            }
-            tbody{
-                .mu-tr:nth-child(2){
-                    padding-left: 0;
-                    padding-right: 0;
-                }
+        table{
+          width: 100%;
+            td{
+                white-space: pre-line;
             }
             .mu-icon-button{
                 color: #f44336;
             }
+            .topic-restriction{
+              text-align: center;
+            }
         }
-    }
 }
 </style>

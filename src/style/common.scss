@@ -89,7 +89,7 @@ button
     position: relative;
 
     padding: 6px 12px;
-
+    margin: 0 8px;
     cursor: pointer;
     -webkit-user-select: none;
        -moz-user-select: none;
@@ -98,6 +98,7 @@ button
     transition: $material-enter;
     text-align: center;
     white-space: nowrap;
+    letter-spacing: 1px;
 
     color: white;
     border-color: transparent;
@@ -109,7 +110,7 @@ button
 
         cursor: inherit;
     }
-    i
+    > i
     {
         position: relative;
         top: 4px;
@@ -135,7 +136,7 @@ button
         background-color: $greenVue;
         &:hover
         {
-            background-color: $greenVue;
+            background-color: $greenVue600;
         }
     }
     &.blue
@@ -151,9 +152,13 @@ button
 table
 {
     font-size: 16px;
+
     width: 100%;
+
     border-spacing: 0;
     border-collapse: collapse;
+
+    background-color: white;
 }
 caption
 {
@@ -164,26 +169,25 @@ th
     font-weight: lighter;
 
     padding: 8px 0;
+
+    border-top: 1px solid #ececec;
 }
 th:first-child
 {
     padding-left: 24px;
-
 }
 tr
 {
     transition: all .3s cubic-bezier(.2,.1,.6,1);
+
     border-bottom: 1px solid #ececec;
-    &:hover
-    {
-        background-color: #efefef;
-    }
 }
 
 td
 {
-    padding: 3px 0;
     height: 32px;
+    padding: 3px 0;
+
     white-space: nowrap;
     text-overflow: ellipsis;
 }
@@ -230,6 +234,14 @@ td:first-child
     font-weight: lighter;
 }
 
+.mu-item.show-right
+{
+    padding-right: 48px !important;
+}
+.mu-item.show-left
+{
+    padding-left: 48px !important;
+}
 .no-selection
 {
     -webkit-user-select:      none;
@@ -261,6 +273,31 @@ td:first-child
             box-shadow: $material-shadow-2dp;
 }
 
+.columns
+{
+    width: 98%;
+    max-width: 1280px;
+    margin: 8px auto;
+
+    column-width: 320px;
+    -moz-column-width:320px; /* Firefox */
+    -webkit-column-width:320px;
+    column-gap: 10px;
+}
+@media screen and (max-width: 993px)
+{
+    #columns
+    {
+        column-gap: 0;
+    }
+    #columns figure
+    {
+        width: 100%;
+    }
+}
+.console-panel .logo{
+    background-color: $red;
+}
 .logo
 {
     position: relative;
@@ -300,8 +337,9 @@ td:first-child
     .sidebar-drawer
     {
         max-width: $sidebar-size;
-        .menu-border{
-          border-bottom: 1px solid #dedede;
+        .menu-border
+        {
+            border-bottom: 1px solid #dedede;
         }
         .mu-item-left
         {
@@ -310,7 +348,7 @@ td:first-child
     }
     .main-content
     {
-        height: 100vh;
+        height: calc(100vh - 82px);
         margin: 64px 0 18px 188px;
         padding: 8px 8px 16px 12px;
 
@@ -336,8 +374,8 @@ td:first-child
 //主内容区过渡动画
 .main-transition-enter-active
 {
-    transition: all .2s cubic-bezier(0, .87, .21, 1.1);
-    transition-delay: .3s !important;
+    transition: all .1s cubic-bezier(0, .87, .21, 1.1);
+    transition-delay: .1s !important;
     //元素进来时给大于等于离开动画的延迟
     //就能避免两个元素同时在画内
 }
@@ -346,18 +384,14 @@ td:first-child
 //因为元素的opacity本来为1 所以会渐变化成1
 .main-transition-enter
 {
-    position: absolute;
-
-    transform: translateY(-40px); //这个是执行函数
+    transform: translateY(-70px); //这个是执行函数
 
     opacity: 0; //而这个是直接设置
 }
 
 .main-transition-leave-active
 {
-    position: absolute;
-
-    transform: translateY(40px);
+    transform: translateY(70px);
 
     opacity: 0;
 }

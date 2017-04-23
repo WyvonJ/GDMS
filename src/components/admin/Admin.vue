@@ -10,6 +10,15 @@
         <mu-list class="menu-border" @change="handleMenuChange" :value="menuValue">
         <mu-list-item title="毕业流程" value="procedure">
             <img src="../../assets/icon/timeline.svg" slot="left" alt="student"/>
+          </mu-list-item> 
+          <mu-list-item title="导师管理" toggleNested>
+            <img src="../../assets/icon/teacher.svg" slot="left" alt="teacher"/>
+            <mu-list-item value="tchaccount" slot="nested" title="帐号管理">
+              <img src="../../assets/icon/account_box.svg" slot="left" alt="account"/>
+            </mu-list-item>
+            <mu-list-item value="tchtopics" slot="nested" title="选题管理">
+            <img src="../../assets/icon/view_comfy.svg" slot="left" alt="view_comfy"/>
+            </mu-list-item>
           </mu-list-item>
           <mu-list-item title="学生管理" toggleNested>
             <img src="../../assets/icon/student.svg" slot="left" alt="student"/>
@@ -20,15 +29,7 @@
               <img src="../../assets/icon/view_comfy.svg" slot="left" alt="view_comfy"/>
             </mu-list-item>
           </mu-list-item>
-          <mu-list-item title="导师管理" toggleNested>
-            <img src="../../assets/icon/teacher.svg" slot="left" alt="teacher"/>
-            <mu-list-item value="tchaccount" slot="nested" title="帐号管理">
-              <img src="../../assets/icon/account_box.svg" slot="left" alt="account"/>
-            </mu-list-item>
-            <mu-list-item value="tchtopics" slot="nested" title="选题管理">
-            <img src="../../assets/icon/view_comfy.svg" slot="left" alt="view_comfy"/>
-            </mu-list-item>
-          </mu-list-item>
+         
           <mu-list-item title="分组管理" toggleNested :open="false">
             <img src="../../assets/icon/group.svg" slot="left" alt="group"/>
             <mu-list-item value="midgroup" slot="nested" title="中期分组">
@@ -38,14 +39,11 @@
               <img src="../../assets/icon/assignment.svg" slot="left" alt="assignment"/>
             </mu-list-item>
           </mu-list-item>
-          <mu-list-item title="成绩管理" toggleNested :open="false">
+          <mu-list-item title="成绩管理" value="studentgrade">
             <img src="../../assets/icon/star.svg" slot="left" alt="star"/>
-            <mu-list-item value="midgrade" slot="nested" title="中期成绩">
-              <img src="../../assets/icon/star_half.svg" slot="left" alt="star_half"/>
-            </mu-list-item>
-            <mu-list-item value="finalgrade" slot="nested" title="终期成绩">
-              <img src="../../assets/icon/turned_in.svg" slot="left" alt="turned_in"/>
-            </mu-list-item>
+          </mu-list-item>
+          <mu-list-item title="系统重置" value="resetsystem">
+            <img src="../../assets/icon/reset.svg" slot="left" alt="star"/>
           </mu-list-item>
         </mu-list>
       </div>
@@ -122,10 +120,4 @@ import WyvonjFooter from '../utils/WyvonjFooter.vue'
 </script>
 
 <style lang="sass" rel="stylesheet/scss">
-.mu-item.show-right {
-    padding-right: 48px !important;
-}
-.mu-item.show-left {
-    padding-left: 48px !important;
-}
 </style>

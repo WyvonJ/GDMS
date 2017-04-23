@@ -1,6 +1,6 @@
 <template>
   <div class="main-container">
-    <wyvonj-header :class="{'nav-hide': !openDrawer}" :showSearchInput="menuValue==='topics'" @search="search" :username="username" :notification="notification"></wyvonj-header>
+    <wyvonj-header :class="{'nav-hide': !openDrawer}" :username="username" :notification="notification"></wyvonj-header>
     <mu-drawer @close="handleDrawerClose" :open="openDrawer" :docked="docked" class="sidebar-drawer" :zDepth="1">
       <div class="console-panel">
         <div class="logo">
@@ -56,9 +56,6 @@ export default {
       }
     },
     methods: {
-      search(str) {
-        this.$children[2].searchStr = str
-      },
       handleMenuChange(value) {
         this.menuValue = value
         this.$router.push('/student/' + value)

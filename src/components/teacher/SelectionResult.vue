@@ -2,16 +2,16 @@
   <div class="result-container" v-if="gotResult">
 
     <div class="teacher-topics-status">
-      <md-layout md-gutter="16">
-        <md-layout class="single-card" md-flex-small="100" md-flex-medium="50" v-for="(result,index) in _tch_StudentConfirmed">
-          <mu-paper>
+        <figure class="single-card paper" v-for="(result,index) in _tch_StudentConfirmed">
             <div class="result-title">
               {{result._id}}. {{result.title}}
             </div>
-            <div class="a-student" v-for="(student,sid) in  result.finalstudents">
+            <div class="single-student" v-for="(student,sid) in  result.finalstudents">
               <div class="student-details">
-                <mu-avatar :size="32" :icon="student.gender==='女'?'face':'mood'" :color="student.gender==='女'?'pink500':'blue500'" backgroundColor="#dedede"></mu-avatar><div class="student-name">{{student.name}} - {{student._id}}</div>
-                <mu-divider/>
+                <i class="material-icons" :style="{color:student.gender==='女'?'#f44336':'#009688'}">
+                  {{student.gender==='女'?'face':'mood'}}
+                </i>
+                <div class="student-name">{{student.name}} - {{student._id}}</div>
                 <div class="student-contact">
                   <div class="chip">
                     <mu-icon value="call" :size="18" /> {{student.tel}}
@@ -29,9 +29,7 @@
                 </div>
               </div>
             </div>
-          </mu-paper>
-        </md-layout>
-      </md-layout>
+        </figure>
     </div>
   </div>
   <div class="main-content" v-else>
@@ -74,53 +72,65 @@ export default {
 
 .teacher-topics-status
 {
-        display: flex;
+    display: flex;
+
     margin: 8px 0;
+
+    flex-wrap: wrap;
+    align-content: space-between;
+    align-items: flex-start;
     .single-card
     {
-        margin: 8px 0;
-        .paper{
-          padding: 0;
+        margin: 8px;
+
+        flex: 0 0 12%;
+        .single-student
+        {
+            min-width: 320px;
+
+            border-bottom: 1px solid #ccc;
+        }
+        .paper
+        {
+            padding: 0;
         }
         .result-title
         {
             padding: 8px;
 
-            color: #fff;
+            color: white;
             border-top-left-radius: 2px;
             border-top-right-radius: 2px;
-            background-color: $indigo400 ;
+            background-color: $teal ;
         }
+        .student-details
+        {
+            font-size: 16px;
 
-            .student-list{
+            overflow: hidden;
 
-            }
-            .student-details
+            padding: 8px;
+
+            cursor: default;
+            transition: $material-enter;
+            .student-name
             {
-                font-size: 16px;
+                display: inline-block;
 
-                overflow: hidden;
-                padding: 8px;
+                height: 32px;
+                margin-left: 18px;
 
-                cursor: default;
-                transition: $material-enter;
-                .student-name
+                vertical-align: middle;
+            }
+            .mail-link
+            {
+                color: rgba(0,0,0,.7) !important;
+                &:hover
                 {
-                    display: inline-block;
-
-                    height: 32px;
-                    margin-left: 18px;
-
-                    vertical-align: middle;
-                }
-                .mail-link{
-                  color: rgba(0,0,0,.7) !important;
-                  &:hover{
                     text-decoration: none !important;
-                  }
                 }
-              }
+            }
+        }
     }
 }
-
 </style>

@@ -3,12 +3,12 @@
  
   	<div class="paper">
   	<div class="table-admin">
-  		 <button class="blue" label="选择文件">
-      <input type="file" class="file-button" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+  		<button class="blue">
+      <input type="file" class="file-button" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
       <i class="material-icons">file_upload</i>
       <span>帐号上传</span>
     </button>
-     <button class="red" label="选择文件">
+     <button class="red">
       <i class="material-icons">delete_forever</i>
       <span>帐号删除</span>
     </button>
@@ -26,7 +26,7 @@
   				</tr>
   			</thead>
   			<tbody>
-  				<tr class="table-row-border" v-for="(student,index) in studentData">
+  				<tr class="table-row-border" v-for="(student,index) in _adm_StuAccounts">
   					<td :style="genderBorder(student.gender)" width="12%">{{student._id}}</td>
   					<td width="12%">{{student.name}}</td>
   					<td width="12%">{{student.password}}</td>
@@ -45,7 +45,7 @@ import {mapState,mapActions} from 'vuex'
 	export default {
 		data(){
 			return{
-				studentData:[{
+				_adm_StuAccounts:[{
 					_id:'1030513441',
 					name:'李达康',
 					gender:'男',
@@ -70,7 +70,7 @@ import {mapState,mapActions} from 'vuex'
 			}
 		},
 		computed:{
-			
+			...mapState(['_adm_StuAccounts'])
 		},
 		methods:{
 			genderBorder(g){
@@ -97,6 +97,7 @@ import {mapState,mapActions} from 'vuex'
   bottom: 0;
   opacity: 0;
   cursor: pointer;
+  z-index: 12;
 }
 .table-admin{
 	padding: 8px 0 8px 16px;

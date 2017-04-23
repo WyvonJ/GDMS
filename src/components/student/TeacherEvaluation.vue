@@ -1,18 +1,19 @@
 <template>
   <div class="evaluation-card">
-  <div class="teacher-wrapper">
+  <div class="teacher-wrapper paper">
        <div class="teacher-info">
-      <mu-avatar :icon="emoji" :size="44" :iconSize="36" />
       <div class="name">
         {{name}}
       </div>
-      <mu-avatar class="grade" backgroundColor="greenA700" :size="44" :iconSize="36">{{grade}}</mu-avatar>
+      <div class="grade">
+          {{grade}}
+      </div>
     </div>
     <div class="grade-content">
       <mu-slider v-model="grade" :step="1" @change="faceChange" class="grade-slider" />
-      <button @click="commitGrade" class="grade-button">
+      <button @click="commitGrade" class="red" disabled="isOpenForEva">
           <i class="material-icons star-icon">star</i>
-          提交分数
+          <span>提交分数</span>
       </button>
     </div>
   </div>
@@ -28,7 +29,8 @@ import {mapActions} from 'vuex'
 			return {
 				grade:60,
 				emoji:'sentiment_neutral',
-				name:'导师'
+				name:'导师',
+                isOpenForEva:false
 			}
 		},
 		methods:{
@@ -61,7 +63,7 @@ import {mapActions} from 'vuex'
 .evaluation-card
 {
     .teacher-wrapper{
-        border: 1px $indigo400 solid;
+        padding: 16px;
         border-radius: 3px;
         width: 480px;
     }
@@ -70,52 +72,28 @@ import {mapActions} from 'vuex'
         position: relative;
 
         padding: 8px 16px;
-        width: 480px;
+        height: 32px;
         .name
         {
+            float: left;
             font-size: 24px;
-
-            position: relative;
-            bottom: 8px;
-            left: 18px;
-
-            display: inline-block;
         }
         .grade
         {
             font-size: 24px;
-
-            position: absolute;
-            right: 18px;
-            bottom: 8px;
+            float: right;
         }
     }
     .grade-content
-    {width: 480px;
+    {
         padding: 8px 16px;
         .grade-slider
         {
             margin-top: 16px;
         }
-        .grade-button{
-            outline: none;
-            background: transparent;
-            border: 1px #f44336 solid;
-            color: #f44336;
-            border-radius: 2px;
-            transition: $material-enter;
-            cursor: pointer;
-            padding: 0px 8px 8px 8px;
-            font-size: 16px;
-            vertical-align: text-top;
-            &:hover{
-                background-color: #f44336;
-                color: white;
-            }
-            .star-icon{
-                position: relative;
-                top: 4px;
-            }
+        .red span{
+            position: relative;
+            top: -4px;
         }
     }
 }

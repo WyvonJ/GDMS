@@ -11,21 +11,20 @@
       <mu-icon value="help" :size="36" />
     </div>
     <div class="teacher-status-card">
-      <md-layout md-gutter="16">
-        <md-layout class="single-card" md-flex-small="50" md-flex-medium="33" v-for="(topic,index) in _tch_StudentInCard">
-          <div class="paper">
+    <div class="grid">
+      <figure class="single-card paper" v-for="(topic,index) in _tch_StudentInCard">
             <div class="card-title">
               {{topic._id}}. {{topic.title}}
-              <mu-avatar slot="right" backgroundColor="red500" :size="24">{{topic.available}}</mu-avatar>
+              <mu-avatar class="no-selection" slot="right" backgroundColor="red500" :size="24">{{topic.available}}</mu-avatar>
             </div>
             <ul>
               <li v-for="(student,i) in topic.students" class="student-list">
                 <student-card :student="student" @select="selectStudent(student,topic)" :isSelected="student.isselected"></student-card>
               </li>
             </ul>
-          </div>
-        </md-layout>
-      </md-layout>
+        </figure>
+    </div>
+        
     </div>
     <mu-dialog :open="openDialog" title="确认选择" @close="closeDialog">
       你确定要选择{{currentStudent.name}}吗？
@@ -124,7 +123,7 @@ export default {
         padding: 8px;
 
         color: #fff;
-        background-color: $indigo400;
+        background-color: $teal;
     }
     .help-content
     {
@@ -151,38 +150,29 @@ export default {
 {
     margin: 8px 0;
     transition: $material-enter;
-    .div
-    {
-        transition: $material-enter;
-        border-radius: 4px;
-        &:hover
-        {
-            -webkit-box-shadow: $material-shadow-9dp;
-               -moz-box-shadow: $material-shadow-9dp;
-                    box-shadow: $material-shadow-9dp;
-        }
-    }
     .student-list{
       margin: 0;
     }
+    .grid{
+      display: flex;
+      flex-wrap: wrap;
+      align-content: space-between;
+      align-items: flex-start;
+    }
     .single-card
     {
-        margin: 8px 0;
-        flex: initial;
-        -ms-flex: initial;
-        .div{
-          width: 100%;
-        }
+        margin: 12px;
+        flex: 0 0 25%;
         .card-title
         {
             position: relative;
             padding: 8px 10px;
-
-            color: #fff;
+            min-width: 496px;
+            color: white;
             font-size: 16px;
             border-top-left-radius: 4px;
             border-top-right-radius: 4px;
-            background-color: $indigo400;
+            background-color: $teal;
             .mu-avatar
             {
                 font-family: $fontCenturyGothic;
@@ -190,25 +180,8 @@ export default {
                 position: absolute;
                 right: -12px;
                 top: -12px;
-                 -khtml-user-select:      none;
-                -webkit-user-select:      none;
-                   -moz-user-select: -moz-none;
-                    -ms-user-select:      none;
-                        user-select:      none;
             }
         }
     }
 }
-.overlay-fade-enter-active,
-.overlay-fade-leave-active
-{
-    transition: opacity .45s cubic-bezier(.23, 1, .32, 1);
-}
-
-.overlay-fade-enter,
-.overlay-fade-leave-active
-{
-    opacity: 0 !important;
-}
-
 </style>

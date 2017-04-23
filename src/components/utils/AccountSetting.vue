@@ -78,7 +78,7 @@ import WyvonjCanvas from '../utils/WyvonjCanvas.vue'
         cursor: text;
         white-space: nowrap;
 
-        border: 1px #3f51b5 solid;
+        border: 1px #acacac solid;
         border-radius: 2px;
         .mu-icon
         {

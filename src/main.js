@@ -10,6 +10,8 @@ import 'vue-material/dist/vue-material.css'
 import StyleInjector from './components/utils/StyleInjector.vue'
 import WyvonjSnackbar from './components/utils/WyvonjSnackbar.vue'
 
+import VueClip from 'vue-clip'
+
 import store from './store'
 import router from './router'
 import cookie from './utils/cookieUtil'
@@ -20,6 +22,7 @@ global._c = cookie
 Vue.use(MuseUI)
 Vue.use(VueDND)
 Vue.use(VueMaterial)
+Vue.use(VueClip)
 Vue.material.registerTheme('default', {
   primary: 'red',
   accent: 'red',

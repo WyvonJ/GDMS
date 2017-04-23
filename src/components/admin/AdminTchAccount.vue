@@ -1,37 +1,71 @@
 <template>
-  <div class="student-account-container">
+  <div class="teacher-account-container">
  
   	<div class="paper">
   	<div class="table-admin">
-  		 <button class="blue" label="选择文件">
-      <input type="file" class="file-button" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+  	<vue-clip :options="options" class="uploader">
+    <template slot="clip-uploader-action">
+    	<div class="uploader-action">
+    		<div class="dz-message">
+    			 <button class="blue">
       <i class="material-icons">file_upload</i>
       <span>帐号上传</span>
     </button>
-     <button class="red" label="选择文件">
+    		</div>
+    	</div>
+    </template>
+    <template slot="clip-uploader-body" scope="props">
+    	<div class="uploader-files">
+    		<div class="uploader-file" v-for="file of props.files">
+    			<div class="file-details">
+    				<div class="file-name">
+    					{{file.name}}
+    				</div>
+    				<div class="file-progress" v-if="file.status !== 'error' && file.status !== 'success'">
+    					<span class="progress-indicator" :style="{width: file.progress + '%'}"></span>
+    				</div>
+    				<div class="file-meta" v-else>
+    					<span class="file-status">
+    						{{file.status}}
+    					</span>
+    				</div>
+    			</div>
+    		</div>
+    	</div>
+    </template>
+    </vue-clip>
+  		
+    
+     <button class="red">
       <i class="material-icons">delete_forever</i>
       <span>帐号删除</span>
     </button>
+
+    
   	</div>
   	
   		<table>
-  			<caption>学生信息表</caption>
+  			<caption>导师信息表</caption>
   			<thead>
   				<tr>
-  					<th>学号</th>
+  					<th>帐号</th>
   					<th>姓名</th>
   					<th>密码</th>
   					<th>手机号</th>
   					<th>邮箱</th>
+  					<th>QQ/WeChat</th>
+  					<th>办公室</th>
   				</tr>
   			</thead>
   			<tbody>
-  				<tr class="table-row-border" v-for="(student,index) in studentData">
-  					<td :style="genderBorder(student.gender)" width="12%">{{student._id}}</td>
-  					<td width="12%">{{student.name}}</td>
-  					<td width="12%">{{student.password}}</td>
-  					<td width="12%">{{student.tel}}</td>
-  					<td width="12%">{{student.email}}</td>
+  				<tr class="table-row-border" v-for="(teacher,index) in _adm_TchAccounts">
+  					<td width="12%">{{teacher._id}}</td>
+  					<td width="12%">{{teacher.name}}</td>
+  					<td width="12%">{{teacher.password}}</td>
+  					<td width="12%">{{teacher.tel}}</td>
+  					<td width="12%">{{teacher.email}}</td>
+  					<td width="12%">{{teacher.qq}}/{{teacher.wechat}}</td>
+  					<td width="12%">{{teacher.office}}</td>
   				</tr>
   			</tbody>
   		</table>
@@ -45,40 +79,33 @@ import {mapState,mapActions} from 'vuex'
 	export default {
 		data(){
 			return{
-				studentData:[{
-					_id:'1030513441',
-					name:'李达康',
-					gender:'男',
-					password:'123456',
-					tel:'18016996320',
-					email:'google@hotmail.com'
-				},{
-					_id:'1030513441',
-					name:'李达康',
-					gender:'男',
-					password:'123456',
-					tel:'18016996320',
-					email:'google@hotmail.com'
-				},{
-					_id:'1030513441',
-					name:'李达康',
-					gender:'男',
-					password:'123456',
-					tel:'18016996320',
-					email:'google@hotmail.com'
-				},]
+				files:[],
+				options:{
+					url:'/admin/admUpTchAccounts',
+					method:'post',
+					parallelUploads:1,
+					uploadMultiple:false,
+					maxFiles:1,
+					paramName:'file',
+					acceptedFiles:{
+						extensions:['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+						message:'文件格式不对！'
+					}
+				}
 			}
 		},
 		computed:{
-			
+			...mapState(['_adm_TchAccounts'])
 		},
 		methods:{
-			genderBorder(g){
-				let c=g==='男'?'#3f51b5':'#f44336'
-				return{
-					borderLeft:'4px solid '+c
+			fileUpload($event){
+				let fileReader=new FileReader()
+				console.log($event.target.files[0])
+				fileReader.onload=(e)=>{
+					console.log(e)
 				}
-			}
+			},
+			...mapActions(['admUpTchAccounts'])
 		},
 		mounted(){
 		}
@@ -87,7 +114,7 @@ import {mapState,mapActions} from 'vuex'
 
 <style lang="sass" rel="stylesheet/scss" scoped>
 
-.student-account-container{
+.teacher-account-container{
 	.file-button{
   position: absolute;
   width: 100%;
@@ -96,6 +123,7 @@ import {mapState,mapActions} from 'vuex'
   top: 0;
   bottom: 0;
   opacity: 0;
+  z-index: 12;
   cursor: pointer;
 }
 .table-admin{

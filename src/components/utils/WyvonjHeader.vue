@@ -6,10 +6,7 @@
     </div>
     <mu-icon-button icon="menu" @click="toggleNav"></mu-icon-button>
     <transition name="search-transition">
-      <div class="search-bar-wrapper" v-show="showSearchInput" >
-      <mu-icon class="search-icon" value="search"/>
-      <input type="text" @focus="focus" :class="{'focused':searchFocus}" @blur="blur" @keyup.enter="search" v-model.trim="str" placeholder="Search" class="search-input" name="search">
-    </div>
+      
     </transition>
     <div class="notification-info">
       <mu-icon-button tooltip="通知" class="notify-button" ref="notify" icon="notifications" @click="showNotification" />
@@ -33,13 +30,8 @@
 <script>
 
 import { mapState ,mapMutations} from 'vuex'
-//import {unsetCookie} from '../../utils/cookieUtil'
 export default {
   props: {
-    showSearchInput: {
-      type: Boolean,
-      default: false
-    } ,
     username:{
       type:String,
       default:''
@@ -54,8 +46,6 @@ export default {
     return {
       openNotification: false,
       trigger: null,
-      searchFocus:false,
-      str:'',
     }
   },
   methods: {
@@ -64,15 +54,6 @@ export default {
     },
     handleClose(e) {
       this.openNotification = false
-    },
-    focus(){
-      this.searchFocus=true
-    },
-    blur(){
-      this.searchFocus=false
-    },
-    search(){
-      this.$emit('search',this.str)
     },
     toggleNav() {
       this.$parent.toggleNav()
@@ -98,13 +79,10 @@ export default {
           return {backgroundColor:'#009688'}
           break
         case 'a':
-          return {backgroundColor:'#f44336'}
+          return {backgroundColor:'#4a4d4f'}
       }
     },
     ...mapState(['user'])
-  },
-  watch:{
-    str:'search'
   },
   mounted() {
     this.trigger = this.$refs.notify.$el
@@ -150,70 +128,6 @@ export default {
         position: absolute;
         top: 8px;
         right: -80px;
-    }
-    .search-bar-wrapper
-    {
-        position: absolute;
-        top: 8px;
-        left: 256px;
-
-        width: 40%;
-        height: 48px;
-        padding-left: 48px;
-
-        cursor: text;
-        transition: $material-enter;
-        white-space: nowrap;
-        border: 1px white solid;
-        border-radius: 3px;
-        background-color: transparent;
-        .search-icon
-        {
-            position: absolute;
-            top: 0;
-            left: 0;
-
-            margin: 12px;
-        }
-        .search-input
-        {
-            font-size: 20px;
-
-            position: relative;
-            top: 8px;
-
-            width: 100%;
-            height: 32px;
-
-            color: #fff;
-            border: 0;
-            outline: none;
-            background-color: transparent;
-            &.focused
-            {
-                width: 120%;
-            }
-        }
-        @media (max-width:993px)
-        {
-            display: none;
-        }
-    }
-    input::-webkit-input-placeholder
-    {
-        font-variant: small-caps;
-    }
-    input::-moz-input-placeholder
-    {
-        font-variant: small-caps;
-    }
-    input::-ms-input-placeholder
-    {
-        font-variant: small-caps;
-    }
-    input::-o-input-placeholder
-    {
-        font-variant: small-caps;
     }
     .notification-info
     {

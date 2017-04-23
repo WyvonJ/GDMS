@@ -1,5 +1,8 @@
 <template>
   <div class="group-container">
+    <div class="group-current-status paper">
+      现在是{{status?'终':'中'}}期分组
+    </div>
     <div class="group-status-card card">
       <div class="teacher-wrapper">
       <mu-avatar backgroundColor="red500" class="group-id-icon">{{groupId}}</mu-avatar>
@@ -11,7 +14,7 @@
       <div class="student-wrapper">
       <span class="card-title">Student</span>
       <div class="chip" v-for="(student,index) in students">
-          <mu-icon value="face" color="blue500" :size="18" /> 
+          <mu-icon :value="student.gender==='女'?'face':'mood'" color="blue500" :size="18" /> 
           <span class="student-name">
             {{student.name}}
           </span>
@@ -30,6 +33,7 @@ import { mapActions, mapState } from 'vuex'
 export default {
   data() {
       return {
+        status: 0,
         groupId: '',
         students: [],
         teachers: []
@@ -63,6 +67,13 @@ export default {
 
 <style lang="sass" rel="stylesheet/scss" scoped>
 @import '../../style/variables.scss';
+.group-current-status{
+  display: inline-block;
+  width: 196px;
+  padding: 12px;
+  font-size: 24px;
+  margin: 16px 0;
+}
 .group-status-card
 {
     font-size: 16px;
@@ -138,7 +149,7 @@ export default {
     .student-wrapper
     {
         position: relative;
-        background-color: #fff;
+        background-color: white;
         padding: 36px 16px 16px 8px;
         .chip{
           background-color: #e4e4e4;

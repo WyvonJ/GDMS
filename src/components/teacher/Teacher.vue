@@ -19,14 +19,8 @@
               <mu-list-item value="selectionresult" title="选题结果">
                 <img src="../../assets/icon/local_library.svg" slot="left" alt="description"/>
               </mu-list-item>
-              <mu-list-item value="grouping" title="答辩分组" toggleNested>
+              <mu-list-item value="grouping" title="答辩分组" >
                 <img src="../../assets/icon/group.svg" slot="left" alt="description"/>
-                <mu-list-item value="midgroup" slot="nested" title="中期分组">
-                <img src="../../assets/icon/assessment.svg" slot="left" alt="description"/>
-              </mu-list-item>
-              <mu-list-item value="finalgroup" slot="nested" title="终期分组">
-                <img src="../../assets/icon/assignment.svg" slot="left" alt="description"/>
-              </mu-list-item>
               </mu-list-item>
               <mu-list-item value="evaluation" title="学生评价">
                 <img src="../../assets/icon/star_half.svg" slot="left" alt="description"/>

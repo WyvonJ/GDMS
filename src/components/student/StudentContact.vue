@@ -41,7 +41,13 @@
 		},
 		methods:{
 			commitContact(){
-
+                let info={
+                    studentId:_c.getCookie('user'),
+                    tel:'18649150331',
+                    email:'sunisdown@hotmail.com',
+                    qq:'965884102',
+                    wechat:'welovevue'
+                }
 			}
 		}
 	}
@@ -76,12 +82,4 @@
         }
     }
 }
-.mu-raised-button
-{
-    margin: 16px;
-
-    color: #fff;
-    background-color: #03a9f4;
-}
-
 </style>

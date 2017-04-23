@@ -17,7 +17,7 @@
       </span>
       </div>
     </div>
-    <button class="check-button" @click="select">
+    <button class="check-button" @click="select" :class="{'is-selected':isSelected}">
         <i class="material-icons">check</i>
     </button>
   </div>
@@ -79,7 +79,7 @@
         border-bottom: 1px #dfdfdf solid;
         position: relative;
         z-index: 6;
-        border-left: 6px $indigo400 solid;
+        border-left: 6px $teal solid;
         .student-name
         {
             display: inline-block;
@@ -128,10 +128,10 @@
         border: none;
         outline: none;
         color: white;
-        background-color: $greenV;
+        background-color: $greenVue;
         &:hover
         {
-            color: $greenV;
+            color: $greenVue;
             background-color: #dedede;;
         }
     }
@@ -143,6 +143,9 @@
 
         width: 64px;
         height: 64px;
+        &.is-selected{
+            background-color: $lightBlue;
+        }
     }
 }
 

@@ -25,12 +25,12 @@ export default {
   STU_TOPIC_IN_CART: (state, topic) => {
     state._stu_TopicInCart = topic
   },
-  STU_SELECT_TOPIC:(state,topic)=>{
-    if(topic)
+  STU_SELECT_TOPIC: (state, topic) => {
+    if (topic)
       state._stu_TopicInCart.push(topic)
   },
-  STU_DELTED_TOPIC:(state,index)=>{ 
-      state._stu_TopicInCart.splice(index,1)
+  STU_DELTED_TOPIC: (state, index) => {
+    state._stu_TopicInCart.splice(index, 1)
   },
   TCH_TOPIC_CREATED_ALL: (state, topic) => {
     state._tch_TopicCreatedAll = topic
@@ -48,13 +48,31 @@ export default {
     student.isselected = true
   },
   TCH_DELETE_STUDENT: (state, topic) => {
-    let sorted=_.groupBy(topic.students,'isselected')
-    topic.students=sorted[true]
+    let sorted = _.groupBy(topic.students, 'isselected')
+    topic.students = sorted[true]
   },
   SET_PROGRESSBAR: (state, isShow) => {
     state.isProgressbar = isShow
   },
   RESET_STATE: (state) => {
     state = null
+  },
+  ADM_SET_TCH_ACCOUNT: (state, accounts) => {
+    state._adm_TchAccounts = accounts
+  },
+  ADM_SET_STU_ACCOUNT: (state, accounts) => {
+    state._adm_StuAccounts = accounts
+  },
+  ADM_SET_STU_TOPICS: (state, topics) => {
+    state._adm_StuTopics = topics
+  },
+  ADM_SET_TCH_TOPICS: (state, topics) => {
+    state._adm_TchTopics = topics
+  },
+  ADM_SET_MID_GROUP: (state, groups) => {
+    state._adm_TchTopics = topics
+  },
+  ALL_SET:(state,obj)=>{
+    state[obj.name]=obj.target
   }
 }
