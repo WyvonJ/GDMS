@@ -63,7 +63,6 @@ import {mapActions} from 'vuex'
 .evaluation-card
 {
     .teacher-wrapper{
-        padding: 16px;
         border-radius: 3px;
         width: 480px;
     }
@@ -71,7 +70,8 @@ import {mapActions} from 'vuex'
     {
         position: relative;
 
-        padding: 8px 16px;
+        padding: 16px;
+        border-top: 4px solid $indigo; 
         height: 32px;
         .name
         {

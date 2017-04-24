@@ -3,38 +3,6 @@
  
   	<div class="paper">
   	<div class="table-admin">
-  	<vue-clip :options="options" class="uploader">
-    <template slot="clip-uploader-action">
-    	<div class="uploader-action">
-    		<div class="dz-message">
-    			 <button class="blue">
-      <i class="material-icons">file_upload</i>
-      <span>帐号上传</span>
-    </button>
-    		</div>
-    	</div>
-    </template>
-    <template slot="clip-uploader-body" scope="props">
-    	<div class="uploader-files">
-    		<div class="uploader-file" v-for="file of props.files">
-    			<div class="file-details">
-    				<div class="file-name">
-    					{{file.name}}
-    				</div>
-    				<div class="file-progress" v-if="file.status !== 'error' && file.status !== 'success'">
-    					<span class="progress-indicator" :style="{width: file.progress + '%'}"></span>
-    				</div>
-    				<div class="file-meta" v-else>
-    					<span class="file-status">
-    						{{file.status}}
-    					</span>
-    				</div>
-    			</div>
-    		</div>
-    	</div>
-    </template>
-    </vue-clip>
-  		
     
      <button class="red">
       <i class="material-icons">delete_forever</i>
@@ -79,19 +47,7 @@ import {mapState,mapActions} from 'vuex'
 	export default {
 		data(){
 			return{
-				files:[],
-				options:{
-					url:'/admin/admUpTchAccounts',
-					method:'post',
-					parallelUploads:1,
-					uploadMultiple:false,
-					maxFiles:1,
-					paramName:'file',
-					acceptedFiles:{
-						extensions:['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
-						message:'文件格式不对！'
-					}
-				}
+				files:[]
 			}
 		},
 		computed:{

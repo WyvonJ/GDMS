@@ -69,10 +69,11 @@ export default {
 @import '../../style/variables.scss';
 .group-current-status{
   display: inline-block;
-  width: 196px;
-  padding: 12px;
-  font-size: 24px;
-  margin: 16px 0;
+    width: 208px;
+    padding: 12px;
+    font-size: 24px;
+    margin: 16px 0;
+    border-left: 6px solid $red;
 }
 .group-status-card
 {

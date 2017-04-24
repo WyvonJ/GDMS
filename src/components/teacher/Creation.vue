@@ -1,7 +1,17 @@
 <template>
     <div class="creation-container sub-padding">
-       <md-tabs md-fixed md-centerd class="md-transparent">
-        <md-tab id="teacher-account-upload" md-label="课题创建" md-icon="library_add">
+      <div class="tab-button">
+        <button type="button" @click="isTab=true" class="add-topic-button">
+          <img src="../../assets/icon/library_add.svg" alt="add" />
+          <span>课题创建</span>
+        </button>
+        <button type="button" @click="isTab=false" class="manage-topic-button">
+          <img src="../../assets/icon/subject.svg" alt="mag" />
+          <span>课题管理</span>
+        </button>
+      </div>
+      <transition-group class="tab-box" name="slide-fade">
+        <div id="tab-box1" key="tab1" v-show="isTab">
           <div class="creation-card paper">
               <span>可选人数：{{available}}</span>
               <mu-slider v-model="available" :min="1" :max="10" :step="1" @change="availableChange" class="available-slider" />
@@ -25,9 +35,9 @@
                 <span>发布课题</span>
               </button>
           </div>
-        </md-tab>
-        <md-tab id="teacher-topic-admin" md-label="课题管理" md-icon="subject">
-            <div class="table-container paper">
+        </div>
+        <div id="tab-box2" key="tab2" v-show="!isTab">
+          <div class="table-container paper">
               <table>
                 <thead slot="header">
                   <tr>
@@ -54,8 +64,8 @@
                 </tbody>
               </table>
             </div>
-        </md-tab>
-      </md-tabs>
+        </div>
+      </transition-group>
     </div>
 </template>
 
@@ -72,6 +82,7 @@ export default {
         fieldsError: '', //错误提示文字
         titleError: '',
         detailError: '',
+        isTab:true,
         fields: [],
         fieldsData: [
         "图形图像处理", "游戏开发设计", "信息可视化", 
@@ -179,6 +190,8 @@ export default {
 </script>
 
 <style lang="sass" rel="stylesheet/scss" scoped>
+@import '../../style/variables.scss';
+
 .creation-container
 {
     z-index: 0;
@@ -232,5 +245,47 @@ export default {
               text-align: center;
             }
         }
+}
+.tab-button{
+  padding: 16px;
+  text-align: center;
+  button{
+    border-radius: 0;
+  }
+  .add-topic-button{
+    background-color: $greenVue;
+  }
+  .manage-topic-button{
+    background-color: $blue;
+
+  }
+}
+#tab-box1,#tab-box2{
+  width: 100%;
+}
+
+
+.slide-fade-enter-active
+{
+    transition: all .3s cubic-bezier(0, .87, .21, 1.1);
+    transition-delay: .1s;
+    //元素进来时给大于等于离开动画的延迟
+    //就能避免两个元素同时在画内
+}
+
+//page进来的时候将其向上移动80px opacity设置为0
+//因为元素的opacity本来为1 所以会渐变化成1
+.slide-fade-enter
+{
+    transform: translateX(-70px); //这个是执行函数
+
+    opacity: 0; //而这个是直接设置
+}
+
+.slide-fade-leave-active
+{
+    transform: translateX(70px);
+
+    opacity: 0;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="contact-container">
-  <div class="paper">
+  <div class="wrapper">
     <div class="contact-input">
         <img src="../../assets/icon/call.svg" alt="WECHAT" />
         <input type="number" v-model.trim="card.tel"/>
@@ -57,7 +57,7 @@
 
     align-items: flex-start;
     justify-content: center;
-    .paper{
+    .wrapper{
       padding: 24px 16px 16px;
       margin-top: 64px;
     }

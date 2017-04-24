@@ -11,7 +11,6 @@
     <div class="notification-info">
       <mu-icon-button tooltip="通知" class="notify-button" ref="notify" icon="notifications" @click="showNotification" />
       <mu-icon-button tooltip="注销" class="logout-button" ref="button" icon="exit_to_app" @click="logout" />
-      </mu-badge>
       <mu-popover :trigger="trigger" :open="openNotification" @close="handleClose">
         <mu-card>
           <mu-card-header :title="username">
@@ -107,6 +106,9 @@ export default {
     transition: $material-enter;
 
     color: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 1px 1px rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 1px 1px rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 1px 1px rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
     > .mu-icon-button
     {
         position: absolute;
@@ -149,7 +151,7 @@ export default {
     {
         .logo
         {
-            display: none;
+            display: inline-block;
         }
     }
 }

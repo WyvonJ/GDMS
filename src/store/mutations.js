@@ -25,13 +25,6 @@ export default {
   STU_TOPIC_IN_CART: (state, topic) => {
     state._stu_TopicInCart = topic
   },
-  STU_SELECT_TOPIC: (state, topic) => {
-    if (topic)
-      state._stu_TopicInCart.push(topic)
-  },
-  STU_DELTED_TOPIC: (state, index) => {
-    state._stu_TopicInCart.splice(index, 1)
-  },
   TCH_TOPIC_CREATED_ALL: (state, topic) => {
     state._tch_TopicCreatedAll = topic
   },
@@ -70,9 +63,15 @@ export default {
     state._adm_TchTopics = topics
   },
   ADM_SET_MID_GROUP: (state, groups) => {
-    state._adm_TchTopics = topics
+    state._adm_MidGroup = groups
   },
-  ALL_SET:(state,obj)=>{
-    state[obj.name]=obj.target
+  ADM_SET_FNL_GROUP: (state, groups) => {
+    state._adm_FnlGroup = groups
+  },
+  ADM_SET_MID_GRADE: (state, grades) => {
+    state._adm_MidGrade = grades
+  },
+  ADM_SET_FNL_GRADE: (state, grades) => {
+    state._adm_FnlGrade = grades
   }
 }

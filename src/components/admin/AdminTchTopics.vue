@@ -63,17 +63,6 @@ button{
 .teacher-topics-admin{
 	padding: 8px 0 8px 16px;
 }
-.columns{
-	column-width: 320px;
-	column-gap: 15px;
-	 width: 98%;
-	max-width: 1100px;
-	margin: 8px auto;
-}
-@media screen and (max-width: 993px) { 
-	  #columns { column-gap: 0px; }
-	  #columns figure { width: 100%; }
-	}
 .teacher-wrapper{
 		margin: 8px;
 		padding-bottom: 10px;
@@ -94,6 +83,9 @@ button{
 	}
 	.topic-id-title{
 		padding: 2px;
+		font-size: 1.08em;
+    border-left: 2px solid #d8f9df;
+    border-radius: 5px;
 	}
 	.topic-students{
 		padding: 8px 6px;

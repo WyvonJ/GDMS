@@ -1,4 +1,7 @@
 <template>
+<div class="student-wrapper">
+  
+</div>
 </template>
 
 <script>

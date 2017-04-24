@@ -89,7 +89,6 @@ export default {
             if (response.data.topics[i])
               wrapper.push(response.data.topics[i])
           }
-          console.log(wrapper)
           commit('STU_TOPIC_IN_CART', wrapper)
         }
       })
@@ -281,22 +280,28 @@ export default {
         commit('ADM_SET_STU_ACCOUNT', response.data)
       })
   },
+  admMidGroup: ({ commit }) => {
+    return axios.get('/admin/admFnlGroup')
+      .then(response => {
+        commit('ADM_SET_MID_GROUP',response.data)
+      })
+  },
   admFnlGroup: ({ commit }) => {
     return axios.get('/admin/admFnlGroup')
       .then(response => {
-
+        commit('ADM_SET_FNL_GROUP',response.data)
       })
   },
   admMidGrade: ({ commit }) => {
     return axios.get('/admin/admMidGrade')
       .then(response => {
-
+        commit('ADM_SET_MID_GRADE',response.data)
       })
   },
   admFnlGrade: ({ commit }) => {
     return axios.get('/admin/admFnlGrade')
       .then(response => {
-
+        commit('ADM_SET_FNL_GRADE',response.data)
       })
   },
 
