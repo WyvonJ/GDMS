@@ -99,7 +99,8 @@ import {post,get} from 'axios'
             left: 0;
             box-sizing: border-box;
             border-right: 1px #acacac solid;
-            padding: 12px;
+            padding: 11px;
+            background-color: #ededed;
         }
         input
         {

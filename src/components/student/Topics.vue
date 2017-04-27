@@ -70,12 +70,14 @@
           <transition-group tag="ul" name="slide-fade">
             <li class="selected-item" v-for="(topic,index) in topicsInCart" v-dragging="{ item: topic, list: topicsInCart, group: 'topic' }" :key="topic._id" :class="{'show-details':isDetails[index]}">
               <mu-avatar :size="20" :backgroundColor="selectedBgc[index]">
-                {{++index}}
+                {{index+1}}
               </mu-avatar>
               <mu-icon class="arrow-button" :class="{'show-details':isDetails[index]}" value="keyboard_arrow_right" @click="toggleDetails(index)" />
               <div class="selected-item-content">
                 <span class="title">{{topic._id}}.{{topic.title}}</span>
-                <p class="details" v-if="isDetails[index]">{{topic.details}}</p>
+                <p class="details" v-if="isDetails[index]">
+                {{topic.details}}
+                </p>
               </div>
               <mu-icon-button class="delete-button" icon="delete_forever" @click="deleteTopic(index)" />
             </li>

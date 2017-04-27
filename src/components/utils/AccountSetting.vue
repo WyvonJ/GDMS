@@ -45,7 +45,7 @@ import {post} from 'axios'
           return this.passwordError='密码长度不够'
 				if (this.password!==this.passwordRepeat) {
 					return this.repeatError='两次输入的密码不一样'
-				}else{
+				}else if(this.password.exec(/^(?:\d+|[a-zA-Z]+|[!@#$%^&*]+)$/)){
 					post('/login/account',{
             oldPassword:this.original,
             newPassword:this.password
@@ -53,7 +53,9 @@ import {post} from 'axios'
           .then(res=>{
             console.log(res.data)
           })
-				}
+				}else{
+          return this.passwordError='密码包含非法字符'
+        }
 			},
       clearError() {
         this.originalError = ''
