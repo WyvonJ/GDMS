@@ -79,11 +79,13 @@ export default {
     flex-wrap: wrap;
     align-content: space-between;
     align-items: flex-start;
+    justify-content: flex-start;
     .single-card
     {
         margin: 8px;
 
-        flex: 0 0 12%;
+        flex: 1 1 12%;
+        min-width: 320px;
         .single-student
         {
             min-width: 320px;

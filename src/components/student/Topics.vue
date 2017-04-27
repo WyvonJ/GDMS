@@ -70,7 +70,7 @@
           <transition-group tag="ul" name="slide-fade">
             <li class="selected-item" v-for="(topic,index) in topicsInCart" v-dragging="{ item: topic, list: topicsInCart, group: 'topic' }" :key="topic._id" :class="{'show-details':isDetails[index]}">
               <mu-avatar :size="20" :backgroundColor="selectedBgc[index]">
-                {{index+1}}
+                {{++index}}
               </mu-avatar>
               <mu-icon class="arrow-button" :class="{'show-details':isDetails[index]}" value="keyboard_arrow_right" @click="toggleDetails(index)" />
               <div class="selected-item-content">
@@ -350,7 +350,6 @@ input::-o-input-placeholder
     }
     table.topic-table
     {
-      clear: both;
 
         td:first-child
         {
@@ -378,6 +377,7 @@ input::-o-input-placeholder
                 width: 32px;
                 height: 32px;
                 margin-left: 12px;
+                display: inline-block;
 
                 cursor: pointer;
                 transition: $material-enter;
@@ -410,7 +410,7 @@ input::-o-input-placeholder
 .cart-toggle
 {
     position: fixed;
-    right: 32px;
+    right: 96px;
     bottom: 32px;
 
     width: 64px;

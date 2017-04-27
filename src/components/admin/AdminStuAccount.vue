@@ -3,11 +3,10 @@
  
   	<div class="paper">
   	<div class="table-admin">
-  		<button class="blue">
-      <input type="file" class="file-button" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+  		<button class="blue" @click="dialog=true">
       <i class="material-icons">file_upload</i>
       <span>帐号上传</span>
-    </button>
+    	</button>
      <button class="red">
       <i class="material-icons">delete_forever</i>
       <span>帐号删除</span>
@@ -30,21 +29,39 @@
   					<td :style="genderBorder(student.gender)" width="12%">{{student._id}}</td>
   					<td width="12%">{{student.name}}</td>
   					<td width="12%">{{student.password}}</td>
-  					<td width="12%">{{student.tel}}</td>
-  					<td width="12%">{{student.email}}</td>
+  					<td width="12%">{{student.tel||'无'}}</td>
+  					<td width="12%">{{student.email||'无'}}</td>
   				</tr>
   			</tbody>
   		</table>
   	</div>
+  	 <mu-dialog class="form-dialog" :open="dialog" title="文件上传" @close="dialog=false">
+        <form enctype="multipart/form-data" role="form" class="form" onsubmit="return false">
+          <div class="form-group">
+            <label for="file">{{chosenFile}}</label>
+            <input id="file" @change="fileInput" type="file" class="form-control" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+          </div>
+        </form>
+        <progress :value="progressBar" max="100"></progress>
+        <div id="output">
+        </div>
+        <button slot="actions" @click="dialog=false" class="red">
+          <span>取消</span>
+        </button>
+      </mu-dialog>
   </div>
 </template>
 
 <script type="text/javascript">
 //导入full build 以后更改需求
 import {mapState,mapActions} from 'vuex'
+import {post} from 'axios'
 	export default {
 		data(){
 			return{
+				dialog:false,
+				chosenFile:'选择文件',
+			progressBar:0,
 				_adm_StuAccounts:[{
 					_id:'1030513441',
 					name:'李达康',
@@ -76,16 +93,53 @@ import {mapState,mapActions} from 'vuex'
 			genderBorder(g){
 				let c=g==='男'?'#3f51b5':'#f44336'
 				return{
-					borderLeft:'4px solid '+c
+					borderLeft:'4px solid ' + c
 				}
-			}
+			},
+
+  	fileInput(){
+  		let routes
+  		if (this.gradeType===0) {
+  			routes='/admin/admMidGradeUpload'
+  		}else{
+  			routes='/admin/admFnlGradeUpload'
+  		}
+  		let file=document.getElementById('file').files[0]
+  		if (file) {
+  			this.chosenFile=file.name
+
+      let output = document.getElementById('output')
+      let data = new FormData()
+      data.append('file', document.getElementById('file').files[0])
+      let config = {
+        onUploadProgress: (progressEvent) => {
+          let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+        }
+      }
+      post(routes, data, config)
+        .then((res)=> {
+
+          output.className = 'container'
+          output.innerHTML = '成功上传文件'
+          this.progressBar=100
+        })
+        .catch((err)=> {
+          output.className = 'container text-danger'
+          output.innerHTML = '上传文件失败，请重新试试'
+          console.log(err)
+        })
+  		}else{
+  			chosenFile='选择文件'
+  		}
+  	}
+
 		},
 		mounted(){
 		}
 	}
 </script>
 
-<style lang="sass" rel="stylesheet/scss" scoped>
+<style lang="sass" rel="stylesheet/scss">
 
 .student-account-container{
 	.file-button{
@@ -117,5 +171,50 @@ th:first-child
 {
     border-left: 4px #42b983 solid;
 }
+}
+
+.form{
+	position: relative;
+}
+.form-control{
+	 position: absolute;
+  width: 100%;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 12;
+}
+
+.form-group{
+	padding: 18px 0;
+	border: 2px dashed #dedede;
+	margin: 4px;
+}
+.container{
+	padding: 12px 4px;
+}
+.text-danger{
+	color: #f44336;
+	font-size: 18px;
+	border: 1px solid #f44336;
+}
+
+progress {
+    width: 274px;
+    height: 12px;
+    border: 1px solid #4caf50;  
+    color: #4caf50; /*IE10*/
+    border-radius: 2px;
+    margin: 8px 0;
+}
+
+progress::-moz-progress-bar { background: #4caf50; }
+progress::-webkit-progress-bar { background: white }
+progress::-webkit-progress-value  { background: #4caf50; }
+.red,.blue{
+	margin:  0 12px;
 }
 </style>

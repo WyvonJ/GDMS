@@ -1,7 +1,7 @@
 <template>
   <div class="group-container">
     <div class="group-current-status paper">
-      现在是{{status?'终':'中'}}期分组
+      {{status?'终':'中'}}期分组
     </div>
     <div class="group-status-card card">
       <div class="teacher-wrapper">
@@ -69,7 +69,7 @@ export default {
 @import '../../style/variables.scss';
 .group-current-status{
   display: inline-block;
-    width: 208px;
+    width: 132px;
     padding: 12px;
     font-size: 24px;
     margin: 16px 0;

@@ -10,7 +10,7 @@
           <span>课题管理</span>
         </button>
       </div>
-      <transition-group class="tab-box" name="slide-fade">
+      <transition-group class="tab-box" name="tab-tran">
         <div id="tab-box1" key="tab1" v-show="isTab">
           <div class="creation-card paper">
               <span>可选人数：{{available}}</span>
@@ -31,7 +31,7 @@
               <mu-text-field label="课题简介" v-model.trim="detailText" :errorText="detailError" multiLine labelFloat :rows="6" :rowsMax="20" />
               <br/>
               <button @click="createTopic" class="red">
-               <img src="../../assets/icon/add.svg" alt="add" /> 
+               <img src="../../assets/icon/release.svg" alt="add" /> 
                 <span>发布课题</span>
               </button>
           </div>
@@ -254,10 +254,15 @@ export default {
   }
   .add-topic-button{
     background-color: $greenVue;
+    &:hover{
+      background-color: #4cd798;
+    }
   }
   .manage-topic-button{
     background-color: $blue;
-
+    &:hover{
+      background-color: #64b5f6;
+    }
   }
 }
 #tab-box1,#tab-box2{
@@ -265,27 +270,4 @@ export default {
 }
 
 
-.slide-fade-enter-active
-{
-    transition: all .3s cubic-bezier(0, .87, .21, 1.1);
-    transition-delay: .1s;
-    //元素进来时给大于等于离开动画的延迟
-    //就能避免两个元素同时在画内
-}
-
-//page进来的时候将其向上移动80px opacity设置为0
-//因为元素的opacity本来为1 所以会渐变化成1
-.slide-fade-enter
-{
-    transform: translateX(-70px); //这个是执行函数
-
-    opacity: 0; //而这个是直接设置
-}
-
-.slide-fade-leave-active
-{
-    transform: translateX(70px);
-
-    opacity: 0;
-}
 </style>

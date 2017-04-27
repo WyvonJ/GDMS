@@ -262,8 +262,8 @@ export default {
         return Promise.reject(err)
       })
   },
-  admTchAccount: ({ commit }) => {
-    return axios.get('/admin/admTchAccount')
+  admGetTchAccount: ({ commit }) => {
+    return axios.get('/admin/admGetTchAccount')
       .then(response => {
         commit('ADM_SET_TCH_ACCOUNT', response.data)
       })
@@ -271,13 +271,19 @@ export default {
   admUpTchAccounts: ({ commit }, payload) => {
     return axios.post('/admin/admUpTchAccounts', payload)
       .then(response => {
-        commit('ADM_SET_STU_ACCOUNT', response.data)
+        commit('ADM_SET_TCH_ACCOUNT', response.data)
       })
   },
   admStuAccount: ({ commit }) => {
     return axios.get('/admin/admStuAccount')
       .then(response => {
         commit('ADM_SET_STU_ACCOUNT', response.data)
+      })
+  },
+  admGetTchTopics: ({ commit }) => {
+    return axios.get('/admin/admGetTchTopics')
+      .then(response => {
+        commit('ADM_SET_TCH_TOPICS', response.data)
       })
   },
   admMidGroup: ({ commit }) => {

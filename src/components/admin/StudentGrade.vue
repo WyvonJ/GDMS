@@ -1,29 +1,39 @@
 <template>
-  <div class="procedure">
+  <div class="student-grade">
     <section class="paper workflow">
       <div class="workflow-title">
         <span>成绩管理</span>
       </div>
       <div class="workflow-panel">
-        <button class="red" @click="midUpload">
+        <button class="red" @click="dialog=true;gradeType=0">
           <span>中期成绩上传</span>
         </button>
-        <button class="blue">
+        <button class="blue" @click="dialog=true;gradeType=1">
           <span>终期成绩上传</span>
         </button>
       </div>
-       <form enctype="multipart/form-data" role="form" class="form" onsubmit="return false">
-      <div class="form-group">
-        <label for="file">File</label>
-        <input id="file" type="file" class="form-control"/>
-      </div>
-      <button @click="midUpload" type="button" class="red">Upload</button>
-    </form>
-    <progress :value="progressBar" max="100"></progress>
-      <div id="output">
-      	
-      </div>
+      <mu-dialog class="form-dialog" :open="dialog" title="文件上传" @close="dialog=false">
+        <form enctype="multipart/form-data" role="form" class="form" onsubmit="return false">
+          <div class="form-group">
+            <label for="file">{{chosenFile}}</label>
+            <input id="file" @change="fileInput" type="file" class="form-control" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+          </div>
+        </form>
+        <progress :value="progressBar" max="100"></progress>
+        <div id="output">
+        </div>
+        <button slot="actions" @click="dialog=false" class="red">
+          <span>取消</span>
+        </button>
+      </mu-dialog>
+        
     </section>
+    <article>
+        	<h3>上传格式说明</h3>
+        	<p>
+        		
+        	</p>
+        </article>
   </div>
 </template>
 
@@ -33,39 +43,55 @@ import axios from 'axios'
 export default {
 	data(){
 		return {
-			progressBar:0
+			progressBar:0,
+			dialog:false,
+			chosenFile:'选择文件',
+			gradeType:0
 		}
 	},
   methods: {
-    midUpload() {
+  	fileInput(){
+  		let routes
+  		if (this.gradeType===0) {
+  			routes='/admin/admMidGradeUpload'
+  		}else{
+  			routes='/admin/admFnlGradeUpload'
+  		}
+  		let file=document.getElementById('file').files[0]
+  		if (file) {
+  			this.chosenFile=file.name
+
       let output = document.getElementById('output')
       let data = new FormData()
-      console.log( document.getElementById('file').files[0])
       data.append('file', document.getElementById('file').files[0])
       let config = {
         onUploadProgress: (progressEvent) => {
           let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-          this.progressBar=progressEvent.loaded
         }
       }
-      axios.post('/admin/admMidGradeUpload', data, config)
+      axios.post(routes, data, config)
         .then((res)=> {
+
           output.className = 'container'
-          output.innerHTML = res.data
+          output.innerHTML = '成功上传文件'
+          this.progressBar=100
         })
         .catch((err)=> {
           output.className = 'container text-danger'
-          output.innerHTML = err.message
+          output.innerHTML = '上传文件失败，请重新试试'
           console.log(err)
         })
-    }
+  		}else{
+  			chosenFile='选择文件'
+  		}
+  	}
   }
 }
 
 </script>
 
 <style lang="sass" rel="stylesheet/scss" scoped>
-.procedure{
+.student-grade{
 	display: flex;
 	section{
 		display: inline-block;
@@ -93,4 +119,5 @@ export default {
 		}
 	}
 }
+
 </style>

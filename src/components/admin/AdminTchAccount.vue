@@ -3,7 +3,10 @@
  
   	<div class="paper">
   	<div class="table-admin">
-    
+    <button class="blue" @click="dialog=true">
+      <i class="material-icons">file_upload</i>
+      <span>帐号上传</span>
+    	</button>
      <button class="red">
       <i class="material-icons">delete_forever</i>
       <span>帐号删除</span>
@@ -26,44 +29,96 @@
   				</tr>
   			</thead>
   			<tbody>
-  				<tr class="table-row-border" v-for="(teacher,index) in _adm_TchAccounts">
+  				<tr v-for="(teacher,index) in _adm_TchAccounts">
   					<td width="12%">{{teacher._id}}</td>
   					<td width="12%">{{teacher.name}}</td>
   					<td width="12%">{{teacher.password}}</td>
-  					<td width="12%">{{teacher.tel}}</td>
-  					<td width="12%">{{teacher.email}}</td>
-  					<td width="12%">{{teacher.qq}}/{{teacher.wechat}}</td>
-  					<td width="12%">{{teacher.office}}</td>
+  					<td width="12%">{{teacher.tel||'无'}}</td>
+  					<td width="12%">{{teacher.email||'无'}}</td>
+  					<td width="12%">{{teacher.qq||'无'}}/{{teacher.wechat||'无'}}</td>
+  					<td width="12%">{{teacher.office||'无'}}</td>
   				</tr>
   			</tbody>
   		</table>
   	</div>
+
+  	 <mu-dialog class="form-dialog" :open="dialog" title="文件上传" @close="dialog=false">
+        <form enctype="multipart/form-data" role="form" class="form" onsubmit="return false">
+          <div class="form-group">
+            <label for="file">{{chosenFile}}</label>
+            <input id="file" @change="fileInput" type="file" class="form-control" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+          </div>
+        </form>
+        <progress :value="progressBar" max="100"></progress>
+        <div id="output">
+        {{message}}
+        </div>
+        <button slot="actions" @click="dialog=false" class="red">
+          <span>取消</span>
+        </button>
+      </mu-dialog>
   </div>
 </template>
 
 <script type="text/javascript">
 //导入full build 以后更改需求
 import {mapState,mapActions} from 'vuex'
+import {post} from 'axios'
 	export default {
 		data(){
 			return{
-				files:[]
+				dialog:false,
+				chosenFile:'选择文件',
+				progressBar:0,
+				message:''
 			}
 		},
 		computed:{
 			...mapState(['_adm_TchAccounts'])
 		},
 		methods:{
-			fileUpload($event){
-				let fileReader=new FileReader()
-				console.log($event.target.files[0])
-				fileReader.onload=(e)=>{
-					console.log(e)
-				}
-			},
-			...mapActions(['admUpTchAccounts'])
+			
+  	fileInput(){
+  		let routes
+  		if (this.gradeType===0) {
+  			routes='/admin/admMidGradeUpload'
+  		}else{
+  			routes='/admin/admFnlGradeUpload'
+  		}
+  		let file=document.getElementById('file').files[0]
+  		if (file) {
+  			this.chosenFile=file.name
+
+      let output = document.getElementById('output')
+      let data = new FormData()
+      data.append('file', document.getElementById('file').files[0])
+      let config = {
+        onUploadProgress: (progressEvent) => {
+          let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+        }
+      }
+      post(routes, data, config)
+        .then((res)=> {
+
+          output.className = 'container'
+          this.message = '成功上传文件'
+          this.progressBar=100
+        })
+        .catch((err)=> {
+          output.className = 'container text-danger'
+          this.message = '上传文件失败，请重新试试'
+          console.log(err)
+        })
+  		}else{
+  			this.message=''
+  			output.className = 'container'
+  			chosenFile='选择文件'
+  		}
+  	},
+			...mapActions(['admUpTchAccounts','admGetTchAccount'])
 		},
 		mounted(){
+			this.admGetTchAccount()
 		}
 	}
 </script>
@@ -111,7 +166,7 @@ import {mapState,mapActions} from 'vuex'
 		border-left: 4px #42b983 solid;
 	}
 	tr:nth-child(even){
-		background-color: #f4f4f4;
+		background-color: #fafafa;
 	}
 	tr{
 		transition: all .3s cubic-bezier(.2,.1,.6,1);

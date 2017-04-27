@@ -6,7 +6,7 @@
           <img src="../../assets/icon/export.svg">
           <span>导出导师题目表</span>
     </button>
-     <button class="red">
+     <button class="red" @click="firstSelection">
           <span>导师一轮选题</span>
     	</button>
     	 <button class="blue">
@@ -48,9 +48,21 @@ export default {
     }
     },
     methods:{
-
+    	...mapActions(['admGetTchTopics']),
+    	firstSelection(){
+    		//判断是否有未完成教师
+    		if (true) {
+    			alert('xxx havent finish')
+    			//是否继续操作？？？
+    		}
+    		//导师必须完成。
+    	}
     },
-    computed: mapState(['_adm_TchTopics'])
+    computed: mapState(['_adm_TchTopics']),
+		mounted(){
+			this.admGetTchTopics()
+			console.log(this._adm_TchTopics)
+		}
   }
 </script>
 
@@ -69,6 +81,7 @@ button{
 		transition: $material-enter;
 	  display: inline-block;
 	  column-break-inside: avoid;
+	  min-width: 128px;
 	  &:hover{
 	  	  -webkit-box-shadow: 0 0 5px 5px #dadada;
                -moz-box-shadow: 0 0 5px 5px #dadada;

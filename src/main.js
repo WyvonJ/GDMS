@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { mapState ,mapActions} from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import MuseUI from 'muse-ui'
 import VueDND from 'awe-dnd'
 import VueMaterial from 'vue-material'
@@ -19,7 +19,7 @@ global._c = cookie
 
 Vue.use(MuseUI)
 Vue.use(VueDND)
-Vue.use(VueMaterial) 
+Vue.use(VueMaterial)
 
 let vm = new Vue({
   router,

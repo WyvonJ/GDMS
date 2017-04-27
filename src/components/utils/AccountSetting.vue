@@ -7,13 +7,13 @@
   </div>
   <div class="account-input">
     <mu-icon value="lock_outline" :size="18" />
-    <mu-text-field type="password" hintText="请输入新密码" v-model.trim="password" />
+    <mu-text-field type="password" :errorText="passwordError" hintText="请输入新密码" v-model.trim="password" />
   </div>
   <div class="account-input">
     <mu-icon value="lock_outline" :size="18" />
     <mu-text-field type="password" hintText="请再输入一遍新密码" :errorText="repeatError" v-model.trim="passwordRepeat" />
   </div>
-  <button class="red" @click="commitPassword" >
+  <button class="blue" @click="commitPassword" >
     <img src="../../assets/icon/check.svg" alt="Y" />
     <span>确认更改</span>
   </button>
@@ -25,7 +25,7 @@
 <script>
 import {mapActions} from 'vuex'
 import WyvonjCanvas from '../utils/WyvonjCanvas.vue'
-
+import {post} from 'axios'
 	export default{
 		data(){
 			return{
@@ -33,25 +33,38 @@ import WyvonjCanvas from '../utils/WyvonjCanvas.vue'
 				password:'',
 				passwordRepeat:'',
 				originalError:'',
+        passwordError:'',
 				repeatError:''
 			}
 		},
 		methods:{
 			commitPassword(){
+        if (this.original.length<1) 
+          return this.originalError='请输入原密码'
+        if(this.password.length<8)
+          return this.passwordError='密码长度不够'
 				if (this.password!==this.passwordRepeat) {
 					return this.repeatError='两次输入的密码不一样'
 				}else{
-					
+					post('/login/account',{
+            oldPassword:this.original,
+            newPassword:this.password
+          })
+          .then(res=>{
+            console.log(res.data)
+          })
 				}
 			},
       clearError() {
         this.originalError = ''
         this.repeatError = ''
+        this.passwordError = ''
       }
 		},
 		watch:{
 			original:'clearError',
-			passwordRepeat:'clearError'
+			passwordRepeat:'clearError',
+      password: 'clearError'
 		},
     components:{
       WyvonjCanvas
@@ -66,8 +79,11 @@ import WyvonjCanvas from '../utils/WyvonjCanvas.vue'
 {
     display: flex;
 
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    >div{
+      margin-top: 128px;
+    }
     .account-input
     {
         width: 332px;
@@ -91,12 +107,10 @@ import WyvonjCanvas from '../utils/WyvonjCanvas.vue'
             margin-left: 12px;
         }
     }
-    .mu-raised-button
-    {
-        margin: 16px;
 
-        color: #fff;
-        background-color: #03a9f4;
+    button.blue{
+        margin-left: 90px;
+
     }
 }
 

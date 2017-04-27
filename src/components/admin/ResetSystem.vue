@@ -2,10 +2,13 @@
 	<div class="reset-system">
 	<div>
 		<img src="../../assets/icon/warn.svg" /><br/>
-		<p>
+		<p v-if="!reseted">
 			重置系统将会将所有数据库清空，并将管理员帐号重置为初始帐号。<br/>
 
 			请谨慎操作
+		</p>
+		<p v-if="reseted">
+			系统已重置，请重新上传导师和学生帐号。
 		</p>
 		<button class="red" @click="dialog=!dialog">重置系统</button>
 	</div>
@@ -19,16 +22,22 @@
 </template>
 
 <script>
-import axios from 'axios'
+import {get} from 'axios'
 export default{
 	data(){
 		return {
-			dialog:false
+			dialog:false,
+			reseted:false
 		}
 	},
 	methods:{
 		resetSystem(){
-			axios.get('/admin/admResetSystem')
+			get('/admin/admResetSystem')
+				.then(res=>{
+					console.log(res.data)
+					if (res.data.state) 
+						this.reseted=true
+				})
 		}
 	}
 }

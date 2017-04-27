@@ -2,31 +2,48 @@
   <div class="procedure">
     <section class="paper workflow">
       <div class="workflow-title">
-        <span>选题控制</span>
+        <span>导师未处理事件</span>
       </div>
       <div class="workflow-panel">
-        <button class="red">
-          <span>一轮选题</span>
-        </button>
-        <button class="blue">
-          <span>二轮选题</span>
-        </button>
-        <button class="green-vue">
-          <span>三轮选题</span>
-        </button>
+      <div class="unfinished-wrapper">
+      	<p class="teacher-first-unfinished">
+      		一轮选题未处理导师：
+      	</p>
+      	<div class="first-unfinished" v-for="teacher of firstUnfinished">
+      		{{teacher}}
+      	</div>
+      </div>
+      	<div class="unfinished-wrapper">
+      	<p class="teacher-second-unfinished">
+      		二轮选题未处理导师：
+      	</p>
+      	<div class="second-unfinished" v-for="teacher of secondUnfinished">
+      		{{teacher}}
+      	</div>
+      </div>
       </div>
     </section>
-    <section class="paper midgroup">
-      <div class="midgroup-title">
-        <span>分组控制</span>
+    <section class="paper workflow">
+      <div class="workflow-title">
+        <span>学生未处理事件</span>
       </div>
-      <div class="midgroup-panel">
-        <button class="red">
-          <span>中期分组</span>
-        </button>
-        <button class="blue">
-          <span>终期分组</span>
-        </button>
+      <div class="workflow-panel">
+      <div class="unfinished-wrapper">
+      	<p class="student-first-unfinished">
+      		未登录选题学生：
+      	</p>
+      	<div class="first-unfinished" v-for="student of notLoginStu">
+      		{{student._id}} - {{student.name}}
+      	</div>
+      </div>
+      	<div class="unfinished-wrapper">
+      	<p class="student-second-unfinished">
+      		未被导师确认学生：
+      	</p>
+      	<div class="second-unfinished" v-for="student of notComfirmedStu">
+      		{{student._id}} - {{student.name}}
+      	</div>
+      </div>
       </div>
     </section>
   </div>
@@ -34,15 +51,36 @@
 
 
 <script type="text/javascript">
-	
+	export default{
+		data(){
+			return {
+				firstUnfinished:['陈伟','陈丽芳','迪兰'],
+				secondUnfinished:['陈伟','刘丽芳','迪兰'],
+				notLoginStu:[{
+					_id:'1030513410',
+					name:'辽宁'
+				}],
+				notComfirmedStu:[{
+					_id:'1030513410',
+					name:'辽宁'
+				},{
+					_id:'1030513410',
+					name:'山东'
+				}]
+			}
+		}
+	}
 </script>
 
 <style lang="sass" rel="stylesheet/scss" scoped>
+@import '../../style/variables.scss'; 
+
 .procedure{
 	display: flex;
+	align-items: flex-start;
+	    justify-content: center;
 	section{
 		display: inline-block;
-		height: 128px;
 		margin: 8px;
 		div[class$="title"]{
 
@@ -66,18 +104,16 @@
 		}
 	}
 }
-.workflow{
-	display: inline-block;
-	height: 128px;
-	.workflow-title{
-		
-	}
-	.workflow-panel{
-		padding: 16px;
-		display: flex;
-		align-items:center;
-		justify-content:center;
-		
-	}
+div[class$="unfinished"]{
+	background-color: $greenVue;
+    color: white;
+    border-radius: 12px;
+    min-width: 64px;
+    height: 24px;
+    margin: 8px;
+    padding: 2px 8px;
+}
+.unfinished-wrapper{
+	margin: 2px 8px;
 }
 </style>

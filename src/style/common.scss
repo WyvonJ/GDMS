@@ -105,7 +105,7 @@ button
     outline: none;
     &:disabled{
         cursor: not-allowed;
-        background-color: #6f6f6f;
+        background-color: #9f9f9f;
     }
     span
     {
@@ -118,7 +118,7 @@ button
         position: relative;
         top: 4px;
     }
-    &.red,&.indigo,&.green-vue,&.blue{
+    &.red,&.indigo,&.green-vue,&.blue,&.orange{
         
     box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 1px 1px rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
     -moz-box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 1px 1px rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
@@ -154,6 +154,14 @@ button
         &:hover
         {
             background-color: $lightBlue600;
+        }
+    }
+    &.orange
+    {
+        background-color: #ff5722;
+        &:hover
+        {
+            background-color: #e64a19;
         }
     }
 }
@@ -222,20 +230,20 @@ td:first-child
 
 ::selection
 {
-    color: $white;
-    background: $red;
+    color: $white !important;
+    background: $red !important;
 }
 
 ::-moz-selection
 {
-    color: $white;
-    background: $red;
+    color: $white !important;
+    background: $red !important;
 }
 
 ::-webkit-selection
 {
-    color: $white;
-    background: $red;
+    color: $white !important;
+    background: $red !important;
 }
 
 .md-tooltip
@@ -250,6 +258,10 @@ td:first-child
 .mu-item.show-left
 {
     padding-left: 48px !important;
+}
+
+.mu-dialog-wrapper{
+    max-width: 320px !important;
 }
 .no-selection
 {
@@ -281,7 +293,11 @@ td:first-child
        -moz-box-shadow: $material-shadow-2dp;
             box-shadow: $material-shadow-2dp;
 }
-
+.shadow{
+    box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 1px 1px rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 1px 1px rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 1px 1px rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+}
 .columns
 {
     width: 98%;
@@ -402,6 +418,26 @@ td:first-child
 .main-transition-leave-active
 {
     transform: translateY(70px);
+
+    opacity: 0;
+}
+
+
+.tab-tran-enter-active
+{
+    transition: all .3s cubic-bezier(0, .87, .21, 1.1);
+}
+
+.tab-tran-enter
+{
+    transform: translate3D(70px,0,0); //这个是执行函数
+
+    opacity: 0; //而这个是直接设置
+}
+
+.tab-tran-leave-active
+{
+    transform: translate3D(-70px,0,0);
 
     opacity: 0;
 }

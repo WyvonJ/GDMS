@@ -68,7 +68,7 @@ export default {
   },
   computed:{
     bgColor(){
-      let type=window.location.pathname.match(/^\/[a-z]{1}/)[0]
+      let type = window.location.pathname.match(/^\/[a-z]{1}/)[0]
       type=type.substring(1)
       switch(type){
         case 's':
@@ -78,7 +78,7 @@ export default {
           return {backgroundColor:'#009688'}
           break
         case 'a':
-          return {backgroundColor:'#4a4d4f'}
+          return {backgroundColor:'#2196f3'}
       }
     },
     ...mapState(['user'])

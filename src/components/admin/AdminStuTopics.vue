@@ -22,9 +22,9 @@
   				<tr v-for="(student,index) in _adm_StuTopics">
   					<td width="20%">{{student._id}}</td>
   					<td width="15%">{{student.name}}</td>
-  					<td width="15%">{{student.teacher}}</td>
-  					<td width="20%">{{student.final._id}}</td>
-  					<td width="30%">{{student.final.title}}</td>
+  					<td width="15%">{{student.teacher||'无'}}</td>
+  					<td width="20%">{{student.final._id||'无'}}</td>
+  					<td width="30%">{{student.final.title||'无'}}</td>
   				</tr>
   			</tbody>
   		</table>
