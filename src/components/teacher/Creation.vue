@@ -1,11 +1,11 @@
 <template>
     <div class="creation-container sub-padding">
       <div class="tab-button">
-        <button type="button" @click="isTab=true" class="add-topic-button">
+        <button type="button" @click="isTab=true" :class="{'focused':isTab}" class="add-topic-button">
           <img src="../../assets/icon/library_add.svg" alt="add" />
           <span>课题创建</span>
         </button>
-        <button type="button" @click="isTab=false" class="manage-topic-button">
+        <button type="button" @click="isTab=false" :class="{'focused':!isTab}" class="manage-topic-button">
           <img src="../../assets/icon/subject.svg" alt="mag" />
           <span>课题管理</span>
         </button>
@@ -14,14 +14,14 @@
         <div id="tab-box1" key="tab1" v-show="isTab">
           <div class="creation-card paper">
               <span>可选人数：{{available}}</span>
-              <mu-slider v-model="available" :min="1" :max="10" :step="1" @change="availableChange" class="available-slider" />
+              <mu-slider v-model="available" :min="1" :max="10" :step="1"  class="available-slider" />
               <br/>
-              <mu-select-field v-model="category" label="课题类别" @change="categoryChange" class="select-field">
+              <mu-select-field v-model="category" label="课题类别" class="select-field">
                 <mu-menu-item value="0" title="论文" />
                 <mu-menu-item value="1" title="设计" />
               </mu-select-field>
               <br/>
-              <mu-select-field v-model="fields" multiple :labelFocusClass="['label-foucs']" :errorText="fieldsError" label="课题研究方向" @change="fieldsChange" class="select-field" labelFloat>
+              <mu-select-field v-model="fields" multiple :labelFocusClass="['label-foucs']" :errorText="fieldsError" label="课题研究方向"  class="select-field" labelFloat>
                 <mu-sub-header>可多选</mu-sub-header>
                 <mu-menu-item v-for="text,index in fieldsData" :value="text" :title="text" />
               </mu-select-field>
@@ -102,6 +102,7 @@ export default {
     methods: {
       createTopic() {
         let id = _c.getCookie('user')
+
         if (this.fields.length === 0) {
           return this.fieldsError = "还没选择课题研究方向！"
         }
@@ -118,7 +119,7 @@ export default {
             title: this.titleText,
             details: this.detailText,
             available: this.available
-          }
+        }
           //重新取得所有topics
         this.tchCreateTopic(currentTopic)
           .then(() => {
@@ -150,15 +151,6 @@ export default {
               })
           })
       },
-      availableChange(value) {
-        this.available = value;
-      },
-      categoryChange(value) {
-        this.category = value
-      },
-      fieldsChange(value) {
-        this.fields = value
-      },
       clearError() {
         this.fieldsError = ''
         this.titleError = ''
@@ -176,9 +168,7 @@ export default {
       let id = _c.getCookie('user')
         //if (!id) 
         //return this.$router.push('/')
-      this.tchGetCreatedTopics({
-        teacherId: id
-      })
+      this.tchGetCreatedTopics({teacherId: id})
     },
     watch: {
       fields: 'clearError',
@@ -251,6 +241,11 @@ export default {
   text-align: center;
   button{
     border-radius: 0;
+    &.focused{
+      box-shadow: 0 0 3px 1px #898989;
+      -moz-box-shadow: 0 0 3px 1px #898989;
+      -webkit-box-shadow: 0 0 3px 1px #898989;
+    }
   }
   .add-topic-button{
     background-color: $greenVue;

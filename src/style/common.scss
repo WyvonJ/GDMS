@@ -451,13 +451,13 @@ td:first-child
     display: inline-block;
 
     width: auto;
-    height: 32px;
+    height: 28px;
     margin: 6px;
     padding: 2px 12px;
 
     transition: $material-enter;
 
-    border: 1px #efefef solid;
+    border: 1px #d6d6d7 solid;
     border-radius: 16px;
     background-color: #fff;
     &:hover

@@ -18,12 +18,14 @@ const router = new Router({
     StudentRouter,
     TeacherRouter,
     AdminRouter
-  ]
-})
-
-router.beforeEach((to, from, next) => {
-  window.scrollTo(0, 0)
-  next()
+  ],
+  scrollBehavior (to, from, savedPosition) {
+  if (savedPosition) {
+    return savedPosition
+  } else {
+    return { x: 0, y: 0 }
+  }
+}
 })
 
 export default router

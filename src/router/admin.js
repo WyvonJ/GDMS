@@ -7,7 +7,8 @@ import AdminTchTopics from '../components/admin/AdminTchTopics.vue'
 import Procedure from '../components/admin/Procedure.vue'
 
 import StudentGrade from '../components/admin/StudentGrade.vue'
-import GroupManagement from '../components/admin/GroupManagement.vue'
+import MiddleGroup from '../components/admin/MiddleGroup.vue'
+import FinalGroup from '../components/admin/FinalGroup.vue'
 
 import ResetSystem from '../components/admin/ResetSystem.vue'
 export default {
@@ -21,8 +22,8 @@ export default {
     { path: 'tchaccount', name: 'tchaccount', component: AdminTchAccount },
     { path: 'tchtopics', name: 'tchtopics', component: AdminTchTopics },
     { path: 'studentgrade', name: 'studentgrade', component: StudentGrade },
-    { path: 'groupmanagement', name: 'groupmanagement', component: GroupManagement },
+    { path: 'middlegroup', name: 'middlegroup', component: MiddleGroup },
+    { path: 'finalgroup', name: 'finalgroup', component: FinalGroup },
     { path: 'resetsystem', name: 'resetsystem', component: ResetSystem },
-
   ]
 }

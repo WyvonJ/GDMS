@@ -13,21 +13,20 @@
     <transition-group class="tab-box" name="tab-tran">
       <div id="tab-box1" v-show="isTab" key="tab1">
         <div class="middle-group-teacher paper">
-        <div class="group-settings">
-           <button @click="groups.push([])" class="add-button">
-            <img src="../../assets/icon/add_circle_outline.svg" alt="add" />
-            <span> 添加</span>
-          </button>
-          <button @click="groups.splice(1,1)" class="delete-button">
-            <img src="../../assets/icon/delete_b.svg" alt="delete" />
-            <span> 删除</span>
-          </button>
-          <button @click="resetGroups" class="reset-button">
-            <img src="../../assets/icon/reset_w.svg" alt="reset" />
-            <span> 重置</span>
-          </button>
-        </div>
-         
+          <div class="group-settings">
+            <button @click="groups.push([])" class="add-button">
+              <img src="../../assets/icon/add_circle_outline.svg" alt="add" />
+              <span> 添加</span>
+            </button>
+            <button @click="groups.splice(1,1)" class="delete-button">
+              <img src="../../assets/icon/delete_b.svg" alt="delete" />
+              <span> 删除</span>
+            </button>
+            <button @click="resetGroups" class="reset-button">
+              <img src="../../assets/icon/reset_w.svg" alt="reset" />
+              <span> 重置</span>
+            </button>
+          </div>
           <div class="groups-wrapper">
             <div class="group" v-for="(group,index) of groups" @drop="drop($event)" @dragover="allowDrop($event)" :id="index">
               <span class="group-id no-selection">{{++index}}</span>
@@ -35,15 +34,14 @@
           </div>
           <div class="actions">
             <button @click="uploadGroups" class="orange">
-            <img src="../../assets/icon/upload.svg" alt="upload" />
-            <span>上传教师分组</span>
-          </button>
-           <a href="/admin/download?filename=middlegroup" class="shadow">
-            <img src="../../assets/icon/export.svg" alt="export" />
-            <span>导出中期分组表</span>
-           </a>
+              <img src="../../assets/icon/upload.svg" alt="upload" />
+              <span>上传教师分组</span>
+            </button>
+            <a href="/admin/download?filename=middlegroup" class="shadow">
+              <img src="../../assets/icon/export.svg" alt="export" />
+              <span>导出中期分组表</span>
+            </a>
           </div>
-          
           <div class="to-be-grouped">
             <p>待分组导师，拖拽进行分组，请先上传教师分组，再导出分组表：</p>
             <span class="teacher-to no-selection" v-for="teacher of teachers" draggable="true" @dragstart="drag($event)" :id="teacher._id">
@@ -53,52 +51,51 @@
         </div>
       </div>
       <div id="tab-box2" v-show="!isTab" key="tab2">
-      <div class="final-group-teacher paper">
-        <div class="group-settings">
-        <span>{{groupLength}}</span>
-           <button @click="groups.push([])" class="add-button">
-            <img src="../../assets/icon/add_circle_outline.svg" alt="add" />
-            <span> 添加</span>
-          </button>
-          <button @click="groups.splice(1,1)" class="delete-button">
-            <img src="../../assets/icon/delete_b.svg" alt="delete" />
-            <span> 删除</span>
-          </button>
-          <button @click="resetGroups" class="reset-button">
-            <img src="../../assets/icon/reset_w.svg" alt="reset" />
-            <span> 重置</span>
-          </button>
-        </div>
-         
+        <div class="final-group-teacher paper">
+          <div class="group-settings">
+            <span>{{groupLength}}</span>
+            <button @click="groups.push([])" class="add-button">
+              <img src="../../assets/icon/add_circle_outline.svg" alt="add" />
+              <span> 添加</span>
+            </button>
+            <button @click="groups.splice(1,1)" class="delete-button">
+              <img src="../../assets/icon/delete_b.svg" alt="delete" />
+              <span> 删除</span>
+            </button>
+            <button @click="resetGroups" class="reset-button">
+              <img src="../../assets/icon/reset_w.svg" alt="reset" />
+              <span> 重置</span>
+            </button>
+          </div>
           <div class="groups-wrapper">
             <div class="group" v-for="(group,index) of finalGroups" @drop="drop($event)" @dragover="allowDrop($event)" :id="index">
               <div class="teachers-grouped">
                 <span class="teacher-to no-selection" v-for="teacher of group.teachers" draggable="true" @dragstart="drag($event)" :id="teacher._id">
-          {{teacher.name}}
-        </span>
+                  {{teacher.name}}
+                </span>
               </div>
               <div class="students-grouped">
                 <span class="student-to no-selection" v-for="student of group.students" draggable="true" @dragstart="drag($event)" :id="student._id">
                     {{student._id}}{{student.name}}
-            </span>
+                </span>
               </div>
               <span class="group-id no-selection">{{++index}}</span>
             </div>
           </div>
           <div class="actions">
             <button @click="uploadGroups" class="orange">
-            <img src="../../assets/icon/upload.svg" alt="upload" />
-            <span>上传教师分组</span>
-          </button>
-           <a href="/admin/download?filename=middlegroup" class="shadow">
-            <img src="../../assets/icon/export.svg" alt="export" />
-            <span>导出中期分组表</span>
-           </a>
+              <img src="../../assets/icon/upload.svg" alt="upload" />
+              <span>上传教师分组</span>
+            </button>
+            <a href="/admin/download?filename=middlegroup" class="shadow">
+              <img src="../../assets/icon/export.svg" alt="export" />
+              <span>导出中期分组表</span>
+            </a>
           </div>
           <div class="to-be-grouped">
             <p>待分组导师，拖拽进行分组，请先上传教师分组，再导出分组表：</p>
           </div>
-      </div>
+        </div>
       </div>
     </transition-group>
   </div>
@@ -178,25 +175,37 @@ export default {
     methods: {
       drop($event){
         //
-        $event.preventDefault()
-        if($event.target.nodeName==='SPAN')
+        $event.preventDefault()//阻止默认事件，防止页面跳转
+        if($event.target.nodeName!=='DIV')//如果拖拽到非div则不接受
           return 
-        let tchId = $event.dataTransfer.getData("tchId")
-        let tchName = $event.dataTransfer.getData("tchName")
-        let id = _.parseInt($event.target.id)
-        let tch = {
-          _id:tchId,
-          name:tchName
+        let elId = $event.dataTransfer.getData("elId")//被拖拽元素id和name
+        let elName = $event.dataTransfer.getData("elName")//
+        let id = $event.target.id //group id
+        console.log(id)
+        //拖到学生上
+        if (id.indexOf(0)==='g') {
+          if (elId) {
+          this.groups[id].push(el)
+          
+          $event.target..appendChild(document.getElementById(elId))
+          id = _.parseInt(id)
+          this.finalGroups[id].students.push(el)
         }
-        if (tchId && id) {
-          this.groups[id+1].push(tch)
-          $event.target.appendChild(document.getElementById(tchId))
         }
+        
+        
+        let el = {
+          _id:elId,
+          name:elName
+        }
+        
         
       },
       drag($event){
-        $event.dataTransfer.setData("tchId", $event.target.id)
-        $event.dataTransfer.setData("tchName", $event.target.innerHTML.trim())
+        //获取被拖拽元素的id 也就是绑定的帐号id
+        $event.dataTransfer.setData("elId", $event.target.id)
+        //获取用户姓名 用于传递
+        $event.dataTransfer.setData("elName", $event.target.innerHTML.trim())
       },
       allowDrop($event){
         $event.preventDefault()
@@ -314,16 +323,20 @@ export default {
         margin: 16px;
         padding: 8px 96px 8px 8px;
         display: inline-block;
-        border: 2px dashed #727877;
+        border: 1px dashed #727877;
         position: relative;
+        display: inline-flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
         &::after{
-          content: '';
-          height: 100%;
-          width: 2px;
-          background-color: #b9b9b9;
-          position: absolute;
-          right: 90px;
-          top: 0;
+              content: '拖拽到这里';
+              height: 100%;
+              width: 92px;
+              background-color: rgba(227, 225, 225, 0.28);
+              position: absolute;
+              right: 0;
+              top: 0;
+              border-left: 1px dashed #888;
         }
         &:hover{
           border-color: $red;

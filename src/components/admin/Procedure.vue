@@ -9,7 +9,7 @@
       	<p class="teacher-first-unfinished">
       		一轮选题未处理导师：
       	</p>
-      	<div class="first-unfinished" v-for="teacher of firstUnfinished">
+      	<div class="first-unfinished chip" v-for="teacher of firstUnfinished">
       		{{teacher}}
       	</div>
       </div>
@@ -17,7 +17,7 @@
       	<p class="teacher-second-unfinished">
       		二轮选题未处理导师：
       	</p>
-      	<div class="second-unfinished" v-for="teacher of secondUnfinished">
+      	<div class="second-unfinished chip" v-for="teacher of secondUnfinished">
       		{{teacher}}
       	</div>
       </div>
@@ -32,7 +32,7 @@
       	<p class="student-first-unfinished">
       		未登录选题学生：
       	</p>
-      	<div class="first-unfinished" v-for="student of notLoginStu">
+      	<div class="first-unfinished chip" v-for="student of notLoginStu">
       		{{student._id}} - {{student.name}}
       	</div>
       </div>
@@ -40,7 +40,7 @@
       	<p class="student-second-unfinished">
       		未被导师确认学生：
       	</p>
-      	<div class="second-unfinished" v-for="student of notComfirmedStu">
+      	<div class="second-unfinished chip" v-for="student of notComfirmedStu">
       		{{student._id}} - {{student.name}}
       	</div>
       </div>
@@ -78,7 +78,8 @@
 .procedure{
 	display: flex;
 	align-items: flex-start;
-	    justify-content: center;
+	justify-content: center;
+	flex-wrap: wrap;
 	section{
 		display: inline-block;
 		margin: 8px;
@@ -95,23 +96,14 @@
 		}
 		div[class$="panel"]{
 		padding: 16px;
-		display: flex;
-		align-items:center;
-		justify-content:center;
 		button{
 			margin: 8px;
 		}
 		}
 	}
 }
-div[class$="unfinished"]{
-	background-color: $greenVue;
-    color: white;
-    border-radius: 12px;
-    min-width: 64px;
-    height: 24px;
-    margin: 8px;
-    padding: 2px 8px;
+.chip{
+	height: 28px;
 }
 .unfinished-wrapper{
 	margin: 2px 8px;

@@ -30,8 +30,14 @@
             </mu-list-item>
           </mu-list-item>
          
-          <mu-list-item title="分组管理" value="groupmanagement">
+          <mu-list-item title="分组管理" toggleNested>
             <img src="../../assets/icon/group.svg" slot="left" alt="group"/>
+            <mu-list-item value="middlegroup" slot="nested" title="中期分组">
+              <img src="../../assets/icon/assessment.svg" slot="left" alt="middle"/>
+            </mu-list-item>
+            <mu-list-item value="finalgroup" slot="nested" title="终期分组">
+              <img src="../../assets/icon/assignment.svg" slot="left" alt="final"/>
+            </mu-list-item>
           </mu-list-item>
           <mu-list-item title="成绩管理" value="studentgrade">
             <img src="../../assets/icon/star.svg" slot="left" alt="star"/>

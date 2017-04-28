@@ -14,10 +14,10 @@
                 <div class="student-name">{{student.name}} - {{student._id}}</div>
                 <div class="student-contact">
                   <div class="chip">
-                    <mu-icon value="call" :size="18" /> {{student.tel}}
+                    <img src="../../assets/icon/call.svg" alt="phone" /> {{student.tel}}
                   </div>
                   <div class="chip">
-                    <mu-icon value="mail" :size="18" />
+                    <img src="../../assets/icon/email.svg" alt="email" />
                     <a :href="'mailto:'+student.email">{{student.email}}</a>
                   </div>
                   <div class="chip">
@@ -134,5 +134,10 @@ export default {
             }
         }
     }
+}
+img[alt="phone"],
+img[alt="email"]{
+  width: 18px;
+  height: 18px;
 }
 </style>

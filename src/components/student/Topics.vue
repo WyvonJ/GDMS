@@ -2,7 +2,7 @@
   <div class="topics-table-container">
     <div class="search-bar-wrapper">
       <mu-icon class="search-icon" value="search"/>
-      <input type="text" @keyup.enter="search" v-model.trim="searchStr" placeholder="Search for topics" class="search-input" name="search">
+      <input type="text" @keyup.enter="search" autocomplete="off" v-model.trim="searchStr" placeholder="Search for topics" class="search-input" name="search">
     </div>
     <div class="table-container paper">
       <table>
@@ -412,7 +412,7 @@ input::-o-input-placeholder
 .cart-toggle
 {
     position: fixed;
-    right: 96px;
+    right: 32px;
     bottom: 32px;
 
     width: 64px;
