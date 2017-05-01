@@ -23,9 +23,9 @@
             <th width="16%">已选/可选</th>
           </tr>
         </thead>
-        </table>
-        <div class="topic-table-wrapper scrollbar">
-          <table class="topic-table">
+      </table>
+      <div class="topic-table-wrapper scrollbar" ref="tableBody">
+        <table class="topic-table">
             <transition-group name="list" tag="tbody">
             <tr v-for="(topic,index) in search(_stu_TopicInTable)" :key="topic._id">
               <td width="10%">
@@ -54,7 +54,11 @@
               </td>
             </tr>
             </transition-group>
-          </table>
+        </table>
+      </div>
+      <div class="table-footer">
+        <mu-pagination :total="totalPage" :current="currentPage" @pageChange="handlePageChange">
+        </mu-pagination>
       </div>
     </div>
     <div class="cart-toggle no-selection" @click="isCartDisplay=!isCartDisplay">
@@ -68,7 +72,7 @@
       <div class="choice-cart scrollbar">
         <div class="topic-level">
           <transition-group tag="ul" name="slide-fade">
-            <li class="selected-item" v-for="(topic,index) in topicsInCart" v-dragging="{ item: topic, list: topicsInCart, group: 'topic' }" :key="topic._id" :class="{'show-details':isDetails[index]}">
+            <li class="selected-item" v-for="(topic,index) in topicsInCart" v-dragging="{ item: topic, list: topicsInCart, group: 'topic'}" :key="topic._id" :class="{'show-details':isDetails[index]}">
               <mu-avatar :size="20" :backgroundColor="selectedBgc[index]">
                 {{index+1}}
               </mu-avatar>
@@ -94,28 +98,33 @@
 
 
 <script>
-import { mapState, mapActions ,mapMutations } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
   data() {
       return {
-        isCartDisplay:false,
+        isCartDisplay: false,
         isCategorySorted: false,
-        lastSelection: 0,
-        isDetails: [false, false, false],
-        selectedBgc: ["red500", "lightBlueA700", "teal500"],
-        searchStr: '',
-        topicsInCart:[]
+        lastSelection: 0,//上次选择 
+        isDetails: [false, false, false],//是否展示购物车中课题详情
+        selectedBgc: ["red500", "lightBlueA700", "teal500"],//选择课题的背景表示颜色
+        searchStr: '', //搜索的字符串
+        totalPage:100,//页码总数 作为分页参考
+        currentPage:1,//当前页
+        topicsInCart: [],//在购物车中的课题
+        status: 0  //选题进度，为0表示正常选题 1为最后选择
       }
     },
     computed: {
-      ...mapState(['_stu_TopicInTable','_stu_TopicInCart'])
+      ...mapState(['_stu_TopicInTable', '_stu_TopicInCart'])
     },
     methods: {
-      /*handlePage(newIndex) {
-        this.topicsInDisplay = []
-        this.topicsInDisplay = this.topicsChunk[newIndex - 1]
-        this.currentPage = newIndex
-      },*/
+      handlePageChange(newPage){
+        this.currentPage = newPage
+        let body = this.$refs.tableBody
+        let ch = body.clientHeight
+        let anchor = (body.scrollHeight - body.clientHeight)/10
+        body.scrollTop = newPage * anchor
+      },
       sortCategory() {
         this.isCategorySorted = !this.isCategorySorted
       },
@@ -140,38 +149,47 @@ export default {
         return t1 + t2 + t3
       },
       addTopic(index, topic) {
+        //根据进度选择能选几个题目
+        if(this.status === 0){
         let cart = this.topicsInCart
         if (topic._id !== this.lastSelection) {
           this.toggleTableBar = false
           switch (cart.length) {
             case 0:
-                this.isCartDisplay=true
-                this.topicsInCart.push(topic)
-                this.showSnackbar("请在已选课题中编辑或提交选择。")
-                break
+              this.isCartDisplay = true
+              this.topicsInCart.push(topic)
+              this.showSnackbar("请在已选课题中编辑或提交选择。")
+              break
             case 1:
-                if (topic._id !== cart[0]._id) 
-                  {
-                    this.topicsInCart.push(topic)
-                  this.isCartDisplay=true
-                }
-                 else 
-                  this.showSnackbar("不能选择相同志愿，请在已选课题中编辑！")
-                break
+              if (topic._id !== cart[0]._id) {
+                this.topicsInCart.push(topic)
+                this.isCartDisplay = true
+              } else
+                this.showSnackbar("不能选择相同志愿，请在已选课题中编辑！")
+              break
             case 2:
-                if (topic._id !== cart[0]._id && topic._id !== cart[1]._id) {
-                  this.isCartDisplay=true
+              if (topic._id !== cart[0]._id && topic._id !== cart[1]._id) {
+                this.isCartDisplay = true
 
-                  this.topicsInCart.push(topic)
-                  this.showSnackbar("已经选满三个志愿，请在已选课题面板中编辑或提交。")
-                } else 
-                  this.showSnackbar("不能选择相同志愿！不能选择相同志愿！不能选择相同志愿！")
-                break
+                this.topicsInCart.push(topic)
+                this.showSnackbar("已经选满三个志愿，请在已选课题面板中编辑或提交。")
+              } else
+                this.showSnackbar("不能选择相同志愿！不能选择相同志愿！不能选择相同志愿！")
+              break
             case 3:
-                this.showSnackbar("只能选取三个志愿，请在已选课题中编辑。")
+              this.isCartDisplay = true
+              this.showSnackbar("只能选取三个志愿，请在已选课题中编辑。")
           }
-        } else 
+        } else
           this.lastSelection = topic._id
+        }else{
+          this.isCartDisplay = true
+          if (this.topicsInCart.length===0)
+            this.topicsInCart.push(topic)
+          else
+            this.showSnackbar("只能选择最终志愿，请与导师确认后提交")
+        }
+        
       },
       //提交选题按钮
       commitSelectedTopics() {
@@ -181,46 +199,40 @@ export default {
           second: this.topicsInCart[1] === undefined ? -1 : this.topicsInCart[1]._id,
           third: this.topicsInCart[2] === undefined ? -1 : this.topicsInCart[2]._id
         }
+        //提交选题是否成功
         this.stuCommitSelection(_stu_TopicInCartWrapper)
       },
       toggleDetails(index) {
+        //设置对应的详情是否展示
         this.$set(this.isDetails, index, !this.isDetails[index])
       },
       deleteTopic(index) {
         //删除本条选题
-        this.topicsInCart.splice(index,1)
-        if (this.topicsInCart.length===0) {
-          this.isCartDisplay=false
+        this.topicsInCart.splice(index, 1)
+        //课题显示为零的话收回购物车显示
+        if (this.topicsInCart.length === 0) {
+          this.isCartDisplay = false
         }
       },
-      ...mapActions(['stuGetTopics', 'showSnackbar', 'stuCommitSelection','stuSelectionResult'])
+      ...mapActions(['stuGetTopics', 'showSnackbar', 'stuCommitSelection', 'stuSelectionResult'])
     },
     beforeDestroy() {
       //切换路由时如果还没保存 就弹出提示
-      //this._stu_TopicInCart = []
-      console.log(this.topicsInCart);
-      if(this.topicsInCart==this._stu_TopicInCart){
+      if (this.topicsInCart == this._stu_TopicInCart) {
         console.log(0)
       }
     },
     mounted() {
       let id = _c.getCookie('user')
-      this.stuGetTopics()
-      this.stuSelectionResult({studentId:id})
-      this.topicsInCart=Object.assign([],this._stu_TopicInCart)
-      if (this.topicsInCart.length>0) {
-        this.isCartDisplay=true
-      }
-        //this.stuGetTopics().then(()=>{
-        /*  this.total=this._stu_TopicInTable.length
-          this.topicsChunk = _.chunk(this._stu_TopicInTable, this.pageSize)
-          this.topicsInDisplay = this.topicsChunk[0]
-        //)
-        if (this.topicsInDisplay.length>0) {
-          this.topicsInDisplay = _.sortBy(this.topicsInDisplay,(o)=>{
-          return o._id
+      this.stuGetTopics() //获取学生课题
+      this.stuSelectionResult({ studentId: id })//获取学生选题结果
+        .then(()=>{
+          //将选题结果放入Cart中
+          this.topicsInCart = Object.assign([], this._stu_TopicInCart)
+            if (this.topicsInCart.length > 0) {
+              this.isCartDisplay = true //有已选课题则展示
+            }
         })
-        }*/
     }
 }
 
@@ -343,9 +355,10 @@ input::-o-input-placeholder
     }
     .topic-table-wrapper{
       position: relative;
-      overflow-x: hidden!important;
-      overflow-y: scroll!important;
-      max-height: calc(100vh - 248px);
+      overflow-x: hidden;
+      overflow-y: scroll;
+      height: calc(100vh - 296px);
+      max-height: calc(100vh - 296px);
       width: 100%;
       -webkit-box-direction: normal;
       -webkit-tap-highlight-color: transparent;
@@ -407,6 +420,13 @@ input::-o-input-placeholder
                 background-color: $red;
             }
         }
+    }
+    .table-footer{
+      width: 100%;
+      height: 44px;
+          display: flex;
+    align-items: center;
+    justify-content: center;
     }
 }
 .cart-toggle

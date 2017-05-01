@@ -1,21 +1,21 @@
 <template>
-  <nav class="nav-bar" :style="bgColor">
-    <div class="logo">
+  <nav class="nav-bar shadow" :style="bgColor">
+    <div class="logo" @click="$router.push('/')">
       <img src="../../assets/img/gd_logo.png" alt="GDMS">
       <p class="jnudm">Jnudm</p>
     </div>
-    <mu-icon-button icon="menu" @click="toggleNav"></mu-icon-button>
-    <transition name="search-transition">
-      
-    </transition>
+    <span class="menu" @click="toggleNav">
+      <img src="../../assets/icon/menu.svg" alt="menu" />
+    </span>
+    <span class="account">
+      <img src="../../assets/icon/account_c.svg" alt="account" />
+      <span>{{username}}</span>
+    </span>
     <div class="notification-info">
-      <mu-icon-button tooltip="通知" class="notify-button" ref="notify" icon="notifications" @click="showNotification" />
+      <mu-icon-button tooltip="通知" class="notify-button" ref="notify" icon="notifications" @click="isOpen = !isOpen" />
       <mu-icon-button tooltip="注销" class="logout-button" ref="button" icon="exit_to_app" @click="logout" />
-      <mu-popover :trigger="trigger" :open="openNotification" @close="handleClose">
+      <mu-popover :trigger="trigger" :open="isOpen" @close="isOpen = false">
         <mu-card>
-          <mu-card-header :title="username">
-            <mu-avatar icon="assignment_turned_in" />
-          </mu-card-header>
           <mu-card-text>
             {{notification}}
           </mu-card-text>
@@ -25,63 +25,54 @@
   </nav>
 </template>
 
-
 <script>
-
-import { mapState ,mapMutations} from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
   props: {
-    username:{
-      type:String,
-      default:''
+    username: {
+      type: String,
+      default: ''
     },
-    notification:{
-      type:String,
-      default:'没有什么新消息。'
+    notification: {
+      type: String,
+      default: '没有什么新消息。'
     }
 
   },
   data() {
     return {
-      openNotification: false,
+      isOpen: false,
       trigger: null,
     }
   },
   methods: {
-    showNotification() {
-      this.openNotification = !this.openNotification
-    },
-    handleClose(e) {
-      this.openNotification = false
-    },
     toggleNav() {
       this.$parent.toggleNav()
     },
     //登出
-    logout(){
-      _c.unsetCookie('user','/',window.location.hostname)
-      this.SET_USER({account:'',password:''})
+    logout() {
+      _c.unsetCookie('user', '/', window.location.hostname)
+      this.SET_USER({ account: '' })
       this.RESET_STATE()
-      this.$router.push('/')//返回登录界面
+      this.$router.push('/') //返回登录界面
     },
-    ...mapMutations(['SET_USER','RESET_STATE'])
+    ...mapMutations(['SET_USER', 'RESET_STATE'])
   },
-  computed:{
-    bgColor(){
+  computed: {
+    bgColor() {
       let type = window.location.pathname.match(/^\/[a-z]{1}/)[0]
-      type=type.substring(1)
-      switch(type){
+      type = type.substring(1)
+      switch (type) {
         case 's':
-          return {backgroundColor:'#3f51b5'}
+          return { backgroundColor: '#3f51b5' }
           break
         case 't':
-          return {backgroundColor:'#009688'}
+          return { backgroundColor: '#009688' }
           break
         case 'a':
-          return {backgroundColor:'#2196f3'}
+          return { backgroundColor: '#03a9f4' }
       }
     },
-    ...mapState(['user'])
   },
   mounted() {
     this.trigger = this.$refs.notify.$el
@@ -106,17 +97,27 @@ export default {
     transition: $material-enter;
 
     color: white;
-    box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 1px 1px rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
-    -moz-box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 1px 1px rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
-    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 1px 1px rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
-    > .mu-icon-button
+    .menu
     {
         position: absolute;
-        top: 8px;
-        left: 188px;
+        top: 22px;
+        left: 196px;
+
+        cursor: pointer;
+        transition: $material-enter;
+
         @media (max-width: 993px)
         {
-            left: 8px;
+            left: 16px;
+        }
+    }
+    .account{
+        position: absolute;
+        top: 22px;
+        right: 106px;
+        height: 24px;
+        span{
+          padding-left: 6px;
         }
     }
     .notify-button
@@ -154,26 +155,6 @@ export default {
             display: inline-block;
         }
     }
-}
-
-.search-transition-enter-active
-{
-    transition: $material-enter;
-    transition-delay: .3s !important;
-}
-
-.search-transition-enter
-{
-    transform: translateX(-40px);
-
-    opacity: 0;
-}
-
-.search-transition-leave-active
-{
-    transform: translateX(40px);
-
-    opacity: 0;
 }
 
 </style>

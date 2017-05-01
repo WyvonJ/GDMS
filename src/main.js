@@ -10,6 +10,7 @@ import 'vue-material/dist/vue-material.css'
 import StyleInjector from './components/utils/StyleInjector.vue'
 import WyvonjSnackbar from './components/utils/WyvonjSnackbar.vue'
 
+import axios from 'axios'
 
 import store from './store'
 import router from './router'
@@ -20,6 +21,9 @@ global._c = cookie
 Vue.use(MuseUI)
 Vue.use(VueDND)
 Vue.use(VueMaterial)
+
+Vue.prototype.GET = axios.get
+Vue.prototype.POST = axios.post
 
 let vm = new Vue({
   router,

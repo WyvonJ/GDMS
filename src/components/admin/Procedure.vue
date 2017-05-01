@@ -6,17 +6,12 @@
       </div>
       <div class="workflow-panel">
       <div class="unfinished-wrapper">
-      	<p class="teacher-first-unfinished">
-      		一轮选题未处理导师：
-      	</p>
       	<div class="first-unfinished chip" v-for="teacher of firstUnfinished">
       		{{teacher}}
       	</div>
       </div>
       	<div class="unfinished-wrapper">
-      	<p class="teacher-second-unfinished">
-      		二轮选题未处理导师：
-      	</p>
+    
       	<div class="second-unfinished chip" v-for="teacher of secondUnfinished">
       		{{teacher}}
       	</div>
@@ -33,14 +28,6 @@
       		未登录选题学生：
       	</p>
       	<div class="first-unfinished chip" v-for="student of notLoginStu">
-      		{{student._id}} - {{student.name}}
-      	</div>
-      </div>
-      	<div class="unfinished-wrapper">
-      	<p class="student-second-unfinished">
-      		未被导师确认学生：
-      	</p>
-      	<div class="second-unfinished chip" v-for="student of notComfirmedStu">
       		{{student._id}} - {{student.name}}
       	</div>
       </div>
@@ -68,6 +55,24 @@
 					name:'山东'
 				}]
 			}
+		},
+		mounted(){
+			this.GET('/admin/unhandledTch')
+				.then(res => {
+					console.log(res.data)
+					this.firstUnfinished = res.data
+				})
+				.catch(err=>{
+					console.log(err)
+				})
+			this.GET('/admin/unhandledStu')
+				.then(res => {
+					console.log(res.data)
+					this.firstUnfinished = res.data
+				})
+				.catch(err=>{
+					console.log(err)
+				})
 		}
 	}
 </script>
@@ -78,7 +83,7 @@
 .procedure{
 	display: flex;
 	align-items: flex-start;
-	justify-content: center;
+	justify-content: flex-start;
 	flex-wrap: wrap;
 	section{
 		display: inline-block;

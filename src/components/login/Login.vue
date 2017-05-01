@@ -89,9 +89,9 @@ export default {
               } else {
 
                 if (usertype === 0) {
-                  this.$router.push('/student/welcome')
+                  this.$router.push('/student')
                 } else if (usertype === 1) {
-                  this.$router.push('/teacher/welcome')
+                  this.$router.push('/teacher')
                 } else if (usertype === 2) {
                   this.$router.push('/admin')
                 }

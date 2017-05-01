@@ -39,6 +39,7 @@ dbConnection.once('open',function(){
 
 //导出三个对像
 //exports.Schema = Schema
-module.exports = mongoose
+//exports.connection = dbConnection
+module.exports  = mongoose
 //exports.dbConnection = dbConnection
 //exports.autoIncModel = autoIncModel

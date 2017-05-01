@@ -13,7 +13,6 @@ router.post('/tchCreateTopic', (req, res) => {
       _id: newTopicId
     })
   })
-
 })
 
 
@@ -188,6 +187,7 @@ router.post('/tchSetContactData', (req, res) => {
 
 /*得到分组信息*/
 router.post('/tchGrouping', (req, res) => {
+  console.log(req.body)
   let account = req.body.account
   let mydb = {
     0: db.students,
@@ -207,8 +207,8 @@ router.post('/tchGrouping', (req, res) => {
     .then((doc) => {
       if(doc.group){
         db.groups.findOne({ _id: doc.group }, ['mentors', 'students'])
-        .populate('mentors', 'name')
-        .populate('students', 'name final')
+        .populate('mentors', 'name gender')
+        .populate('students', 'name final gender')
         .exec()
         .then((group) => {
           cardData._id = group._id
@@ -216,7 +216,6 @@ router.post('/tchGrouping', (req, res) => {
           Promise.all(group.students.map((student) => fillCardData(student, cardData)))
             .then(() => {
               res.send(cardData)
-         //     console.log(cardData)
             })
         })
       }else{
@@ -238,4 +237,32 @@ router.post('/tchGrouping', (req, res) => {
     })
   }
 })
+
+router.post('/tchContacInfo', (req, res) => {
+  var account = req.body.teacherId
+  var tel = req.body.tel
+  var email = req.body.email
+  var wechat = req.body.wechat
+  db.mentors.findOneAndUpdate({_id:account},
+                              {$set: {tel:tel, email:email, qq:qq, wechat: wechat}},
+                              {new: true}).exec()
+                              .then(res.send(1))
+})
+
+router.post('/tchAccountInfo', (req, res) => {
+  var account = req.body.teacherId
+  var oldPassword = req.body.oldPassword
+  var newPassword = req.body.newPassword
+  db.mentors.findOne({_id:account},(err,mentor)=>{
+    if(mentor.password !=oldPassword)
+              res.send(0);//密码错识
+              else{
+                mentor.password = newPassword
+                mentor.save()
+                res.send(1)
+              }
+  })
+            
+})
+
 module.exports = router

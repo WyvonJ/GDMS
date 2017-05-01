@@ -1,12 +1,6 @@
 <template>
   <div class="student-topics">
   <div class="paper">
-  	<div class="student-topics-admin">
-    <button class="export-table green-vue">
-          <img src="../../assets/icon/export.svg">
-          <span>导出学生选题表</span>
-    </button>
-  </div>
     	<table>
   			<caption>学生选题表</caption>
   			<thead>
@@ -40,6 +34,14 @@ import {mapState} from 'vuex'
 			return {
 			}
 		},
+    methods:{
+      exportTopics(){
+        this.GET('/admin/admExpStuTopics')
+      }
+    },
+    mounted(){
+      this.GET('/admin/admGetStuTopics')
+    },
 		computed:mapState(['_adm_StuTopics'])
 	}
 </script>

@@ -261,54 +261,5 @@ export default {
         showSnackbar({ commit }, '出了点小问题，再试试')
         return Promise.reject(err)
       })
-  },
-  admGetTchAccount: ({ commit }) => {
-    return axios.get('/admin/admGetTchAccount')
-      .then(response => {
-        commit('ADM_SET_TCH_ACCOUNT', response.data)
-      })
-  },
-  admUpTchAccounts: ({ commit }, payload) => {
-    return axios.post('/admin/admUpTchAccounts', payload)
-      .then(response => {
-        commit('ADM_SET_TCH_ACCOUNT', response.data)
-      })
-  },
-  admStuAccount: ({ commit }) => {
-    return axios.get('/admin/admStuAccount')
-      .then(response => {
-        commit('ADM_SET_STU_ACCOUNT', response.data)
-      })
-  },
-  admGetTchTopics: ({ commit }) => {
-    return axios.get('/admin/admGetTchTopics')
-      .then(response => {
-        commit('ADM_SET_TCH_TOPICS', response.data)
-      })
-  },
-  admMidGroup: ({ commit }) => {
-    return axios.get('/admin/admFnlGroup')
-      .then(response => {
-        commit('ADM_SET_MID_GROUP',response.data)
-      })
-  },
-  admFnlGroup: ({ commit }) => {
-    return axios.get('/admin/admFnlGroup')
-      .then(response => {
-        commit('ADM_SET_FNL_GROUP',response.data)
-      })
-  },
-  admMidGrade: ({ commit }) => {
-    return axios.get('/admin/admMidGrade')
-      .then(response => {
-        commit('ADM_SET_MID_GRADE',response.data)
-      })
-  },
-  admFnlGrade: ({ commit }) => {
-    return axios.get('/admin/admFnlGrade')
-      .then(response => {
-        commit('ADM_SET_FNL_GRADE',response.data)
-      })
-  },
-
+  }
 }

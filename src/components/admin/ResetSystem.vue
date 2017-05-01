@@ -35,7 +35,7 @@ export default{
 			get('/admin/admResetSystem')
 				.then(res=>{
 					console.log(res.data)
-					if (res.data.state) 
+					if (res.data.state===1) 
 						this.reseted=true
 				})
 		}

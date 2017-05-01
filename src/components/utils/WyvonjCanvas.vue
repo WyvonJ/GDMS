@@ -1,16 +1,9 @@
 <template>
-  <canvas id="canvas"></canvas> 
-	
+  <canvas id="canvas"></canvas> 	
 </template>
 
 <script type="text/javascript">
 	export default{
-		data(){
-			return {
-
-			}
-		},
-		methods:{},
 		mounted(){
       let cvs = document.getElementById('canvas')
       let cxt = cvs.getContext('2d')
@@ -55,7 +48,7 @@
       function drawLine(cxt, x, y, _x, _y, o) {
         let line = new Line(x, y, _x, _y, o)
         cxt.beginPath()
-        cxt.strokeStyle = 'rgba(196,193,216,' + o + ')'
+        cxt.strokeStyle = 'rgba(86,68,76,' + o + ')'
         cxt.moveTo(line.beginX, line.beginY)
         cxt.lineTo(line.closeX, line.closeY)
         cxt.closePath()

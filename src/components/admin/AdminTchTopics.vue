@@ -2,16 +2,25 @@
   <div class="teacher-topics">
   	<header class="teacher-topics-admin">
   	
-    <button class="export-table green-vue">
+    <a class="export-table" href="/admin/download?filename=SelectedResult">
           <img src="../../assets/icon/export.svg">
           <span>导出导师题目表</span>
-    </button>
-     <button class="red" @click="firstSelection">
+    </a>
+    <div class="order-admin">
+       <button @click="teacherFirst" class="order-button">
           <span>导师一轮选题</span>
-    	</button>
-    	 <button class="blue">
+      </button>
+       <button @click="teacherSecond" class="order-button">
           <span>导师二轮选题</span>
-    	</button>
+      </button>
+      <button @click="teacherThird" class="order-button">
+          <span>导师三轮选题</span>
+      </button>
+      <button @click="teacherFinal" class="order-button">
+          <span>导师最终选题</span>
+      </button>
+    </div>
+    
   </header>
   <div class="columns">
   	<figure v-for="teacher of _adm_TchTopics" class="teacher-wrapper paper">
@@ -28,14 +37,18 @@
      				.{{topic.title}}
      			</div>
      			<div class="student-id-name">
-     				<div v-for="student of topic.finalstudents" class="single-student">
+     				<span v-for="student of topic.finalstudents" class="single-student chip">
      				{{student._id}} - {{student.name}}
-     			</div>
+     			</span>
      			</div>
      		</div>
     	</figure>
   </div>
-    	
+    	<mu-dialog :open="dialog" title="注意！" @close="dialog=false">
+    {{message}}
+    <mu-flat-button slot="actions" @click="dialog=false;$router.push('/admin/procedure')" secondary label="取消"/>
+    <mu-flat-button slot="actions" @click="dialog=false" label="确定"/>
+  </mu-dialog>
   
   </div>
 </template>
@@ -45,6 +58,9 @@ import { mapState,mapActions } from 'vuex'
 export default {
   data() {
     return {
+      message:'',
+      dialog:false,
+
     }
     },
     methods:{
@@ -56,7 +72,38 @@ export default {
     			//是否继续操作？？？
     		}
     		//导师必须完成。
-    	}
+    	},
+      exportTable(){
+        this.GET('/admin/download?filename=tchtopics')
+        
+      },
+      teacherFirst(){
+        this.GET('/admin/unhandledTch')
+        this.GET('/admin/unhandledStu')
+
+        if (true) {
+          this.message = '还有学生未登录选题，是否继续？'
+          this.dialog = true
+        }
+        this.POST('/admin/procSelection',{
+          order:1
+        })
+      },
+      teacherSecond(){
+        this.POST('/admin/procSelection',{
+          order:2
+        })
+      },
+      teacherThird(){
+        this.POST('/admin/procSelection',{
+          order:3
+        })
+      },
+      teacherFinal(){
+        this.POST('/admin/procSelection',{
+          order:4   //只能选择一个题目 设置为 直接存入数据库
+        })
+      },
     },
     computed: mapState(['_adm_TchTopics']),
 		mounted(){
@@ -69,54 +116,102 @@ export default {
 
 <style lang="sass" rel="stylesheet/scss" scoped>
 @import '../../style/variables';
-button{
-	margin: 0 8px;
+.export-table{
+    width: 144px;
+    height: 40px;
+    padding: 8px;
+    border-radius: 4px;
+    display: inline-block;
+    background-color: #4caf50;
+    color: white!important;
 }
-.teacher-topics-admin{
-	padding: 8px 0 8px 16px;
+.order-admin{
+display: flex;
+margin-top: 16px;
+button
+{
+  flex: 1;
+  background-color: transparent;
+  border-radius: 0;
+  border: 1px #999 solid;
+  color: #455739;
+  &:hover{
+    background-color: #dedede;
+  }
 }
-.teacher-wrapper{
-		margin: 8px;
-		padding-bottom: 10px;
-		transition: $material-enter;
-	  display: inline-block;
-	  column-break-inside: avoid;
-	  min-width: 128px;
-	  &:hover{
-	  	  -webkit-box-shadow: 0 0 5px 5px #dadada;
-               -moz-box-shadow: 0 0 5px 5px #dadada;
-                    box-shadow: 0 0 5px 5px #dadada;
-	  }
-	.teacher-name{
-		font-size: 20px;
-		padding: 8px 10px;
-		position: relative;
-		font-weight: normal;
-    border-bottom: 1px dashed #4CAF50;
-	}
-	.topic-id-title{
-		padding: 2px;
-		font-size: 1.08em;
-    border-left: 2px solid #d8f9df;
-    border-radius: 5px;
-	}
-	.topic-students{
-		padding: 8px 6px;
-		.single-student{
-			display: inline-block;
-			padding: 2px 5px;
-			margin: 4px;
-		}
-	}
+.order-button:first-child{
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-right-color: transparent;
+}
+.order-button:last-child{
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-left-color: transparent;
+}
+.order-button:nth-child(2){
+  border-right-color: transparent;
+}
+}
 
+.teacher-topics-admin
+{
+    padding: 8px 0 8px 16px;
 }
-.show-avatar::before{
-	content: '';
-	width: 16px;
-	height: 16px;
-	border: 2px #f44336 solid;
-	border-radius: 8px;
-	position: absolute;
-	right: 10px;
+.teacher-wrapper
+{
+    display: inline-block;
+
+    min-width: 128px;
+    margin: 8px;
+    padding-bottom: 10px;
+
+    transition: $material-enter;
+
+    column-break-inside: avoid;
+    &:hover
+    {
+        -webkit-box-shadow: 0 0 9px 4px #dadada;
+           -moz-box-shadow: 0 0 9px 4px #dadada;
+                box-shadow: 0 0 9px 4px #dadada;
+    }
+    .teacher-name
+    {
+        font-size: 20px;
+        font-weight: normal;
+
+        position: relative;
+
+        padding: 8px 10px;
+
+        border-bottom: 1px dashed #4caf50;
+    }
+    .topic-id-title
+    {
+        font-size: 1.08em;
+
+        padding: 2px;
+
+        border-left: 2px solid #d8f9df;
+        border-radius: 5px;
+    }
+    .topic-students
+    {
+        padding: 8px 6px;
+    }
 }
+.show-avatar::before
+{
+    position: absolute;
+    right: 10px;
+
+    width: 16px;
+    height: 16px;
+
+    content: '';
+
+    border: 2px #f44336 solid;
+    border-radius: 8px;
+}
+
 </style>

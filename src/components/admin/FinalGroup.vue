@@ -1,6 +1,13 @@
 <template>
   <div class="group-container">
     <div class="final-group-teacher paper">
+      <div class="instructions">
+        <p>
+          <strong>
+            请先设定分组数并上传，然后下载分组表，也可以调整后确认分组再下载分组表。
+          </strong>
+        </p>
+      </div>
       <div class="group-settings">
         <span class="group-length">{{groupCount}}</span>
         <button @click="groupCount++" class="add-button">
@@ -11,30 +18,30 @@
         </button>
         <button @click="uploadGroupCount" class="upload-group-count">
           <img src="../../assets/icon/file_upload.svg" alt="reset" />
-          <span>上传分组数</span>
+          <span>提交分组数</span>
         </button>
       </div>
       <div class="groups-wrapper">
-        <div class="group" name="group" v-for="(group,index) of finalGroups" @drop="drop($event)" @dragover="allowDrop($event)" :id="'g'+index">
-          <div class="teachers-grouped" :id="'tg'+index">
-            <span class="teacher-to chip no-selection" v-for="teacher of group.teachers" draggable="true" @dragstart="drag($event)" :id="'t'+teacher._id">
+        <div class="group" name="group" v-for="(group,index) of finalGroups" @drop="drop($event)" @dragover="allowDrop($event)" :id="'g'+group._id">
+          <div class="teachers-grouped" :id="'tg'+group._id">
+            <span class="teacher-to chip no-selection" v-for="teacher of group.mentors" draggable="true" @dragstart="drag($event)" :id="'t'+teacher._id">
                   {{teacher.name}}
                 </span>
           </div>
-          <div class="students-grouped" :id="'sg'+index">
+          <div class="students-grouped" :id="'sg'+group._id">
             <span class="student-to chip no-selection" v-for="student of group.students" draggable="true" @dragstart="drag($event)" :id="'s'+student._id">
                     {{student._id}}{{student.name}}
                 </span>
           </div>
-          <span class="group-id no-selection">{{++index}}</span>
+          <span class="group-id no-selection" :id="'p'+group._id">{{group._id}}</span>
         </div>
       </div>
       <div class="actions">
         <button @click="uploadGroups" class="orange">
           <img src="../../assets/icon/upload.svg" alt="upload" />
-          <span>上传教师分组</span>
+          <span>确认分组</span>
         </button>
-        <a href="/admin/download?filename=middlegroup" class="shadow">
+        <a href="/admin/download?filename=FinalGroup" class="shadow">
           <img src="../../assets/icon/export.svg" alt="export" />
           <span>导出最终分组表</span>
         </a>
@@ -60,7 +67,8 @@ export default {
         isTab: false,
         isOverlap: false,
         finalGroups: [{
-          teachers: [{
+          _id:1,
+          mentors: [{
             _id: '2103154',
             name: '张军'
           }, {
@@ -78,10 +86,12 @@ export default {
             name: '李大伟'
           }, {
             _id: '4104567',
-            name: '刘晓丽'
+            name: '刘晓丽',
+            tchId:'20305134301'
           }]
         }, {
-          teachers: [{
+          _id: 2,
+          mentors: [{
             _id: '42145',
             name: '李军'
           }, {
@@ -107,7 +117,7 @@ export default {
     methods: {
       drop($event) {
         $event.preventDefault() //阻止默认事件，防止页面跳转
-        if ($event.target.nodeName !== 'DIV') //如果拖拽到非div则不接受
+        if ($event.target.id[0] !== 'g') //如果拖拽到非div则不接受
           return
         let elId = $event.dataTransfer.getData("elId") //被拖拽元素id和name
           ,
@@ -115,6 +125,7 @@ export default {
           ,
           id = $event.target.id.substring(1) //group id
           //拖到学生上
+        console.log(id)
         if (elId[0] === 's')
           document.getElementById('sg' + id).appendChild(document.getElementById(elId))
         if (elId[0] === 't')
@@ -130,16 +141,10 @@ export default {
         $event.preventDefault()
       },
       uploadGroupCount(){
-        post('/admin/admFnlGroupCount',this.groupCount)
+        this.POST('/admin/admFnlGroupCount',{count:this.groupCount})
           .then(res => {
-            get('/admin/admFnlGroups')
-              .then(res => {
                 console.log(res.data)
                 this.finalGroups = res.data
-              })
-              .catch(err => {
-                throw new Error(err)
-              })
           })
       },
       uploadGroups() {
@@ -147,16 +152,23 @@ export default {
           this.isOverlap = true
           let group = document.getElementsByName('group'),
           groups = []
+          if(!group)
+            return 
         _.forEach(group, (g, index) => {
             groups[index] = {
-              teachers: [],
+              _id: 0,
+              mentors: [],
               students: []
             }
             _.forEach(g.childNodes, (c) => {
+              if (c.nodeName==='SPAN') {
+                groups[index]._id=_.parseInt(c.id.substring(1))
+              }
               if (c.nodeName === 'DIV') {
+
                 if (c.id[0] === 't') {
                   _.forEach(c.childNodes, (teacher) => {
-                    groups[index].teachers.push(teacher.id.substring(1))
+                    groups[index].mentors.push(teacher.id.substring(1))
                   })
                 }
                 if (c.id[0] === 's') {
@@ -167,14 +179,13 @@ export default {
               }
             })
           })
-          /*post('/admin/admUpTchGroups',groups)
+          this.POST('/admin/admUpFTchGroups',groups)
             .then(res => {
 
             })
             .catch(err => {
             throw new Error(err)
           })
-          console.log(groups)*/
           resolve(groups)
         })
         .then((g)=>{
@@ -183,7 +194,7 @@ export default {
         })
       },
       overflow(){
-        this.groupCount < 0 ? this.groupCount = 0 : 0  
+        this.groupCount < 1 ? this.groupCount = 1 : 1  
       }
     },
     watch:{
@@ -201,7 +212,10 @@ export default {
     margin: 16px 0;
     padding: 12px;
 }
-
+.instructions{
+  font-size: 20px;
+  padding-bottom: 14px;
+}
 .final-group-teacher
 {
     width: 100%;
@@ -227,123 +241,90 @@ export default {
         }
         .minus-button
         {
-            border-top-right-radius: 3px;
             border-left: none;
+            border-top-right-radius: 3px;
             border-bottom-right-radius: 3px;
         }
-        .upload-group-count{
-          border-radius: 3px;
-          margin-left: 16px;
+        .upload-group-count
+        {
+            margin-left: 16px;
+
+            border-radius: 3px;
         }
     }
 }
-.groups-wrapper
+
+.teachers-grouped
 {
-    display: flex;
+    padding: 8px;
 
-    align-items: center;
-    justify-content: flex-start;
-    flex-wrap: wrap;
+    border-bottom: 1px dashed #727877;
 }
-
-.teachers-grouped{
-  border-bottom: 1px dashed #727877;
-  padding: 8px;
-}
-.students-grouped{
-  padding: 8px;
+.students-grouped
+{
+    padding: 8px;
 }
 
 .group
 {
     position: relative;
-
-    min-width: 320px;
-    min-height: 64px;
-    margin: 16px;
-    padding-right: 96px;
-
-    border: 1px dashed #727877;
-
-    &::after
-    {
-        position: absolute;
-        top: 0;
-        right: 0;
-
-        width: 92px;
-        height: 100%;
-
-        content: '拖拽到这里';
-
-        border-left: 1px dashed #888;
-        background-color: rgba(227, 225, 225, .28);
-    }
-    &:hover
-    {
-        border-color: $red;
-    }
-    span.group-id
-    {
-        font-size: 18px;
-
-        position: absolute;
-        top: -12px;
-        right: -12px;
-
-        width: 24px;
-        height: 24px;
-        padding-top: 3px;
-        padding-left: 7px;
-
-        color: white;
-        border-radius: 12px;
-        background-color: $red;
-    }
+    display: block;
 }
-.group-length{
-  width: 40px;
-  border: 1px solid #aaa;
-      line-height: 28px;
-    height: 34px;
-    display: inline-block;
+.group-length
+{
     font-size: 20px;
-    text-align: center;
-    border-radius: 3px;
+    line-height: 28px;
+
+    display: inline-block;
+
+    width: 40px;
+    height: 34px;
     margin-right: 16px;
-}
-.chip{
-  cursor: move;
-  height: 28px;
+
+    text-align: center;
+
+    border: 1px solid #aaa;
+    border-radius: 3px;
 }
 .actions button
 {
     margin: 3px 16px;
 }
-.overlap{
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;  
-  background-color: rgba(0,0,0,.5);
-  z-index: 200;
-  display: flex;
-  align-items:center;
-  justify-content: center;
-  .progress{
-    width: 320px;
-    height: 320px;
-    background-color: #FFF;
-    text-align: center;
-    font-size: 20px;
-    padding-top: 60px;
-    border-radius: 4px;
-    .mu-circular-progress{
-      margin-top: 24px;
+.overlap
+{
+    position: fixed;
+    z-index: 200;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    display: flex;
+
+    width: 100vw;
+    height: 100vh;
+
+    background-color: rgba(0,0,0,.5);
+
+    align-items: center;
+    justify-content: center;
+    .progress
+    {
+        font-size: 20px;
+
+        width: 320px;
+        height: 320px;
+        padding-top: 60px;
+
+        text-align: center;
+
+        border-radius: 4px;
+        background-color: #fff;
+        .mu-circular-progress
+        {
+            margin-top: 24px;
+        }
     }
-  }
 }
+
 </style>

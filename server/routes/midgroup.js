@@ -7,12 +7,12 @@ var fs = require('fs');
 ]*/
 var writeToExcel = function(originData){
     var buffer = xlsx.build(originData)
-    fs.writeFileSync('中期答辨分组.xlsx',buffer,{'flag':'w'});
+    fs.writeFileSync('./server/files/download/MidGroup.xlsx',buffer,{'flag':'w'});
 }
-var groups = [
+/*var groups = [
    {
     name:'第一组',
-    mentors:['2030513414','2030513411','2030513406','2030513426',],
+    mentors:['2030513414','2030513411','2030513406','2030513426'],
    // mentors:['2030513401','2030513402'],
     data:[['序号','学号','学生姓名','课题名','指导教师']]
    },
@@ -45,11 +45,11 @@ var groups = [
    // mentors:['2030513401','2030513402'],
     data:[['序号','学号','学生姓名','课题名','指导教师']]
    },
-]
+]*/
 
-var midGroup = function(){
+var midGroup = function(groups){
     for(var i = 0; i < groups.length; i++){
-        fillGroupData(i)
+        fillGroupData(i,groups)
         
     }
     setTimeout(()=>{
@@ -59,13 +59,16 @@ var midGroup = function(){
     //  console.log(groups)
      // xlsx.build(groups)
       writeToExcel(groups)
+    //  cb()
        }, 1000);/// console.log(group)
 }
 
-var fillGroupData = function(groupId){
+var fillGroupData = function(groupId,groups){
         var id = 1;
         var group = groups[groupId]
         var mentorsId = group.mentors
+    //   console.log(mentorsId)
+        //if(mentorsId.length)
         for(var j=0; j<mentorsId.length; j++){
             var mentorId = mentorsId[j]
             db.mentors.findOne({_id:mentorId},['name','topics'])
@@ -104,8 +107,8 @@ var fillGroupData = function(groupId){
         //console.log(group)
        }, 1000);/// console.log(group)*/
         }
-midGroup()
-
+exports.midgroup = midGroup
+//exports.groups = groups
 /*Promise.all(groups.map(group=>{
     return new Promise((resolve1, reject)=>{
         Promise.all(group.mentors.map(mentorId=>{

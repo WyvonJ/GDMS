@@ -12,70 +12,65 @@ exports.topics = topics
 exports.students = students
 exports.mentors = mentors
 exports.groups = groups
-
-/*初始化students mentors数据*/
-var initialStudentsAndMentors=function(initialDataFilePath){
-
-	var excelData = xlsx.parse(initialDataFilePath)
-	//console.log(excelData)
+exports.admins = admins
+//exports.connection = mongoose.connection
+/*初始化students数据*/
+var ImportStudentsData=function(FilePath){
+	var excelData = xlsx.parse(FilePath)
 	var sheetNum = excelData.length //读取excel中sheet个数
 	Promise.all(excelData.map(sheet=>{
-		if(sheet.name == '学生'){
+		if(sheet.name == '学生' || sheet.name == 'sheet1'){
 			var studentsData = sheet.data
 			studentsData.shift() //删除excel数组的第一行元素，就是'姓名 学号'
-			console.log(studentsData)
+			console.log('开始导入学生初始数据')
 			Promise.all(studentsData.map(student=>{
 				new students({
-					_id: 	 student[0],//一个数组 0 1 2 3就分别是学号 姓名 密码 性别
+					_id: 	 student[0],
+					//一个数组 0 1 2 3就分别是学号 姓名 密码 性别
 					name: 	 student[1],
 					password:student[2],
 					gender:  student[3],
 					gpa:     student[4],
-					intro:   student[5]
+				//	intro:   student[5]
 				}).save()
-			})).then(console.log('学生数据存储完毕'))
-			/*for(var i = 0; i < studentsData.length;i++){
-				new students({
-					_id: 	 studentsData[i][0],//一个数组 0 1 2 3就分别是学号 姓名 密码 性别
-					name: 	 studentsData[i][1],
-					password:studentsData[i][2],
-					gender:  studentsData[i][3],
-					gpa:     studentsData[i][4],
-					intro:   studentsData[i][5]
-				}).save()//保存学生的初始数据
-			}*///每次save就是往数据库中插入新数据
-		}else if(sheet.name == '导师'){
-			var mentorsData = sheet.data
-			mentorsData.shift() //删除excel数组的第一行元素，就是'姓名 学号'
-			Promise.all(mentorsData.map(mentor => {
-				new mentors({
-					_id: 	  mentor[0],
-					name: 	  mentor[1],
-					password: mentor[2],
-					fields:   mentor[4],
-					gender:   mentor[3],
-					classrate:mentor[5]
-				}).save()
-			})).then(console.log("老师数据存储完毕"))
-		/*	for(var i in mentorsData){
-				new mentors({
-					_id: 	  mentorsData[i][0],
-					name: 	  mentorsData[i][1],
-					password: mentorsData[i][2],
-					fields:   mentorsData[i][4],
-					gender:   mentorsData[i][3],
-					classrate:mentorsData[i][5]
-				}).save()
-			}*/
+			})).then(console.log('导入学生初始数据完毕'))
 		}else{
-			console.log('excel中多的数据暂时不用')
+			console.log('excel中多余sheet的数据不导入')
 		}
 	}))
 	.then(()=>{
-		console.log('学生导师数据初始化完成')
+	//	console.log('学生导师数据初始化完成')
 	})
 }
 
+/*初始化mentors数据*/
+var ImportMentorsData=function(FilePath){
+
+	var excelData = xlsx.parse(FilePath)
+	var sheetNum = excelData.length //读取excel中sheet个数
+	Promise.all(excelData.map(sheet=>{
+			if(sheet.name == '导师'||sheet.name == 'Sheet1'){
+			var mentorsData = sheet.data
+			mentorsData.shift() //删除excel数组的第一行元素，就是'姓名 学号'
+			console.log('开始导入导师初始数据')
+			Promise.all(mentorsData.map(mentor => {
+				new mentors({
+					_id: 	  mentor[0],//账号
+					name: 	  mentor[1],//姓名
+					password: mentor[2],//密码
+				//	fields:   mentor[4],//研究邻域
+					gender:   mentor[3],//性别
+				//	classrate:mentor[5] //技艺比
+				}).save()
+			})).then(console.log("导师初始数据导入完毕"))
+		}else{
+			console.log('excel中多余sheet的数据不导入')
+		}
+	}))
+	.then(()=>{
+	//	console.log('学生导师数据初始化完成')
+	})
+}
 var makePromise = function(item){//为了让程序一步接一步运行要用promise运行
 	return new Promise(function(resolve, reject){
 								var topic = new topics(item)
@@ -129,11 +124,11 @@ var testSelectTopic = function(){
 
 
 //initialStudentsAndMentors('../initialdata/测试数据.xlsx')
-
-
+//ImportStudentsData('../initialdata/学生初始数据.xlsx')
+//ImportMentorsData('../initialdata/导师初始数据.xlsx')
 //initialTopics()
 //testSelectTopic()
-exports.initialStudentsAndMentors = initialStudentsAndMentors
-exports.initialTopics = initialTopics
+exports.ImportStudentsData = ImportStudentsData
+exports.ImportMentorsData = ImportMentorsData
 //mongoose.disconnect()
 

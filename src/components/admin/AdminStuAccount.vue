@@ -3,16 +3,15 @@
  
   	<div class="paper">
   	<div class="table-admin">
-  		<button class="blue" @click="dialog=true">
-      <i class="material-icons">file_upload</i>
+  		<button class="upload" @click="dialog=true">
+     <img src="../../assets/icon/upload_g.svg" alt="phone" />
       <span>帐号上传</span>
     	</button>
-     <button class="red">
-      <i class="material-icons">delete_forever</i>
+     <button class="delete" @click="deleteAccounts">
+     <img src="../../assets/icon/delete_b.svg" alt="phone" />
       <span>帐号删除</span>
     </button>
   	</div>
-  	
   		<table>
   			<caption>学生信息表</caption>
   			<thead>
@@ -53,168 +52,214 @@
 </template>
 
 <script type="text/javascript">
-//导入full build 以后更改需求
-import {mapState,mapActions} from 'vuex'
-import {post} from 'axios'
-	export default {
-		data(){
-			return{
-				dialog:false,
-				chosenFile:'选择文件',
-			progressBar:0,
-				_adm_StuAccounts:[{
-					_id:'1030513441',
-					name:'李达康',
-					gender:'男',
-					password:'123456',
-					tel:'18016996320',
-					email:'google@hotmail.com'
-				},{
-					_id:'1030513441',
-					name:'李达康',
-					gender:'男',
-					password:'123456',
-					tel:'18016996320',
-					email:'google@hotmail.com'
-				},{
-					_id:'1030513441',
-					name:'李达康',
-					gender:'男',
-					password:'123456',
-					tel:'18016996320',
-					email:'google@hotmail.com'
-				},]
-			}
-		},
-		computed:{
-			...mapState(['_adm_StuAccounts'])
-		},
-		methods:{
-			genderBorder(g){
-				let c=g==='男'?'#3f51b5':'#f44336'
-				return{
-					borderLeft:'4px solid ' + c
-				}
-			},
+import { mapState, mapActions } from 'vuex'
+import { post } from 'axios'
+export default {
+  data() {
+      return {
+        dialog: false,
+        chosenFile: '选择文件',
+        progressBar: 0,
+        _adm_StuAccounts: [{
+          _id: '1030513441',
+          name: '李达康',
+          gender: '男',
+          password: '123456',
+          tel: '18016996320',
+          email: 'google@hotmail.com'
+        }, {
+          _id: '1030513441',
+          name: '李达康',
+          gender: '男',
+          password: '123456',
+          tel: '18016996320',
+          email: 'google@hotmail.com'
+        }, {
+          _id: '1030513441',
+          name: '李达康',
+          gender: '男',
+          password: '123456',
+          tel: '18016996320',
+          email: 'google@hotmail.com'
+        }, ]
+      }
+    },
+    computed: {
+      ...mapState(['_adm_StuAccounts'])
+    },
+    methods: {
+      genderBorder(gender) {
+        let color = gender === '男' ? '#3f51b5' : '#f44336'
+        return {
+          borderLeft: '4px solid ' + color
+        }
+      },
+      deleteAccounts() {
+      	get('/admin/admDelStuAcc')
+      		.then(res => {
 
-  	fileInput(){
-  		let routes
-  		if (this.gradeType===0) {
-  			routes='/admin/admMidGradeUpload'
-  		}else{
-  			routes='/admin/admFnlGradeUpload'
-  		}
-  		let file=document.getElementById('file').files[0]
-  		if (file) {
-  			this.chosenFile=file.name
+      		})
+      },
+      fileInput() {
+        let routes
+        if (this.gradeType === 0) 
+          routes = '/admin/admMidGradeUpload'
+        else 
+          routes = '/admin/admFnlGradeUpload'
+        let file = document.getElementById('file').files[0]
+        if (file) {
+          this.chosenFile = file.name
 
-      let output = document.getElementById('output')
-      let data = new FormData()
-      data.append('file', document.getElementById('file').files[0])
-      let config = {
-        onUploadProgress: (progressEvent) => {
-          let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+          let output = document.getElementById('output')
+          , data = new FormData()
+          , config = {
+            onUploadProgress: (progressEvent) => {
+              let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+            }
+          }
+          data.append('file', document.getElementById('file').files[0])
+          post(routes, data, config)
+            .then((res) => {
+
+              output.className = 'container'
+              output.innerHTML = '成功上传文件'
+              this.progressBar = 100
+            })
+            .catch((err) => {
+              output.className = 'container text-danger'
+              output.innerHTML = '上传文件失败，请重新试试'
+              console.log(err)
+            })
+        } else {
+          chosenFile = '选择文件'
         }
       }
-      post(routes, data, config)
-        .then((res)=> {
 
-          output.className = 'container'
-          output.innerHTML = '成功上传文件'
-          this.progressBar=100
-        })
-        .catch((err)=> {
-          output.className = 'container text-danger'
-          output.innerHTML = '上传文件失败，请重新试试'
-          console.log(err)
-        })
-  		}else{
-  			chosenFile='选择文件'
-  		}
-  	}
+    }
+}
 
-		},
-		mounted(){
-		}
-	}
 </script>
 
 <style lang="sass" rel="stylesheet/scss">
 
-.student-account-container{
-	.file-button{
-  position: absolute;
-  width: 100%;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  opacity: 0;
-  cursor: pointer;
-  z-index: 12;
-}
-.table-admin{
-	padding: 8px 0 8px 16px;
-	border-bottom: 1px solid #d8d8d8; 
-}
-.red,.blue{
-	margin-left: 8px;
-	span{
-		position:relative;
-		top: -4px;
-	}
-}
-caption{
-	padding: 8px 0;
-}
-th:first-child
+.student-account-container,.teacher-account-container
 {
-    border-left: 4px #42b983 solid;
-}
+    .file-button
+    {
+        position: absolute;
+        z-index: 12;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+
+        width: 100%;
+
+        cursor: pointer;
+
+        opacity: 0;
+    }
+    .table-admin
+    {
+        padding: 8px 0 8px 16px;
+
+        border-bottom: 1px solid #d8d8d8;
+    }
+    button{
+        border: 1px solid #bababa;
+        background-color: transparent;
+        color: black;
+    }
+    .upload{
+    	border-top-right-radius: 0;
+    	border-bottom-right-radius: 0;
+    	&:hover{
+    		background-color: #03A9F4;
+    		color: white;
+    		border-color: #03A9F4;
+    	}
+    }
+    .delete
+    {
+    	border-top-left-radius: 0;
+    	border-bottom-left-radius: 0;
+    	&:hover{
+    		background-color: #F44336;
+    		color: white;
+    		border-color: #F44336;
+    	}
+    }
+    caption
+    {
+        padding: 8px 0;
+    }
+    th:first-child
+    {
+        border-left: 4px #42b983 solid;
+    }
 }
 
-.form{
-	position: relative;
+.form
+{
+    position: relative;
 }
-.form-control{
-	 position: absolute;
-  width: 100%;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  opacity: 0;
-  cursor: pointer;
-  z-index: 12;
+.form-control
+{
+    position: absolute;
+    z-index: 12;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+
+    cursor: pointer;
+
+    opacity: 0;
 }
 
-.form-group{
-	padding: 18px 0;
-	border: 2px dashed #dedede;
-	margin: 4px;
+.form-group
+{
+    margin: 4px;
+    padding: 18px 0;
+
+    border: 2px dashed #dedede;
 }
-.container{
-	padding: 12px 4px;
+.container
+{
+    padding: 12px 4px;
 }
-.text-danger{
-	color: #f44336;
-	font-size: 18px;
-	border: 1px solid #f44336;
+.text-danger
+{
+    font-size: 18px;
+
+    color: #f44336;
+    border: 1px solid #f44336;
 }
 
-progress {
+progress
+{
     width: 274px;
     height: 12px;
-    border: 1px solid #4caf50;  
-    color: #4caf50; /*IE10*/
-    border-radius: 2px;
     margin: 8px 0;
+
+    color: #4caf50; /*IE10*/
+    border: 1px solid #4caf50;
+    border-radius: 2px;
 }
 
-progress::-moz-progress-bar { background: #4caf50; }
-progress::-webkit-progress-bar { background: white }
-progress::-webkit-progress-value  { background: #4caf50; }
-.red,.blue{
-	margin:  0 12px;
+progress::-moz-progress-bar
+{
+    background: #4caf50;
 }
+progress::-webkit-progress-bar
+{
+    background: white;
+}
+progress::-webkit-progress-value
+{
+    background: #4caf50;
+}
+
 </style>

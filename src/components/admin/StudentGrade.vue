@@ -11,8 +11,13 @@
         <button class="blue" @click="dialog=true;gradeType=1">
           <span>终期成绩上传</span>
         </button>
+        <a href="" class="export-grade">
+          <img src="../../assets/icon/export.svg" alt="export" />
+
+          <span>导出最终分数表</span>
+        </a>
       </div>
-      <mu-dialog class="form-dialog" :open="dialog" title="文件上传" @close="dialog=false">
+      <mu-dialog class="form-dialog" :open="dialog" title="文件上传" @close="dialog = false">
         <form enctype="multipart/form-data" role="form" class="form" onsubmit="return false">
           <div class="form-group">
             <label for="file">{{chosenFile}}</label>
@@ -43,27 +48,22 @@ import axios from 'axios'
 export default {
 	data(){
 		return {
-			progressBar:0,
-			dialog:false,
-			chosenFile:'选择文件',
-			gradeType:0
+			progressBar: 0,
+			dialog: false,
+			chosenFile: '选择文件',
+			gradeType: 0
 		}
 	},
   methods: {
   	fileInput(){
-  		let routes
-  		if (this.gradeType===0) {
-  			routes='/admin/admMidGradeUpload'
-  		}else{
-  			routes='/admin/admFnlGradeUpload'
-  		}
+  		let routes='/admin/admGradeUpload'
+      let type = this.gradeType?'final':'middle'
   		let file=document.getElementById('file').files[0]
   		if (file) {
   			this.chosenFile=file.name
-
       let output = document.getElementById('output')
       let data = new FormData()
-      data.append('file', document.getElementById('file').files[0])
+      data.append(type, document.getElementById('file').files[0])
       let config = {
         onUploadProgress: (progressEvent) => {
           let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
@@ -71,10 +71,9 @@ export default {
       }
       axios.post(routes, data, config)
         .then((res)=> {
-
           output.className = 'container'
           output.innerHTML = '成功上传文件'
-          this.progressBar=100
+          this.progressBar = 100
         })
         .catch((err)=> {
           output.className = 'container text-danger'
@@ -116,6 +115,15 @@ export default {
 		button{
 			margin: 8px;
 		}
+    .export-grade{
+    width: 144px;
+    height: 40px;
+    padding: 8px;
+    border-radius: 4px;
+    display: inline-block;
+    background-color: #4caf50;
+    color: white!important;
+    }
 		}
 	}
 }

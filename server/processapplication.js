@@ -54,14 +54,14 @@ var autoProcessFirstApplication = function(){
 	                   			  										 {$set: {'isselected': true, 'mentor': topics[i].mentor, final: topics[i]._id}},
 	                   			    									 {new: true}).exec()
 	                   			    		db.topics.findOneAndUpdate({_id: topics[i]._id},
-	                   			  							 {$push: {finalstudents: firststudents[j]._id}},
+	                   			  							 {$addToSet: {finalstudents: firststudents[j]._id}},
 	                   			  							 {new: true}).exec()	                   
 	                   			  }
 	                   		}
 	                   		else {//如果选的人数大于可选人数就要让导师人工选择，即将要处理的题目压入eventsstack
 	                   			//console.log('here')
 	                   			db.mentors.findOneAndUpdate({_id: topics[i].mentor},
-	                   										{$push: {eventstack: topics[i]._id}, $set:{notification: '有多个学生第一志愿选您的题目，请您根据题目剩余的可选人数进行选择'}},
+	                   										{$addToSet: {eventstack: topics[i]._id}, $set:{notification: '有多个学生第一志愿选您的题目，请您根据题目剩余的可选人数进行选择'}},
 	                   										{new: true}).exec()
 	                   		}
 	                   	}
@@ -96,14 +96,14 @@ var autoProcessSecondApplication = function(){
 	                   			  										 {$set: {'isselected': true, 'mentor': topics[i].mentor, final: topics[i]._id}},
 	                   			    									 {new: true}).exec()
 	                   			  			db.topics.findOneAndUpdate({_id: topics[i]._id},
-	                   			  							 {$push: {finalstudents: secondstudents[j]._id}},
+	                   			  							 {$addToSet: {finalstudents: secondstudents[j]._id}},
 	                   			  							 {new: true}).exec()	                   
 	                   	                   			  }
 	                   		}
 	                   		else {//如果选的人数大于可选人数就要让导师人工选择，即将要处理的题目压入eventsstack
 	                   			//console.log('here')
 	                   			db.mentors.findOneAndUpdate({_id: topics[i].mentor},
-	                   										{$push: {eventstack: topics[i]._id}, $set:{notification: '有多个学生第二志愿选您的题目，请您根据题目剩余的可选人数进行选择'}},
+	                   										{$addToSet: {eventstack: topics[i]._id}, $set:{notification: '有多个学生第二志愿选您的题目，请您根据题目剩余的可选人数进行选择'}},
 	                   										{new: true}).exec()
 	                   		}
 	                   	}
@@ -138,7 +138,7 @@ var autoProcessThirdApplication = function(){
 	                   			  										 {$set: {'isselected': true, 'mentor': topics[i].mentor, final: topics[i]._id}},
 	                   			    									 {new: true}).exec()
 	                   			    	    db.topics.findOneAndUpdate({_id: topics[i]._id},
-	                   			  							          {$push: {finalstudents: thirdstudents[j]._id}},
+	                   			  							          {$addToSet: {finalstudents: thirdstudents[j]._id}},
 	                   			  							          {new: true}).exec()	                   	                   
 	                   			  }
 	                   		}

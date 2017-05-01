@@ -11,9 +11,7 @@ let StudentRouter = {
   path: '/student',
   component: Student,
   children: [
-    { path: '', component: Topics },
-    { path: 'welcome', name: 'studentwelcome', component: Welcome },
-
+    { path: '', component: Welcome },
     { path: 'topics', name: 'topics', component: Topics },
     { path: 'status', name: 'status', component: TopicsStatus },
     { path: 'grouping', name: 'grouping', component: Grouping },

@@ -13,8 +13,7 @@ export default {
   path: '/teacher',
   component: Teacher,
   children: [
-    { path: '', component: Creation },
-    { path: 'welcome', name: 'teacherwelcome', component: Welcome },
+    { path: '', name: 'teacherwelcome', component: Welcome },
     { path: 'creation', name: 'creation', component: Creation },
     { path: 'confirmation', name: 'confirmation', component: Confirmation },
     { path: 'selectionresult', name: 'selectionresult', component: SelectionResult },

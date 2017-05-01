@@ -1,7 +1,7 @@
 <template>
   <div class="main-container">
-    <wyvonj-header :class="{'nav-hide': !openDrawer}" :username="username" :notifyTitle="notifyTitle"></wyvonj-header>
-    <mu-drawer @hide="handleHide" :open="openDrawer" :docked="docked" class="sidebar-drawer" :zDepth="1">
+    <wyvonj-header :class="{'nav-hide': !openDrawer}" :username="username" :notification="notification"></wyvonj-header>
+    <mu-drawer @hide="handleDrawerClose" :open="openDrawer" :docked="docked" class="sidebar-drawer" :zDepth="1">
       <div class="console-panel">
         <div class="logo">
           <img src="../../assets/img/gd_logo.png">
@@ -60,7 +60,9 @@
 import {mapState,mapMutations} from 'vuex'
 import WyvonjHeader from '../utils/WyvonjHeader.vue'
 import WyvonjFooter from '../utils/WyvonjFooter.vue'
-
+  function isDesktop () {
+  return window.innerWidth > 993
+}
 	export default {
 		data(){
 		const desktop=isDesktop()
@@ -68,9 +70,9 @@ import WyvonjFooter from '../utils/WyvonjFooter.vue'
 				openDrawer:desktop,
 				docked:desktop,
 				desktop:desktop,
-				menuValue:'',
+				menuValue:'procedure',
 				username:'管理员',
-				notifyTitle:'zazaza'
+				notification:'zazaza'
 			}
 		},
 		methods:{
@@ -86,10 +88,8 @@ import WyvonjFooter from '../utils/WyvonjFooter.vue'
      		}
      		this.desktop = desktop
     	},
-    	handleHide () {
-      	if (!this.changeHref) return
-      		window.location.hash = this.menuValue
-      		this.changeHref = false
+    	handleDrawerClose () {
+      	 this.openDrawer = !this.openDrawer
     	},
     	toggleNav(){
     		this.openDrawer=!this.openDrawer
@@ -97,6 +97,8 @@ import WyvonjFooter from '../utils/WyvonjFooter.vue'
     	handleMenuChange(value){
     		this.menuValue=value
     		this.$router.push('/admin/'+value)
+        if (!isDesktop())
+          this.handleDrawerClose()
     	}
 		},
 		components:{
@@ -114,9 +116,6 @@ import WyvonjFooter from '../utils/WyvonjFooter.vue'
     	window.removeEventListener('resize', this.handleResize)
   	}
 	}
-	function isDesktop () {
-  return window.innerWidth > 993
-}
 </script>
 
 <style lang="sass" rel="stylesheet/scss">

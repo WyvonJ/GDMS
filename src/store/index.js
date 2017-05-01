@@ -440,11 +440,7 @@ const store = new Vuex.Store({
           name: '高澳网耳塞义'
         }]  
       }]
-    }],
-    _adm_MidGroup:[],
-    _adm_FnlGroup: [],
-    _adm_MidGrade:[],
-    _adm_FnlGrade:[]
+    }]
   },
   mutations,
   actions,

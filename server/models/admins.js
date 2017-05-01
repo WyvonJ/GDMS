@@ -10,7 +10,7 @@ var Schema = mongoose.Schema
 
 var adminsSchema = new Schema
 ({
-	_id: 			       {type:  String, index: 1},//工号
+	_id: 			       {type:  String},//工号
 	account:         {type:  String, default:'admin'},
 	name: 			     {type:  String },//姓名
 	password: 		   {type:  String, required: true, default: 'admin'},//密码 required表示一开始存数据的时候就要有
@@ -24,9 +24,9 @@ var adminsSchema = new Schema
 const admins = mongoose.model('admins',adminsSchema)
 
 var newAdMin = new admins({
-  _id: 10000,
+  _id: 'admin',
   account: 'admin',
-  password: 'admin',
+  password: '10086',
   name: '晏涛'
 })
 

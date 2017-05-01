@@ -3,15 +3,15 @@
  */
 var db = require('./models/db')
 
-var numGroups = 3 //分成4组的话
-var numTopics = 0
-var numStu = 0
-var groupMentors = function(cb) { //根据导师的类别比例进行分组
-    db.students.count({}).exec().then((count) => numStu = count)
-    db.topics.count({}).exec().then((count) => numTopics = count)
+//var numGroups = 6 //分成4组的话
+var numTopics = 128
+var numStu = 128
+var groupMentors = function(numGroups) { //根据导师的类别比例进行分组
+    
     db.mentors.count({}).exec() //numMentors是所有导师的数量
         .then((numMentors) => {
-            var numGroupMembers = Math.floor(numMentors / numGroups) //向下取整,每组中有多少人
+            var numGroupMembers = 20
+            numGroupMembers = Math.floor(numMentors / numGroups) //向下取整,每组中有多少人
             var leftMentors = numMentors - numGroupMembers * numGroups //会剩下这么多人没得分组
             var query = db.mentors.find()
             query.select({ name: 1, fields: 1, classrate: 1, group: 1 })
@@ -56,7 +56,7 @@ var groupMentors = function(cb) { //根据导师的类别比例进行分组
 
 }
 
-var groupTopics = function() {
+var groupTopics = function(numGroups) {
     db.topics.find({}, ['_id', 'mentor', 'fields', 'finalstudents']).exec()
         .then((topics) => {
             var numStudentsGroup = 5
@@ -73,10 +73,10 @@ var groupTopics = function() {
                                 continue
                             for (var k = 0; k < topics[i].fields.length; k++)
                                 if (groups[j].fields.indexOf(topics[i].fields[k]) != -1) { //如果这组有题目的研究方向
-                                    db.groups.findOneAndUpdate({ _id: groups[j]._id }, { $push: { topics: topics[i]._id } }).exec()
+                                    db.groups.findOneAndUpdate({ _id: groups[j]._id }, { $addToSet: { topics: topics[i]._id } }).exec()
                                     for (var s = 0; s < topics[i].finalstudents.length; s++) {
                                         db.students.findOneAndUpdate({ _id: topics[i].finalstudents[s] }, { $set: { group: groups[j]._id } }).exec()
-                                        db.groups.findOneAndUpdate({ _id: groups[j]._id }, { $push: { students: topics[i].finalstudents[s] } }).exec()
+                                        db.groups.findOneAndUpdate({ _id: groups[j]._id }, { $addToSet: { students: topics[i].finalstudents[s] } }).exec()
                                     }
                                     recordTopic[i].isgrouped = true
                                     recordGroup[j].numStudents += topics[i].finalstudents.length
@@ -91,14 +91,16 @@ var groupTopics = function() {
                             var Index = 0
                             for (var l = 0; l < groups.length; l++) {
                                 if (groups[l].mentors.indexOf(topics[i].mentor) != -1) continue
-                                if (recordGroup[l].numStudents < minStudentsGroup) { minStudentsGroup = recordGroup[l].numStudents;
-                                    Index = l }
+                                if (recordGroup[l].numStudents < minStudentsGroup) {
+                                    minStudentsGroup = recordGroup[l].numStudents;
+                                    Index = l
+                                }
                             }
-                            console.log(Index)
-                            db.groups.findOneAndUpdate({ _id: groups[Index]._id }, { $push: { topics: topics[i]._id } }).exec()
+                           // console.log(Index)
+                            db.groups.findOneAndUpdate({ _id: groups[Index]._id }, { $addToSet: { topics: topics[i]._id } }).exec()
                             for (var s = 0; s < topics[i].finalstudents.length; s++) {
                                 db.students.findOneAndUpdate({ _id: topics[i].finalstudents[s] }, { $set: { group: groups[Index]._id } }).exec()
-                                db.groups.findOneAndUpdate({ _id: groups[Index]._id }, { $push: { students: topics[i].finalstudents[s] } }).exec()
+                                db.groups.findOneAndUpdate({ _id: groups[Index]._id }, { $addToSet: { students: topics[i].finalstudents[s] } }).exec()
                             }
                             recordTopic[i].isgrouped = true
                             recordGroup[Index].numStudents += topics[i].finalstudents.length
@@ -109,6 +111,26 @@ var groupTopics = function() {
                 })
         })
 }
+var finalgroup = function(numGroups){
+        db.students.count({}).exec().then((count) => numStu = count)
+        db.topics.count({}).exec().then((count) => numTopics = count)
+        groupMentors(numGroups);
+    
+    setTimeout(()=>{
+        groupTopics(numGroups);
+    },500)
 
+   /* new Promise((resolve,reject)=>{
+        groupMentors(numGroups)
+        //console.log(2)
+        resolve()
+    }).then(()=>{
+       // console.log(1)
+        groupTopics(numGroups)
+    })*/
+}
+//finalgroup(6)
+exports.finalgroup = finalgroup
+//finalgroup()
 //groupMentors()
-//groupTopics()
+   // groupTopics()

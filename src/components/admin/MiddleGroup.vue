@@ -25,13 +25,17 @@
           <img src="../../assets/icon/upload.svg" alt="upload" />
           <span>上传教师分组</span>
         </button>
-        <a href="/admin/download?filename=middlegroup" class="shadow">
+        <a href="/admin/download?filename=MidGroup" class="shadow">
           <img src="../../assets/icon/export.svg" alt="export" />
           <span>导出中期分组表</span>
         </a>
       </div>
       <div class="to-be-grouped">
-        <p>待分组导师，拖拽进行分组，请先上传教师分组，再导出分组表：</p>
+        <p>
+        <strong>
+          待分组导师，拖拽进行分组，请先分组并上传教师分组，再导出分组表：
+        </strong>
+        </p>
         <span class="teacher-to chip no-selection" v-for="teacher of teachers" draggable="true" @dragstart="drag($event)" :id="'t'+teacher._id">
           {{teacher.name}}
           </span>
@@ -65,6 +69,15 @@ export default {
         }, {
           _id: '200003',
           name: '陈丽芳'
+        },{
+          _id: '200004',
+          name: '王军'
+        }, {
+          _id: '200005',
+          name: '李俊'
+        }, {
+          _id: '2000036',
+          name: '刘军'
         }],
       }
     },
@@ -88,56 +101,45 @@ export default {
         $event.preventDefault()
       },
       resetGroups() {
-        this.groups = [
-          [],
-          [],
-          [],
-          [],
-          [],
-          []
-        ]
-        get('/admin/admTchMidList')
-          .then(res => {
-            this.teachers = res.data
-          })
-          .catch(err => {
-            throw new Error(err)
-          })
+        window.location.reload()
       },
       uploadGroups() {
+        
         let group = document.getElementsByName('group')
         let groups = []
         _.forEach(group, (g, index) => {
+           groups[index] = []
           _.forEach(g.childNodes, (c) => {
             if (c.id) {
-              groups[index] = []
               groups[index].push(c.id.substring(1))
             }
           })
         })
-        post('/admin/admUpTchGroups', groups)
+        console.log(groups)
+        this.POST('/admin/admUpMTchGroups', groups)
           .then(res => {
 
           })
           .catch(err => {
-            throw new Error(err)
+            console.log(err)
           })
+
       }
     },
     created() {
-      get('/admin/admTchMidList')
+      this.GET('/admin/admTchMidList')
         .then(res => {
           this.teachers = res.data
         })
         .catch(err => {
-          throw new Error(err)
+          console.log(err)
         })
     }
 }
 
 </script>
 
-<style lang="sass" rel="stylesheet/scss" scoped>
+<style lang="sass" rel="stylesheet/scss">
 @import '../../style/variables.scss';
 .middle-group-teacher
 {
@@ -182,13 +184,12 @@ export default {
 {
     position: relative;
 
-    display: inline-block;
     display: inline-flex;
 
     min-width: 320px;
     min-height: 64px;
     margin: 16px;
-    padding: 8px 96px 8px 8px;
+    padding-right: 96px;
 
     border: 1px dashed #727877;
 
@@ -202,8 +203,9 @@ export default {
 
         width: 92px;
         height: 100%;
-
-        content: '拖拽到这里';
+        padding-top: 24px;
+        padding-left: 8px;
+        content: '\62D6\62FD\5230\8FD9\91CC';
 
         border-left: 1px dashed #888;
         background-color: rgba(227, 225, 225, .28);
@@ -230,13 +232,8 @@ export default {
         background-color: $red;
     }
 }
-.teacher-to
-{
-}
-.chip{
+.teacher-to, .student-to{
   cursor: move;
-  height: 28px;
-
 }
 .to-be-grouped
 {
@@ -250,9 +247,19 @@ export default {
         padding: 8px;
     }
 }
-.actions button
+.actions
 {
+  button{
     margin: 3px 16px;
+  }
+  a{
+    width: 160px;
+    height: 40px;
+    padding: 8px;
+    display: inline-block;
+    background-color: $blue;
+    color: white!important;
+  }
 }
 .teachers-grouped
 {

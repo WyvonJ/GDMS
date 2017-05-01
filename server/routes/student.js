@@ -16,6 +16,8 @@ router.post('/stuCommitSelection', (req, res) => {
   db.students.findOne({ _id: studentId }).exec(function(err, student) {
     if (err) res.send({ state: 0 })
     else {
+      if(student.isselected)return //如果学生已经被选择了 则不能再进行选题
+
       /*	if(second!=-1)
       	student.selectTopic('second', second)
           if(first!=-1)
@@ -69,12 +71,15 @@ router.get('/stuGetTopics', (req, res) => {
     thirdstudents: 1
   })
   query.sort({ '_id': 1 })
+
   query.exec((err, topics) => {
+    for(var i=0;i<topics.length;i++)
+      topics[i].selected = topics[i].firststudents.length + topics[i].secondstudents.length + topics[i].thirdstudents.length;
     if (err) { res.send(404), console.log(err) } else res.send(topics)
   })
 })
 
-/*填写学生的联系信息*/
+/*初次填写学生的联系信息*/
 router.post('/stuSetContactData', (req, res) => {
   var studentId = req.body.account
     //console.log(req.body)
@@ -125,4 +130,28 @@ router.post('/stuSelectionResult', (req, res) => {
     })
 })
 
+router.post('/stuContacInfo', (req, res) => {
+  var account = req.body.studentId
+  var tel = req.body.tel
+  var email = req.body.email
+  var wechat = req.body.wechat
+  db.students.findOneAndUpdate({_id:account},
+                              {$set: {'tel':tel, 'email':email, 'qq':qq, 'wechat': wechat}},
+                              {new: true}).exec()
+                              .then(res.send(1))
+})
+router.post('/stuAccountInfo', (req, res) => {
+  var account = req.body.studentId
+  var oldPassword = req.body.oldPassword
+  var newPassword = req.body.newPassword
+  db.studens.findOne({_id:account},(err,student)=>{
+    if(student.password != oldPassword)
+              res.send(0);//密码错识
+              else{
+                studen.password = newPassword
+                student.save()
+                res.send(1)
+              }
+        })
+})
 module.exports = router

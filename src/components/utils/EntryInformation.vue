@@ -68,7 +68,7 @@
             <span class="class-right">艺术{{100-classratio}}%</span>
           </div>
           <div class="fields">
-            <mu-select-field v-model="fields" multiple :labelFocusClass="['label-foucs']" :errorText="fieldsError" label="您的研究领域" @change="changeFields" labelFloat>
+            <mu-select-field v-model="fields" multiple :labelFocusClass="['label-focus']" :errorText="fieldsError" label="您的研究领域" @change="changeFields" labelFloat>
               <mu-sub-header>可多选</mu-sub-header>
               <mu-menu-item v-for="text,index in fieldsData" :value="text" :title="text" />
             </mu-select-field>

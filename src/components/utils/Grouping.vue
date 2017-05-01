@@ -47,10 +47,6 @@ export default {
     },
     mounted() {
       let user = _c.getCookie('user')
-      if (!user) {
-        //alert('超时未操作，请重新登录')
-        // return this.$router.push('/')
-      }
       this.tchGrouping({ account: user })
         .then(() => {
           if (this._stu_tch_Group.length !== 0) {
@@ -67,12 +63,16 @@ export default {
 
 <style lang="sass" rel="stylesheet/scss" scoped>
 @import '../../style/variables.scss';
-.group-current-status{
-  display: inline-block;
-    width: 132px;
-    padding: 12px;
+.group-current-status
+{
     font-size: 24px;
+
+    display: inline-block;
+
+    width: 132px;
     margin: 16px 0;
+    padding: 12px;
+
     border-left: 6px solid $red;
 }
 .group-status-card
@@ -82,7 +82,6 @@ export default {
     position: relative;
 
     max-width: 480px;
-
     &:hover
     {
         transform: translateY(-4px);
@@ -91,12 +90,14 @@ export default {
            -moz-box-shadow: $material-shadow-6dp;
                 box-shadow: $material-shadow-6dp;
     }
-    .card-title{
-      position: absolute;
-      left: 12px;
-      top: 12px;
-      font-family: Century Gothic;
-      font-variant: small-caps;
+    .card-title
+    {
+        font-family: Century Gothic;
+        font-variant: small-caps;
+
+        position: absolute;
+        top: 12px;
+        left: 12px;
     }
     .chip
     {
@@ -105,22 +106,23 @@ export default {
         position: relative;
 
         display: inline-block;
-        cursor: default;
+        overflow: hidden;
+
         width: 100px;
         max-width: 128px;
         height: 32px;
         margin: 6px;
         padding: 4px 16px 4px 12px;
 
+        cursor: default;
         transition: $material-enter;
 
         border: 1px #efefef solid;
         border-radius: 16px;
         background-color: #fff;
-        overflow: hidden;
         &:hover
         {
-                    -webkit-box-shadow: $material-shadow-1dp;
+            -webkit-box-shadow: $material-shadow-1dp;
                -moz-box-shadow: $material-shadow-1dp;
                     box-shadow: $material-shadow-1dp;
         }
@@ -130,41 +132,46 @@ export default {
             top: 2px;
         }
     }
-
     .teacher-wrapper
     {
+        position: relative;
+
         padding: 36px 16px 16px 8px;
 
         background-color: #e4e4e4;
-        position: relative;
-    .group-id-icon{
-      position: absolute;
-      right: -20px;
-      bottom: - 20px;
-      z-index: 20;
-    }
-        .chip{
-          width: auto;
+        .group-id-icon
+        {
+            position: absolute;
+            z-index: 20;
+            right: -20px;
+            bottom: - 20px;
+        }
+        .chip
+        {
+            width: auto;
         }
     }
     .student-wrapper
     {
         position: relative;
-        background-color: white;
+
         padding: 36px 16px 16px 8px;
-        .chip{
-          background-color: #e4e4e4;
-          &:hover
+
+        background-color: white;
+        .chip
         {
-          height: 80px;
-          width: auto;
+            background-color: #e4e4e4;
+            &:hover
+            {
+                width: auto;
+                height: 80px;
+            }
+            .student-topic
+            {
+                padding: 4px 0;
+            }
         }
-        .student-topic{
-          padding: 4px 0;
-        }
-        }
-      }
-        
+    }
 }
 
 </style>
