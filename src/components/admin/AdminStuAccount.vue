@@ -21,15 +21,19 @@
   					<th>密码</th>
   					<th>手机号</th>
   					<th>邮箱</th>
+            <th>微信</th>
+            <th>QQ</th>
   				</tr>
   			</thead>
   			<tbody>
-  				<tr class="table-row-border" v-for="(student,index) in _adm_StuAccounts">
+  				<tr class="table-row-border" v-for="(student,index) in studentAccounts">
   					<td :style="genderBorder(student.gender)" width="12%">{{student._id}}</td>
   					<td width="12%">{{student.name}}</td>
   					<td width="12%">{{student.password}}</td>
   					<td width="12%">{{student.tel||'无'}}</td>
   					<td width="12%">{{student.email||'无'}}</td>
+            <td width="12%">{{student.wechat||'无'}}</td>
+            <td width="12%">{{student.qq||'无'}}</td>
   				</tr>
   			</tbody>
   		</table>
@@ -60,13 +64,14 @@ export default {
         dialog: false,
         chosenFile: '选择文件',
         progressBar: 0,
-        _adm_StuAccounts: [{
+        studentAccounts: [{
           _id: '1030513441',
           name: '李达康',
           gender: '男',
           password: '123456',
           tel: '18016996320',
-          email: 'google@hotmail.com'
+          email: 'google@hotmail.com',
+          wechat:'asdf'
         }, {
           _id: '1030513441',
           name: '李达康',
@@ -84,9 +89,6 @@ export default {
         }, ]
       }
     },
-    computed: {
-      ...mapState(['_adm_StuAccounts'])
-    },
     methods: {
       genderBorder(gender) {
         let color = gender === '男' ? '#3f51b5' : '#f44336'
@@ -95,10 +97,8 @@ export default {
         }
       },
       deleteAccounts() {
-      	get('/admin/admDelStuAcc')
-      		.then(res => {
-
-      		})
+      	this.GET('/admin/admDelStuAcc')
+      		.then(res => {})
       },
       fileInput() {
         let routes
@@ -118,7 +118,7 @@ export default {
             }
           }
           data.append('file', document.getElementById('file').files[0])
-          post(routes, data, config)
+          this.POST(routes, data, config)
             .then((res) => {
 
               output.className = 'container'
@@ -173,6 +173,7 @@ export default {
     .upload{
     	border-top-right-radius: 0;
     	border-bottom-right-radius: 0;
+      border-right-color: transparent;
     	&:hover{
     		background-color: #03A9F4;
     		color: white;

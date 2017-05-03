@@ -1,23 +1,18 @@
 <template>
   <div class="evaluation-card">
-  <div class="teacher-wrapper paper">
-       <div class="teacher-info">
-      <div class="name">
-        {{name}}
+    <div class="teacher-wrapper paper">
+      <div class="teacher-info">
+        <span class="name">{{name}}</span>
+        <span class="grade">{{grade}}</span>
       </div>
-      <div class="grade">
-          {{grade}}
-      </div>
-    </div>
-    <div class="grade-content">
-      <mu-slider v-model="grade" :step="1" @change="faceChange" class="grade-slider" />
-      <button @click="commitGrade" class="red" disabled="isOpenForEva">
+      <div class="grade-content">
+        <mu-slider v-model="grade" :step="1" class="grade-slider" />
+        <button @click="commitGrade" class="red" disabled="isOpenForEva">
           <i class="material-icons star-icon">star</i>
           <span>提交分数</span>
-      </button>
+        </button>
+      </div>
     </div>
-  </div>
-   
   </div>
 </template>
 
@@ -28,28 +23,17 @@ import {mapActions} from 'vuex'
 		data(){
 			return {
 				grade:60,
-				emoji:'sentiment_neutral',
 				name:'导师',
-                isOpenForEva:false
+        isOpenForEva:false
 			}
 		},
 		methods:{
-			faceChange(value){
-				if (value<=40) {
-					this.emoji='sentiment_very_dissatisfied'
-				}else if(value>40 && value<60){
-					this.emoji='sentiment_dissatisfied'
-				}else if(value===60){
-					this.emoji='sentiment_neutral'
-				}else if(value>60 && value <=80){
-					this.emoji='sentiment_satisfied'
-				}else if(value>80){
-					this.emoji='sentiment_very_satisfied'
-				}
-			},
 			commitGrade(){
+        let id = _c.getCookie('user')
+        if (!id) 
+          return alert('登录超时，请重新登录后操作')
 				this.stuEvaluationToTch({
-					studentId:_c.getCookie('user'),
+					studentId:id,
 					grade:this.grade
 				})
 			},
@@ -71,7 +55,7 @@ import {mapActions} from 'vuex'
         position: relative;
 
         padding: 16px;
-        border-top: 4px solid $indigo; 
+        border-top: 16px solid $indigo; 
         height: 32px;
         .name
         {

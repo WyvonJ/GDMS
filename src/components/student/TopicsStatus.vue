@@ -88,7 +88,7 @@ import {mapActions,mapState} from 'vuex'
       let id=_c.getCookie('user')
       this.stuSelectionResult({studentId: id})
         .then(()=>{
-        if (this._stu_TopicComfirmed.name.length!=0) {
+        if (this._stu_TopicComfirmed.name.length !== 0) {
           this.isTopicConfirmed=true
         }
       })
@@ -213,9 +213,9 @@ import {mapActions,mapState} from 'vuex'
 
     align-items: center;
     justify-items: center;
-    li
+    li.card
     {
-        display: inline-block;
+        flex: 0 1 50%;
 
         margin-right: 20px;
 
@@ -253,7 +253,6 @@ import {mapActions,mapState} from 'vuex'
 
             width: 32px;
             height: 32px;
-            padding-top: 7px;
             padding-left: 10px;
 
             border-radius: 16px;

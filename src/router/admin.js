@@ -16,14 +16,14 @@ export default {
   component: Admin,
   children: [
     { path: '', name: 'adminwelcome', component: Welcome },
-    { path: 'procedure', name: 'procedure', component: Procedure },
-    { path: 'stuaccount', name: 'stuaccount', component: AdminStuAccount },
-    { path: 'stutopics', name: 'stutopics', component: AdminStuTopics },
-    { path: 'tchaccount', name: 'tchaccount', component: AdminTchAccount },
+    { path: 'procedure',  component: Procedure , meta:{title:'毕业流程'}},
+    { path: 'stuaccount',  component: AdminStuAccount },
+    { path: 'stutopics',  component: AdminStuTopics },
+    { path: 'tchaccount',  component: AdminTchAccount },
     { path: 'tchtopics', name: 'tchtopics', component: AdminTchTopics },
-    { path: 'studentgrade', name: 'studentgrade', component: StudentGrade },
-    { path: 'middlegroup', name: 'middlegroup', component: MiddleGroup },
-    { path: 'finalgroup', name: 'finalgroup', component: FinalGroup },
-    { path: 'resetsystem', name: 'resetsystem', component: ResetSystem },
+    { path: 'studentgrade', component: StudentGrade },
+    { path: 'middlegroup',  component: MiddleGroup },
+    { path: 'finalgroup',  component: FinalGroup },
+    { path: 'resetsystem',  component: ResetSystem },
   ]
 }

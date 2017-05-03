@@ -323,12 +323,9 @@ span.title
         margin-bottom: 0;
     }
 }
-.fields
+.fields .mu-text-field
 {
-    .mu-text-field
-    {
         width: 320px !important;
-    }
 }
 
 </style>

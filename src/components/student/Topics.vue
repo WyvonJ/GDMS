@@ -36,21 +36,21 @@
               <td width="10%">{{topic._id}}</td>
               <td width="10%">{{topic.category===0?"论文":"设计"}}</td>
               <td width="52%">{{topic.title}}
-                <md-tooltip md-direction="top" class="details-tooltip">
+                <wyvonj-tooltip direction="top" class="details-tooltip">
                   <div class="details-appbar">Description</div>
                   <div class="details-content">
                     {{topic.details}}
                   </div>
-                </md-tooltip>
+                </wyvonj-tooltip>
               </td>
               <td width="14%"><span :class="{'selected-all' : getTotal(topic) >= topic.restriction}" class="selected-restriction">{{ getTotal(topic) }}/{{ topic.restriction ||0}}</span>
-                <md-tooltip md-direction="top" class="selected-tooltip">
+                <wyvonj-tooltip direction="top" class="selected-tooltip">
                   <ul>
                     <li>第一志愿：{{topic.firststudents===undefined?0:topic.firststudents.length}}</li>
                     <li>第二志愿：{{topic.secondstudents===undefined?0:topic.secondstudents.length}}</li>
                     <li>第三志愿：{{topic.thirdstudents===undefined?0:topic.thirdstudents.length}}</li>
                   </ul>
-                </md-tooltip>
+                </wyvonj-tooltip>
               </td>
             </tr>
             </transition-group>
@@ -111,7 +111,7 @@ export default {
         totalPage:100,//页码总数 作为分页参考
         currentPage:1,//当前页
         topicsInCart: [],//在购物车中的课题
-        status: 0  //选题进度，为0表示正常选题 1为最后选择
+        step: ''  //系统进度
       }
     },
     computed: {
@@ -150,7 +150,7 @@ export default {
       },
       addTopic(index, topic) {
         //根据进度选择能选几个题目
-        if(this.status === 0){
+        if(this.step === 'selecttopics'){
         let cart = this.topicsInCart
         if (topic._id !== this.lastSelection) {
           this.toggleTableBar = false
@@ -182,12 +182,14 @@ export default {
           }
         } else
           this.lastSelection = topic._id
-        }else{
+        }else if(this.type==='reselecttopics'){
           this.isCartDisplay = true
           if (this.topicsInCart.length===0)
             this.topicsInCart.push(topic)
           else
             this.showSnackbar("只能选择最终志愿，请与导师确认后提交")
+        }else{
+          this.showSnackbar("现在是非选题时间。")
         }
         
       },
@@ -224,7 +226,12 @@ export default {
     },
     mounted() {
       let id = _c.getCookie('user')
+       this.GET('/getStep')
+        .then(res=>{
+          this.step = res.data.curstep
+        })
       this.stuGetTopics() //获取学生课题
+
       this.stuSelectionResult({ studentId: id })//获取学生选题结果
         .then(()=>{
           //将选题结果放入Cart中
@@ -609,7 +616,7 @@ input::-o-input-placeholder
     }
 }
 
-.md-tooltip
+.wyvonj-tooltip
 {
     font-family: $fontYahei;
     font-size: 14px;
@@ -628,12 +635,12 @@ input::-o-input-placeholder
             box-shadow: $material-shadow-3dp;
 }
 
-.md-tooltip.selected-tooltip
+.wyvonj-tooltip.selected-tooltip
 {
     width: 100px;
     padding: 8px;
 }
-.md-tooltip.details-tooltip
+.wyvonj-tooltip.details-tooltip
 {
     width: 480px;
     padding: 0;

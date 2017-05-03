@@ -51,17 +51,11 @@ export default {
         docked: desktop,
         desktop: desktop,
         menuValue: 'topics',
-        username: 'UNKNOWN',
+        username: '',
         notification: '',
       }
     },
     methods: {
-      handleMenuChange(value) {
-        this.menuValue = value
-        this.$router.push('/student/' + value)
-        if (!isDesktop())
-          this.handleDrawerClose()
-      },
       changeNav() {
         const desktop = isDesktop()
         this.docked = desktop
@@ -72,6 +66,12 @@ export default {
         if (desktop && !this.desktop && !this.openDrawer)
           this.openDrawer = true
         this.desktop = desktop
+      },
+      handleMenuChange(value) {
+        this.menuValue = value
+        this.$router.push('/student/' + value)
+        if (!isDesktop())
+          this.handleDrawerClose()
       },
       handleDrawerClose() {
         this.openDrawer = !this.openDrawer

@@ -32,6 +32,7 @@ export default {
   showSnackbar,
   progressbarStart,
   progressbarStop,
+  //登录路由
   login: ({ commit }, payload) => {
     return axios.post('/login', payload)
       .then((response) => {
@@ -203,7 +204,6 @@ export default {
   tchGetCreatedTopics: ({ commit }, payload) => {
     return axios.post('/teacher/tchGetCreatedTopics', payload)
       .then(response => {
-        console.log(response)
         commit('TCH_TOPIC_CREATED_ALL', response.data)
       })
   },
@@ -212,10 +212,10 @@ export default {
     return axios.post('/teacher/tchDeleteTopic', payload)
       .then(response => {
         console.log(response)
+        showSnackbar({ commit }, "课题已删除")
       })
-      .catch((err) => {
-        showSnackbar({ commit }, '出了点问题，再试试')
-        return Promise.reject(err)
+      .catch(err => {
+        console.log('课题删除出错' + err)
       })
   },
   //确认学生选题

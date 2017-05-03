@@ -23,7 +23,7 @@
     
   </header>
   <div class="columns">
-  	<figure v-for="teacher of _adm_TchTopics" class="teacher-wrapper paper">
+  	<figure v-for="teacher of teacherTopics" class="teacher-wrapper paper">
      		<figcaption class="teacher-name">
      			<span class="show-avatar">
      				{{teacher.name}}
@@ -60,11 +60,10 @@ export default {
     return {
       message:'',
       dialog:false,
-
+      teacherTopics:[]
     }
     },
     methods:{
-    	...mapActions(['admGetTchTopics']),
     	firstSelection(){
     		//判断是否有未完成教师
     		if (true) {
@@ -105,10 +104,11 @@ export default {
         })
       },
     },
-    computed: mapState(['_adm_TchTopics']),
 		mounted(){
-			this.admGetTchTopics()
-			console.log(this._adm_TchTopics)
+      this.GET('/admin/admGetTchTopics')
+        .then(res => {
+          this.teacherTopics = res.data
+        })
 		}
   }
 </script>

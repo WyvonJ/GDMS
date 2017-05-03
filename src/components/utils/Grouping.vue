@@ -1,7 +1,7 @@
 <template>
   <div class="group-container">
     <div class="group-current-status paper">
-      {{status?'终':'中'}}期分组
+      {{step==='midgroup'?'中':'终'}}期分组
     </div>
     <div class="group-status-card card">
       <div class="teacher-wrapper">
@@ -13,15 +13,17 @@
       </div>
       <div class="student-wrapper">
       <span class="card-title">Student</span>
-      <div class="chip" v-for="(student,index) in students">
+      <div class="student-chips">
+        <span class="chip" v-for="(student,index) in students">
           <mu-icon :value="student.gender==='女'?'face':'mood'" color="blue500" :size="18" /> 
           <span class="student-name">
             {{student.name}}
           </span>
-          <div class="student-topic">
+          <span class="student-topic">
             {{student.final.title}}
-          </div>
-        </div>
+          </span>
+        </span>
+      </div>
     </div>
       </div>
   </div>
@@ -33,7 +35,7 @@ import { mapActions, mapState } from 'vuex'
 export default {
   data() {
       return {
-        status: 0,
+        step: 'midgroup',
         groupId: '',
         students: [],
         teachers: []
@@ -55,6 +57,10 @@ export default {
             this.teachers = this._stu_tch_Group.teachers
             this.students = this._stu_tch_Group.students
           }
+        })
+      this.GET('/getstep')
+        .then(res=>{
+          this.step = res.data.curstep
         })
     }
 }
@@ -81,7 +87,8 @@ export default {
 
     position: relative;
 
-    max-width: 480px;
+    min-width: 480px;
+    max-width: calc(100% - 64px);
     &:hover
     {
         transform: translateY(-4px);
@@ -99,39 +106,6 @@ export default {
         top: 12px;
         left: 12px;
     }
-    .chip
-    {
-        font-size: 14px;
-
-        position: relative;
-
-        display: inline-block;
-        overflow: hidden;
-
-        width: 100px;
-        max-width: 128px;
-        height: 32px;
-        margin: 6px;
-        padding: 4px 16px 4px 12px;
-
-        cursor: default;
-        transition: $material-enter;
-
-        border: 1px #efefef solid;
-        border-radius: 16px;
-        background-color: #fff;
-        &:hover
-        {
-            -webkit-box-shadow: $material-shadow-1dp;
-               -moz-box-shadow: $material-shadow-1dp;
-                    box-shadow: $material-shadow-1dp;
-        }
-        .mu-icon
-        {
-            position: relative;
-            top: 2px;
-        }
-    }
     .teacher-wrapper
     {
         position: relative;
@@ -146,10 +120,6 @@ export default {
             right: -20px;
             bottom: - 20px;
         }
-        .chip
-        {
-            width: auto;
-        }
     }
     .student-wrapper
     {
@@ -158,20 +128,24 @@ export default {
         padding: 36px 16px 16px 8px;
 
         background-color: white;
-        .chip
+        .student-chips
         {
-            background-color: #e4e4e4;
-            &:hover
-            {
-                width: auto;
-                height: 80px;
-            }
-            .student-topic
-            {
-                padding: 4px 0;
-            }
+            display: inline-flex;
+
+            flex-wrap: wrap;
+        }
+        .student-name
+        {
+            margin: 0 6px;
+        }
+        .mu-icon
+        {
+            position: relative;
+            top: 2px;
+            left: -2px;
         }
     }
 }
+
 
 </style>

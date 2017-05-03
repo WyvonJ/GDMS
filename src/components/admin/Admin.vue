@@ -30,7 +30,7 @@
             </mu-list-item>
           </mu-list-item>
          
-          <mu-list-item title="分组管理" toggleNested>
+          <mu-list-item title="分组管理" toggleNested :open="false">
             <img src="../../assets/icon/group.svg" slot="left" alt="group"/>
             <mu-list-item value="middlegroup" slot="nested" title="中期分组">
               <img src="../../assets/icon/assessment.svg" slot="left" alt="middle"/>
@@ -57,66 +57,60 @@
 
 
 <script>
-import {mapState,mapMutations} from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import WyvonjHeader from '../utils/WyvonjHeader.vue'
 import WyvonjFooter from '../utils/WyvonjFooter.vue'
-  function isDesktop () {
-  return window.innerWidth > 993
-}
-	export default {
-		data(){
-		const desktop=isDesktop()
-			return{
-				openDrawer:desktop,
-				docked:desktop,
-				desktop:desktop,
-				menuValue:'procedure',
-				username:'管理员',
-				notification:'zazaza'
-			}
-		},
-		methods:{
-			changeNav () {
-     		const desktop = isDesktop()
-     		this.docked = desktop
-     		if (desktop === this.desktop) return
-     		if (!desktop && this.desktop && this.openDrawer) {
-     		  this.openDrawer = false
-     		}
-     		if (desktop && !this.desktop && !this.openDrawer) {
-     		  this.openDrawer = true
-     		}
-     		this.desktop = desktop
-    	},
-    	handleDrawerClose () {
-      	 this.openDrawer = !this.openDrawer
-    	},
-    	toggleNav(){
-    		this.openDrawer=!this.openDrawer
-    	},
-    	handleMenuChange(value){
-    		this.menuValue=value
-    		this.$router.push('/admin/'+value)
+let isDesktop = () => window.innerWidth > 993
+export default {
+  data() {
+      const desktop = isDesktop()
+      return {
+        openDrawer: desktop,
+        docked: desktop,
+        desktop: desktop,
+        menuValue: 'procedure',
+        username: '管理员',
+        notification: 'zazaza'
+      }
+    },
+    methods: {
+      changeNav() {
+        const desktop = isDesktop()
+        this.docked = desktop
+        if (desktop === this.desktop) return
+        if (!desktop && this.desktop && this.openDrawer) 
+          this.openDrawer = false
+        if (desktop && !this.desktop && !this.openDrawer) 
+          this.openDrawer = true
+        this.desktop = desktop
+      },
+      handleMenuChange(value) {
+        this.menuValue = value
+        this.$router.push('/admin/' + value)
         if (!isDesktop())
           this.handleDrawerClose()
-    	}
-		},
-		components:{
-			WyvonjHeader,
-			WyvonjFooter
-		},
-		mounted(){
-			this.changeNav()
-			this.handleResize=()=>{
-				this.changeNav()
-			}
-			window.addEventListener('resize',this.handleResize)
-		},
-		destroyed(){
-    	window.removeEventListener('resize', this.handleResize)
-  	}
-	}
-</script>
+      },
+      handleDrawerClose() {
+        this.openDrawer = !this.openDrawer
+      },
+      toggleNav() {
+        this.openDrawer = !this.openDrawer
+      }
 
-<style lang="sass" rel="stylesheet/scss">
-</style>
+    },
+    components: {
+      WyvonjHeader,
+      WyvonjFooter
+    },
+    mounted() {
+      this.handleResize = () => {
+        this.changeNav()
+      }
+      window.addEventListener('resize', this.handleResize)
+    },
+    destroyed() {
+      window.removeEventListener('resize', this.handleResize)
+    }
+}
+
+</script>

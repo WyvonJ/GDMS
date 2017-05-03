@@ -223,6 +223,7 @@ export default {
     .group-settings
     {
         padding-left: 16px;
+        display: flex;
         button
         {
             color: #333;
@@ -273,12 +274,10 @@ export default {
 .group-length
 {
     font-size: 20px;
-    line-height: 28px;
-
-    display: inline-block;
+    line-height: 34px;
 
     width: 40px;
-    height: 34px;
+    height: 38px;
     margin-right: 16px;
 
     text-align: center;

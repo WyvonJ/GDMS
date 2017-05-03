@@ -1,0 +1,70 @@
+
+
+.wyvonj-tooltip {
+  height: auto;
+  min-width: 64px;
+  background-color: white;
+  padding: 0 8px;
+  position: fixed;
+  z-index: 2000;
+  pointer-events: none;
+  border-radius: 2px;
+  opacity: 0;
+  transform-origin: center top;
+  transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);
+  transition-delay: 0s;
+  font-size: 16px;
+  line-height: 20px;
+  text-transform: none;
+  white-space: normal;
+  font-weight: lighter;
+  &.wyvonj-active {
+    opacity: 1;
+    transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);
+    transition-duration: .3s;
+  }
+
+  &:not(.wyvonj-active) {
+    transition-delay: 0s !important;
+  }
+
+  &.wyvonj-transition-off {
+    transition: none !important;
+  }
+
+  &.wyvonj-tooltip-top {
+    margin-top: -14px;
+    transform: translate(-50%, 8px);
+
+    &.wyvonj-active {
+      transform: translate(-50%, 0);
+    }
+  }
+
+  &.wyvonj-tooltip-right {
+    margin-left: 14px;
+    transform: translate(-8px, 50%);
+
+    &.wyvonj-active {
+      transform: translate(0, 50%);
+    }
+  }
+
+  &.wyvonj-tooltip-bottom {
+    margin-top: 14px;
+    transform: translate(-50%, -8px);
+
+    &.wyvonj-active {
+      transform: translate(-50%, 0);
+    }
+  }
+
+  &.wyvonj-tooltip-left {
+    margin-left: -14px;
+    transform: translate(8px, 50%);
+
+    &.wyvonj-active {
+      transform: translate(0, 50%);
+    }
+  }
+}

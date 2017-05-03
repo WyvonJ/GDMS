@@ -90,7 +90,7 @@
 
         width: 300px;
         height: 48px;
-        margin: 16px;
+        margin: 40px 0;
 
         cursor: text;
         white-space: nowrap;

@@ -24,13 +24,13 @@ const store = new Vuex.Store({
       title: ' 元素用于在网页中包含对象',
       details: 'form 返回对对象的父表单的引用。height  设置或返回对象的高度。hspace  设置或返回对象的水平外边距。name  设置或返回对象的名称。standby 设置或返回在加载对象时返回的消息。type  设置或返回通过 data 属性下载的数据的内容类型。',
       category: 0
-    }, {
-      _id: 17,
+    },{
+      _id: 16,
       title: ' 元素用于在网页中包含对象',
       details: 'form 返回对对象的父表单的引用。height  设置或返回对象的高度。hspace  设置或返回对象的水平外边距。name  设置或返回对象的名称。standby 设置或返回在加载对象时返回的消息。type  设置或返回通过 data 属性下载的数据的内容类型。',
-      category: 1
-    }, {
-      _id: 18,
+      category: 0
+    },{
+      _id: 16,
       title: ' 元素用于在网页中包含对象',
       details: 'form 返回对对象的父表单的引用。height  设置或返回对象的高度。hspace  设置或返回对象的水平外边距。name  设置或返回对象的名称。standby 设置或返回在加载对象时返回的消息。type  设置或返回通过 data 属性下载的数据的内容类型。',
       category: 0
@@ -269,176 +269,6 @@ const store = new Vuex.Store({
         email: 'donaldjtrump@gmail.com',
         qq: '852663214',
         wechat: 'donaldjtrump'
-      }]
-    }],
-    _tch_Account: {},
-    _stu_tch_Group: {},
-    _adm_StuAccounts: [],
-    _adm_StuTopics: [{
-      _id: '1030513410',
-      name: '高宇',
-      teacher: '陈伟',
-      final: {
-        _id: 66,
-        title: '毕业设计管理大系统'
-      }
-    }, {
-      _id: '1030513410',
-      name: '高宇',
-      teacher: '陈伟',
-      final: {
-        _id: 66,
-        title: '毕业设计管理大系统'
-      }
-    }, {
-      _id: '1030513410',
-      name: '高宇',
-      teacher: '陈伟',
-      final: {
-        _id: 66,
-        title: '毕业设计管理大系统'
-      }
-    }, {
-      _id: '1030513410',
-      name: '高宇',
-      teacher: '陈伟',
-      final: {
-        _id: 66,
-        title: '毕业设计管理大系统'
-      }
-    }],
-    _adm_TchAccounts: [{
-      _id:'2030513402',
-      name:'李晓光',
-      password:'16asdf',
-      tel:'18861853209',
-      email:'12389q2389@waf.com',
-      qq:'46844231',
-      office:'503'
-    }],
-    _adm_TchTopics: [{
-      name: '刘云',
-      topics: [{
-        _id: 110,
-        title: '基于java的后端管理系统设计，使用Vuejs技术栈实现',
-        finalstudents: [{
-          _id: '1030513465',
-          name: '高义'
-        }]
-      }, {
-        _id: 16,
-        title: '基啊额外人田阿尔泰用Vuejs技术栈实现',
-        finalstudents: [{
-          _id: '1030513465',
-          name: '阿斯蒂芬'
-        }, {
-          _id: '1030513465',
-          name: '高澳网耳塞义'
-        }]  
-      }]
-    },{
-      name: '水电',
-      topics: [{
-        _id: 110,
-        title: '基于java的后端管理系统设计，使用Vuejs技术栈实现',
-        finalstudents: [{
-          _id: '1030513465',
-          name: '高义'
-        }, {
-          _id: '1030513465',
-          name: '带哦'
-        },{
-          _id: '1030513465',
-          name: '倒萨'
-        }]
-      }, {
-        _id: 16,
-        title: '基啊额外人田阿尔泰用Vuejs技术栈实现',
-        finalstudents: [{
-          _id: '1030513465',
-          name: '阿斯蒂芬'
-        }, {
-          _id: '1030513465',
-          name: '高澳网耳塞义'
-        }]  
-      }]
-    },{
-      name: '阿里斯柯达',
-      topics: [{
-        _id: 110,
-        title: '基于java的后端管理系统设计，使用Vuejs技术栈实现',
-        finalstudents: [{
-          _id: '1030513465',
-          name: '高义'
-        }, {
-          _id: '1030513465',
-          name: '带哦'
-        },{
-          _id: '1030513465',
-          name: '倒萨'
-        }]
-      }, {
-        _id: 16,
-        title: '基啊额外人田阿尔泰用Vuejs技术栈实现',
-        finalstudents: [{
-          _id: '1030513465',
-          name: '阿斯蒂芬'
-        }, {
-          _id: '1030513465',
-          name: '高澳网耳塞义'
-        }]  
-      }]
-    },{
-      name: '阿里斯柯达',
-      topics: [{
-        _id: 110,
-        title: '基于java的后端管理系统设计，使用Vuejs技术栈实现',
-        finalstudents: [{
-          _id: '1030513465',
-          name: '高义'
-        }, {
-          _id: '1030513465',
-          name: '带哦'
-        },{
-          _id: '1030513465',
-          name: '倒萨'
-        }]
-      }, {
-        _id: 16,
-        title: '基啊额外人田阿尔泰用Vuejs技术栈实现',
-        finalstudents: [{
-          _id: '1030513465',
-          name: '阿斯蒂芬'
-        }, {
-          _id: '1030513465',
-          name: '高澳网耳塞义'
-        }]  
-      }]
-    },{
-      name: '阿里斯柯达',
-      topics: [{
-        _id: 110,
-        title: '基于java的后端管理系统设计，使用Vuejs技术栈实现',
-        finalstudents: [{
-          _id: '1030513465',
-          name: '高义'
-        }, {
-          _id: '1030513465',
-          name: '带哦'
-        },{
-          _id: '1030513465',
-          name: '倒萨'
-        }]
-      }, {
-        _id: 16,
-        title: '基啊额外人田阿尔泰用Vuejs技术栈实现',
-        finalstudents: [{
-          _id: '1030513465',
-          name: '阿斯蒂芬'
-        }, {
-          _id: '1030513465',
-          name: '高澳网耳塞义'
-        }]  
       }]
     }]
   },

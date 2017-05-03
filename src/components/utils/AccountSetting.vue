@@ -49,19 +49,26 @@ export default {
         if (this.original.length < 1)
           return this.warningMsg = '请输入原密码'
         if (this.password.length < 8)
-          return this.warningMsg = '密码长度不够'
+          return this.warningMsg = '新密码长度不够'
         if (this.password !== this.passwordRepeat) {
           return this.warningMsg = '两次输入的密码不一样'
         } else if (this.password.exec(/^(?:\d+|[a-zA-Z]+|[!@#$%^&*]+)$/)){
+          let acc = _c.getCookie('user')
+          if (!acc) {
+            return this.warningMsg = '登录超时，请重新登录再进行操作'
+          }
           this.POST('/login/account', {
+              account: acc,
               oldPassword: this.original,
               newPassword: this.password
             })
             .then(res => {
               console.log(res.data)
-              if (res.data.state===1) {
+              if (res.data.state === 1) {
                 this.success = true
                 this.warningMsg = '成功修改密码'
+              }else{
+                this.warningMsg = '原密码不正确'
               }
             })
         } else {

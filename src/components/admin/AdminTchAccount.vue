@@ -25,7 +25,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(teacher,index) in _adm_TchAccounts">
+          <tr v-for="(teacher,index) in teacherAccounts">
             <td width="12%">{{teacher._id}}</td>
             <td width="12%">{{teacher.name}}</td>
             <td width="12%">{{teacher.password}}</td>
@@ -64,11 +64,9 @@ export default {
         dialog: false,
         chosenFile: '选择文件',
         progressBar: 0,
-        message: ''
+        message: '',
+        teacherAccounts:[]
       }
-    },
-    computed: {
-      ...mapState(['_adm_TchAccounts'])
     },
     methods: {
       deleteAccounts() {
@@ -89,7 +87,7 @@ export default {
               let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
             }
           }
-          post(routes, data, config)
+          this.POST(routes, data, config)
             .then((res) => {
 
               output.className = 'container'
@@ -106,11 +104,16 @@ export default {
           output.className = 'container'
           chosenFile = '选择文件'
         }
-      },
-      ...mapActions(['admUpTchAccounts', 'admGetTchAccount'])
+      }
     },
     mounted() {
-      this.admGetTchAccount()
+      this.GET('/admin/admGetTchAccount')
+        .then(res => {
+          this.teacherAccounts = res.data
+        })
+        .catch(err=>{
+          console.log(err)
+        })
     }
 }
 

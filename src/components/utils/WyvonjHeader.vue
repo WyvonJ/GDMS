@@ -12,8 +12,13 @@
       <span>{{username}}</span>
     </span>
     <div class="notification-info">
-      <mu-icon-button tooltip="通知" class="notify-button" ref="notify" icon="notifications" @click="isOpen = !isOpen" />
-      <mu-icon-button tooltip="注销" class="logout-button" ref="button" icon="exit_to_app" @click="logout" />
+      <mu-icon-button tooltip="通知" class="notify-button" ref="notify"  @click="isOpen = !isOpen" >
+      <img src="../../assets/icon/notifications.svg" alt="notification" />
+      </mu-icon-button>
+      <mu-icon-button tooltip="注销" class="logout-button" ref="button" @click="logout">
+      <img src="../../assets/icon/exit.svg" alt="exit" />
+
+      </mu-icon-button>
       <mu-popover :trigger="trigger" :open="isOpen" @close="isOpen = false">
         <mu-card>
           <mu-card-text>
@@ -116,6 +121,7 @@ export default {
         top: 22px;
         right: 106px;
         height: 24px;
+        display: flex;
         span{
           padding-left: 6px;
         }

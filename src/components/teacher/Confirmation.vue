@@ -59,7 +59,6 @@ export default {
       },
       finalConfirm(){
         let tchId=_c.getCookie('user') 
-        //this.$set(this.currentStudent, 'isselected', true)
         
         if (!tchId) {
           let tchSelection = {
@@ -71,14 +70,11 @@ export default {
           .then(()=>{
             this.showSnackbar('成功选择了'+this.currentStudent.name)
             this.TCH_SET_STU_SELECTED(this.currentStudent)
-            this.openDialog=false
+            this.openDialog = false
             this.currentTopic.count++
-            if(this.currentTopic.count===this.currentTopic.available){
+            if(this.currentTopic.count === this.currentTopic.available){
               this.TCH_DELETE_STUDENT(this.currentTopic)
             }
-          })
-          .catch(err=>{
-            console.log('选择学生出错了'+err)
           })
         }
       },
@@ -93,11 +89,8 @@ export default {
     },
     created() {
         this.tchGetTopics({ teacherId: _c.getCookie('user') })
-          .catch(err=>{
-            console.log('获取题目和选题学生错误'+err)
-          })
         _.forEach(this._tch_StudentInCard,(topic)=>{
-          topic.count=0
+          topic.count = 0
         })
     },
     components: {
@@ -149,27 +142,37 @@ export default {
 .teacher-status-card
 {
     margin: 8px 0;
+
     transition: $material-enter;
-    .student-list{
-      margin: 0;
+    .student-list
+    {
+        margin: 0;
     }
-    .grid{
-      display: flex;
-      flex-wrap: wrap;
-      align-content: space-between;
-      align-items: flex-start;
+    .grid
+    {
+        display: flex;
+
+        flex-wrap: wrap;
+        align-content: space-between;
+        align-items: flex-start;
     }
     .single-card
     {
+        z-index: 200;
+
         margin: 12px;
+
         flex: 0 0 25%;
         .card-title
         {
-            position: relative;
-            padding: 8px 10px;
-            min-width: 496px;
-            color: white;
             font-size: 16px;
+
+            position: relative;
+
+            min-width: 496px;
+            padding: 8px 10px;
+
+            color: white;
             border-top-left-radius: 4px;
             border-top-right-radius: 4px;
             background-color: $teal;
@@ -178,10 +181,11 @@ export default {
                 font-family: $fontCenturyGothic;
 
                 position: absolute;
-                right: -12px;
                 top: -12px;
+                right: -12px;
             }
         }
     }
 }
+
 </style>

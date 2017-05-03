@@ -230,6 +230,7 @@ export default {
         color: white;
         border-radius: 12px;
         background-color: $red;
+        z-index: 3;
     }
 }
 .teacher-to, .student-to{

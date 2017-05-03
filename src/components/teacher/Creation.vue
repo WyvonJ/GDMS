@@ -3,10 +3,10 @@
       <div class="tab-button">
         <button type="button" @click="isTab=true" :class="{'focused':isTab}" class="add-topic-button">
           <img src="../../assets/icon/library_add.svg" alt="add" />
-          <span>课题创建</span>
+          <span>课题发布</span>
         </button>
         <button type="button" @click="isTab=false" :class="{'focused':!isTab}" class="manage-topic-button">
-          <img src="../../assets/icon/subject.svg" alt="mag" />
+          <img src="../../assets/icon/subject.svg" alt="man" />
           <span>课题管理</span>
         </button>
       </div>
@@ -107,7 +107,7 @@ export default {
           return this.fieldsError = "还没选择课题研究方向！"
         }
         if (this.titleText.length === 0) {
-          return this.titleError = "好像还没写名字？"
+          return this.titleError = "好像还没写课题名称？"
         }
         if (this.detailText.length === 0) {
           return this.detailError = "随便写点介绍吧！"
@@ -140,15 +140,7 @@ export default {
             topicId: topic._id
           })
           .then(() => {
-            this.tchGetCreatedTopics({
-                teacherId: id,
-              })
-              .then(() => {
-                this.showSnackbar("课题已删除")
-              })
-              .catch(err=>{
-                console.log('课题删除出错'+err)
-              })
+            this.tchGetCreatedTopics({teacherId: id,})
           })
       },
       clearError() {
@@ -181,32 +173,31 @@ export default {
 
 <style lang="sass" rel="stylesheet/scss" scoped>
 @import '../../style/variables.scss';
-
 .creation-container
 {
     z-index: 0;
-
     .creation-card
     {
+        padding: 8px 24px;
+
         text-align: left;
-            padding: 8px 24px;
-            .available-slider{
-              width: 256px;
-              margin-top: 12px;
-              margin-bottom: 0;
+        .available-slider
+        {
+            width: 256px;
+            margin-top: 12px;
+            margin-bottom: 0;
+        }
+        .mu-text-field
+        {
+            font-size: 14px;
 
-            }
-            .mu-text-field
+            width: 50vw;
+            margin-bottom: 0;
+            .mu-text-field-content
             {
-                font-size: 14px;
-
-                width: 50vw;
-                margin-bottom: 0;
-                .mu-text-field-content
-                {
-                    padding-top: 24px;
-                }
+                padding-top: 24px;
             }
+        }
         .available,
         .category
         {
@@ -218,51 +209,66 @@ export default {
         {
             max-width: 50vw;
         }
-        .select-field{
-          width: 256px !important;
+        .select-field
+        {
+            width: 256px !important;
         }
-
     }
-        table{
-          width: 100%;
-            td{
-                white-space: pre-line;
-            }
-            .mu-icon-button{
-                color: #f44336;
-            }
-            .topic-restriction{
-              text-align: center;
-            }
+    table
+    {
+        width: 100%;
+        td
+        {
+            white-space: pre-line;
         }
-}
-.tab-button{
-  padding: 16px;
-  text-align: center;
-  button{
-    border-radius: 0;
-    &.focused{
-      box-shadow: 0 0 3px 1px #898989;
-      -moz-box-shadow: 0 0 3px 1px #898989;
-      -webkit-box-shadow: 0 0 3px 1px #898989;
+        .mu-icon-button
+        {
+            color: #f44336;
+        }
+        .topic-restriction
+        {
+            text-align: center;
+        }
     }
-  }
-  .add-topic-button{
-    background-color: $greenVue;
-    &:hover{
-      background-color: #4cd798;
-    }
-  }
-  .manage-topic-button{
-    background-color: $blue;
-    &:hover{
-      background-color: #64b5f6;
-    }
-  }
-}
-#tab-box1,#tab-box2{
-  width: 100%;
 }
 
+.tab-button
+{
+    padding: 16px;
+
+    text-align: center;
+    button
+    {
+        border-radius: 0;
+        &.focused
+        {
+            -webkit-box-shadow: 0 0 3px 1px #898989;
+               -moz-box-shadow: 0 0 3px 1px #898989;
+                    box-shadow: 0 0 3px 1px #898989;
+        }
+    }
+    .add-topic-button
+    {
+        background-color: $greenVue;
+        &:hover
+        {
+            background-color: #4cd798;
+        }
+    }
+    .manage-topic-button
+    {
+        background-color: $blue;
+        &:hover
+        {
+            background-color: #64b5f6;
+        }
+    }
+}
+
+#tab-box1,
+#tab-box2
+{
+    width: 100%;
+}
 
 </style>

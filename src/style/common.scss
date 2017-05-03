@@ -16,15 +16,16 @@ body
     font-weight: lighter;
 
     width: 100%;
-    min-height: 99% !important;
+    min-height: 99%;
 
     letter-spacing: .05em;
 
     color: $black2;
-    background-color: #f6f6f6 !important;
+    background-color: #f6f6f6;
 
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+
 .scrollbar
 {
     &::-webkit-scrollbar
@@ -53,6 +54,7 @@ body
         -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
     }
 }
+
 html,
 body
 {
@@ -63,14 +65,14 @@ a
 {
     text-decoration: none;
 
-    color: rgba(0, 0, 0, .7) !important;
+    color: rgba(0, 0, 0, .7);
 }
 
 a:hover
 {
-    text-decoration: none !important;
+    text-decoration: none;
 
-    color: $red !important;
+    color: $red;
 }
 
 ul,
@@ -85,6 +87,8 @@ button
     font-size: 16px;
 
     position: relative;
+
+    display: inline-flex;
 
     padding: 6px 12px;
 
@@ -102,8 +106,10 @@ button
     border-color: transparent;
     border-radius: 4px;
     outline: none;
-    &:disabled{
+    &:disabled
+    {
         cursor: not-allowed;
+
         background-color: #9f9f9f;
     }
     span
@@ -111,17 +117,31 @@ button
         margin-left: 4px;
 
         cursor: inherit;
+
+        flex: 1;
+    }
+    img
+    {
+        position: relative;
+
+        flex: 1;
     }
     > i
     {
         position: relative;
         top: 4px;
+
+        flex: 1;
     }
-    &.red,&.indigo,&.green-vue,&.blue,&.orange{
-        
-    box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 1px 1px rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
-    -moz-box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 1px 1px rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
-    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 1px 1px rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+    &.red,
+    &.indigo,
+    &.green-vue,
+    &.blue,
+    &.orange
+    {
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .2), 0 1px 1px rgba(0, 0, 0, .14), 0 2px 1px -1px rgba(0, 0, 0, .12);
+           -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .2), 0 1px 1px rgba(0, 0, 0, .14), 0 2px 1px -1px rgba(0, 0, 0, .12);
+                box-shadow: 0 1px 3px rgba(0, 0, 0, .2), 0 1px 1px rgba(0, 0, 0, .14), 0 2px 1px -1px rgba(0, 0, 0, .12);
     }
     &.red
     {
@@ -176,10 +196,12 @@ table
 
     background-color: white;
 }
+
 caption
 {
     font-size: 20px;
 }
+
 th
 {
     font-weight: lighter;
@@ -188,13 +210,15 @@ th
 
     border-top: 1px solid #ececec;
 }
+
 th:first-child
 {
     padding-left: 24px;
 }
+
 tr
 {
-    transition: all .3s cubic-bezier(.2,.1,.6,1);
+    transition: all .3s cubic-bezier(.2, .1, .6, 1);
 
     border-bottom: 1px solid #ececec;
 }
@@ -207,6 +231,7 @@ td
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
 td:first-child
 {
     padding-left: 16px;
@@ -229,39 +254,37 @@ td:first-child
 
 ::selection
 {
-    color: $white !important;
-    background: $red !important;
+    color: $white;
+    background: $red;
 }
 
 ::-moz-selection
 {
-    color: $white !important;
-    background: $red !important;
+    color: $white;
+    background: $red;
 }
 
 ::-webkit-selection
 {
-    color: $white !important;
-    background: $red !important;
-}
-
-.md-tooltip
-{
-    font-weight: lighter;
+    color: $white;
+    background: $red;
 }
 
 .mu-item.show-right
 {
     padding-right: 48px !important;
 }
+
 .mu-item.show-left
 {
     padding-left: 48px !important;
 }
 
-.mu-dialog-wrapper{
+.mu-dialog-wrapper
+{
     max-width: 320px !important;
 }
+
 .no-selection
 {
     -webkit-user-select:      none;
@@ -292,22 +315,29 @@ td:first-child
        -moz-box-shadow: $material-shadow-2dp;
             box-shadow: $material-shadow-2dp;
 }
-.shadow{
-    box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 1px 1px rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
-    -moz-box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 1px 1px rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
-    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.2), 0 1px 1px rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+
+.shadow
+{
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .2), 0 1px 1px rgba(0, 0, 0, .14), 0 2px 1px -1px rgba(0, 0, 0, .12);
+       -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .2), 0 1px 1px rgba(0, 0, 0, .14), 0 2px 1px -1px rgba(0, 0, 0, .12);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .2), 0 1px 1px rgba(0, 0, 0, .14), 0 2px 1px -1px rgba(0, 0, 0, .12);
 }
+
 .columns
 {
     width: 98%;
     max-width: 1280px;
     margin: 8px auto;
 
+    background: #f6f6f6;
+
             column-width: 320px;
-       -moz-column-width: 320px; /* Firefox */
+       -moz-column-width: 320px;
+    /* Firefox */
     -webkit-column-width: 320px;
     column-gap: 10px;
 }
+
 @media screen and (max-width: 993px)
 {
     #columns
@@ -319,15 +349,19 @@ td:first-child
         width: 100%;
     }
 }
+
 .console-panel .logo
 {
     background-color: #747474;
 }
+
 .logo
 {
     position: relative;
+
     width: 188px;
     height: 64px;
+
     cursor: pointer;
     img
     {
@@ -422,7 +456,6 @@ td:first-child
     opacity: 0;
 }
 
-
 .tab-tran-enter-active
 {
     transition: all .3s cubic-bezier(0, .87, .21, 1.1);
@@ -430,14 +463,14 @@ td:first-child
 
 .tab-tran-enter
 {
-    transform: translate3D(70px,0,0); //这个是执行函数
+    transform: translate3D(70px, 0, 0); //这个是执行函数
 
     opacity: 0; //而这个是直接设置
 }
 
 .tab-tran-leave-active
 {
-    transform: translate3D(-70px,0,0);
+    transform: translate3D(-70px, 0, 0);
 
     opacity: 0;
 }
@@ -448,7 +481,7 @@ td:first-child
 
     position: relative;
 
-    display: inline-block;
+    display: inline-flex;
 
     width: auto;
     height: 28px;
@@ -475,6 +508,7 @@ td:first-child
     {
         position: relative;
         bottom: 2px;
+
         width: 18px;
     }
 }
