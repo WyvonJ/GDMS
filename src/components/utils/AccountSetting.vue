@@ -52,12 +52,12 @@ export default {
           return this.warningMsg = '新密码长度不够'
         if (this.password !== this.passwordRepeat) {
           return this.warningMsg = '两次输入的密码不一样'
-        } else if (this.password.exec(/^(?:\d+|[a-zA-Z]+|[!@#$%^&*]+)$/)){
+        } else if (true){
           let acc = _c.getCookie('user')
           if (!acc) {
             return this.warningMsg = '登录超时，请重新登录再进行操作'
           }
-          this.POST('/login/account', {
+          this.POST('/account', {
               account: acc,
               oldPassword: this.original,
               newPassword: this.password

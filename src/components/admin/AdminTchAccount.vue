@@ -6,10 +6,6 @@
      <img src="../../assets/icon/upload_g.svg" alt="phone" />
       <span>帐号上传</span>
       </button>
-     <button class="delete" @click="deleteAccounts">
-     <img src="../../assets/icon/delete_b.svg" alt="phone" />
-      <span>帐号删除</span>
-    </button>
       </div>
       <table>
         <caption>导师信息表</caption>
@@ -74,7 +70,7 @@ export default {
       },
       fileInput() {
         let routes
-        routes = this.gradeType === 0 ? '/admin/admMidGradeUpload' : '/admin/admFnlGradeUpload'
+        routes = '/admin/admTchAccUpload'
         let file = document.getElementById('file').files[0]
         if (file) {
           this.chosenFile = file.name
@@ -89,10 +85,23 @@ export default {
           }
           this.POST(routes, data, config)
             .then((res) => {
-
-              output.className = 'container'
+              if (res.data.state===1) {
+                output.className = 'container'
               this.message = '成功上传文件'
               this.progressBar = 100
+              this.dialog = false
+              this.GET('/admin/admGetTchAccount')
+             .then(res => {
+               this.teacherAccounts = res.data
+             })
+             .catch(err=>{
+               console.log(err)
+        })
+            }else{
+              output.className = 'container text-danger'
+              this.message = '上传文件失败，请重新试试'
+            }
+              
             })
             .catch((err) => {
               output.className = 'container text-danger'

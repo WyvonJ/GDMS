@@ -46,30 +46,29 @@
   export default{
     data(){
       return {
-        usertype:true,
+        usertype:0,
         contact:{
-        tel:'18649150331',
-        email:'sunisdown@hotmail.com',
-        qq:'965884102',
-        wechat:'welovevue',
-        office:''
       }
       }
     },
     methods:{
       commitContact(){
-        let routes = this.usertype?'/student/stuSetContact':'/teacher/tchSetContact'
-        this.POST(routes,this.contact)
+        let routes = this.usertype=='0'?'/student/stuSetContact':'/teacher/tchSetContact'
+        let wrapper={
+          account:_c.getCookie('user'),
+          contact:this.contact
+        }
+        this.POST(routes,wrapper)
           .then(res => {
             console.log(res.data)
           })
       }
     },
     mounted(){
-       this.usertype = _c.getCookie('usertype')
-        let routes = this.usertype ? '/student/stuGetContact':'/teacher/tchGetContact'
+       this.usertype = _.parseInt(_c.getCookie('usertype'))
+        let routes = this.usertype=='0' ? '/student/stuGetContact':'/teacher/tchGetContact'
         let user=_c.getCookie('user')
-          this.POST(routes,{
+          this.GET(routes+'?account='+user,{
             account:user
           })
           .then(res => {

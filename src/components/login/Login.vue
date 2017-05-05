@@ -76,7 +76,6 @@ export default {
             this.progressbarStop()
               let date = new Date(Date.now() + 60000 * 30)
               let usertype=this.user.usertype
-              console.log(this.user)
               _c.setCookie('user', this.account, date, '/', location.hostname)
               _c.setCookie('username',this.user.username , date, '/', location.hostname)
               _c.setCookie('usertype',usertype , date, '/', location.hostname)
@@ -237,7 +236,7 @@ export default {
     {
         font-size: 40px;
 
-        padding-top: 36px;
+        padding-top: 14px;
 
         cursor: pointer;
 
@@ -250,7 +249,7 @@ export default {
     {
         font-size: 24px;
 
-        margin-top: 34px;
+        margin-top: 20px;
 
         color: #b7b7b7;
 

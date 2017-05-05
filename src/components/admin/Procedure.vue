@@ -6,13 +6,7 @@
       </div>
       <div class="workflow-panel">
       <div class="unfinished-wrapper">
-      	<div class="first-unfinished chip" v-for="teacher of firstUnfinished">
-      		{{teacher}}
-      	</div>
-      </div>
-      	<div class="unfinished-wrapper">
-    
-      	<div class="second-unfinished chip" v-for="teacher of secondUnfinished">
+      	<div class="first-unfinished chip" v-for="teacher of teacherUnfinished">
       		{{teacher}}
       	</div>
       </div>
@@ -41,34 +35,24 @@
 	export default{
 		data(){
 			return {
-				firstUnfinished:['陈伟','陈丽芳','迪兰'],
-				secondUnfinished:['陈伟','刘丽芳','迪兰'],
+				teacherUnfinished:['陈伟','陈丽芳','迪兰'],
 				notLoginStu:[{
 					_id:'1030513410',
 					name:'辽宁'
-				}],
-				notComfirmedStu:[{
-					_id:'1030513410',
-					name:'辽宁'
-				},{
-					_id:'1030513410',
-					name:'山东'
 				}]
 			}
 		},
 		mounted(){
 			this.GET('/admin/unhandledTch')
 				.then(res => {
-					console.log(res.data)
-					this.firstUnfinished = res.data
+					this.teacherUnfinished = res.data
 				})
 				.catch(err=>{
 					console.log(err)
 				})
 			this.GET('/admin/unhandledStu')
 				.then(res => {
-					console.log(res.data)
-					this.firstUnfinished = res.data
+					this.notLoginStu = res.data
 				})
 				.catch(err=>{
 					console.log(err)

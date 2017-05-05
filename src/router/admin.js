@@ -1,7 +1,6 @@
 import Welcome from '../components/utils/Welcome.vue'
 import Admin from '../components/admin/Admin.vue'
 import AdminStuAccount from '../components/admin/AdminStuAccount.vue'
-import AdminStuTopics from '../components/admin/AdminStuTopics.vue'
 import AdminTchAccount from '../components/admin/AdminTchAccount.vue'
 import AdminTchTopics from '../components/admin/AdminTchTopics.vue'
 import Procedure from '../components/admin/Procedure.vue'
@@ -18,7 +17,6 @@ export default {
     { path: '', name: 'adminwelcome', component: Welcome },
     { path: 'procedure',  component: Procedure , meta:{title:'毕业流程'}},
     { path: 'stuaccount',  component: AdminStuAccount },
-    { path: 'stutopics',  component: AdminStuTopics },
     { path: 'tchaccount',  component: AdminTchAccount },
     { path: 'tchtopics', name: 'tchtopics', component: AdminTchTopics },
     { path: 'studentgrade', component: StudentGrade },

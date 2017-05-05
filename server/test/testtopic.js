@@ -1,5 +1,49 @@
-//var db = require('../models/db')
-
+var db = require('../models/db')
+var xlsx = require('node-xlsx');
+var fs = require('fs');
+//db.students.findAndUpdate({})
+ var excelData=[{
+    name:'学生最终分数排名表',
+    data:[['学号','姓名','课题','导师','最终分数']]
+ }]
+ db.students.find({},['midgrade','finalgrade','finalscore'],(err,students)=>{
+            if(err)return
+                Promise.all(students.map(student=>{
+                    return new Promise((resolve,reject)=>{
+                        student.finalscore = student.midgrade * 0.2 + student.finalgrade *0.8;
+                        student.save()
+                        resolve()
+                    })
+                })).then(()=>{
+                    db.students.find({},['_id','name','mentor','final','finalscore'])
+                      .populate('mentor','name')
+                      .populate('final','title')
+                      .sort({finalscore:-1})
+                      .exec()
+                      .then((items)=>{
+                        console.log(items);
+                            Promise.all(items.map(item=>{
+                                return new Promise((resolve1,reject)=>{
+                                    var row = []
+                                  //  if(!item.final)item.final.title=''
+                                    //if(!item.mentor)item.mentor.name=''
+                                    row.push(
+                                        item._id,
+                                        item.name,
+                                        item.final?item.final.title:' ',
+                                        item.mentor?item.mentor.name:' ',
+                                        item.finalscore)
+                                    excelData[0].data.push(row)
+                                    resolve1()
+                                })
+                                
+                            })).then(()=>{
+                                var buffer = xlsx.build(excelData)
+                                fs.writeFileSync('最终分数分组.xlsx',buffer,{'flag':'w'});
+                            })
+                      })
+                })
+            })
 /*var topicData ={
 	    1:1,
 		2:"云计算研究",

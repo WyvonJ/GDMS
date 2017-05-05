@@ -49,8 +49,24 @@ export default {
     },
     mounted() {
       let user = _c.getCookie('user')
-      this.tchGrouping({ account: user })
+      
+      this.GET('/getstep')
+        .then(res=>{
+          this.step = res.data.curstep
+          if(this.step==='midgroup'){
+            this.POST('/teacher/tchMGrouping',{account:user})
+              .then(res=>{
+                if (res.data) {
+                this.gotGroup = true
+                this.groupId = res.data._id
+                this.teachers = res.data.teachers
+                this.students = res.data.students
+          }
+              })
+          }else{
+            this.tchGrouping({ account: user })
         .then(() => {
+          console.log(this._stu_tch_Group)
           if (this._stu_tch_Group.length !== 0) {
             this.gotGroup = true
             this.groupId = this._stu_tch_Group._id
@@ -58,9 +74,7 @@ export default {
             this.students = this._stu_tch_Group.students
           }
         })
-      this.GET('/getstep')
-        .then(res=>{
-          this.step = res.data.curstep
+          }
         })
     }
 }

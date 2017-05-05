@@ -68,17 +68,38 @@ router.get('/stuGetTopics', (req, res) => {
     selected: 1,
     firststudents: 1,
     secondstudents: 1,
-    thirdstudents: 1
+    thirdstudents: 1,
+    isselected:1
   })
-  query.sort({ '_id': 1 })
 
+  //query.where({'isselected':false})//只发送还未被选的题目
+  query.sort({ '_id': 1 })
   query.exec((err, topics) => {
     for(var i=0;i<topics.length;i++)
       topics[i].selected = topics[i].firststudents.length + topics[i].secondstudents.length + topics[i].thirdstudents.length;
     if (err) { res.send(404), console.log(err) } else res.send(topics)
   })
 })
+router.post('/stuFinalTopic',(req,res)=>{
+  var _id = req.body._id
+  var final = req.body.final
 
+  db.topics.findOneAndUpdate({_id:final},{$set:{finalstudents:_id}},{new:true})
+    .exec((err,topic)=>{
+    if(err)return
+    var mentor = topic.mentor
+     db.students.findOneAndUpdate({_id:_id},{$set:{final:final, mentor: mentor,isselected:true}},{new:true}).exec((err,student)=>{
+          if(err)return
+          else {
+            db.mentors.findOneAndUpdate({_id:mentor},{$set:{students:_id}},{new:true})
+            .exec(()=>{
+              console.log(`${student.name}最终选题选了${final}题`)
+              res.send({state:1})
+            })
+          }
+        })
+    })
+  })
 /*初次填写学生的联系信息*/
 router.post('/stuSetContactData', (req, res) => {
   var studentId = req.body.account
@@ -153,5 +174,35 @@ router.post('/stuAccountInfo', (req, res) => {
                 res.send(1)
               }
         })
+})
+
+router.post('/stuSetContact',(req, res)=>{
+  var account = req.body.studentId
+  var tel = req.body.tel
+  var email = req.body.email
+  var wechat = req.body.wechat
+  var qq = req.body.qq
+  db.students.findOneAndUpdate({_id:account},
+                              {$set: {'tel':tel, 'email':email, 'qq':qq, 'wechat': wechat}},
+                              {new: true}).exec()
+                              .then(res.send(1))
+})
+
+router.get('/stuGetContact',(req, res)=>{
+  var q = req.query
+  var account = q.account
+  console.log(account)
+  //var account = req.body.studentId
+  //var account = '1030513425'
+  db.students.findOne({_id:account},['tel','email','qq','wechat'],(err,student)=>{
+  // delete student._id
+    if(err)return
+    var studentContact = {}
+    studentContact.tel = student.tel
+    studentContact.email = student.email
+    studentContact.qq = student.qq
+    studentContact.wechat = student.wechat
+    res.send(studentContact)
+  })
 })
 module.exports = router

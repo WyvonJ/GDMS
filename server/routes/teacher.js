@@ -185,6 +185,9 @@ router.post('/tchSetContactData', (req, res) => {
     })
 })
 
+router.post('/tchMGrouping',(req,res)=>{
+
+})
 /*得到分组信息*/
 router.post('/tchGrouping', (req, res) => {
   console.log(req.body)
@@ -201,16 +204,17 @@ router.post('/tchGrouping', (req, res) => {
     teachers: [],
     students: []
   }
-
-  mydb[type].findOne({ _id: account }, 'group')
-    .exec()
-    .then((doc) => {
+  //console.log(account)
+  mydb[type].findOne({ _id: account }, 'group',(err,doc) => {
+      console.log(doc)
+      //if(err)return
       if(doc.group){
         db.groups.findOne({ _id: doc.group }, ['mentors', 'students'])
         .populate('mentors', 'name gender')
         .populate('students', 'name final gender')
         .exec()
-        .then((group) => {
+        .then((err,group) => {
+          if(err)return
           cardData._id = group._id
           cardData.teachers = group.mentors
           Promise.all(group.students.map((student) => fillCardData(student, cardData)))
@@ -221,7 +225,9 @@ router.post('/tchGrouping', (req, res) => {
       }else{
         res.sendStatus(403)
       }
-    })
+    }
+  )
+
 
   function fillCardData(student, cardData) {
     return new Promise((resolve, reject) => {
@@ -265,4 +271,33 @@ router.post('/tchAccountInfo', (req, res) => {
             
 })
 
+router.post('/tchSetContact',(req, res)=>{
+  var account = req.body.studentId
+  var tel = req.body.tel
+  var email = req.body.email
+  var wechat = req.body.wechat
+  var qq = req.body.qq
+  var office = req.office
+  db.mentors.findOneAndUpdate({_id:account},
+                              {$set: {'tel':tel, 'email':email, 'qq':qq, 'wechat': wechat, 'office':office}},
+                              {new: true}).exec()
+                              .then(res.send(1))
+})
+
+router.get('/tchGetContact',(req, res)=>{
+ // var account = req.body.teacherId
+    var q = req.query
+    var account = q.account
+ // var account = '2030513401'
+  db.mentors.findOne({_id:account},['tel','email','qq','wechat','office'],(err,mentor)=>{
+    if(err)return
+    var mentorContact = {}
+    mentorContact.tel = mentor.tel
+    mentorContact.email = mentor.email
+    mentorContact.qq = mentor.qq
+    mentorContact.wechat = mentor.wechat
+    mentorContact.office = mentor.office
+    res.send(mentorContact)
+  })
+})
 module.exports = router

@@ -11,26 +11,18 @@
         <mu-list-item title="毕业流程" value="procedure">
             <img src="../../assets/icon/timeline.svg" slot="left" alt="student"/>
           </mu-list-item> 
-          <mu-list-item title="导师管理" toggleNested>
-            <img src="../../assets/icon/teacher.svg" slot="left" alt="teacher"/>
-            <mu-list-item value="tchaccount" slot="nested" title="帐号管理">
-              <img src="../../assets/icon/account_box.svg" slot="left" alt="account"/>
-            </mu-list-item>
-            <mu-list-item value="tchtopics" slot="nested" title="选题管理">
+          <mu-list-item  title="课题管理" value="tchtopics">
             <img src="../../assets/icon/view_comfy.svg" slot="left" alt="view_comfy"/>
             </mu-list-item>
+          <mu-list-item title="导师帐号"  value="tchaccount">
+            <img src="../../assets/icon/teacher.svg" slot="left" alt="teacher"/>
+            
           </mu-list-item>
-          <mu-list-item title="学生管理" toggleNested>
+          <mu-list-item title="学生帐号" value="stuaccount">
             <img src="../../assets/icon/student.svg" slot="left" alt="student"/>
-            <mu-list-item value="stuaccount" slot="nested" title="帐号管理">
-              <img src="../../assets/icon/account_box.svg" slot="left" alt="account"/>
-            </mu-list-item>
-            <mu-list-item value="stutopics" slot="nested" title="选题管理">
-              <img src="../../assets/icon/view_comfy.svg" slot="left" alt="view_comfy"/>
-            </mu-list-item>
           </mu-list-item>
          
-          <mu-list-item title="分组管理" toggleNested :open="false">
+          <mu-list-item title="分组管理" toggleNested >
             <img src="../../assets/icon/group.svg" slot="left" alt="group"/>
             <mu-list-item value="middlegroup" slot="nested" title="中期分组">
               <img src="../../assets/icon/assessment.svg" slot="left" alt="middle"/>

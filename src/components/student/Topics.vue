@@ -182,7 +182,7 @@ export default {
           }
         } else
           this.lastSelection = topic._id
-        }else if(this.type==='reselecttopics'){
+        }else if(this.step === 'reselecttopics'){
           this.isCartDisplay = true
           if (this.topicsInCart.length===0)
             this.topicsInCart.push(topic)
@@ -195,7 +195,17 @@ export default {
       },
       //提交选题按钮
       commitSelectedTopics() {
-        let _stu_TopicInCartWrapper = {
+        if (this.step==='reselecttopics') {
+          this.POST('/student/stuFinalTopic',{
+            _id: _c.getCookie('user'),
+            final: this.topicsInCart[0]._id,
+          })
+          .then((state)=>{
+              this.showSnackbar('选题成功')
+              this.$router.push('/student/status')
+          })
+        }else{
+          let _stu_TopicInCartWrapper = {
           _id: _c.getCookie('user'),
           first: this.topicsInCart[0]._id,
           second: this.topicsInCart[1] === undefined ? -1 : this.topicsInCart[1]._id,
@@ -203,6 +213,13 @@ export default {
         }
         //提交选题是否成功
         this.stuCommitSelection(_stu_TopicInCartWrapper)
+          .then((state)=>{
+            console.log(state)
+              this.showSnackbar('选题成功')
+              this.$router.push('/student/status')
+          })
+        }
+        
       },
       toggleDetails(index) {
         //设置对应的详情是否展示
@@ -226,7 +243,7 @@ export default {
     },
     mounted() {
       let id = _c.getCookie('user')
-       this.GET('/getStep')
+       this.GET('/getstep')
         .then(res=>{
           this.step = res.data.curstep
         })

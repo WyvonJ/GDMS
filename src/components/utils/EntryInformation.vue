@@ -208,7 +208,7 @@ export default {
       },
       handleFinish() {
         this.account = _c.getCookie('user')
-        if (!this.usertype) {
+        if (this.usertype===0) {
           this.stuSetContactData({
               account: this.account,
               tel: this.tel,
@@ -246,7 +246,7 @@ export default {
     },
     mounted() {
       try {
-        this.usertype = _c.getCookie('usertype')
+        this.usertype = _.parseInt(_c.getCookie('usertype'))
       } catch (err) {
         return console.log(err)
       }

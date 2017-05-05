@@ -4,6 +4,8 @@ var students = require('./students').students
 var mentors = require('./mentors').mentors
 var groups = require('./groups').groups
 var admins = require('./admins').admins
+var step = require('./step').step
+var autoIncModel = require('./autoIncModel').autoIncModel
 var xlsx = require('node-xlsx')//读取excel文件
 var fs = require('fs')//读取文件内容
 var  topicsinitialdata = require('../initialdata/topicsinitialdata.json')//初始的课题信息
@@ -13,6 +15,8 @@ exports.students = students
 exports.mentors = mentors
 exports.groups = groups
 exports.admins = admins
+exports.step = step
+exports.autoIncModel = autoIncModel
 //exports.connection = mongoose.connection
 /*初始化students数据*/
 var ImportStudentsData=function(FilePath){

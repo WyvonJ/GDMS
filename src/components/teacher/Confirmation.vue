@@ -60,7 +60,7 @@ export default {
       finalConfirm(){
         let tchId=_c.getCookie('user') 
         
-        if (!tchId) {
+        if (tchId) {
           let tchSelection = {
             teacherId:tchId,
             studentId: this.currentStudent._id, 

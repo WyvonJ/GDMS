@@ -71,10 +71,13 @@ var fillGroupData = function(groupId,groups){
         //if(mentorsId.length)
         for(var j=0; j<mentorsId.length; j++){
             var mentorId = mentorsId[j]
-            db.mentors.findOne({_id:mentorId},['name','topics'])
+            db.mentors.findOne({_id:mentorId},['name','topics','group'])
                   .populate('topics','title finalstudents')
                   .exec()
                   .then((mentor)=>{
+                    mentor.group = groupId
+                    mentor.save()
+
                     var topics = mentor.topics
                     for(var k=0;k<topics.length;k++){
                         var topic = topics[k]
@@ -85,6 +88,7 @@ var fillGroupData = function(groupId,groups){
                         
                         var students = topic.finalstudents
                         for(var i = 0 ;i < students.length; i++){
+                          db.students.findOneAndUpdate({_id:students[i]._id},{$set:{group:groupId}},{new:true}).exec()
                             var row = []
                             row.push(
                                 id,

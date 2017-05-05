@@ -32,11 +32,13 @@ export default{
 	},
 	methods:{
 		resetSystem(){
-			get('/admin/admResetSystem')
+			this.GET('/admin/admResetSystem')
 				.then(res=>{
-					console.log(res.data)
-					if (res.data.state===1) 
-						this.reseted=true
+					if (res.data.state===1) {
+						this.reseted = true
+						this.dialog = false
+					}
+						
 				})
 		}
 	}

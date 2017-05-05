@@ -71,7 +71,7 @@ export default {
     return axios.post('/student/stuCommitSelection', payload)
       .then((response) => {
         if (response.data.state === 1)
-          showSnackbar({ commit }, '选题志愿提交成功')
+          Promise.resolve(1)
       })
       .catch(err => {
         showSnackbar({ commit }, '出了点小问题，再试试')

@@ -89,7 +89,7 @@ import {mapActions,mapState} from 'vuex'
       this.stuSelectionResult({studentId: id})
         .then(()=>{
         if (this._stu_TopicComfirmed.name.length !== 0) {
-          this.isTopicConfirmed=true
+          this.isTopicConfirmed = true
         }
       })
     }

@@ -2,7 +2,8 @@ var a = ['A','B','C','D','F']
 var b = ['a','b','c','d','f']
 var c = ['L','M','N','O','P']
 var db = require('../models/db')
-console.log(__dirname)
+//db.ImportMentorsData(FilePath)
+//console.log(__dirname)
 /*db.students.findOne({_id:'1030513425'},(err,student)=>{
 	console.log(student)
            	student.name = 'King'

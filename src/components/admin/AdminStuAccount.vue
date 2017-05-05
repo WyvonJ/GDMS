@@ -7,10 +7,6 @@
      <img src="../../assets/icon/upload_g.svg" alt="phone" />
       <span>帐号上传</span>
     	</button>
-     <button class="delete" @click="deleteAccounts">
-     <img src="../../assets/icon/delete_b.svg" alt="phone" />
-      <span>帐号删除</span>
-    </button>
   	</div>
   		<table>
   			<caption>学生信息表</caption>
@@ -102,39 +98,56 @@ export default {
       },
       fileInput() {
         let routes
-        if (this.gradeType === 0) 
-          routes = '/admin/admMidGradeUpload'
-        else 
-          routes = '/admin/admFnlGradeUpload'
+        routes = '/admin/admStuAccUpload'
         let file = document.getElementById('file').files[0]
         if (file) {
           this.chosenFile = file.name
 
           let output = document.getElementById('output')
-          , data = new FormData()
-          , config = {
+          let data = new FormData()
+          data.append('file', document.getElementById('file').files[0])
+          let config = {
             onUploadProgress: (progressEvent) => {
               let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
             }
           }
-          data.append('file', document.getElementById('file').files[0])
           this.POST(routes, data, config)
             .then((res) => {
-
-              output.className = 'container'
-              output.innerHTML = '成功上传文件'
+              if (res.data.state === 1) {
+                output.className = 'container'
+              this.message = '成功上传文件'
               this.progressBar = 100
+              this.dialog = false
+              this.GET('/admin/admGetTchAccount')
+             .then(res => {
+               this.teacherAccounts = res.data
+             })
+             .catch(err=>{
+               console.log(err)
+        })
+            }else{
+              output.className = 'container text-danger'
+              this.message = '上传文件失败，请重新试试'
+            }
+              
             })
             .catch((err) => {
               output.className = 'container text-danger'
-              output.innerHTML = '上传文件失败，请重新试试'
+              this.message = '上传文件失败，请重新试试'
               console.log(err)
             })
         } else {
+          this.message = ''
+          output.className = 'container'
           chosenFile = '选择文件'
         }
       }
-
+    },
+    mounted(){
+      this.GET('/admin/admGetStuAccount')
+        .then(res=>{
+          this.studentAccounts = res.data
+        })
     }
 }
 
@@ -170,26 +183,9 @@ export default {
         background-color: transparent;
         color: black;
     }
-    .upload{
-    	border-top-right-radius: 0;
-    	border-bottom-right-radius: 0;
-      border-right-color: transparent;
-    	&:hover{
-    		background-color: #03A9F4;
-    		color: white;
-    		border-color: #03A9F4;
+    .upload:hover{
+    		background-color: #dadada;
     	}
-    }
-    .delete
-    {
-    	border-top-left-radius: 0;
-    	border-bottom-left-radius: 0;
-    	&:hover{
-    		background-color: #F44336;
-    		color: white;
-    		border-color: #F44336;
-    	}
-    }
     caption
     {
         padding: 8px 0;

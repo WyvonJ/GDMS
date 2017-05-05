@@ -28,6 +28,9 @@ var studentsSchema = new Schema
 	intro:      {type: String},//自我介绍
 	group: 		{type: Number, ref: 'groups'},
 	finalscore: {type: Number},
+	midgrade:{type:Number},//中期答辨分数
+	finalgrade:{type:Number},//最后答辨分数
+	teachergrade:{type:Number},//老师评分
 	isselected: {type: Boolean, default:false},//这个学生是不是已经选择了题目
 	notification: {type: String},//这个学生是不是已经选择了题目
 	isfirstlogin: {type:Boolean, default:true}
