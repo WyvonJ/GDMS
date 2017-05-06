@@ -205,16 +205,17 @@ export default {
 
 <style lang="sass" rel="stylesheet/scss" scoped>
 @import '../../style/variables.scss';
-
 .group-current-status
 {
     width: 196px;
     margin: 16px 0;
     padding: 12px;
 }
-.instructions{
-  font-size: 20px;
-  padding-bottom: 14px;
+.instructions
+{
+    font-size: 20px;
+
+    padding-bottom: 14px;
 }
 .final-group-teacher
 {
@@ -222,8 +223,9 @@ export default {
     padding: 16px 8px;
     .group-settings
     {
-        padding-left: 16px;
         display: flex;
+
+        padding-left: 16px;
         button
         {
             color: #333;
@@ -269,6 +271,7 @@ export default {
 .group
 {
     position: relative;
+
     display: block;
 }
 .group-length
@@ -325,5 +328,6 @@ export default {
         }
     }
 }
+
 
 </style>

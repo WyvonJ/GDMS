@@ -64,7 +64,7 @@ export default {
           }
               })
           }else{
-            this.tchGrouping({ account: user })
+        this.tchGrouping({ account: user })
         .then(() => {
           console.log(this._stu_tch_Group)
           if (this._stu_tch_Group.length !== 0) {

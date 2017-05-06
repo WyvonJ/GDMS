@@ -2,7 +2,7 @@
   <div class="teacher-topics">
   	<header class="teacher-topics-admin">
   	
-    <a class="export-table" href="/admin/download?filename=SelectedResult">
+    <a class="export-table shadow" href="/admin/download?filename=SelectedResult">
           <img src="../../assets/icon/export.svg">
           <span>导出导师题目表</span>
     </a>
@@ -116,42 +116,57 @@ export default {
 
 <style lang="sass" rel="stylesheet/scss" scoped>
 @import '../../style/variables';
-.export-table{
-    width: 144px;
-    height: 40px;
-    padding: 8px;
-    border-radius: 4px;
-    display: inline-block;
-    background-color: #4caf50;
-    color: white!important;
-}
-.order-admin{
-display: flex;
-margin-top: 16px;
-button
+.export-table
 {
-  flex: 1;
-  background-color: transparent;
-  border-radius: 0;
-  border: 1px #999 solid;
-  color: #455739;
-  &:hover{
-    background-color: #dedede;
-  }
+    display: inline-flex;
+
+    width: 144px;
+    height: 36px;
+    padding: 8px;
+
+    color: white!important;
+    border-radius: 4px;
+    background-color: #4caf50;
+    &:hover
+    {
+        background-color: #61b164;
+    }
 }
-.order-button:first-child{
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  border-right-color: transparent;
-}
-.order-button:last-child{
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-  border-left-color: transparent;
-}
-.order-button:nth-child(2){
-  border-right-color: transparent;
-}
+.order-admin
+{
+    display: flex;
+
+    width: 568px;
+    margin-top: 16px;
+    button
+    {
+        color: #455739;
+        border: 1px #999 solid;
+        border-radius: 0;
+        background-color: transparent;
+
+        flex: 1;
+        &:hover
+        {
+            background-color: #dedede;
+        }
+    }
+    .order-button:first-child
+    {
+        border-right-color: transparent;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+    }
+    .order-button:last-child
+    {
+        border-left-color: transparent;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+    }
+    .order-button:nth-child(2)
+    {
+        border-right-color: transparent;
+    }
 }
 
 .teacher-topics-admin
@@ -213,5 +228,6 @@ button
     border: 2px #f44336 solid;
     border-radius: 8px;
 }
+
 
 </style>

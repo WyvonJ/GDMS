@@ -110,6 +110,3 @@ const desktop=isDesktop()
 		}
 </script>
 
-<style lang="sass" rel="stylesheet/scss">
-@import '../../style/variables.scss';
-</style>

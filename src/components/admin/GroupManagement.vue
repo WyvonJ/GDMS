@@ -253,27 +253,35 @@ export default {
 <style lang="sass" rel="stylesheet/scss" scoped>
 @import '../../style/variables.scss';
 
-.tab-button{
-  padding: 16px;
-  text-align: center;
-  button{
-    border-radius: 0;
-    &.focused{
-      box-shadow: 0 0 3px 1px #898989;
+.tab-button
+{
+    padding: 16px;
+
+    text-align: center;
+    button
+    {
+        border-radius: 0;
+        &.focused
+        {
+            box-shadow: 0 0 3px 1px #898989;
+        }
     }
-  }
-  .add-topic-button{
-    background-color: $greenVue;
-    &:hover{
-      background-color: #53dd9f;
+    .add-topic-button
+    {
+        background-color: $greenVue;
+        &:hover
+        {
+            background-color: #53dd9f;
+        }
     }
-  }
-  .manage-topic-button{
-    background-color: $blue;
-    &:hover{
-      background-color: #3cbef8;
+    .manage-topic-button
+    {
+        background-color: $blue;
+        &:hover
+        {
+            background-color: #3cbef8;
+        }
     }
-  }
 }
 .group-current-status
 {
@@ -285,62 +293,75 @@ export default {
 .final-group-teacher
 {
     width: 100%;
-    .group-settings{
-      padding-left: 16px;
-      button{
-        border-radius: 0;
-        border: 1px solid #aaa;
-        background-color: #FFF;
-        color: #333;
-        &:hover{
-          background-color: #e7e7e7;
+    .group-settings
+    {
+        padding-left: 16px;
+        button
+        {
+            color: #333;
+            border: 1px solid #aaa;
+            border-radius: 0;
+            background-color: #fff;
+            &:hover
+            {
+                background-color: #e7e7e7;
+            }
         }
-      }
-      .add-button{
-        border-top-left-radius: 3px;
-        border-bottom-left-radius: 3px;
-      }
-      .reset-button{
-        border-top-right-radius: 3px;
-        border-bottom-right-radius: 3px;
-      }
-
+        .add-button
+        {
+            border-top-left-radius: 3px;
+            border-bottom-left-radius: 3px;
+        }
+        .reset-button
+        {
+            border-top-right-radius: 3px;
+            border-bottom-right-radius: 3px;
+        }
     }
 }
 .groups-wrapper
 {
-  display: flex;
+    display: flex;
 
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
 }
-    
-    .group
+
+.group
+{
+    position: relative;
+
+    display: inline-block;
+    display: inline-flex;
+
+    min-width: 320px;
+    min-height: 64px;
+    margin: 16px;
+    padding: 8px 96px 8px 8px;
+
+    border: 1px dashed #727877;
+
+    flex-wrap: wrap;
+    align-items: flex-start;
+    &::after
     {
-        min-width: 320px;
-        min-height: 64px;
-        margin: 16px;
-        padding: 8px 96px 8px 8px;
-        display: inline-block;
-        border: 1px dashed #727877;
-        position: relative;
-        display: inline-flex;
-        flex-wrap: wrap;
-        align-items: flex-start;
-        &::after{
-              content: '拖拽到这里';
-              height: 100%;
-              width: 92px;
-              background-color: rgba(227, 225, 225, 0.28);
-              position: absolute;
-              right: 0;
-              top: 0;
-              border-left: 1px dashed #888;
-        }
-        &:hover{
-          border-color: $red;
-        }
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        width: 92px;
+        height: 100%;
+
+        content: '拖拽到这里';
+
+        border-left: 1px dashed #888;
+        background-color: rgba(227, 225, 225, .28);
+    }
+    &:hover
+    {
+        border-color: $red;
+    }
     span.group-id
     {
         font-size: 18px;
@@ -358,7 +379,7 @@ export default {
         border-radius: 12px;
         background-color: $red;
     }
-    }
+}
 .teacher-to
 {
     font-size: 18px;
@@ -368,67 +389,82 @@ export default {
     padding: 3px 12px;
 
     cursor: move;
+    transition: $material-enter;
 
     color: white;
     border-radius: 20px;
     background-color: #afafaf;
-    transition: $material-enter;
-    &:hover{
-      background-color: #8f8f8f;
+    &:hover
+    {
+        background-color: #8f8f8f;
     }
 }
-.student-to{
-  font-size: 18px;
+.student-to
+{
+    font-size: 18px;
     line-height: 20px;
 
     margin: 4px;
     padding: 3px 12px;
 
     cursor: move;
+    transition: $material-enter;
 
     color: white;
     border-radius: 20px;
     background-color: #f44336;
-    transition: $material-enter;
-    &:hover{
-      background-color: #8f8f8f;
+    &:hover
+    {
+        background-color: #8f8f8f;
     }
 }
-.to-be-grouped{
-  width: 100%;
-  min-height: 64px;
-  p{
-    padding: 8px;
-    font-size: 18px;
-    margin: 10px;
-  }
-}
-.tab-box .paper{
-  padding: 12px 8px;
-}
-#tab-box1,#tab-box2{
-  width: 100%;
-  a{
-    width: 100px;
-    height: 48px;
-    padding: 12px;
-    background-color: $lightBlue;
-    color: white !important;
-    border-radius: 3px;
-    &:hover{
-      color: white !important;
-      background-color: $lightBlue600;
-    }
-  }
-}
-.actions button{
-  margin: 3px 16px;
-}
-.teachers-grouped{
-  display: flex;
-}
-.students-grouped{
-  display: flex;
+.to-be-grouped
+{
+    width: 100%;
+    min-height: 64px;
+    p
+    {
+        font-size: 18px;
 
+        margin: 10px;
+        padding: 8px;
+    }
 }
+.tab-box .paper
+{
+    padding: 12px 8px;
+}
+#tab-box1,
+#tab-box2
+{
+    width: 100%;
+    a
+    {
+        width: 100px;
+        height: 48px;
+        padding: 12px;
+
+        color: white !important;
+        border-radius: 3px;
+        background-color: $lightBlue;
+        &:hover
+        {
+            color: white !important;
+            background-color: $lightBlue600;
+        }
+    }
+}
+.actions button
+{
+    margin: 3px 16px;
+}
+.teachers-grouped
+{
+    display: flex;
+}
+.students-grouped
+{
+    display: flex;
+}
+
 </style>

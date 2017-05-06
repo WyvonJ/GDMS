@@ -348,6 +348,10 @@ td:first-child
     {
         width: 100%;
     }
+    .main-content
+    {
+        margin-left: 0;
+    }
 }
 
 .console-panel .logo
@@ -423,13 +427,6 @@ td:first-child
     }
 }
 
-@media (max-width: 993px)
-{
-    .main-content
-    {
-        margin-left: 0 !important;
-    }
-}
 
 //主内容区过渡动画
 .main-transition-enter-active
@@ -492,7 +489,7 @@ td:first-child
 
     border: 1px #d6d6d7 solid;
     border-radius: 16px;
-    background-color: #fff;
+    background-color: white;
     &:hover
     {
         -webkit-box-shadow: $material-shadow-1dp;

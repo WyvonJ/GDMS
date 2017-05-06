@@ -76,54 +76,63 @@ export default{
     position: relative;
 
     display: inline-block;
+
     margin: 12px 0;
-    &.active{
-    	z-index: 3000;//超过遮罩层的z-index
+    &.active
+    {
+        z-index: 3000;//超过遮罩层的z-index
     }
     .mu-paper
     {
         position: absolute !important;
         bottom: 6px;
         left: 36px;
-        height: 0;
-        width: 0 !important;
-        border-radius: 6px;
+
         overflow: hidden;
 
-        transition:$material-enter;
+        width: 0 !important;
+        height: 0;
+
+        transition: $material-enter;
+
         opacity: 0;
+        border-radius: 6px;
         &.active
         {
-        	  height: 125px;
-            padding: 12px 36px;
-            opacity: 1;
             width: 256px !important;
+            height: 125px;
+            padding: 12px 36px;
+
+            opacity: 1;
         }
-        &.confirm-panel{
-        	  height: 200px;
+        &.confirm-panel
+        {
+            height: 200px;
             padding-bottom: 12px;
         }
-        .confirm{
-          position: absolute;
-          bottom: 6px;
-          width: 184px;
-          text-align: center;
-        .mu-raised-button{
-          background-color: #1e88e5 !important;
-          border-radius: 18px;
-          color: #fff;
-        }
-        }
-        
+        .confirm
+        {
+            position: absolute;
+            bottom: 6px;
 
+            width: 184px;
+
+            text-align: center;
+            .mu-raised-button
+            {
+                color: #fff;
+                border-radius: 18px;
+                background-color: #1e88e5 !important;
+            }
+        }
     }
     .name-button
     {
+        z-index: 3;
+
+        display: inline-block;
 
         padding: 6px 8px;
-        display: inline-block;
-        z-index: 3;
-       
     }
     .check-button
     {
@@ -164,40 +173,48 @@ export default{
                -moz-box-shadow: $material-shadow-6dp;
                     box-shadow: $material-shadow-6dp;
         }
-        &.confirm-panel{
+        &.confirm-panel
+        {
             background-color: #e53935 !important;
-
         }
     }
 }
 
-.confirmed-avatar{
-  padding: 6px 8px;
-  display: inline-block;
-  .mu-avatar{
-    font-size: 14px;
-     cursor: default;
-     -khtml-user-select: none;
-                -webkit-user-select:      none;
-                   -moz-user-select: -moz-none;
-                    -ms-user-select:      none;
-                        user-select:      none;
-  }
-  
+.confirmed-avatar
+{
+    display: inline-block;
 
+    padding: 6px 8px;
+    .mu-avatar
+    {
+        font-size: 14px;
+
+        cursor: default;
+        -webkit-user-select:      none;
+           -moz-user-select: -moz-none;
+            -ms-user-select:      none;
+                user-select:      none;
+
+        -khtml-user-select: none;
+    }
 }
 .confirm-slide-enter-active,
-.confirm-slide-leave-active {
-  transition: $material-enter;
-  transition-duration: .4s;
+.confirm-slide-leave-active
+{
+    transition: $material-enter;
+    transition-duration: .4s;
 }
 
 .confirm-slide-enter,
-.confirm-slide-leave-active {
-  opacity: 0;
-  transform: translateY(40px);
+.confirm-slide-leave-active
+{
+    transform: translateY(40px);
+
+    opacity: 0;
 }
-.confirm-slide-move {
-  transition: transform .4s;
+.confirm-slide-move
+{
+    transition: transform .4s;
 }
+
 </style>

@@ -104,30 +104,35 @@ export default {
     {
         margin-top: 128px;
     }
-    .message-container{
-      height: 64px;
-      border-radius: 4px;
-      border: 1px transparent solid;
-      font-size: 20px;
-      font-weight: 400;
-      color: white;
-      text-align: center;
-      padding-top: 20px;
-      transition: $material-enter;
-      &.warning{
-        border-color: $red;
-        background-color: #E57373;
-      }
-      &.success{
-        border-color: $greenVue;
-        background-color: #7bb99c;
-      }
+    .message-container
+    {
+        font-size: 20px;
+        font-weight: 400;
+
+        height: 64px;
+        padding-top: 20px;
+
+        transition: $material-enter;
+        text-align: center;
+
+        color: white;
+        border: 1px transparent solid;
+        border-radius: 4px;
+        &.warning
+        {
+            border-color: $red;
+            background-color: #e57373;
+        }
+        &.success
+        {
+            border-color: $greenVue;
+            background-color: #7bb99c;
+        }
     }
     button.blue
     {
         margin-left: 90px;
     }
-
 }
 
 </style>

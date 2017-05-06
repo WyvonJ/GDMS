@@ -71,7 +71,7 @@ import {mapActions,mapState} from 'vuex'
         //手机号码转换
         if (this.isTopicConfirmed) {
           let tel=''
-        for (let i = 0; i < this._stu_TopicComfirmed.tel.length; i++) {
+        for (let i = 0,len=this._stu_TopicComfirmed.tel.length; i < len; i++) {
           if (i===3 || i===7) {
             tel+='-'
           }

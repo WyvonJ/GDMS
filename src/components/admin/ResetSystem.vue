@@ -32,6 +32,7 @@ export default{
 	},
 	methods:{
 		resetSystem(){
+			console.log(this)
 			this.GET('/admin/admResetSystem')
 				.then(res=>{
 					if (res.data.state===1) {

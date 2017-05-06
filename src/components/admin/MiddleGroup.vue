@@ -224,7 +224,6 @@ export default {
 
         width: 24px;
         height: 24px;
-        padding-top: 3px;
         padding-left: 7px;
 
         color: white;
@@ -254,12 +253,17 @@ export default {
     margin: 3px 16px;
   }
   a{
-    width: 160px;
+    width: 144px;
     height: 40px;
     padding: 8px;
-    display: inline-block;
     background-color: $blue;
     color: white!important;
+    display: inline-flex;
+    border-radius: 4px;
+    &:hover{
+    background-color: #64b5f6;
+
+    }
   }
 }
 .teachers-grouped

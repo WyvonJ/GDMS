@@ -30,7 +30,7 @@ const app=express()
 
 
 //设置port为预设或3000
-app.set('port',(process.env.port||80))
+app.set('port',(process.env.port||3000))
 //设置图标
 app.use(favicon(resolve('../dist/favicon.ico')))
 //将文本作为json解析 然后以req.body为结果对象
