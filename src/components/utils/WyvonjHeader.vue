@@ -4,9 +4,9 @@
       <img src="../../assets/img/gd_logo.png" alt="GDMS">
       <p class="jnudm">Jnudm</p>
     </div>
-    <span class="menu" @click="toggleNav">
+    <mu-icon-button tooltip="侧边栏" class="menu" @click="toggleNav">
       <img src="../../assets/icon/menu.svg" alt="menu" />
-    </span>
+    </mu-icon-button>
     <span class="account">
       <img src="../../assets/icon/account_c.svg" alt="account" />
       <span>{{username}}</span>
@@ -15,9 +15,8 @@
       <mu-icon-button tooltip="通知" class="notify-button" ref="notify"  @click="isOpen = !isOpen" >
       <img src="../../assets/icon/notifications.svg" alt="notification" />
       </mu-icon-button>
-      <mu-icon-button tooltip="注销" class="logout-button" ref="button" @click="logout">
+      <mu-icon-button tooltip="注销" class="logout-button" @click="logout">
       <img src="../../assets/icon/exit.svg" alt="exit" />
-
       </mu-icon-button>
       <mu-popover :trigger="trigger" :open="isOpen" @close="isOpen = false">
         <mu-card>
@@ -75,7 +74,9 @@ export default {
           return { backgroundColor: '#009688' }
           break
         case 'a':
-          return { backgroundColor: '#03a9f4' }
+        default:
+          return { backgroundColor: '#42b983' }
+
       }
     },
   },
@@ -105,7 +106,7 @@ export default {
     .menu
     {
         position: absolute;
-        top: 22px;
+        top: 10px;
         left: 196px;
 
         cursor: pointer;
@@ -158,7 +159,7 @@ export default {
     {
         .logo
         {
-            display: inline-block;
+            display: none;
         }
     }
 }

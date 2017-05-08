@@ -87,8 +87,8 @@
             </li>
           </transition-group>
         </div>
-        <button class="blue submit-button" :disabled="!topicsInCart[0]" @click="commitSelectedTopics">
-          <img src="../../assets/icon/check_circle.svg" alt="check" />
+        <button class="e-blue submit-button" :disabled="!topicsInCart[0]" @click="commitSelectedTopics">
+          <i class="material-icons">check_circle</i>
           <span>提交</span>
         </button>
       </div>
@@ -111,7 +111,7 @@ export default {
         totalPage:100,//页码总数 作为分页参考
         currentPage:1,//当前页
         topicsInCart: [],//在购物车中的课题
-        step: ''  //系统进度
+        step: 'selecttopics'  //系统进度
       }
     },
     computed: {
@@ -143,9 +143,9 @@ export default {
         this.stuGetTopics()
       },
       getTotal(topic) {
-        let t1 = topic.firststudents === undefined ? 0 : topic.firststudents.length
-        let t2 = topic.secondstudents === undefined ? 0 : topic.secondstudents.length
-        let t3 = topic.thirdstudents === undefined ? 0 : topic.thirdstudents.length
+        let t1 = topic.firststudents ?  topic.firststudents.length:0
+        let t2 = topic.secondstudents ? topic.secondstudents.length:0
+        let t3 = topic.thirdstudents ? topic.thirdstudents.length:0
         return t1 + t2 + t3
       },
       addTopic(index, topic) {
@@ -195,31 +195,27 @@ export default {
       },
       //提交选题按钮
       commitSelectedTopics() {
-        if (this.step==='reselecttopics') {
-          this.POST('/student/stuFinalTopic',{
-            _id: _c.getCookie('user'),
-            final: this.topicsInCart[0]._id,
-          })
-          .then((state)=>{
-              this.showSnackbar('选题成功')
-              this.$router.push('/student/status')
-          })
-        }else{
-          let _stu_TopicInCartWrapper = {
-          _id: _c.getCookie('user'),
-          first: this.topicsInCart[0]._id,
-          second: this.topicsInCart[1] === undefined ? -1 : this.topicsInCart[1]._id,
-          third: this.topicsInCart[2] === undefined ? -1 : this.topicsInCart[2]._id
+        let user=_c.getCookie('user')
+        if (!user) {
+          alert('登录超时，请重新登录')
+          this.$router.push('/')
+        }
+        if (this.step==='selecttopics') {
+
+          let wrapper = {
+            _id: user,
+            first: this.topicsInCart[0]._id,
+            second: this.topicsInCart[1] ? this.topicsInCart[1]._id:-1,
+            third: this.topicsInCart[2] ? this.topicsInCart[2]._id:-1
         }
         //提交选题是否成功
-        this.stuCommitSelection(_stu_TopicInCartWrapper)
-          .then((state)=>{
-            console.log(state)
-              this.showSnackbar('选题成功')
-              this.$router.push('/student/status')
+        this.stuCommitSelection(wrapper)
+        }else if (this.step==='reselecttopics'){
+          this.POST('/student/stuFinalTopic',{
+            _id: user,
+            final: this.topicsInCart[0]._id,
           })
         }
-        
       },
       toggleDetails(index) {
         //设置对应的详情是否展示
@@ -620,6 +616,10 @@ input::-o-input-placeholder
     .submit-button
     {
         width: 128px;
+        span{
+              letter-spacing: 10px;
+               font-size: 16px;
+        }
     }
 }
 

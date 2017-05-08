@@ -29,11 +29,6 @@ const store = new Vuex.Store({
       title: ' 元素用于在网页中包含对象',
       details: 'form 返回对对象的父表单的引用。height  设置或返回对象的高度。hspace  设置或返回对象的水平外边距。name  设置或返回对象的名称。standby 设置或返回在加载对象时返回的消息。type  设置或返回通过 data 属性下载的数据的内容类型。',
       category: 1
-    }, {
-      _id: 18,
-      title: ' 元素用于在网页中包含对象',
-      details: 'form 返回对对象的父表单的引用。height  设置或返回对象的高度。hspace  设置或返回对象的水平外边距。name  设置或返回对象的名称。standby 设置或返回在加载对象时返回的消息。type  设置或返回通过 data 属性下载的数据的内容类型。',
-      category: 0
     }],
     _stu_TopicInTable: [{
       _id: 9,
@@ -66,15 +61,13 @@ const store = new Vuex.Store({
       title: '基于3ds max的城市小区动画漫游设计与实现',
       details: '3ds max 是三维建模、动画制作的渲染软件，被广泛应用于制作角色动画、室内外效果图、游戏开发、建筑动画、影视动画、虚拟现实等领域。为了更好的让大众了解城市小区的建设和发展情况，我们可以用三维动画的形式来展示其全貌，本课题要求结合专业知识利用3ds max等软件实现虚拟城市小区动画漫游。',
       restriction: 3,
-      secondstudents: [],
-      thirdstudents: [3]
+      secondstudents: [1],
     }, {
       _id: 22,
       category: 0,
       title: '基于Unity3D的VR项目设计与实现',
       details: 'VR即虚拟现实，指综合利用计算机图形系统和各种实现及控制等接口设备，在计算机上生成的、可交互的三维环境中提供沉浸感觉的技术。虚拟现实技术实现的载体是虚拟现实仿真平台。VR技术可广泛的应用于规划展示、工业仿真、旅游教学等众多领域。利用Unity3D实现一个VR虚拟现实体验项目，给用户带来身临其境的感受。',
       firststudents: [1, 3],
-      secondstudents: [],
       thirdstudents: [3]
     }, {
       _id: 83,

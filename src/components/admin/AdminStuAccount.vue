@@ -97,15 +97,13 @@ export default {
       		.then(res => {})
       },
       fileInput() {
-        let routes
-        routes = '/admin/admStuAccUpload'
-        let file = document.getElementById('file').files[0]
+        let routes  = '/admin/admStuAccUpload'
+        let file = document.querySelector('#file').files[0]
         if (file) {
           this.chosenFile = file.name
-
-          let output = document.getElementById('output')
+          let output = document.querySelector('#output')
           let data = new FormData()
-          data.append('file', document.getElementById('file').files[0])
+          data.append('file', file)
           let config = {
             onUploadProgress: (progressEvent) => {
               let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
@@ -119,17 +117,16 @@ export default {
               this.progressBar = 100
               this.dialog = false
               this.GET('/admin/admGetTchAccount')
-             .then(res => {
-               this.teacherAccounts = res.data
-             })
-             .catch(err=>{
-               console.log(err)
-        })
+                .then(res => {
+                  this.teacherAccounts = res.data
+                })
+                .catch(err=>{
+                  console.log(err)
+                })
             }else{
               output.className = 'container text-danger'
               this.message = '上传文件失败，请重新试试'
             }
-              
             })
             .catch((err) => {
               output.className = 'container text-danger'

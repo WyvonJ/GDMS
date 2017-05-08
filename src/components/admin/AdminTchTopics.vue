@@ -7,16 +7,16 @@
           <span>导出导师题目表</span>
     </a>
     <div class="order-admin">
-       <button @click="teacherFirst" class="order-button">
+       <button @click="beginSelection(1)" class="order-button">
           <span>导师一轮选题</span>
       </button>
-       <button @click="teacherSecond" class="order-button">
+       <button @click="beginSelection(2)" class="order-button">
           <span>导师二轮选题</span>
       </button>
-      <button @click="teacherThird" class="order-button">
+      <button @click="beginSelection(3)" class="order-button">
           <span>导师三轮选题</span>
       </button>
-      <button @click="teacherFinal" class="order-button">
+      <button @click="beginSelection(4)" class="order-button">
           <span>导师最终选题</span>
       </button>
     </div>
@@ -76,38 +76,44 @@ export default {
         this.GET('/admin/download?filename=tchtopics')
         
       },
-      teacherFirst(){
+      beginSelection(odr){
         this.GET('/admin/unhandledTch')
-        this.GET('/admin/unhandledStu')
+          .then(res=>{
+            if (res.data.length>0) {
+              this.message = '还有学生未登录选题，是否继续？'
+              this.dialog = true
+            }
+          })
+          .then(()=>{
+            this.GET('/admin/unhandledStu')
+            .then(res=>{
+              if (res.data.length>0) {
+                this.message = '还有学生未登录选题，是否继续？'
+                this.dialog = true
+              }
+            })
+          })
+          .then(()=>{
+            this.POST('/admin/procSelection',{
+              order:odr
+            })
+            .then(res=>{
+              if (res.data.state===1) {
 
-        if (true) {
-          this.message = '还有学生未登录选题，是否继续？'
-          this.dialog = true
-        }
-        this.POST('/admin/procSelection',{
-          order:1
-        })
-      },
-      teacherSecond(){
-        this.POST('/admin/procSelection',{
-          order:2
-        })
-      },
-      teacherThird(){
-        this.POST('/admin/procSelection',{
-          order:3
-        })
-      },
-      teacherFinal(){
-        this.POST('/admin/procSelection',{
-          order:4   //只能选择一个题目 设置为 直接存入数据库
-        })
-      },
+                this.message = odr + '轮自动选题完成，可通知导师对其余学生进行选择。'
+                this.dialog = true
+              }
+            })
+          })
+      }
     },
 		mounted(){
       this.GET('/admin/admGetTchTopics')
         .then(res => {
           this.teacherTopics = res.data
+        })
+        .catch(err=>{
+          console.log(err)
         })
 		}
   }

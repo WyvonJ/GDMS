@@ -22,8 +22,8 @@
           </span>
         <input placeholder="请再输入一遍新密码" type="password" v-model.trim="passwordRepeat" />
       </div>
-      <button class="blue" @click="commitPassword">
-        <img src="../../assets/icon/check.svg" alt="Y" />
+      <button class="e-blue" @click="commitPassword">
+      <i class="material-icons">check</i>
         <span>确认更改</span>
       </button>
     </div>
@@ -129,7 +129,7 @@ export default {
             background-color: #7bb99c;
         }
     }
-    button.blue
+    button.e-blue
     {
         margin-left: 90px;
     }

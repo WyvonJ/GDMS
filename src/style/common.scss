@@ -106,6 +106,7 @@ button
     border-color: transparent;
     border-radius: 4px;
     outline: none;
+    align-items: flex-end;
     &:disabled
     {
         cursor: not-allowed;
@@ -129,7 +130,7 @@ button
     > i
     {
         position: relative;
-        top: 4px;
+        top: 2px;
 
         flex: 1;
     }
@@ -181,6 +182,16 @@ button
         &:hover
         {
             background-color: #e64a19;
+        }
+    }
+    &.e-blue{
+        background-color: transparent;
+        border: 1px solid $lightBlue600;
+        color: $lightBlue600;
+        &:hover
+        {
+            color: white;
+            background-color: $lightBlue600;
         }
     }
 }
@@ -338,21 +349,7 @@ td:first-child
     column-gap: 10px;
 }
 
-@media screen and (max-width: 993px)
-{
-    #columns
-    {
-        column-gap: 0;
-    }
-    #columns figure
-    {
-        width: 100%;
-    }
-    .main-content
-    {
-        margin-left: 0;
-    }
-}
+
 
 .console-panel .logo
 {
@@ -384,7 +381,7 @@ td:first-child
         font-variant: small-caps;
 
         position: absolute;
-        top: 22px;
+        top: 12px;
         left: 84px;
 
         color: white;
@@ -492,9 +489,8 @@ td:first-child
     background-color: white;
     &:hover
     {
-        -webkit-box-shadow: $material-shadow-1dp;
-           -moz-box-shadow: $material-shadow-1dp;
-                box-shadow: $material-shadow-1dp;
+        border-color: $greenVue;
+        color: $greenVue;
     }
     .mu-icon
     {
@@ -507,5 +503,22 @@ td:first-child
         bottom: 2px;
 
         width: 18px;
+    }
+}
+
+
+@media screen and (max-width: 993px)
+{
+    #columns
+    {
+        column-gap: 0;
+    }
+    #columns figure
+    {
+        width: 100%;
+    }
+    .main-content
+    {
+        margin-left: 0 !important;
     }
 }

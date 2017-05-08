@@ -22,8 +22,13 @@
             <mu-text-field label="密码" hintText="请输入密码" type="password" :errorText="errorPassword" v-model.trim="password" labelFloat/>
             <mu-raised-button label="登 录" class="login-button" v-on:click="doLogin" />
           </div>
-          <span class="pw-forget" @click="passwordForget">忘记密码？</span>
-          <p class="pw-forget-content" v-show="isForgot">学生初始密码都为学号，<br/>如果修改密码后忘记密码，<br/>请咨询管理员修改密码。</p>
+          <div class="pw-forget">忘记密码？
+            <wyvonj-tooltip>
+              <p class="pw-forget-content">学生初始密码都为学号，<br/>如果修改密码后忘记密码，<br/>请咨询管理员修改密码。</p>
+            </wyvonj-tooltip>
+          </div>
+
+          
         </section>
       </div>
     </div>
@@ -291,8 +296,8 @@ export default {
             font-size: 11px;
 
             position: absolute;
-            right: 0;
-            bottom: -12px;
+            right: -60;
+            bottom: -14px;
 
             cursor: pointer;
             &:hover
@@ -300,14 +305,13 @@ export default {
                 color: #e53935;
             }
         }
-        .pw-forget-content
-        {
-            font-size: 11px;
-
-            position: absolute;
-            right: -142px;
-            bottom: 32px;
-        }
+        
     }
 }
+.wyvonj-tooltip{
+          font-size: 14px;
+          padding: 8px;
+          background-color: rgba(0,0,0,.5);
+          color: white;
+        }
 </style>

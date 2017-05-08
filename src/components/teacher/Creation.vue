@@ -72,6 +72,7 @@
 
 <script type="text/javascript">
 import { mapState, mapActions } from 'vuex'
+
 export default {
   data() {
       return {
@@ -82,15 +83,16 @@ export default {
         fieldsError: '', //错误提示文字
         titleError: '',
         detailError: '',
-        isTab:true,
+        isTab: true,
         fields: [],
         fieldsData: [
-        "图形图像处理", "游戏开发设计", "信息可视化", 
-        "数字视音频处理", "移动互联网", "软件工程", 
-        "Web开发", "人机交互", "虚拟现实&增强现实", 
-        "文化传媒","信息安全","信号处理", 
-        "云计算","大数据","机器学习&深度学习",
-        "算法研究","其他"],
+          "图形图像处理", "游戏开发设计", "信息可视化",
+          "数字视音频处理", "移动互联网", "软件工程",
+          "Web开发", "人机交互", "虚拟现实&增强现实",
+          "文化传媒", "信息安全", "信号处理",
+          "云计算", "大数据", "机器学习&深度学习",
+          "算法研究", "其他"
+        ],
         fixedHeader: true,
         selectable: false,
         showCheckbox: false,
@@ -102,7 +104,7 @@ export default {
     methods: {
       createTopic() {
         let id = _c.getCookie('user')
-
+          //if (!id) return alert('登录超时，请重新操作')
         if (this.fields.length === 0) {
           return this.fieldsError = "还没选择课题研究方向！"
         }
@@ -112,35 +114,60 @@ export default {
         if (this.detailText.length === 0) {
           return this.detailError = "随便写点介绍吧！"
         }
-        let currentTopic = {
-            mentor: id,
-            category: this.category,
-            fields: this.fields,
-            title: this.titleText,
-            details: this.detailText,
-            available: this.available
-        }
-          //重新取得所有topics
-        this.tchCreateTopic(currentTopic)
-          .then(() => {
-            this.tchGetCreatedTopics({
-              teacherId: id,
-            })
-            this.fields = []
-            this.titleText = ''
-            this.detailText = ''
-            this.available = '1'
-            this.showSnackbar("课题创建成功")
+        this.GET('/getstep')
+          .then(res => {
+            if (step === 'createtopics') {
+              let currentTopic = {
+                  mentor: id,
+                  category: this.category,
+                  fields: this.fields,
+                  title: this.titleText,
+                  details: this.detailText,
+                  available: this.available
+                }
+                //重新取得所有topics
+              this.tchCreateTopic(currentTopic)
+                .then(() => {
+                  this.tchGetCreatedTopics({
+                    teacherId: id,
+                  })
+                  this.fields = []
+                  this.titleText = ''
+                  this.detailText = ''
+                  this.available = '1'
+                  this.showSnackbar("课题创建成功")
+                })
+            } else {
+              this.showSnackbar('现在无法对课题进行操作')
+            }
           })
+          .catch(err => {
+            this.showSnackbar('出了点小问题，重新试试。')
+            console.log(err)
+          })
+
+
       },
       deleteTopic(topic, index) {
         let id = _c.getCookie('user')
-        this.tchDeleteTopic({
-            teacherId: id,
-            topicId: topic._id
+        this.GET('/getstep')
+          .then((res) => {
+            let step = res.data.curstep
+            if (step === 'createtopics') {
+              this.tchDeleteTopic({
+                  teacherId: id,
+                  topicId: topic._id
+                })
+                .then(() => {
+                  this.tchGetCreatedTopics({ teacherId: id, })
+                })
+            } else {
+              this.showSnackbar('现在无法对课题进行操作')
+            }
           })
-          .then(() => {
-            this.tchGetCreatedTopics({teacherId: id,})
+          .catch(err => {
+            this.showSnackbar('出了点小问题，重新试试。')
+            console.log(err)
           })
       },
       clearError() {
@@ -160,7 +187,7 @@ export default {
       let id = _c.getCookie('user')
         //if (!id) 
         //return this.$router.push('/')
-      this.tchGetCreatedTopics({teacherId: id})
+      this.tchGetCreatedTopics({ teacherId: id })
     },
     watch: {
       fields: 'clearError',

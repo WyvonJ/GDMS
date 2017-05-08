@@ -124,12 +124,10 @@ export default {
           elName = $event.dataTransfer.getData("elName") //
           ,
           id = $event.target.id.substring(1) //group id
-          //拖到学生上
-        console.log(id)
         if (elId[0] === 's')
-          document.getElementById('sg' + id).appendChild(document.getElementById(elId))
+          document.querySelector('#sg' + id).appendChild(document.getElementById(elId))
         if (elId[0] === 't')
-          document.getElementById('tg' + id).appendChild(document.getElementById(elId))
+          document.querySelector('#tg' + id).appendChild(document.getElementById(elId))
       },
       drag($event) {
         //获取被拖拽元素的id 也就是绑定的帐号id
@@ -165,7 +163,6 @@ export default {
                 groups[index]._id=_.parseInt(c.id.substring(1))
               }
               if (c.nodeName === 'DIV') {
-
                 if (c.id[0] === 't') {
                   _.forEach(c.childNodes, (teacher) => {
                     groups[index].mentors.push(teacher.id.substring(1))
@@ -181,16 +178,17 @@ export default {
           })
           this.POST('/admin/admUpFTchGroups',groups)
             .then(res => {
-
+              if (res.data.state===1) {
+                
+              }
             })
             .catch(err => {
-            throw new Error(err)
+            console.log(err)
           })
           resolve(groups)
         })
         .then((g)=>{
           this.isOverlap=false
-          console.log(g)
         })
       },
       overflow(){

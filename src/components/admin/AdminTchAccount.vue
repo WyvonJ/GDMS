@@ -65,9 +65,6 @@ export default {
       }
     },
     methods: {
-      deleteAccounts() {
-        console.log(this)
-      },
       fileInput() {
         let routes = '/admin/admTchAccUpload'
         let file = document.querySelector('#file').files[0]

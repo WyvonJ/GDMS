@@ -49,29 +49,5 @@ export default {
   },
   RESET_STATE: (state) => {
     state = null
-  },
-  ADM_SET_TCH_ACCOUNT: (state, accounts) => {
-    state._adm_TchAccounts = accounts
-  },
-  ADM_SET_STU_ACCOUNT: (state, accounts) => {
-    state._adm_StuAccounts = accounts
-  },
-  ADM_SET_STU_TOPICS: (state, topics) => {
-    state._adm_StuTopics = topics
-  },
-  ADM_SET_TCH_TOPICS: (state, topics) => {
-    state._adm_TchTopics = topics
-  },
-  ADM_SET_MID_GROUP: (state, groups) => {
-    state._adm_MidGroup = groups
-  },
-  ADM_SET_FNL_GROUP: (state, groups) => {
-    state._adm_FnlGroup = groups
-  },
-  ADM_SET_MID_GRADE: (state, grades) => {
-    state._adm_MidGrade = grades
-  },
-  ADM_SET_FNL_GRADE: (state, grades) => {
-    state._adm_FnlGrade = grades
   }
 }

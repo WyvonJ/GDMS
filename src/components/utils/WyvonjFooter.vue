@@ -24,14 +24,13 @@ footer
         transition: all .8s cubic-bezier(.1,.1,.4,1);
         text-align: center;
 
-        color: #aaa;
+        color: #777;
         border-top: 1px solid rgba(0,0,0,.08);
         a
         {
-            transition: all .8s cubic-bezier(.1,.1,.4,1);
-            text-decoration: none !important;
+            text-decoration: none ;
 
-            color: #aaa !important;
+            color: #777 ;
         }
     }
 }

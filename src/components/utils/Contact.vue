@@ -32,8 +32,8 @@
         <input type="text" placeholder="微信" v-model.trim="contact.wechat" />
       </div>
       <br/>
-      <button class="blue" @click="commitContact">
-        <img src="../../assets/icon/check.svg" alt="submit" />
+      <button class="e-blue" @click="commitContact">
+        <i class="material-icons">check</i>
         <span>确认更改</span>
       </button>
     </div>
@@ -60,7 +60,9 @@
         }
         this.POST(routes,wrapper)
           .then(res => {
-            console.log(res.data)
+            if(res.data.state === 1){
+
+            }
           })
       }
     },
@@ -150,7 +152,7 @@
         margin-top: 64px;
         padding: 24px 16px 16px;
     }
-    button.blue
+    button.e-blue
     {
         margin-left: 90px;
     }

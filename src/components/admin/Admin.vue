@@ -1,7 +1,7 @@
 <template>
   <div class="main-container">
     <wyvonj-header :class="{'nav-hide': !openDrawer}" :username="username" :notification="notification"></wyvonj-header>
-    <mu-drawer @hide="handleDrawerClose" :open="openDrawer" :docked="docked" class="sidebar-drawer" :zDepth="1">
+    <mu-drawer @close="handleDrawerClose" :open="openDrawer" :docked="docked" class="sidebar-drawer" :zDepth="1">
       <div class="console-panel">
         <div class="logo">
           <img src="../../assets/img/gd_logo.png">
@@ -69,10 +69,11 @@ export default {
       changeNav() {
         const desktop = isDesktop()
         this.docked = desktop
-        if (desktop === this.desktop) return
-        if (!desktop && this.desktop && this.openDrawer) 
+        if (desktop === this.desktop)
+          return
+        if (!desktop && this.desktop && this.openDrawer)
           this.openDrawer = false
-        if (desktop && !this.desktop && !this.openDrawer) 
+        if (desktop && !this.desktop && !this.openDrawer)
           this.openDrawer = true
         this.desktop = desktop
       },
@@ -94,14 +95,17 @@ export default {
       WyvonjHeader,
       WyvonjFooter
     },
+    destroyed() {
+      window.removeEventListener('resize', this.handleResize)
+    },
     mounted() {
+      //if (_c.getCookie('usertype') != 0)
+      //return this.$router.push('/')
+      this.username = _c.getCookie('username')
       this.handleResize = () => {
         this.changeNav()
       }
       window.addEventListener('resize', this.handleResize)
-    },
-    destroyed() {
-      window.removeEventListener('resize', this.handleResize)
     }
 }
 

@@ -56,7 +56,7 @@ const desktop=isDesktop()
 				docked:desktop,
 				desktop:desktop,
 				menuValue:1,
-				username:'UNKNOW',
+				username:'',
 				notification:''
 			}
 		},
@@ -103,7 +103,7 @@ const desktop=isDesktop()
      
         this.username = _c.getCookie('username')
         this.handleResize = () => {
-          this.changeNav()
+          this.changeNav() 
         }
         window.addEventListener('resize', this.handleResize)
     }

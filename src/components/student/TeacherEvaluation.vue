@@ -18,28 +18,32 @@
 
 
 <script>
-import {mapActions} from 'vuex'
-	export default{
-		data(){
-			return {
-				grade:60,
-				name:'导师',
-        isOpenForEva:false
-			}
-		},
-		methods:{
-			commitGrade(){
+import { mapActions } from 'vuex'
+export default {
+  data() {
+      return {
+        grade: 80,
+        name: '导师',
+        isOpenForEva: false
+      }
+    },
+    methods: {
+      commitGrade() {
         let id = _c.getCookie('user')
-        if (!id) 
-          return alert('登录超时，请重新登录后操作')
-				this.stuEvaluationToTch({
-					studentId:id,
-					grade:this.grade
-				})
-			},
-			...mapActions(['stuEvaluationToTch'])
-		}
-	}
+        if (!id)
+          {
+            alert('登录超时，请重新登录后操作')
+            this.$router.push('/')
+          } 
+        this.stuEvaluationToTch({
+          studentId: id,
+          grade: this.grade
+        })
+      },
+      ...mapActions(['stuEvaluationToTch'])
+    }
+}
+
 </script>
 
 <style lang="sass" stylesheet="scss" scoped>
@@ -77,7 +81,7 @@ import {mapActions} from 'vuex'
         }
         .red span{
             position: relative;
-            top: -4px;
+            top: 4px;
         }
     }
 }

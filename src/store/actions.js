@@ -70,11 +70,14 @@ export default {
   stuCommitSelection: ({ commit }, payload) => {
     return axios.post('/student/stuCommitSelection', payload)
       .then((response) => {
-        if (response.data.state === 1)
-          Promise.resolve(1)
+        if (response.data.state === 1){
+          showSnackbar({ commit }, '出了点小问题，再试试')
+          router.push('/student/status')
+        }
       })
       .catch(err => {
         showSnackbar({ commit }, '出了点小问题，再试试')
+        console.log(err)
         Promise.reject(err)
       })
   },

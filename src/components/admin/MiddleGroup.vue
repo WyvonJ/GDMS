@@ -84,12 +84,14 @@ export default {
     methods: {
       drop($event) {
         $event.preventDefault() //阻止默认事件，防止页面跳转
-        if ($event.target.nodeName !== 'DIV') //如果拖拽到非div则不接受
-          return
-        let elId = $event.dataTransfer.getData("elId") //被拖拽元素id和name
+        if ($event.target.nodeName === 'DIV') //如果拖拽到非div则不接受
+        {
+          let elId = $event.dataTransfer.getData("elId") //被拖拽元素id和name
         let id = $event.target.id.substring(1) //group id
         if (elId && id)
           $event.target.appendChild(document.getElementById(elId))
+        }
+        
       },
       drag($event) {
         //获取被拖拽元素的id 也就是绑定的帐号id
