@@ -19,7 +19,7 @@
           <mu-list-item value="grouping" title="答辩分组">
             <img src="../../assets/icon/group.svg" slot="left" alt="W" />
           </mu-list-item>
-          <mu-list-item value="evaluation" title="教师评价">
+          <mu-list-item value="evaluation" title="导师评价">
             <img src="../../assets/icon/star_half.svg" slot="left" alt="W" />
           </mu-list-item>
           <mu-list-item value="contact" title="联系信息">
