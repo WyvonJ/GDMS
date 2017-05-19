@@ -1,30 +1,18 @@
-var express = require('express');
-var router = express.Router();
-var db = require('../models/db')
+const express = require('express')
+const router = express.Router()
+const db = require('../models/db')
 
 router.post('/stuCommitSelection', (req, res) => {
-  //var selections = req.body//获得创建新题目的数据
-  var studentId = req.body._id
-  var first = req.body.first
-  var second = req.body.second
-  var third = req.body.third
-    //console.log(req.body)
-  console.log(studentId + '选择了' + first + '题')
+  let studentId = req.body._id
+  let first = req.body.first
+  let second = req.body.second
+  let third = req.body.third
   let t = new Date()
-  console.log('At ' + t.getHours() + ':' + t.getMinutes())
-
+  console.log(`${studentId} chosen T${first} at ${t.getHours()}:${t.getMinutes()}`)
   db.students.findOne({ _id: studentId }).exec(function(err, student) {
     if (err) res.send({ state: 0 })
     else {
       if(student.isselected)return //如果学生已经被选择了 则不能再进行选题
-
-      /*	if(second!=-1)
-      	student.selectTopic('second', second)
-          if(first!=-1)
-      	student.selectTopic('first', first)
-      	if(third!=-1)		    
-          student.selectTopic('third', third)
-      	res.send({state: 1})*/
 
       if (second != -1) {
         db.topics.findOneAndUpdate({ _id: student.second }, { $pull: { secondstudents: studentId } }, { new: true }).exec()
@@ -45,18 +33,16 @@ router.post('/stuCommitSelection', (req, res) => {
       {
         db.topics.findOneAndUpdate({ _id: student.third }, { $pull: { thirdstudents: studentId } }, { new: true }).exec()
           .then(student.selectTopic('third', third))
-
       }
       res.send({ state: 1 })
-
     }
   })
 })
 
 //发送所有选题
 router.get('/stuGetTopics', (req, res) => {
-  //var topic = {}
-  var query = db.topics.find()
+  //let topic = {}
+  let query = db.topics.find()
     //query.where('isselected',false)第二次选题的时候才给没有选完的题目
     //第二次选题的时候要把每个题的第几志源选的学生删除了
   query.select({
@@ -75,19 +61,19 @@ router.get('/stuGetTopics', (req, res) => {
   //query.where({'isselected':false})//只发送还未被选的题目
   query.sort({ '_id': 1 })
   query.exec((err, topics) => {
-    for(var i=0;i<topics.length;i++)
+    for(let i=0;i<topics.length;i++)
       topics[i].selected = topics[i].firststudents.length + topics[i].secondstudents.length + topics[i].thirdstudents.length;
     if (err) { res.send(404), console.log(err) } else res.send(topics)
   })
 })
 router.post('/stuFinalTopic',(req,res)=>{
-  var _id = req.body._id
-  var final = req.body.final
+  let _id = req.body._id
+  let final = req.body.final
 
   db.topics.findOneAndUpdate({_id:final},{$set:{finalstudents:_id}},{new:true})
     .exec((err,topic)=>{
     if(err)return
-    var mentor = topic.mentor
+    let mentor = topic.mentor
      db.students.findOneAndUpdate({_id:_id},{$set:{final:final, mentor: mentor,isselected:true}},{new:true}).exec((err,student)=>{
           if(err)return
           else {
@@ -102,7 +88,7 @@ router.post('/stuFinalTopic',(req,res)=>{
   })
 /*初次填写学生的联系信息*/
 router.post('/stuSetContactData', (req, res) => {
-  var studentId = req.body.account
+  let studentId = req.body.account
     //console.log(req.body)
   db.students.findOneAndUpdate({ _id: studentId }, { $set: { 'tel': req.body.tel, 'email': req.body.email, 'qq': req.body.qq, 'wechat': req.body.wechat, 'intro': req.body.intro } }, { new: true }).exec(function(err, student) {
     if (err) res.send(err)
@@ -112,10 +98,10 @@ router.post('/stuSetContactData', (req, res) => {
 
 /*得到学生选题结果*/
 router.post('/stuSelectionResult', (req, res) => {
-  var studentId = req.body.studentId
-    //var studentId = '1030513402'
+  let studentId = req.body.studentId
+    //let studentId = '1030513402'
     //console.log(studentId)
-  var finalData = {}
+  let finalData = {}
   db.students.findOne({ _id: studentId }, ['final', 'mentor', 'isselected', 'first', 'second', 'third'])
     .populate('final', '_id title category details')
     .populate('first', '_id title category details')
@@ -152,19 +138,19 @@ router.post('/stuSelectionResult', (req, res) => {
 })
 
 router.post('/stuContacInfo', (req, res) => {
-  var account = req.body.studentId
-  var tel = req.body.tel
-  var email = req.body.email
-  var wechat = req.body.wechat
+  let account = req.body.studentId
+  let tel = req.body.tel
+  let email = req.body.email
+  let wechat = req.body.wechat
   db.students.findOneAndUpdate({_id:account},
                               {$set: {'tel':tel, 'email':email, 'qq':qq, 'wechat': wechat}},
                               {new: true}).exec()
                               .then(res.send(1))
 })
 router.post('/stuAccountInfo', (req, res) => {
-  var account = req.body.studentId
-  var oldPassword = req.body.oldPassword
-  var newPassword = req.body.newPassword
+  let account = req.body.studentId
+  let oldPassword = req.body.oldPassword
+  let newPassword = req.body.newPassword
   db.studens.findOne({_id:account},(err,student)=>{
     if(student.password != oldPassword)
               res.send(0);//密码错识
@@ -177,11 +163,11 @@ router.post('/stuAccountInfo', (req, res) => {
 })
 
 router.post('/stuSetContact',(req, res)=>{
-  var account = req.body.studentId
-  var tel = req.body.tel
-  var email = req.body.email
-  var wechat = req.body.wechat
-  var qq = req.body.qq
+  let account = req.body.studentId
+  let tel = req.body.tel
+  let email = req.body.email
+  let wechat = req.body.wechat
+  let qq = req.body.qq
   db.students.findOneAndUpdate({_id:account},
                               {$set: {'tel':tel, 'email':email, 'qq':qq, 'wechat': wechat}},
                               {new: true}).exec()
@@ -189,15 +175,15 @@ router.post('/stuSetContact',(req, res)=>{
 })
 
 router.get('/stuGetContact',(req, res)=>{
-  var q = req.query
-  var account = q.account
+  let q = req.query
+  let account = q.account
   console.log(account)
-  //var account = req.body.studentId
-  //var account = '1030513425'
+  //let account = req.body.studentId
+  //let account = '1030513425'
   db.students.findOne({_id:account},['tel','email','qq','wechat'],(err,student)=>{
   // delete student._id
     if(err)return
-    var studentContact = {}
+    let studentContact = {}
     studentContact.tel = student.tel
     studentContact.email = student.email
     studentContact.qq = student.qq

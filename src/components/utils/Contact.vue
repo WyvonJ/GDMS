@@ -43,42 +43,39 @@
 
 
 <script>
+import {mapActions} from 'vuex'
   export default{
     data(){
       return {
         usertype:0,
-        contact:{
-      }
+        contact:{}
       }
     },
     methods:{
       commitContact(){
         let routes = this.usertype=='0'?'/student/stuSetContact':'/teacher/tchSetContact'
         let wrapper={
-          account:_c.getCookie('user'),
+          account:cookie.get('user'),
           contact:this.contact
         }
         this.POST(routes,wrapper)
           .then(res => {
             if(res.data.state === 1){
-
+              this.showSnackbar('修改联系方式成功')
             }
           })
-      }
+      },
+      ...mapActions(['showSnackbar'])
     },
     mounted(){
-       this.usertype = _.parseInt(_c.getCookie('usertype'))
+       this.usertype = _.parseInt(cookie.get('usertype'))
         let routes = this.usertype=='0' ? '/student/stuGetContact':'/teacher/tchGetContact'
-        let user=_c.getCookie('user')
-          this.GET(routes+'?account='+user,{
-            account:user
-          })
+        let user=cookie.get('user')
+          this.GET(routes+'?account='+user)
           .then(res => {
             this.contact = res.data
           })
-          .catch(err=>{
-            console.log(err)
-          })
+          .catch(err=>{})
        }
   }
 </script>

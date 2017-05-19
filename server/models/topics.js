@@ -1,15 +1,14 @@
 /*
  *创建topics model即话题表格
  */
-var mongoose = require('./mongodb')
-var Schema = mongoose.Schema
-var autoIncModel = require('./autoIncModel').autoIncModel
-var students = require('./students').students
-var mentors = require('./mentors').mentors
+const mongoose = require('./mongodb')
+const Schema = mongoose.Schema
+let autoIncModel = require('./autoIncModel').autoIncModel
+let students = require('./students').students
+let mentors = require('./mentors').mentors
 
-var topicsSchema = new Schema({ /*这里重写了_id属性，这样可以用来关联查询*/
+let topicsSchema = new Schema({ /*这里重写了_id属性，这样可以用来关联查询*/
   _id: { type: Number }, //序号,为什么一定要加default啊？？？才有因为要required唉
-  //topicid:        {type:  Number}
   category: { type: Number, required: true }, //分类 0论文 1设计
   title: { type: String, required: true }, //名称
   details: { type: String }, //描述
@@ -28,7 +27,7 @@ var topicsSchema = new Schema({ /*这里重写了_id属性，这样可以用来�
 //在save前要用pre啊啊啊
 //topicsSchema.pre('save',function(next)//每个题目保存前先得到该题目的序号，然后保存
 //{		/*这样可以保证第一个存的序号就是1，然后递增*/
-//		var ret  = this
+//		let ret  = this
 //		//这个this是指doc 即topics的实例，但里面回调函数的this不是
 //		autoIncModel.getTopicsId('topics',function(ID){
 //		ret._id = ID//这样可以得外到的this ret即外面的this
@@ -55,72 +54,47 @@ topicsSchema.methods.createTopic = function(cb) {
       this.save((err, topic) => {
         getNewId(err, this._id)
         mentors.findOneAndUpdate({ _id: topic.mentor }, { $addToSet: { topics: topic._id } }, { new: true }).exec((err, mentor) => {
-
         })
       })
     })
-    var getNewId = function(err, newId) {
+    let getNewId = function(err, newId) {
       cb(err, newId)
     }
 
   } //所以要用箭头函数
-
 
 /*删除一个题目，并让最后面的题目移动到删除的题目这*/
 /*删除一个题目觉得还是静态方法好*/
 /*静态方法用的是statics 多加个s*/
 /*mongodb的主键不能该，所以只能删除了，再插入*/
 topicsSchema.statics.removeTopic = function(topicId, cb) {
-  /*this.findOneAndRemove({_id: topicId}).exec( (err, deleteTopic) =>{
-  											//console.log(deleteTopic)
-  											var query = this.find({})
-  											query.where('_id').gt(deleteTopic._id)
-  											query.exec((err, docs) =>{
-  												for( var i in docs){
-  													
-  													var newID = docs[i]._id - 1
-  													this.update({_id: docs[i]._id},{$set: {_id: newID}}).exec()
-
-  													}
-  													})
-  												})*/
 
   this.findOneAndRemove({ _id: topicId }).exec()
     .then((deletedTopic) => {
-      console.log(deletedTopic)
-      this.model('autoIncModel').findOneAndUpdate({ collectionName: 'topics' }, { $inc: { topicsSeq: -1 } }, { new: true }).exec()
+      this.model('autoIncModel').findOneAndUpdate({ collectionName: 'topics' }, { $inc: { topicsSeq: -1 } }, { new: true })
+        .exec()
         .then((doc) => {
           if (doc.topicsSeq + 1 == deletedTopic._id) return //如果要删除的是最后一个题目 就直接删除了
-          this.findOneAndRemove({ _id: doc.topicsSeq + 1 }).exec((err, lastdoc) => {
-
-            var deletedId = deletedTopic._id
+          this.findOneAndRemove({ _id: doc.topicsSeq + 1 })
+          .exec((err, lastdoc) => {
+            let deletedId = deletedTopic._id
             console.log(`deletedTopicId + ${deletedId}`)
             console.log(`lastTopicId + ${lastdoc._id}`)
-              //   if (lastdoc.mentors != deletedTopic.mentors)
-            mentors.findOneAndUpdate({ _id: lastdoc.mentor }, {
-                $pull: { topics: lastdoc._id }
-              }, { new: true })
+            mentors.findOneAndUpdate({ _id: lastdoc.mentor },
+             {$pull: { topics: lastdoc._id }},
+              { new: true })
               .exec(() => {
-                mentors.findOneAndUpdate({ _id: lastdoc.mentor }, {
-                    //  $pull: { topics: lastdoc._id },
-                    $addToSet: { topics: deletedId }
-                  }, { new: true })
-                  .exec()
+                mentors.findOneAndUpdate({ _id: lastdoc.mentor },
+                 {$addToSet: { topics: deletedId }},
+                  { new: true })
+                .exec()
               })
-              //  console.log(lastdoc)
-
-
             lastdoc._id = deletedId //删除的题目
-
             this.collection.insert(lastdoc) //插入最后一个题
-
           })
         })
-    }).catch((err) => console.log(err))
-
-
-
+    })
+    .catch((err) => console.log(err))
 }
 
-const topics = mongoose.model('topics', topicsSchema)
-exports.topics = topics
+exports.topics = mongoose.model('topics', topicsSchema)

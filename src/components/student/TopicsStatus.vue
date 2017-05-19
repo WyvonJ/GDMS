@@ -62,14 +62,14 @@ import {mapActions,mapState} from 'vuex'
   export default{
     data(){
       return {
-        isTopicConfirmed: false
+        isTopicConfirmed: true
       }
     },
     computed:{
       ...mapState(['_stu_TopicComfirmed','_stu_TopicInCart']),
       tele(){
         //手机号码转换
-        if (this.isTopicConfirmed) {
+        if (this.isTopicConfirmed.tel) {
           let tel=''
         for (let i = 0,len=this._stu_TopicComfirmed.tel.length; i < len; i++) {
           if (i===3 || i===7) {
@@ -85,7 +85,7 @@ import {mapActions,mapState} from 'vuex'
       ...mapActions(['stuSelectionResult'])
     },
     mounted(){
-      let id=_c.getCookie('user')
+      let id=cookie.get('user')
       this.stuSelectionResult({studentId: id})
         .then(()=>{
         if (this._stu_TopicComfirmed.name.length !== 0) {

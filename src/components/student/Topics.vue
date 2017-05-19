@@ -99,6 +99,7 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
+import {KMP} from '../../utils/StringSearch'
 export default {
   data() {
       return {
@@ -132,6 +133,8 @@ export default {
         let reg = new RegExp(this.searchStr, 'i')
           //let isNum = this.searchStr.search(/^[0-9]*[1-9][0-9]*$/)
         return topics.filter((topics) => {
+
+
           if ((topics.title.match(reg) || topics._id.toString().match(reg))) {
             return true
           } else {
@@ -195,7 +198,7 @@ export default {
       },
       //提交选题按钮
       commitSelectedTopics() {
-        let user=_c.getCookie('user')
+        let user=cookie.get('user')
         if (!user) {
           alert('登录超时，请重新登录')
           this.$router.push('/')
@@ -234,11 +237,11 @@ export default {
     beforeDestroy() {
       //切换路由时如果还没保存 就弹出提示
       if (this.topicsInCart == this._stu_TopicInCart) {
-        console.log(0)
+        //console.log(0)
       }
     },
     mounted() {
-      let id = _c.getCookie('user')
+      let id = cookie.get('user')
        this.GET('/getstep')
         .then(res=>{
           this.step = res.data.curstep

@@ -5,6 +5,17 @@
 	</div>
 </template>
 
+<script type="text/javascript">
+	
+	export default{
+		mounted(){
+			window.setTimeout(()=>{
+				this.$router.push('/')
+			},5000)
+		}
+	}
+</script>
+
 <style type="text/css" media="screen">
 	.not-found{
 		background-color: #868686;

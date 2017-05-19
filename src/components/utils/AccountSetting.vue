@@ -53,7 +53,7 @@ export default {
         if (this.password !== this.passwordRepeat) {
           return this.warningMsg = '两次输入的密码不一样'
         } else if (true){
-          let acc = _c.getCookie('user')
+          let acc = cookie.get('user')
           if (!acc) {
             return this.warningMsg = '登录超时，请重新登录再进行操作'
           }
@@ -63,7 +63,6 @@ export default {
               newPassword: this.password
             })
             .then(res => {
-              console.log(res.data)
               if (res.data.state === 1) {
                 this.success = true
                 this.warningMsg = '成功修改密码'

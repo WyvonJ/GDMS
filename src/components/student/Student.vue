@@ -1,6 +1,6 @@
 <template>
   <div class="main-container">
-    <wyvonj-header :class="{'nav-hide': !openDrawer}" :username="username" :notification="notification"></wyvonj-header>
+    <wyvonj-header :class="{'nav-hide': !openDrawer}" :notification="notification"></wyvonj-header>
     <mu-drawer @close="handleDrawerClose" :open="openDrawer" :docked="docked" class="sidebar-drawer" :zDepth="1">
       <div class="console-panel">
         <div class="logo">
@@ -51,7 +51,6 @@ export default {
         docked: desktop,
         desktop: desktop,
         menuValue: 'topics',
-        username: '',
         notification: '',
       }
     },
@@ -91,9 +90,8 @@ export default {
       window.removeEventListener('resize', this.handleResize)
     },
     mounted() {
-      //if (_c.getCookie('usertype') != 0)
+      //if (cookie.get('usertype') != 0)
       //return this.$router.push('/')
-      this.username = _c.getCookie('username')
       this.handleResize = () => {
         this.changeNav()
       }

@@ -55,7 +55,7 @@ export default {
       //一键导出excel表格功能实现
     },
     mounted() {
-      let tchId = _c.getCookie('user')
+      let tchId = cookie.get('user')
       if (tchId) {
         this.tchSelectionResult({ teacherId: tchId })
       } else {

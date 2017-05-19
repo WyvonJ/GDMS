@@ -13,6 +13,9 @@ import ResetSystem from '../components/admin/ResetSystem.vue'
 export default {
   path: '/admin',
   component: Admin,
+  meta:{
+    requireAuth:true
+  },
   children: [
     { path: '', name: 'adminwelcome', component: Welcome },
     { path: 'procedure',  component: Procedure , meta:{title:'毕业流程'}},

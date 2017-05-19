@@ -5,6 +5,7 @@
 			<br/>
 			<span>
 				欢迎使用毕业设计管理系统<br>
+				{{getTime}}
 			</span>
 		</h2>
     <wyvonj-canvas></wyvonj-canvas>
@@ -14,6 +15,13 @@
 <script>
 import WyvonjCanvas from '../utils/WyvonjCanvas.vue'
 	export default{
+		computed:{
+			getTime(){
+				let t = new Date()
+				let month = t.getMonth() +1
+				return t.getFullYear()+'-'+month+'-'+t.getDate()
+			}
+		},
 		components:{
 			WyvonjCanvas
 		}
@@ -35,6 +43,5 @@ import WyvonjCanvas from '../utils/WyvonjCanvas.vue'
 	span{
 		display: inline-block;
 		margin-top: 64px;
-		text-shadow: -1px 4px 7px rgb(116, 116, 116);
 	}
 </style>

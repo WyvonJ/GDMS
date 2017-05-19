@@ -1,8 +1,8 @@
-var mongoose = require('./mongodb')
-var Schema = mongoose.Schema
+const mongoose = require('./mongodb')
+const Schema = mongoose.Schema
 
 /*存储目前程序运行到哪一步了*/
-var stepSchema = new Schema
+let stepSchema = new Schema
 ({
   key:{type:String},              	
 	curstep: {type:String}
@@ -10,7 +10,7 @@ var stepSchema = new Schema
 
 const step = mongoose.model('step',stepSchema)
 
-var initialStep = new step({
+let initialStep = new step({
   key:'system',
   curstep:'importmentorsdata'
 })
@@ -20,13 +20,12 @@ step.find(null,function(err,doc){
       console.log(err)
     }else if (!doc.length){//如果数据库中没有初始状态
       initialStep.save()
-      console.log('System step is importmentorsdata')
+      console.log('System step is import mentors data')
     }
     else{
-      console.log('There are initialsetp in database')
+      console.log('There are initialstep in database')
       }
   })
-
 
 exports.step = step
 

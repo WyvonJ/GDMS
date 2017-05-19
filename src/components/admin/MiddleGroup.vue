@@ -91,7 +91,6 @@ export default {
         if (elId && id)
           $event.target.appendChild(document.getElementById(elId))
         }
-        
       },
       drag($event) {
         //获取被拖拽元素的id 也就是绑定的帐号id
@@ -106,7 +105,6 @@ export default {
         window.location.reload()
       },
       uploadGroups() {
-        
         let group = document.getElementsByName('group')
         let groups = []
         _.forEach(group, (g, index) => {
@@ -117,7 +115,6 @@ export default {
             }
           })
         })
-        console.log(groups)
         this.POST('/admin/admUpMTchGroups', groups)
           .then(res => {
 
@@ -125,7 +122,6 @@ export default {
           .catch(err => {
             console.log(err)
           })
-
       }
     },
     created() {
@@ -165,11 +161,13 @@ export default {
         {
             border-top-left-radius: 3px;
             border-bottom-left-radius: 3px;
+            border-right-color: transparent;
         }
         .reset-button
         {
             border-top-right-radius: 3px;
             border-bottom-right-radius: 3px;
+            border-left-color: transparent;
         }
     }
 }

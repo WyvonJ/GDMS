@@ -2,7 +2,7 @@
   <div class="procedure">
     <section class="paper workflow">
       <div class="workflow-title">
-        <span>导师未处理事件</span>
+        <span>流程未完成导师</span>
       </div>
       <div class="workflow-panel">
       <div class="unfinished-wrapper">
@@ -14,7 +14,7 @@
     </section>
     <section class="paper workflow">
       <div class="workflow-title">
-        <span>学生未处理事件</span>
+        <span>流程未完成学生</span>
       </div>
       <div class="workflow-panel">
       <div class="unfinished-wrapper">
@@ -38,7 +38,7 @@
 				teacherUnfinished:['陈伟','陈丽芳','迪兰'],
 				notLoginStu:[{
 					_id:'1030513410',
-					name:'辽宁'
+					name:'张大伟'
 				}]
 			}
 		},

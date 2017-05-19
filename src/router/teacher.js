@@ -12,6 +12,9 @@ import AccountSetting from '../components/utils/AccountSetting.vue'
 export default {
   path: '/teacher',
   component: Teacher,
+  meta:{
+    requireAuth:true
+  },
   children: [
     { path: '', name: 'teacherwelcome', component: Welcome },
     { path: 'creation', name: 'creation', component: Creation },

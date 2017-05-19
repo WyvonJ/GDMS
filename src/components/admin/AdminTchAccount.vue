@@ -13,7 +13,6 @@
           <tr>
             <th>帐号</th>
             <th>姓名</th>
-            <th>密码</th>
             <th>手机号</th>
             <th>邮箱</th>
             <th>QQ/WeChat</th>
@@ -24,7 +23,6 @@
           <tr v-for="(teacher,index) in teacherAccounts">
             <td width="12%">{{teacher._id}}</td>
             <td width="12%">{{teacher.name}}</td>
-            <td width="12%">{{teacher.password}}</td>
             <td width="12%">{{teacher.tel||'无'}}</td>
             <td width="12%">{{teacher.email||'无'}}</td>
             <td width="12%">{{teacher.qq||'无'}}/{{teacher.wechat||'无'}}</td>
@@ -52,8 +50,6 @@
 </template>
 
 <script type="text/javascript">
-import { mapState, mapActions } from 'vuex'
-import { post } from 'axios'
 export default {
   data() {
       return {

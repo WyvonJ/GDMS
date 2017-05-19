@@ -1,15 +1,15 @@
-var db = require('../models/db')
-var xlsx = require('node-xlsx');
-var fs = require('fs');
+const db = require('../models/db')
+const xlsx = require('node-xlsx');
+const fs = require('fs');
 
-/*var mentorsGroup = [
+/*let mentorsGroup = [
 
 ]*/
-var writeToExcel = function(originData){
-    var buffer = xlsx.build(originData)
+let writeToExcel = function(originData){
+    let buffer = xlsx.build(originData)
     fs.writeFileSync('./server/files/download/MidGroup.xlsx',buffer,{'flag':'w'});
 }
-/*var groups = [
+/*let groups = [
    {
     name:'第一组',
     mentors:['2030513414','2030513411','2030513406','2030513426'],
@@ -47,30 +47,28 @@ var writeToExcel = function(originData){
    },
 ]*/
 
-var midGroup = function(groups){
-    for(var i = 0; i < groups.length; i++){
+let midGroup = function(groups){
+    for(let i = 0; i < groups.length; i++){
         fillGroupData(i,groups)
         
     }
     setTimeout(()=>{
-       for(var i=0;i<groups.length;i++){
+       for(let i=0;i<groups.length;i++){
         delete groups[i].mentors
        }
     //  console.log(groups)
      // xlsx.build(groups)
       writeToExcel(groups)
     //  cb()
-       }, 1000);/// console.log(group)
+       }, 1000)/// console.log(group)
 }
 
-var fillGroupData = function(groupId,groups){
-        var id = 1;
-        var group = groups[groupId]
-        var mentorsId = group.mentors
-    //   console.log(mentorsId)
-        //if(mentorsId.length)
-        for(var j=0; j<mentorsId.length; j++){
-            var mentorId = mentorsId[j]
+let fillGroupData = function(groupId,groups){
+        let id = 1
+        let group = groups[groupId]
+        let mentorsId = group.mentors
+        for(let j=0; j<mentorsId.length; j++){
+            let mentorId = mentorsId[j]
             db.mentors.findOne({_id:mentorId},['name','topics','group'])
                   .populate('topics','title finalstudents')
                   .exec()
@@ -78,18 +76,18 @@ var fillGroupData = function(groupId,groups){
                     mentor.group = groupId
                     mentor.save()
 
-                    var topics = mentor.topics
-                    for(var k=0;k<topics.length;k++){
-                        var topic = topics[k]
+                    let topics = mentor.topics
+                    for(let k=0;k<topics.length;k++){
+                        let topic = topics[k]
                         db.topics.findOne({_id:topic._id},['title', 'finalstudents'])
                         .populate('finalstudents', 'name')
                         .exec()
                         .then(topic=>{
                         
-                        var students = topic.finalstudents
-                        for(var i = 0 ;i < students.length; i++){
+                        let students = topic.finalstudents
+                        for(let i = 0 ;i < students.length; i++){
                           db.students.findOneAndUpdate({_id:students[i]._id},{$set:{group:groupId}},{new:true}).exec()
-                            var row = []
+                            let row = []
                             row.push(
                                 id,
                                 students[i]._id,
@@ -105,92 +103,5 @@ var fillGroupData = function(groupId,groups){
                 })
                  // console.log(group)
         }
-       // delete group.mentors
-       /*setTimeout(()=>{
-       // groups[group.name].data.push(group.data)
-        //console.log(group)
-       }, 1000);/// console.log(group)*/
         }
 exports.midgroup = midGroup
-//exports.groups = groups
-/*Promise.all(groups.map(group=>{
-    return new Promise((resolve1, reject)=>{
-        Promise.all(group.mentors.map(mentorId=>{
-            return new Promise((resolve2, reject)=>{
-                db.mentors.findOne({_id:mentorId},['name','topics'])
-                  .populate('topics','title finalstudents')
-                  .exec()
-                  .then((mentor)=>{
-                    Promise.all(mentor.topics.map(topic=>{
-                    return new Promise((resolve3, reject)=>{
-                    db.topics.findOne({_id:topic._id},['title', 'finalstudents'])
-                      .populate('finalstudents', 'name')
-                      .exec()
-                      .then(topic=>{
-                        var row = []
-                        students = topic.finalstudents
-                        for(var i = 0 ;i < students.length; i++){
-                            row.push(
-                                students[i]._id,
-                                students[i].name,
-                                topic.title,
-                                mentor.name)
-                            group.data.push(row)
-                        }
-                       // console.log(group)
-                       // console.log('学生')
-                        resolve3(group)                        
-                    })
-                    })
-            })).then(
-            console.log('1'))
-            console.log(group)
-            console.log('这个导师的所有学生都查询出来了')
-            resolve2(mentor)
-          })
-      })
-    })).then(()=>{
-        console.log('2')
-        console.log('这个组的所有老师都查询出来了')
-        resolve1(group)
-    })
-})
-})).then(console.log('3'))
-//console.log(groups))*/
-//读取文件内容
-/*var obj = xlsx.parse(__dirname+'/test.xlsx');
-var excelObj=obj[0].data;
-console.log(excelObj);
-
-var data = [];
-for(var i in excelObj){
-    var arr=[];
-    var value=excelObj[i];
-    for(var j in value){
-        arr.push(value[j]);
-    }
-    data.push(arr);
-}*/
-/*var mydata = */
-
-/*var buffer = xlsx.build([
-    {
-        name:'第一组',
-        data:[
-            ['晏涛','1030513430','吴吉','毕业选题系统'],
-            ['钱鹏江','1030513425','我','毕业设计选题系统']]
-    },
-    {
-        name:'第二组',
-        data:[
-        ['林意','1030513412','李诗芸','屏幕特效']]
-    }        
-]);*/
-//将文件内容插入新的文件中
-
-    
-    //fs.writeFileSync('中期答辨分组.xlsx',mydata,{'flag':'w'});
-   
-    
-
-

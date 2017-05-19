@@ -1,6 +1,6 @@
 <template>
 	<div class="main-container">
-    <wyvonj-header :class="{'nav-hide': !openDrawer}" :username="username" :notification="notification"></wyvonj-header>
+    <wyvonj-header :class="{'nav-hide': !openDrawer}" :notification="notification"></wyvonj-header>
     <mu-drawer @close="handleClose" :open="openDrawer" :docked="docked" class="sidebar-drawer" :zDepth="1">
         <div class="console-panel">
         <div class="logo">
@@ -10,7 +10,7 @@
           </p>
         </div>
             <mu-list class="menu-border" @change="handleMenuChange" :value="menuValue">
-              <mu-list-item value="creation" title="创建选题">
+              <mu-list-item value="creation" title="选题发布">
                 <img src="../../assets/icon/playlist_add.svg" slot="left" alt="description"/>
               </mu-list-item>
               <mu-list-item value="confirmation" title="选择学生">
@@ -56,7 +56,6 @@ const desktop=isDesktop()
 				docked:desktop,
 				desktop:desktop,
 				menuValue:1,
-				username:'',
 				notification:''
 			}
 		},
@@ -98,10 +97,9 @@ const desktop=isDesktop()
     	window.removeEventListener('resize', this.handleResize)
   	},
 		mounted(){
-			if (_c.getCookie('usertype')!=1)
+			if (cookie.get('usertype')!=1)
        // return this.$router.push('/')
      
-        this.username = _c.getCookie('username')
         this.handleResize = () => {
           this.changeNav() 
         }

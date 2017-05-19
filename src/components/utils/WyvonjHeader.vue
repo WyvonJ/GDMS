@@ -33,20 +33,16 @@
 import { mapState, mapMutations } from 'vuex'
 export default {
   props: {
-    username: {
-      type: String,
-      default: ''
-    },
     notification: {
       type: String,
       default: '没有什么新消息。'
     }
-
   },
   data() {
     return {
       isOpen: false,
       trigger: null,
+      username:''
     }
   },
   methods: {
@@ -55,12 +51,12 @@ export default {
     },
     //登出
     logout() {
-      _c.unsetCookie('user', '/', window.location.hostname)
-      this.SET_USER({ account: '' })
+      cookie.unset('user', '/', window.location.hostname)
+      this.UNSET_USER()
       this.RESET_STATE()
       this.$router.push('/') //返回登录界面
     },
-    ...mapMutations(['SET_USER', 'RESET_STATE'])
+    ...mapMutations(['UNSET_USER', 'RESET_STATE'])
   },
   computed: {
     bgColor() {
@@ -82,6 +78,8 @@ export default {
   },
   mounted() {
     this.trigger = this.$refs.notify.$el
+    this.username = cookie.get('username')
+
   }
 }
 

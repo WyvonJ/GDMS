@@ -58,7 +58,7 @@ export default {
         this.currentTopic=topic
       },
       finalConfirm(){
-        let tchId=_c.getCookie('user') 
+        let tchId=cookie.get('user') 
         
         if (tchId) {
           let tchSelection = {
@@ -88,7 +88,7 @@ export default {
       ...mapMutations(['TCH_SET_STU_SELECTED','TCH_DELETE_STUDENT'])
     },
     created() {
-        this.tchGetTopics({ teacherId: _c.getCookie('user') })
+        this.tchGetTopics({ teacherId: cookie.get('user') })
         _.forEach(this._tch_StudentInCard,(topic)=>{
           topic.count = 0
         })

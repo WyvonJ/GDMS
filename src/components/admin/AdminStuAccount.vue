@@ -14,7 +14,6 @@
   				<tr>
   					<th>学号</th>
   					<th>姓名</th>
-  					<th>密码</th>
   					<th>手机号</th>
   					<th>邮箱</th>
             <th>微信</th>
@@ -25,7 +24,6 @@
   				<tr class="table-row-border" v-for="(student,index) in studentAccounts">
   					<td :style="genderBorder(student.gender)" width="12%">{{student._id}}</td>
   					<td width="12%">{{student.name}}</td>
-  					<td width="12%">{{student.password}}</td>
   					<td width="12%">{{student.tel||'无'}}</td>
   					<td width="12%">{{student.email||'无'}}</td>
             <td width="12%">{{student.wechat||'无'}}</td>
@@ -52,37 +50,13 @@
 </template>
 
 <script type="text/javascript">
-import { mapState, mapActions } from 'vuex'
-import { post } from 'axios'
 export default {
   data() {
       return {
         dialog: false,
         chosenFile: '选择文件',
         progressBar: 0,
-        studentAccounts: [{
-          _id: '1030513441',
-          name: '李达康',
-          gender: '男',
-          password: '123456',
-          tel: '18016996320',
-          email: 'google@hotmail.com',
-          wechat:'asdf'
-        }, {
-          _id: '1030513441',
-          name: '李达康',
-          gender: '男',
-          password: '123456',
-          tel: '18016996320',
-          email: 'google@hotmail.com'
-        }, {
-          _id: '1030513441',
-          name: '李达康',
-          gender: '男',
-          password: '123456',
-          tel: '18016996320',
-          email: 'google@hotmail.com'
-        }, ]
+        studentAccounts: []
       }
     },
     methods: {
@@ -113,10 +87,10 @@ export default {
             .then((res) => {
               if (res.data.state === 1) {
                 output.className = 'container'
-              this.message = '成功上传文件'
-              this.progressBar = 100
-              this.dialog = false
-              this.GET('/admin/admGetTchAccount')
+                this.message = '成功上传文件'
+                this.progressBar = 100
+                this.dialog = false
+                this.GET('/admin/admGetTchAccount')
                 .then(res => {
                   this.teacherAccounts = res.data
                 })

@@ -1,8 +1,8 @@
 /*
  *负责处理序号递增
  */
-var mongoose = require('./mongodb')
-var Schema = mongoose.Schema
+const mongoose = require('./mongodb')
+const Schema = mongoose.Schema
 
 const autoIncSchema = new Schema({
   collectionName: { type: String },
@@ -24,21 +24,18 @@ autoIncSchema.statics.getTopicsId = function(name, cb) {
     console.log(' ret.topicSeq %d',ret.topicsSeq)
    return ret.topicsSeq*/
 
-  this.findOneAndUpdate( //｛query},{update},{options},{callback},按这个顺序加{}不要多加｛｝
-    { collectionName: name }, { $inc: { topicsSeq: 1 } }, { new: true }
-  ).exec().then(function(doc) {
-    //   console.log('topicsSeq is %d', doc.topicsSeq)
+  this.findOneAndUpdate({ collectionName: name }, { $inc: { topicsSeq: 1 } }, { new: true }).exec().then(function(doc) {
     //   console.log(doc)
     return cb(doc.topicsSeq)
   }).catch(function(err) {
-    //   console.log('err' + err);
+    console.log(err);
   })
 }
 
 const autoIncModel = mongoose.model('autoIncModel', autoIncSchema)
 
 //要让topics实现递增，从1开始
-var newAutoIncID = new autoIncModel({
+let newAutoIncID = new autoIncModel({
   collectionName: 'topics',
   topicsSeq: 0
 })
@@ -54,10 +51,5 @@ autoIncModel.find(null, function(err, doc) {
   })
   //console.log(newAutoIncID._id);
   //save是一个异步函数，这样save之后才查找就可以找到
-  /*newAutoIncID.save(function(err){
-    autoIncModel.getTopicsId('topics')
-  })*/
-
-
 
 exports.autoIncModel = autoIncModel

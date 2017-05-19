@@ -1,11 +1,11 @@
 /*
 *负责处理组别的表
 */
-var mongoose = require('./mongodb')
-var Schema = mongoose.Schema
+const mongoose = require('./mongodb')
+const Schema = mongoose.Schema
 
-var students = require('./students').students
-var mentors = require('./mentors').mentors
+let students = require('./students').students
+let mentors = require('./mentors').mentors
 
 const groupsSchema = new Schema({
 	_id: 		{type: Number, required:true, unique: true},
@@ -16,5 +16,4 @@ const groupsSchema = new Schema({
     //numTopics:  {type:Number}//这组负责答辨的题目数
 },{collection: 'groups'})
 
-const groups = mongoose.model('groups',groupsSchema)
-exports.groups = groups
+exports.groups = mongoose.model('groups',groupsSchema)

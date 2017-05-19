@@ -48,7 +48,7 @@ export default {
       ...mapActions(['tchGrouping'])
     },
     mounted() {
-      let user = _c.getCookie('user')
+      let user = cookie.get('user')
       
       this.GET('/getstep')
         .then(res=>{
@@ -66,7 +66,6 @@ export default {
           }else{
         this.tchGrouping({ account: user })
         .then(() => {
-          console.log(this._stu_tch_Group)
           if (this._stu_tch_Group.length !== 0) {
             this.gotGroup = true
             this.groupId = this._stu_tch_Group._id

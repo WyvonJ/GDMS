@@ -33,7 +33,7 @@
 
 ## 组件框架
 + UI组件
-    + MuseUI, VueMaterial 基于Material Design原则设计的Vue 组件框架，
+    + MuseUI, 基于Material Design原则设计的Vue 组件框架，
     + 自定义需要各使用其部分组件，如按钮和表格
 + Ajax
    + Axios 基于Promise的Ajax库，官方推荐
@@ -41,14 +41,14 @@
    + Express
    + Mongoose
 
-## 需要修复的
+## 需要添加和修复的功能
 + [x] 重复选题 每次应该得到 之前已选的题目 重复选题
 + [x] 判断类型
 + [x] 搜索算法失灵
 + [x] 降低外部UI组件需求
-+ [ ] 整合CSS
++ [x] 整合CSS
 + [x] 重新设计老师选择学生页面
-+ [ ] 答辩成绩 排名
++ [x] 答辩成绩 排名
 + [x] 文件上传下载
 + [x] 分组排序，整合
 ***

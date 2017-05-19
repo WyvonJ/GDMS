@@ -29,7 +29,7 @@ export default {
     },
     methods: {
       commitGrade() {
-        let id = _c.getCookie('user')
+        let id = cookie.get('user')
         if (!id)
           {
             alert('登录超时，请重新登录后操作')

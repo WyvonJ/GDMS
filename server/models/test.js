@@ -1,19 +1,7 @@
 
-var state = require('../state')
-
-if(state.CurrentState == state.StateEnum.InitializeData)
-console.log("InitializeData")
-if(state.CurrentState == state.StateEnum.CreateTopics)
-console.log("CreateTopics")
-if(state.CurrentState == state.StateEnum.SelectTopics)
-console.log("SelectTopics")
-if(state.CurrentState == state.StateEnum.ReSelectTopics)
-console.log("ReSelectTopics")
-
-
-state.CurrentState = state.StateEnum.CreateTopics
-
-if(state.CurrentState == state.StateEnum.DetermineGroups)
-console.log("DetermineGroups")
-if(state.CurrentState == state.StateEnum.Scoring)
-console.log("Scoring")
+const jwt = require('jsonwebtoken')
+const rand =require('csprng')
+const sha1=require('sha1')
+let salt = 'dv2tfpqo705ymot7q0fo9umu5888cam'
+let pass = sha1('1030513101'+salt)
+console.log(pass) 

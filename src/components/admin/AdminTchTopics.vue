@@ -74,7 +74,6 @@ export default {
     	},
       exportTable(){
         this.GET('/admin/download?filename=tchtopics')
-        
       },
       beginSelection(odr){
         this.GET('/admin/unhandledTch')

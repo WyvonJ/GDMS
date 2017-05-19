@@ -10,6 +10,9 @@ import AccountSetting from '../components/utils/AccountSetting.vue'
 let StudentRouter = {
   path: '/student',
   component: Student,
+  meta:{
+    requireAuth:true
+  },
   children: [
     { path: '', component: Welcome },
     { path: 'topics', name: 'topics', component: Topics },

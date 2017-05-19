@@ -22,7 +22,7 @@
             <img src="../../assets/icon/student.svg" slot="left" alt="student"/>
           </mu-list-item>
          
-          <mu-list-item title="分组管理" toggleNested >
+          <mu-list-item title="答辩分组" toggleNested >
             <img src="../../assets/icon/group.svg" slot="left" alt="group"/>
             <mu-list-item value="middlegroup" slot="nested" title="中期分组">
               <img src="../../assets/icon/assessment.svg" slot="left" alt="middle"/>
@@ -101,7 +101,6 @@ export default {
     mounted() {
       //if (_c.getCookie('usertype') != 0)
       //return this.$router.push('/')
-      this.username = _c.getCookie('username')
       this.handleResize = () => {
         this.changeNav()
       }

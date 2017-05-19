@@ -16,10 +16,10 @@
               <span>可选人数：{{available}}</span>
               <mu-slider v-model="available" :min="1" :max="10" :step="1"  class="available-slider" />
               <br/>
-              <mu-select-field v-model="category" label="课题类别" class="select-field">
-                <mu-menu-item value="0" title="论文" />
-                <mu-menu-item value="1" title="设计" />
-              </mu-select-field>
+              <div class="category-box">
+                  <mu-radio label="论文" name="group" nativeValue="0" v-model="category"  uncheckIcon="build" checkedIcon="build" class="category-radio"/> 
+                  <mu-radio label="设计" name="group" nativeValue="1" v-model="category"   uncheckIcon="assignment" checkedIcon="assignment"  class="category-radio"/>
+              </div>
               <br/>
               <mu-select-field v-model="fields" multiple :labelFocusClass="['label-foucs']" :errorText="fieldsError" label="课题研究方向"  class="select-field" labelFloat>
                 <mu-sub-header>可多选</mu-sub-header>
@@ -69,7 +69,6 @@
     </div>
 </template>
 
-
 <script type="text/javascript">
 import { mapState, mapActions } from 'vuex'
 
@@ -103,7 +102,7 @@ export default {
     },
     methods: {
       createTopic() {
-        let id = _c.getCookie('user')
+        let id = cookie.get('user')
           //if (!id) return alert('登录超时，请重新操作')
         if (this.fields.length === 0) {
           return this.fieldsError = "还没选择课题研究方向！"
@@ -116,7 +115,7 @@ export default {
         }
         this.GET('/getstep')
           .then(res => {
-            if (step === 'createtopics') {
+            if (res.data.curstep === 'createtopics') {
               let currentTopic = {
                   mentor: id,
                   category: this.category,
@@ -149,7 +148,7 @@ export default {
 
       },
       deleteTopic(topic, index) {
-        let id = _c.getCookie('user')
+        let id = cookie.get('user')
         this.GET('/getstep')
           .then((res) => {
             let step = res.data.curstep
@@ -184,7 +183,7 @@ export default {
     },
     mounted() {
       //如果cookie过期则跳转到登录界面------------------
-      let id = _c.getCookie('user')
+      let id = cookie.get('user')
         //if (!id) 
         //return this.$router.push('/')
       this.tchGetCreatedTopics({ teacherId: id })
@@ -213,6 +212,9 @@ export default {
             width: 256px;
             margin-top: 12px;
             margin-bottom: 0;
+        }
+        .category-radio{
+          margin-right: 16px;
         }
         .mu-text-field
         {

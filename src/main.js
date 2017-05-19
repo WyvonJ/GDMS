@@ -13,17 +13,20 @@ import axios from 'axios'
 import store from './store'
 import router from './router'
 import cookie from './utils/cookieUtil'
-let _ = require('lodash')
-global._c = cookie
+const _ = require('lodash')
+
+global.cookie = cookie
 
 Vue.use(MuseUI)
 Vue.use(VueDND)
 Vue.use(WyvonjTooltip)
+  //添加请求拦截器
+
 
 Vue.prototype.GET = axios.get
 Vue.prototype.POST = axios.post
 
-let vm = new Vue({
+const vm = new Vue({
   router,
   store,
   components: {
@@ -33,3 +36,23 @@ let vm = new Vue({
   computed: mapState(['isProgressbar', 'snackbarText', 'isSnackbar'])
 }).$mount('#GDMS')
 
+axios.interceptors.request.use((config) => {
+  let token = window.localStorage.getItem('token')
+  if (token) {
+    config.headers.common['Authorization'] = 'Bearer ' + token
+  }
+  return config
+}, (err) => {
+  return Promise.reject(err)
+})
+
+axios.interceptors.response.use((res) => {
+  if (res.status === 401||res.status===404) {
+    store.commit('UNSET_USER')
+    router.go({ name: 'login' })
+  }
+  return Promise.resolve(res)
+}, (error) => {
+  console.warn('找不到服务器')
+  return Promise.reject(error)
+})

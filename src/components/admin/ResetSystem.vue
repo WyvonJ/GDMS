@@ -12,10 +12,10 @@
 		</p>
 		<button class="red" @click="dialog=!dialog">重置系统</button>
 	</div>
-     <mu-dialog :open="dialog" title="Attention!" @close="dialog=false">
+     <mu-dialog :open="dialog" title="注意!" @close="dialog=false">
     操作不可逆，请再次确认操作
-    <button slot="actions" @click="dialog=false" class="blue">取消</button>
-    <button slot="actions" @click="resetSystem" class="red">确定</button>
+    <button slot="actions" @click="dialog=false" class="cancel red">取消</button>
+    <button slot="actions" @click="resetSystem" class="confirm blue">确定</button>
   </mu-dialog>
 		
 	</div>
@@ -32,14 +32,12 @@ export default{
 	},
 	methods:{
 		resetSystem(){
-			console.log(this)
 			this.GET('/admin/admResetSystem')
 				.then(res=>{
 					if (res.data.state===1) {
 						this.reseted = true
 						this.dialog = false
 					}
-						
 				})
 		}
 	}
@@ -59,7 +57,7 @@ export default{
 		line-height: 36px;
 		margin: 32px;
 	}
-	button{
-		margin: 0 8px;
+	.cancel,.confirm{
+		border-radius: 0;
 	}
 </style>

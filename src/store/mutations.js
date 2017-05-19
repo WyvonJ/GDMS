@@ -2,7 +2,14 @@ import Vue from 'vue'
 
 export default {
   SET_USER: (state, user) => {
+    localStorage.setItem('token',user.token)
+    localStorage.setItem('username',user.username)
     state.user = user
+  },
+  UNSET_USER:(state)=>{
+    localStorage.removeItem('token')
+    localStorage.removeItem('username')
+    state.user = {}
   },
   SET_NOTIFICATION: (state, string) => {
     state.notification = string

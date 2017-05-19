@@ -1,7 +1,8 @@
-let express = require('express');
-let router = express.Router();
-let db = require('../models/db')
-let fs = require("fs")
+const express = require('express')
+const router = express.Router()
+const db = require('../models/db')
+const fs = require("fs")
+const confirmToken = require('../middlewares/confirmToken')
 
 router.post('/tchCreateTopic', (req, res) => {
   //console.log(req.body)
@@ -21,9 +22,9 @@ router.post('/tchConfirmStudent', (req, res) => {
   let tchId = req.body.teacherId
   let stuId = req.body.studentId
   let topicId = req.body.topicId
-  //console.log(tchId)
- // console.log(stuId)
- // console.log(topicId)
+    //console.log(tchId)
+    // console.log(stuId)
+    // console.log(topicId)
   db.mentors.find({ _id: tchId }, ['notification']).exec()
     .then((notification) => console.log(`${tchId}: ${notification}`))
     .catch((err) => console.log(err))
@@ -62,7 +63,7 @@ router.post('/tchGetTopics', (req, res) => {
       Promise.all(mentor.eventstack.map(topicId => fillCardData(topicId, cardData)))
         .then(() => {
           res.send(cardData)
-         // console.log(cardData)
+            // console.log(cardData)
         })
     })
 
@@ -119,7 +120,7 @@ router.post('/tchDeleteTopic', (req, res) => {
 router.post('/tchSelectionResult', (req, res) => {
   let tchId = req.body.teacherId
   let cardData = []
- // console.log(tchId)
+    // console.log(tchId)
   db.mentors.findOne({ _id: tchId })
     .populate('topics')
     .exec()
@@ -149,18 +150,17 @@ router.post('/tchSelectionResult', (req, res) => {
 
 })
 
-router.post('/tchGetCreatedTopics', (req, res) => {
+router.post('/tchGetCreatedTopics', confirmToken, (req, res) => {
   //console.log(tchId)
   let tchId = req.body.teacherId
-  console.log(tchId)
+  if (!tchId) return res.send({ state: 0 })
   db.mentors.findOne({ _id: tchId }, 'topics')
     .populate('topics', '_id category title details restriction')
     .exec((err, mentor) => {
       if (mentor)
         res.send(mentor.topics)
-      else 
-        res.sendStatus({state:0})
-
+      else
+        res.sendStatus({ state: 0 })
     })
 
 })
@@ -168,6 +168,7 @@ router.post('/tchGetCreatedTopics', (req, res) => {
 /*填写导师的联系信息*/
 router.post('/tchSetContactData', (req, res) => {
   let tchId = req.body.account
+  if (!tchId) return res.send({ state: 0 })
   db.mentors.findOneAndUpdate({ _id: tchId }, {
       $set: {
         'tel': req.body.tel,
@@ -185,36 +186,28 @@ router.post('/tchSetContactData', (req, res) => {
     })
 })
 
-router.post('/tchMGrouping',(req,res)=>{
-
-})
 /*得到分组信息*/
 router.post('/tchGrouping', (req, res) => {
-  console.log(req.body)
   let account = req.body.account
-  let mydb = {
-    0: db.students,
-    1: db.mentors
-  }
+  let mydb = [db.students, db.mentors]
   let type = 0
   if (account[0] == 1) type = 0
   else if (account[0] == 2) type = 1
   let cardData = {
-    _id: Number,
-    teachers: [],
-    students: []
-  }
-  //console.log(account)
-  mydb[type].findOne({ _id: account }, 'group',(err,doc) => {
-      console.log(doc)
-      //if(err)return
-      if(doc.group){
-        db.groups.findOne({ _id: doc.group }, ['mentors', 'students'])
+      _id: Number,
+      teachers: [],
+      students: []
+    }
+    //console.log(account)
+  mydb[type].findOne({ _id: account }, 'group', (err, doc) => {
+    //if(err)return
+    if (doc.group) {
+      db.groups.findOne({ _id: doc.group }, ['mentors', 'students'])
         .populate('mentors', 'name gender')
         .populate('students', 'name final gender')
         .exec()
-        .then((err,group) => {
-          if(err)return
+        .then((err, group) => {
+          if (err) return
           cardData._id = group._id
           cardData.teachers = group.mentors
           Promise.all(group.students.map((student) => fillCardData(student, cardData)))
@@ -222,11 +215,10 @@ router.post('/tchGrouping', (req, res) => {
               res.send(cardData)
             })
         })
-      }else{
-        res.sendStatus(403)
-      }
+    } else {
+      res.sendStatus(403)
     }
-  )
+  })
 
 
   function fillCardData(student, cardData) {
@@ -245,53 +237,49 @@ router.post('/tchGrouping', (req, res) => {
 })
 
 router.post('/tchContacInfo', (req, res) => {
-  var account = req.body.teacherId
-  var tel = req.body.tel
-  var email = req.body.email
-  var wechat = req.body.wechat
-  db.mentors.findOneAndUpdate({_id:account},
-                              {$set: {tel:tel, email:email, qq:qq, wechat: wechat}},
-                              {new: true}).exec()
-                              .then(res.send(1))
+  let account = req.body.teacherId
+  let tel = req.body.tel
+  let email = req.body.email
+  let wechat = req.body.wechat
+  db.mentors.findOneAndUpdate({ _id: account }, { $set: { tel: tel, email: email, qq: qq, wechat: wechat } }, { new: true }).exec()
+    .then(res.send({ state: 1 }))
 })
 
 router.post('/tchAccountInfo', (req, res) => {
-  var account = req.body.teacherId
-  var oldPassword = req.body.oldPassword
-  var newPassword = req.body.newPassword
-  db.mentors.findOne({_id:account},(err,mentor)=>{
-    if(mentor.password !=oldPassword)
-              res.send(0);//密码错识
-              else{
-                mentor.password = newPassword
-                mentor.save()
-                res.send(1)
-              }
+  let account = req.body.teacherId
+  let oldPassword = req.body.oldPassword
+  let newPassword = req.body.newPassword
+  db.mentors.findOne({ _id: account }, (err, mentor) => {
+    if (mentor.password != oldPassword)
+      res.send({ state: 0 }) //密码错误
+    else {
+      mentor.password = newPassword
+      mentor.save()
+      res.send({ state: 1 })
+    }
   })
-            
+
 })
 
-router.post('/tchSetContact',(req, res)=>{
-  var account = req.body.studentId
-  var tel = req.body.tel
-  var email = req.body.email
-  var wechat = req.body.wechat
-  var qq = req.body.qq
-  var office = req.office
-  db.mentors.findOneAndUpdate({_id:account},
-                              {$set: {'tel':tel, 'email':email, 'qq':qq, 'wechat': wechat, 'office':office}},
-                              {new: true}).exec()
-                              .then(res.send(1))
+router.post('/tchSetContact', (req, res) => {
+  let account = req.body.studentId
+  let tel = req.body.tel
+  let email = req.body.email
+  let wechat = req.body.wechat
+  let qq = req.body.qq
+  let office = req.office
+  db.mentors.findOneAndUpdate({ _id: account }, { $set: { 'tel': tel, 'email': email, 'qq': qq, 'wechat': wechat, 'office': office } }, { new: true }).exec()
+    .then(res.send({ state: 1 }))
 })
 
-router.get('/tchGetContact',(req, res)=>{
- // var account = req.body.teacherId
-    var q = req.query
-    var account = q.account
- // var account = '2030513401'
-  db.mentors.findOne({_id:account},['tel','email','qq','wechat','office'],(err,mentor)=>{
-    if(err)return
-    var mentorContact = {}
+router.get('/tchGetContact', (req, res) => {
+  // let account = req.body.teacherId
+  let q = req.query
+  let account = q.account
+    // let account = '2030513401'
+  db.mentors.findOne({ _id: account }, ['tel', 'email', 'qq', 'wechat', 'office'], (err, mentor) => {
+    if (err) return res.sendStatus(404)
+    let mentorContact = {}
     mentorContact.tel = mentor.tel
     mentorContact.email = mentor.email
     mentorContact.qq = mentor.qq

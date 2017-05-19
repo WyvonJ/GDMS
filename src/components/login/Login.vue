@@ -81,9 +81,9 @@ export default {
             this.progressbarStop()
               let date = new Date(Date.now() + 60000 * 30)
               let usertype=this.user.usertype
-              _c.setCookie('user', this.account, date, '/', location.hostname)
-              _c.setCookie('username',this.user.username , date, '/', location.hostname)
-              _c.setCookie('usertype',usertype , date, '/', location.hostname)
+              cookie.set('user', this.account, date, '/', location.hostname)
+              cookie.set('username',this.user.username , date, '/', location.hostname)
+              cookie.set('usertype',usertype , date, '/', location.hostname)
               if (this.user.isFirstLogin) {
                 if (usertype < 2) {
                   this.$router.push('/entryinformation')
@@ -275,6 +275,9 @@ export default {
             width: 200px;
             margin-bottom: 0;
         }
+        .mu-text-field.has-label .mu-text-field-label.float{
+          color: #646444 !important;
+        }
         .login-button
         {
             font-size: 16px;
@@ -296,8 +299,8 @@ export default {
             font-size: 11px;
 
             position: absolute;
-            right: -60;
-            bottom: -14px;
+            right: -10px;
+            bottom: -40px;
 
             cursor: pointer;
             &:hover
@@ -311,7 +314,7 @@ export default {
 .wyvonj-tooltip{
           font-size: 14px;
           padding: 8px;
-          background-color: rgba(0,0,0,.5);
+          background-color: rgba(0,0,0,.64);
           color: white;
         }
 </style>

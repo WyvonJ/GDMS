@@ -15,7 +15,7 @@ options = {
     auto_reconnect: true,
     poolSize: 10
   }
-};
+}
 
 mongoose.connect(DB_URL, options)
 const dbConnection=mongoose.connection
@@ -25,8 +25,6 @@ dbConnection.on('error',function(){
 	console.log('Datebase connection Error.')
 })
 
-
-
 //打开数据库连接一旦打开就打出这句话
 dbConnection.once('open',function(){
 	console.log('The datebase has connected.')
@@ -34,8 +32,6 @@ dbConnection.once('open',function(){
 			.then(()=>console.log('Initialize successfully.'))
 			.catch(()=>console.log('Something went wrong during initializing.'))*/
 })
-
-
 
 //导出三个对像
 //exports.Schema = Schema

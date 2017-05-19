@@ -33,19 +33,7 @@
 export default {
   data() {
     return {
-      students: [{
-        _id: '1035245231',
-        name: '王菲'
-      },{
-        _id: '102312354',
-        name: '陈奕迅'
-      },{
-        _id: '163021554',
-        name: '张学友'
-      },{
-        _id: '1030254126',
-        name: '周杰伦'
-      }]
+      students: []
     }
   },
   methods:{
@@ -66,5 +54,7 @@ export default {
   .green-vue{
     font-size: 16px;
     display: inline-block;
+    float: left;
+    margin: 8px;
   }
 </style>
