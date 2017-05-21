@@ -31,7 +31,9 @@ router.post('/tchConfirmStudent', (req, res) => {
 
   db.topics.findOne({ _id: topicId }).exec()
     .then((topic) => {
-      if (topic.isselected) { res.send('题目已经选好学生了'); /*console.log('题目已经选好学生了')*/ } else {
+      if (topic.isselected) {
+        res.send('题目已经选好学生了')
+      } else {
         db.students.findOneAndUpdate({ _id: stuId }, { $set: { isselected: true, mentor: tchId, final: topicId } }, { new: true }).exec()
         db.topics.findOneAndUpdate({ _id: topicId }, { $inc: { available: -1 }, $push: { finalstudents: stuId } }, { new: true }).exec()
           .then((topic) => {
@@ -190,9 +192,7 @@ router.post('/tchSetContactData', (req, res) => {
 router.post('/tchGrouping', (req, res) => {
   let account = req.body.account
   let mydb = [db.students, db.mentors]
-  let type = 0
-  if (account[0] == 1) type = 0
-  else if (account[0] == 2) type = 1
+  let type = account[0] == 1 ? 0 : 1
   let cardData = {
       _id: Number,
       teachers: [],
@@ -216,7 +216,7 @@ router.post('/tchGrouping', (req, res) => {
             })
         })
     } else {
-      res.sendStatus(403)
+      res.sendStatus(404)
     }
   })
 
@@ -262,13 +262,10 @@ router.post('/tchAccountInfo', (req, res) => {
 })
 
 router.post('/tchSetContact', (req, res) => {
-  let account = req.body.studentId
-  let tel = req.body.tel
-  let email = req.body.email
-  let wechat = req.body.wechat
-  let qq = req.body.qq
-  let office = req.office
-  db.mentors.findOneAndUpdate({ _id: account }, { $set: { 'tel': tel, 'email': email, 'qq': qq, 'wechat': wechat, 'office': office } }, { new: true }).exec()
+
+  let account = req.body.account
+  let contact = req.body.contact
+  db.mentors.findOneAndUpdate({ _id: account }, { $set: { 'tel': contact.tel, 'email': contact.email, 'qq': contact.qq, 'wechat': contact.wechat, 'office': contact.office, 'fields': contact.fields } }, { new: true }).exec()
     .then(res.send({ state: 1 }))
 })
 
@@ -279,12 +276,13 @@ router.get('/tchGetContact', (req, res) => {
     // let account = '2030513401'
   db.mentors.findOne({ _id: account }, ['tel', 'email', 'qq', 'wechat', 'office'], (err, mentor) => {
     if (err) return res.sendStatus(404)
-    let mentorContact = {}
-    mentorContact.tel = mentor.tel
-    mentorContact.email = mentor.email
-    mentorContact.qq = mentor.qq
-    mentorContact.wechat = mentor.wechat
-    mentorContact.office = mentor.office
+    let mentorContact = {
+      tel: mentor.tel,
+      email: mentor.email,
+      qq: mentor.qq,
+      wechat: mentor.wechat,
+      office: mentor.office
+    }
     res.send(mentorContact)
   })
 })

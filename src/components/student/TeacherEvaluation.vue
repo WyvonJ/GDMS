@@ -7,10 +7,9 @@
       </div>
       <div class="grade-content">
         <mu-slider v-model="grade" :step="1" class="grade-slider" />
-        <button @click="commitGrade" class="red" disabled="isOpenForEva">
-          <i class="material-icons star-icon">star</i>
-          <span>提交分数</span>
-        </button>
+         <mu-raised-button @click="commitGrade" :disabled="isOpenForEva" secondary label="评分">
+           <wyvonj-tooltip>{{msg}}</wyvonj-tooltip>
+         </mu-raised-button>
       </div>
     </div>
   </div>
@@ -24,7 +23,8 @@ export default {
       return {
         grade: 80,
         name: '导师',
-        isOpenForEva: false
+        isOpenForEva: true,
+        msg:'现在还不能评分'
       }
     },
     methods: {
@@ -41,6 +41,17 @@ export default {
         })
       },
       ...mapActions(['stuEvaluationToTch'])
+    },
+    mounted(){
+      let id = cookie.get('user')
+      this.POST('/student/stuSelectionResult',{studentId:id})
+        .then((res)=>{
+          if(res.data.state===1){
+            this.isOpenForEva=false
+            this.msg=''
+            this.name=res.data.name
+          }
+        })
     }
 }
 
@@ -48,6 +59,10 @@ export default {
 
 <style lang="sass" stylesheet="scss" scoped>
 @import '../../style/variables.scss';
+.wyvonj-tooltip{
+  background-color: rgba(0,0,0,.6);
+  color: white;
+}
 .evaluation-card
 {
     .teacher-wrapper{

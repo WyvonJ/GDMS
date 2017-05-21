@@ -21,6 +21,10 @@
           <span>提交分组数</span>
         </button>
       </div>
+      <div class="deleted-students">
+        <h3>已删除学生</h3>
+        <div ref="deleted"></div>
+      </div>
       <div class="groups-wrapper">
         <div class="group" name="group" v-for="(group,index) of finalGroups" @drop="drop($event)" @dragover="allowDrop($event)" :id="'g'+group._id">
           <div class="teachers-grouped" :id="'tg'+group._id">
@@ -31,20 +35,24 @@
           <div class="students-grouped" :id="'sg'+group._id">
             <span class="student-to chip no-selection" v-for="student of group.students" draggable="true" @dragstart="drag($event)" :id="'s'+student._id">
                     {{student._id}}{{student.name}}
+                    <span @click="deleteItem(student._id)" class="delete-item">
+                    X
+                    <wyvonj-tooltip>删除</wyvonj-tooltip>
+                    </span>
                 </span>
           </div>
           <span class="group-id no-selection" :id="'p'+group._id">{{group._id}}</span>
         </div>
       </div>
+      
       <div class="actions">
-        <button @click="uploadGroups" class="orange">
+         <mu-raised-button @click="uploadGroups" secondary label="更新分组">
           <img src="../../assets/icon/upload.svg" alt="upload" />
-          <span>确认分组</span>
-        </button>
-        <a href="/admin/download?filename=FinalGroup" class="shadow">
+          
+        </mu-raised-button>
+         <mu-raised-button href="/admin/download?filename=MidGroup" secondary label="导出最终分组表">
           <img src="../../assets/icon/export.svg" alt="export" />
-          <span>导出最终分组表</span>
-        </a>
+         </mu-raised-button>
       </div>
       <div class="overlap" v-if="isOverlap">
         <div class="progress">
@@ -138,12 +146,24 @@ export default {
       allowDrop($event) {
         $event.preventDefault()
       },
+      deleteItem(id){
+        this.$refs.deleted.append(document.getElementById('s'+id))
+      },
       uploadGroupCount(){
-        this.POST('/admin/admFnlGroupCount',{count:this.groupCount})
+        new Promise((resolve,reject) => {
+          this.isOverlap = true
+          this.POST('/admin/admFnlGroupCount',{count:this.groupCount})
           .then(res => {
-                console.log(res.data)
-                this.finalGroups = res.data
+            this.finalGroups = res.data
+            resolve()
           })
+          .catch(err=>{
+            console.log(err)
+          })
+        })
+        .then(()=>{
+          this.isOverlap=false
+        })
       },
       uploadGroups() {
         new Promise((resolve,reject) => {
@@ -179,11 +199,11 @@ export default {
           this.POST('/admin/admUpFTchGroups',groups)
             .then(res => {
               if (res.data.state===1) {
-                
+                console.log('%c 上传分组完成','background:#3f51b5;color:#fff')
               }
             })
             .catch(err => {
-            console.log(err)
+              console.log(err)
           })
           resolve(groups)
         })
@@ -203,6 +223,13 @@ export default {
 
 <style lang="sass" rel="stylesheet/scss" scoped>
 @import '../../style/variables.scss';
+.wyvonj-tooltip{
+  border-radius: 3px;
+  background-color: #f44336;
+  font-size: 14px;
+  color: white;
+  text-align: center;
+}
 .group-current-status
 {
     width: 196px;
@@ -214,6 +241,19 @@ export default {
     font-size: 20px;
 
     padding-bottom: 14px;
+}
+.deleted-students{
+  margin: 16px;
+  padding: 16px;
+  border: 1px dashed #f44336;
+  >div{
+    display: flex;
+    flex-wrap: wrap;
+  }
+  h3{
+    color: #f44336;
+  }
+
 }
 .final-group-teacher
 {
@@ -265,7 +305,21 @@ export default {
 {
     padding: 8px;
 }
-
+.delete-item{
+    font-family: arial;
+    display: flex;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: #f44336;
+    color: white;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    top: 1px;
+    right: -6px;
+}
 .group
 {
     position: relative;

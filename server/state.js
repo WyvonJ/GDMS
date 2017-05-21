@@ -1,4 +1,4 @@
-var StateEnum = 
+let StateEnum = 
 {
   InitializeData: 0,
   CreateTopics: 1,
@@ -17,6 +17,6 @@ var StateEnum =
   Scoring: 11
 }
 
-var global.CurrentState = StateEnum.InitializeData
+let global.CurrentState = StateEnum.InitializeData
 
 

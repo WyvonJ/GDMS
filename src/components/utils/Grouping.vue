@@ -1,11 +1,8 @@
 <template>
   <div class="group-container">
-    <div class="group-current-status paper">
-      {{step==='midgroup'?'中':'终'}}期分组
-    </div>
     <div class="group-status-card card">
       <div class="teacher-wrapper">
-      <mu-avatar backgroundColor="red500" class="group-id-icon">{{groupId}}</mu-avatar>
+      <mu-avatar backgroundColor="red500" class="group-id-icon">{{step==='midgroup'?'中':'终'}}</mu-avatar>
       <span class="card-title">Teacher</span>
         <div class="chip" v-for="(teacher,index) in teachers">
           <mu-icon value="account_circle" color="greenA700" :size="18" /> {{teacher.name}}
@@ -49,31 +46,17 @@ export default {
     },
     mounted() {
       let user = cookie.get('user')
-      
       this.GET('/getstep')
         .then(res=>{
           this.step = res.data.curstep
-          if(this.step==='midgroup'){
-            this.POST('/teacher/tchMGrouping',{account:user})
-              .then(res=>{
-                if (res.data) {
-                this.gotGroup = true
-                this.groupId = res.data._id
-                this.teachers = res.data.teachers
-                this.students = res.data.students
-          }
-              })
-          }else{
         this.tchGrouping({ account: user })
         .then(() => {
           if (this._stu_tch_Group.length !== 0) {
-            this.gotGroup = true
             this.groupId = this._stu_tch_Group._id
             this.teachers = this._stu_tch_Group.teachers
             this.students = this._stu_tch_Group.students
           }
         })
-          }
         })
     }
 }

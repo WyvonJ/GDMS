@@ -43,5 +43,6 @@ import WyvonjCanvas from '../utils/WyvonjCanvas.vue'
 	span{
 		display: inline-block;
 		margin-top: 64px;
+		font-family: sans-serif;
 	}
 </style>

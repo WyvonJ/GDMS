@@ -5,15 +5,10 @@
         <span>成绩管理</span>
       </div>
       <div class="workflow-panel">
-        <button class="red" @click="dialog=true;gradeType=0">
-          <span>中期成绩上传</span>
-        </button>
-        <button class="blue" @click="dialog=true;gradeType=1">
-          <span>终期成绩上传</span>
-        </button>
+         <mu-raised-button @click="dialog=true;gradeType=0" secondary label="中期成绩上传"/>
+         <mu-raised-button @click="dialog=true;gradeType=1" backgroundColor="blue" rippleColor="grey" label="终期成绩上传"/>
         <a href="" class="export-grade">
           <img src="../../assets/icon/export.svg" alt="export" />
-
           <span>导出最终分数表</span>
         </a>
       </div>
@@ -27,9 +22,7 @@
         <progress :value="progressBar" max="100"></progress>
         <div id="output">
         </div>
-        <button slot="actions" @click="dialog=false" class="red">
-          <span>取消</span>
-        </button>
+         <mu-flat-button slot="actions" @click="dialog=false" secondary label="取消"/>
       </mu-dialog>
         
     </section>
@@ -120,9 +113,9 @@ export default {
     height: 40px;
     padding: 8px;
     border-radius: 4px;
-    display: inline-block;
+    display: flex;
     background-color: #4caf50;
-    color: white!important;
+    color: white;
     }
 		}
 	}

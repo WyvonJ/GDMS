@@ -141,7 +141,7 @@ export default {
 {
     display: flex;
 
-    width: 568px;
+    max-width: 568px;
     margin-top: 16px;
     button
     {
@@ -189,12 +189,6 @@ export default {
     transition: $material-enter;
 
     column-break-inside: avoid;
-    &:hover
-    {
-        -webkit-box-shadow: 0 0 9px 4px #dadada;
-           -moz-box-shadow: 0 0 9px 4px #dadada;
-                box-shadow: 0 0 9px 4px #dadada;
-    }
     .teacher-name
     {
         font-size: 20px;
@@ -212,8 +206,7 @@ export default {
 
         padding: 2px;
 
-        border-left: 2px solid #d8f9df;
-        border-radius: 5px;
+        font-weight: normal;
     }
     .topic-students
     {

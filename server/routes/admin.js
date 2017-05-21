@@ -18,7 +18,7 @@ router.get('/admGetTchAccount', (req, res) => {
   })
   /*管理员获得学生账号*/
 router.get('/admGetStuAccount', (req, res) => {
-    db.students.find({}, ['_id', 'name','gender', 'password', 'tel', 'email', 'qq', 'wechat'], (err, students) => {
+    db.students.find({}, ['_id', 'name', 'gender', 'password', 'tel', 'email', 'qq', 'wechat'], (err, students) => {
       if (err) res.sendStatus(404)
       else
         res.send(students)
@@ -63,8 +63,9 @@ router.get('/admGetTchTopics', (req, res) => {
             .then((topic) => {
               let students = topic.finalstudents;
               if (students.length) {
+                let row
                 for (let i = 0; i < students.length; i++) {
-                  let row = []
+                  row = []
                   row.push(
                     mentor.name,
                     topic.title,
@@ -193,13 +194,11 @@ router.post('/admGradeUpload', (req, res) => {
 
 router.post('/admFnlGroupCount', (req, res) => {
   let groupCount = req.body.count
-    // console.log(req.body)
   db.groups.remove({}, function(err) {
     if (err) return
-    console.log('pre groups dropped');
+    console.log('pre groups dropped')
     grouping.finalgroup(groupCount)
-  });
-
+  })
   setTimeout(() => {
     db.groups.find({}, ['mentors', 'students'])
       .populate('mentors', '_id name')
@@ -209,28 +208,30 @@ router.post('/admFnlGroupCount', (req, res) => {
       .then((groups) => {
         db.step.findOneAndUpdate({ key: 'system' }, { $set: { curstep: 'finalgroup' } }, { new: true }).exec()
         res.send(groups)
-          // console.log(groups)
       })
   }, 1000)
 })
 router.post('/admUpFTchGroups', (req, res) => {
   let groups = req.body
     // console.log(groups)
-
-
-  for (let j = 0; j < groups.length; j++) {
-    let group = groups[j]
-    db.groups.findOneAndUpdate({ _id: group._id }, { $set: { 'mentors': group.mentors, 'students': group.students } }, { new: true }).exec()
-    let students = group.students
-    let mentors = group.mentors
-    for (let i = 0; i < students.length; i++)
-      db.students.findOneAndUpdate({ _id: students[i] }, { $set: { 'group': group._id } }, { new: true }).exec()
-    for (let i = 0; i < mentors.length; i++)
-      db.mentors.findOneAndUpdate({ _id: mentors[i] }, { $set: { 'group': group._id } }, { new: true }).exec()
-
-  }
-
-
+  new Promise((resolve, reject) => {
+    for (let j = 0, jlen = groups.length; j < jlen; j++) {
+      let group = groups[j]
+      db.groups.findOneAndUpdate({ _id: group._id }, { $set: { 'mentors': group.mentors, 'students': group.students } }, { new: true }).exec()
+      let students = group.students
+      let mentors = group.mentors
+      for (let i = 0, ilen = students.length; i < ilen; i++)
+        db.students.findOneAndUpdate({ _id: students[i] }, { $set: { 'group': group._id } }, { new: true }).exec()
+      for (let m = 0, mlen = mentors.length; i < mlen; i++)
+        db.mentors.findOneAndUpdate({ _id: mentors[m] }, { $set: { 'group': group._id } }, { new: true }).exec()
+    }
+  })
+  .then(()=>{
+    res.send({state:1})
+  })
+  .catch(err=>{
+    res.sendStatus(404).end()
+  })
 })
 router.get('/download', (req, res) => {
   let q = req.query
@@ -463,7 +464,7 @@ router.get('/admResetSystem', (req, res) => {
           console.log('删除数据库序号递增辅助集合信息');
       })*/
   db.step.findOneAndUpdate({ key: 'system' }, { $set: { curstep: 'importmentorsdata' } }, { new: true })
-  .exec()
+    .exec()
     // console.log('保留管理员信息')
     /* db.step.remove({}, function(err) {
          if (err) return

@@ -1,6 +1,13 @@
 <template>
   <div class="contact-container">
     <div class="wrapper">
+    <div class="message-container" :class="{'warning':warningMsg.length>0,'success':success}">
+        {{warningMsg}}
+      </div>
+      <mu-select-field v-model="fields" multiple :labelFocusClass="['label-foucs']" label="课题研究方向"  class="select-field" labelFloat v-if="usertype">
+                <mu-sub-header>可多选</mu-sub-header>
+                <mu-menu-item v-for="text,index in fieldsData" :value="text" :title="text" />
+              </mu-select-field>
       <div class="addon-input">
         <span class="input-addon">
             <i class="material-icons">phone</i>
@@ -32,10 +39,7 @@
         <input type="text" placeholder="微信" v-model.trim="contact.wechat" />
       </div>
       <br/>
-      <button class="e-blue" @click="commitContact">
-        <i class="material-icons">check</i>
-        <span>确认更改</span>
-      </button>
+      <mu-raised-button class="update" @click="commitContact" backgroundColor="blue" label="更新联系方式"/>
     </div>
   </div>
   </div>
@@ -48,11 +52,35 @@ import {mapActions} from 'vuex'
     data(){
       return {
         usertype:0,
-        contact:{}
+        warningMsg: '',
+        success: false,
+        fields: [],
+        fieldsData: [
+          "1.图形图像处理", "2.游戏开发设计", "3.信息可视化",
+          "4.数字视音频处理", "5.移动互联网", "6.软件工程",
+          "7.Web开发", "8.人机交互", "9.虚拟现实&增强现实",
+          "10.文化传媒", "11.信息安全", "12.信号处理",
+          "13.云计算", "14.大数据", "15.机器学习&深度学习",
+          "16.算法研究", "17.其他"
+        ],
+        contact:{
+          tel:'',
+          email:'',
+          qq:'',
+          wechat:'',
+          office:'',
+        }
       }
     },
     methods:{
       commitContact(){
+        let fd=[]
+        for(let i=0,len=this.fields.length;i<len;i++){
+          fd.push(this.fields[i].split('.')[0])
+        }
+        if (fd.length>0) {
+          this.contact.fields = fd
+        }
         let routes = this.usertype=='0'?'/student/stuSetContact':'/teacher/tchSetContact'
         let wrapper={
           account:cookie.get('user'),
@@ -61,11 +89,23 @@ import {mapActions} from 'vuex'
         this.POST(routes,wrapper)
           .then(res => {
             if(res.data.state === 1){
-              this.showSnackbar('修改联系方式成功')
-            }
+              this.success = true
+                this.warningMsg = '联系方式已更新'
+            }else{
+                this.warningMsg = '更新联系方式失败！'
+              }
+          })
+          .catch((err)=>{
+            this.warningMsg = '更新联系方式失败！'
           })
       },
-      ...mapActions(['showSnackbar'])
+      clearError() {
+        this.warningMsg = ''
+        this.success = false
+      }
+    },
+    watch:{
+      contact:'clearError'
     },
     mounted(){
        this.usertype = _.parseInt(cookie.get('usertype'))
@@ -75,7 +115,9 @@ import {mapActions} from 'vuex'
           .then(res => {
             this.contact = res.data
           })
-          .catch(err=>{})
+          .catch(err=>{
+            this.warningMsg = '请求数据失败！'
+          })
        }
   }
 </script>
@@ -90,8 +132,8 @@ import {mapActions} from 'vuex'
 
     width: 300px;
     height: 48px;
-    margin: 40px 0;
-
+    margin: 30px 0;
+margin-top:0;
     cursor: text;
     white-space: nowrap;
 
@@ -138,6 +180,32 @@ import {mapActions} from 'vuex'
         }
     }
 }
+
+    .message-container
+    {
+        font-size: 20px;
+        font-weight: 400;
+
+        height: 48px;
+
+        transition: $material-enter;
+        text-align: center;
+        line-height: 48px;
+        color: white;
+        border: 1px transparent solid;
+        border-radius: 4px;
+        margin-bottom: 24px;
+        &.warning
+        {
+            border-color: $red;
+            background-color: #e57373;
+        }
+        &.success
+        {
+            border-color: $greenVue;
+            background-color: #7bb99c;
+        }
+    }
 .contact-container
 {
     display: flex;
@@ -149,9 +217,13 @@ import {mapActions} from 'vuex'
         margin-top: 64px;
         padding: 24px 16px 16px;
     }
-    button.e-blue
+    button.update
     {
-        margin-left: 90px;
+           width: 300px;
+           justify-content:center;
+
+            height: 48px;
+            font-size: 18px;
     }
 }
 

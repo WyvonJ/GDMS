@@ -5,7 +5,7 @@ const duration = 3000 //snackbar显示事件
 let timer
 const errMsg = '出了点小问题，再试试'
 const progressbarStart = ({ commit }) => {
-  commit('SET_PROGRESSBAR', true)//设置进度条开始
+  commit('SET_PROGRESSBAR', true) //设置进度条开始
   return Date.now()
 }
 const progressbarStop = ({ commit }, start, timeAllowed = 400) => {
@@ -48,6 +48,12 @@ export default {
           return Promise.reject(res.data.state)
       })
   },
+  getCurrentStep: ({ commit }) => {
+    return axios.get('/getstep')
+      .then(res => {
+        commit('SET_STEP', res.curstep)
+      })
+  },
   stuSetContactData: ({ commit }, payload) => {
     return axios.post('/student/stuSetContactData', payload)
       .catch(err => {
@@ -70,7 +76,7 @@ export default {
   stuCommitSelection: ({ commit }, payload) => {
     return axios.post('/student/stuCommitSelection', payload)
       .then((res) => {
-        if (res.data.state === 1){
+        if (res.data.state === 1) {
           showSnackbar({ commit }, errMsg)
           router.push('/student/status')
         }
@@ -172,7 +178,7 @@ export default {
       .then(res => {
         commit('TCH_TOPIC_CREATED_ALL', res.data)
       })
-      .catch(err=>{
+      .catch(err => {
         console.log(err)
       })
   },
@@ -205,30 +211,10 @@ export default {
         commit('TCH_STUDENT_CONFIRMED', res.data)
       })
   },
-  //提交学生评价
-  tchEvaluationToStu: ({ commit }, payload) => {
-    return axios.post('/teacher/tchEvaluationToStu', payload)
-      .then(() => {
-
-      })
-  },
   tchGrouping: ({ commit }, payload) => {
     return axios.post('/teacher/tchGrouping', payload)
       .then(res => {
         commit('STU_TCH_GROUPING', res.data)
-      })
-      .catch(err => {
-        return Promise.reject(err)
-      })
-  },
-  tchAccountInfo: ({ commit }, payload) => {
-    return axios.post('/teacher/tchAccountInfo', payload)
-      .then(res => {
-        //0 
-      })
-      .catch((err) => {
-        showSnackbar({ commit }, errMsg)
-        return Promise.reject(err)
       })
   }
 }

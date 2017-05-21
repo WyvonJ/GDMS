@@ -22,9 +22,7 @@ router.post('/login', (req, res) => {
   let password = req.body.password
   if (account[0] === '2') type = 1
   else if (account === 'admin') type = 2
-  else 
-    return console.log('err lonin in wrong account')
-  models[type].findOne({ _id: account }, ['password', 'name', 'notification', 'isfirstlogin','salt'], (err, doc) => {
+  models[type].findOne({ _id: account }, ['password', 'name', 'notification', 'isfirstlogin', 'salt'], (err, doc) => {
     switch (true) {
       case !!err:
         console.log(err)
@@ -39,7 +37,7 @@ router.post('/login', (req, res) => {
           res.status(200).send({ state: 1, userType: type, userName: doc.name, notification: doc.notification, isfirstlogin: doc.isfirstlogin, token: token })
           models[type].findOneAndUpdate({ _id: account }, { $set: { isfirstlogin: false } }, { new: true }).exec()
 
-          console.log(doc.name + 'signed in at ' + t.getHours() + ':' + t.getMinutes()+'\n')
+          console.log(doc.name + 'signed in at ' + t.getHours() + ':' + t.getMinutes() + '\n')
           break
         }
       case doc.password !== sha1(password + doc.salt):
@@ -56,21 +54,17 @@ router.post('/account', (req, res) => {
   const salt = rand(160, 36)
   let type = 0
   let account = req.body.account
-
-  let oldPassword = sha1(req.body.oldPassword + salt)
-  let newPassword = sha1(req.body.newPassword + salt)
+  let oldPassword = req.body.oldPassword
+  let newPassword = req.body.newPassword
 
   if (account[0] === '2') type = 1
   else if (account === 'admin') type = 2
-  else {
-    console.log('err login in wrong account')
-    return
-  }
   models[type].findOne({ _id: account }, (err, item) => {
-    if (item.password != oldPassword)
+    let valid = sha1(oldPassword + item.salt)
+    if (item.password !== valid)
       res.send({ state: 0 }) //密码错误
     else {
-      item.password = newPassword
+      item.password = sha1(newPassword + item.salt)
       item.save()
       res.send({ state: 1 })
     }

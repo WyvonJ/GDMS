@@ -134,12 +134,12 @@ export default {
         office: '',
         fields: [],
         fieldsData: [
-          "图形图像处理", "游戏开发设计", "信息可视化",
-          "数字视音频处理", "移动互联网", "软件工程",
-          "Web开发", "人机交互", "虚拟现实&增强现实",
-          "文化传媒", "信息安全", "信号处理",
-          "云计算", "大数据", "机器学习&深度学习",
-          "算法研究", "其他"
+          "1.图形图像处理", "2.游戏开发设计", "3.信息可视化",
+          "4.数字视音频处理", "5.移动互联网", "6.软件工程",
+          "7.Web开发", "8.人机交互", "9.虚拟现实&增强现实",
+          "10.文化传媒", "11.信息安全", "12.信号处理",
+          "13.云计算", "14.大数据", "15.机器学习&深度学习",
+          "16.算法研究", "17.其他"
         ]
       }
     },
@@ -207,8 +207,12 @@ export default {
         this.activeStep = 0
       },
       handleFinish() {
+        let fd=[]
+        for(let i=0,len=this.fields.length;i<len;i++){
+          fd.push(this.fields[i].split('.')[0])
+        }
         this.account = cookie.get('user')
-        if (this.usertype===0) {
+        if (this.usertype==0) {
           this.stuSetContactData({
               account: this.account,
               tel: this.tel,
@@ -229,7 +233,7 @@ export default {
               wechat: this.wechat,
               office: this.office,
               classratio: this.classratio,
-              fields: this.fields
+              fields:fd
             })
             .then(() => {
               this.$router.push('/teacher/creation')

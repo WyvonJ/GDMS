@@ -34,9 +34,10 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  if (!Store.state.user.token && to.matched[0].meta.requireAuth) {
+  if (!Store.state.user.token && to.matched[0].meta.requireAuth) 
     //next('/')
-  }else
+    next()
+  else
     next()
 })
 

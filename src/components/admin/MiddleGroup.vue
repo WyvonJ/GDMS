@@ -21,14 +21,13 @@
         </div>
       </div>
       <div class="actions">
-        <button @click="uploadGroups" class="orange">
+        <mu-raised-button @click="uploadGroups" secondary label="上传导师分组">
           <img src="../../assets/icon/upload.svg" alt="upload" />
-          <span>上传教师分组</span>
-        </button>
-        <a href="/admin/download?filename=MidGroup" class="shadow">
+          
+        </mu-raised-button>
+         <mu-raised-button href="/admin/download?filename=MidGroup" secondary label="导出中期分组表">
           <img src="../../assets/icon/export.svg" alt="export" />
-          <span>导出中期分组表</span>
-        </a>
+         </mu-raised-button>
       </div>
       <div class="to-be-grouped">
         <p>
@@ -45,8 +44,6 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
-import { post, get } from 'axios'
 export default {
   data() {
       return {
@@ -253,17 +250,13 @@ export default {
     margin: 3px 16px;
   }
   a{
-    width: 144px;
-    height: 40px;
+    width: 176px;
+    height: 36px;
     padding: 8px;
     background-color: $blue;
     color: white!important;
     display: inline-flex;
-    border-radius: 4px;
-    &:hover{
-    background-color: #64b5f6;
-
-    }
+    border-radius: 1px;
   }
 }
 .teachers-grouped

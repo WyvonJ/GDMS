@@ -2,7 +2,7 @@
   <div class="topics-table-container">
     <div class="search-bar-wrapper">
       <mu-icon class="search-icon" value="search"/>
-      <input type="text" @keyup.enter="search" autocomplete="off" v-model.trim="searchStr" placeholder="Search for topics" class="search-input" name="search">
+      <input type="text" @keyup.enter="search" autocomplete="off" v-model.trim="searchStr" placeholder="Search for topics" class="search-input" name="search"/>
     </div>
     <div class="table-container paper">
       <table>
@@ -14,10 +14,10 @@
           <tr>
             <th width="8%">添加</th>
             <th width="10%">
-              <mu-flat-button class="category-sort" :class="{'sort-category-icon':isCategorySorted}" disabled @click="sortCategory" labelPosition="before">序号</mu-flat-button>
+              <mu-flat-button class="category-sort" :class="{'sort-category-icon':isCategorySorted}" @click="sortCategory" labelPosition="before">序号</mu-flat-button>
             </th>
             <th width="12%">
-              <mu-flat-button class="category-sort" disabled labelPosition="before">类别</mu-flat-button>
+              <mu-flat-button class="category-sort" labelPosition="before">类别</mu-flat-button>
             </th>
             <th width="50%">课题名称</th>
             <th width="16%">已选/可选</th>
@@ -120,7 +120,7 @@ export default {
     },
     methods: {
       handlePageChange(newPage){
-        this.currentPage = newPage
+        this.currentPage = newPage-1
         let body = this.$refs.tableBody
         let ch = body.clientHeight
         let anchor = (body.scrollHeight - body.clientHeight)/10

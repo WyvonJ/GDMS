@@ -9,7 +9,8 @@
             </div>
             <mu-avatar icon="check" backgroundColor="greenA700" :size="36" :iconSize="24" class="check-icon" />
           </div>
-          <div class="tel chip">
+          <div class="chips">
+            <div class="tel chip">
             <mu-icon value="call" :size="18" /> {{tele}}
           </div>
           <div class="email chip">
@@ -17,14 +18,16 @@
             <a :href="'mailto:'+_stu_TopicComfirmed.email">{{_stu_TopicComfirmed.email}}</a>
           </div>
           <div class="office chip">
-            <mu-icon value="desktop_mac" :size="18" /> {{_stu_TopicComfirmed.office||'无'}}
+            <mu-icon value="desktop_mac" :size="18" /> {{_stu_TopicComfirmed.office}}
           </div>
           <div class="qq chip">
-            <img src="../../assets/icon/qq.svg" alt="QQ" /> {{_stu_TopicComfirmed.qq||'无'}}
+            <img src="../../assets/icon/qq.svg" alt="QQ" /> {{_stu_TopicComfirmed.qq}}
           </div>
           <div class="wechat chip">
-            <img src="../../assets/icon/wechat.svg" alt="WECHAT" /> {{_stu_TopicComfirmed.wechat||'无'}}
+            <img src="../../assets/icon/wechat.svg" alt="WECHAT" /> {{_stu_TopicComfirmed.wechat}}
           </div>
+          </div>
+          
         </div>
         <div class="topic-wrapper">
           <div class="topic-info">
@@ -62,7 +65,7 @@ import {mapActions,mapState} from 'vuex'
   export default{
     data(){
       return {
-        isTopicConfirmed: true
+        isTopicConfirmed: false
       }
     },
     computed:{
@@ -88,7 +91,7 @@ import {mapActions,mapState} from 'vuex'
       let id=cookie.get('user')
       this.stuSelectionResult({studentId: id})
         .then(()=>{
-        if (this._stu_TopicComfirmed.name.length !== 0) {
+        if (this._stu_TopicComfirmed.name) {
           this.isTopicConfirmed = true
         }
       })
@@ -104,7 +107,7 @@ import {mapActions,mapState} from 'vuex'
 
     position: relative;
 
-    width: 320px;
+    width: 360px;
     &:hover
     {
         transform: translateY(-4px);
@@ -262,5 +265,9 @@ import {mapActions,mapState} from 'vuex'
 }
 .chip{
   height: 32px;
+}
+.chips{
+  display: flex;
+      flex-wrap: wrap;
 }
 </style>

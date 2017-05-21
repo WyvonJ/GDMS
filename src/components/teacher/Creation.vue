@@ -5,6 +5,7 @@
           <img src="../../assets/icon/library_add.svg" alt="add" />
           <span>课题发布</span>
         </button>
+         
         <button type="button" @click="isTab=false" :class="{'focused':!isTab}" class="manage-topic-button">
           <img src="../../assets/icon/subject.svg" alt="man" />
           <span>课题管理</span>
@@ -17,8 +18,9 @@
               <mu-slider v-model="available" :min="1" :max="10" :step="1"  class="available-slider" />
               <br/>
               <div class="category-box">
-                  <mu-radio label="论文" name="group" nativeValue="0" v-model="category"  uncheckIcon="build" checkedIcon="build" class="category-radio"/> 
-                  <mu-radio label="设计" name="group" nativeValue="1" v-model="category"   uncheckIcon="assignment" checkedIcon="assignment"  class="category-radio"/>
+                  <wyvonj-tooltip>选择课题所属类别</wyvonj-tooltip>
+                  <mu-radio label="设计" name="group" nativeValue="1" v-model="category"  uncheckIcon="build" checkedIcon="build" class="category-radio"/> 
+                  <mu-radio label="论文" name="group" nativeValue="0" v-model="category"   uncheckIcon="assignment" checkedIcon="assignment"  class="category-radio"/>
               </div>
               <br/>
               <mu-select-field v-model="fields" multiple :labelFocusClass="['label-foucs']" :errorText="fieldsError" label="课题研究方向"  class="select-field" labelFloat>
@@ -30,10 +32,9 @@
               <br/>
               <mu-text-field label="课题简介" v-model.trim="detailText" :errorText="detailError" multiLine labelFloat :rows="6" :rowsMax="20" />
               <br/>
-              <button @click="createTopic" class="red">
-               <img src="../../assets/icon/release.svg" alt="add" /> 
-                <span>发布课题</span>
-              </button>
+              <mu-raised-button label="发布课题" class="release-button" @click="createTopic" secondary>
+                <img src="../../assets/icon/release.svg" alt="add" />
+              </mu-raised-button>
           </div>
         </div>
         <div id="tab-box2" key="tab2" v-show="!isTab">
@@ -50,6 +51,9 @@
                   </tr>
                 </thead>
                 <tbody>
+                    <tr v-if="!_tch_TopicCreatedAll.length" style="text-align: center;font-size: 32px;">
+                      <td colspan="6">无</td>
+                    </tr>
                   <tr v-for="(topic,index) in _tch_TopicCreatedAll">
                     <td width="6%">{{topic._id}}</td>
                     <td width="6%">{{topic.category===0?"论文":"设计"}}</td>
@@ -76,7 +80,7 @@ export default {
   data() {
       return {
         available: 1, //初始可选人数
-        category: '0', //初始类别 论文 
+        category: '1', //初始类别 
         titleText: '', //课题名称
         detailText: '', //课题简介 
         fieldsError: '', //错误提示文字
@@ -85,12 +89,12 @@ export default {
         isTab: true,
         fields: [],
         fieldsData: [
-          "图形图像处理", "游戏开发设计", "信息可视化",
-          "数字视音频处理", "移动互联网", "软件工程",
-          "Web开发", "人机交互", "虚拟现实&增强现实",
-          "文化传媒", "信息安全", "信号处理",
-          "云计算", "大数据", "机器学习&深度学习",
-          "算法研究", "其他"
+          "1.图形图像处理", "2.游戏开发设计", "3.信息可视化",
+          "4.数字视音频处理", "5.移动互联网", "6.软件工程",
+          "7.Web开发", "8.人机交互", "9.虚拟现实&增强现实",
+          "10.文化传媒", "11.信息安全", "12.信号处理",
+          "13.云计算", "14.大数据", "15.机器学习&深度学习",
+          "16.算法研究", "17.其他"
         ],
         fixedHeader: true,
         selectable: false,
@@ -113,13 +117,17 @@ export default {
         if (this.detailText.length === 0) {
           return this.detailError = "随便写点介绍吧！"
         }
+        let fd=[]
+        for(let i=0,len=this.fields.length;i<len;i++){
+          fd.push(this.fields[i].split('.')[0])
+        }
         this.GET('/getstep')
           .then(res => {
             if (res.data.curstep === 'createtopics') {
               let currentTopic = {
                   mentor: id,
                   category: this.category,
-                  fields: this.fields,
+                  fields: fd,
                   title: this.titleText,
                   details: this.detailText,
                   available: this.available
@@ -213,6 +221,11 @@ export default {
             margin-top: 12px;
             margin-bottom: 0;
         }
+        .category-box{
+          display: inline-block;
+
+        }
+
         .category-radio{
           margin-right: 16px;
         }
@@ -242,6 +255,13 @@ export default {
         {
             width: 256px !important;
         }
+        .dispatch{
+          margin-bottom: 10px;
+        }
+        .wyvonj-tooltip{
+            background-color: rgba(0,0,0,.6);
+            color: white;
+          }
     }
     table
     {
@@ -299,5 +319,8 @@ export default {
 {
     width: 100%;
 }
-
+.release-button img{
+  position: relative;
+  left: 8px;
+}
 </style>

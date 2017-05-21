@@ -12,6 +12,7 @@ const store = new Vuex.Store({
     isSnackbar: false,
     snackbarText: '',
     user: {},
+    step:'',
     notification: '',
     _stu_TopicInCart: [],
     _stu_TopicInTable: [],

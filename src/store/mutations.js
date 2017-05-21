@@ -11,6 +11,9 @@ export default {
     localStorage.removeItem('username')
     state.user = {}
   },
+  SET_STEP:(state,step)=>{
+    state.step=step
+  },
   SET_NOTIFICATION: (state, string) => {
     state.notification = string
   },

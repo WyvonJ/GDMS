@@ -3,9 +3,7 @@
   <div class="table-container paper">
     <table>
       <caption>
-        <button type="button" class="green-vue" @click="submitScore">
-          提交学生评价
-        </button>
+        <mu-raised-button @click="commitGrade" :disabled="isOpenForEva" secondary label="提交学生评价"/>
         学生评分表
       </caption>
       <thead>
@@ -37,7 +35,7 @@ export default {
     }
   },
   methods:{
-    submitScore:function(){
+    commitGrade:function(){
       console.log(this.students)
     }
   },
@@ -51,7 +49,7 @@ export default {
 </script>
 
 <style type="text/css" media="screen" scoped>
-  .green-vue{
+  .mu-raised-button{
     font-size: 16px;
     display: inline-block;
     float: left;

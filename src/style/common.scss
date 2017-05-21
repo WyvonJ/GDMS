@@ -106,6 +106,7 @@ button
     border-color: transparent;
     border-radius: 4px;
     outline: none;
+
     align-items: flex-end;
     &:disabled
     {
@@ -113,8 +114,11 @@ button
 
         background-color: #9f9f9f;
     }
-    span
+    > span
     {
+        font-size: 16px;
+        font-weight: normal;
+
         margin-left: 4px;
 
         cursor: inherit;
@@ -134,22 +138,12 @@ button
 
         flex: 1;
     }
-    &.red,
-    &.indigo,
-    &.green-vue,
-    &.blue,
-    &.orange
-    {
-        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .2), 0 1px 1px rgba(0, 0, 0, .14), 0 2px 1px -1px rgba(0, 0, 0, .12);
-           -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .2), 0 1px 1px rgba(0, 0, 0, .14), 0 2px 1px -1px rgba(0, 0, 0, .12);
-                box-shadow: 0 1px 3px rgba(0, 0, 0, .2), 0 1px 1px rgba(0, 0, 0, .14), 0 2px 1px -1px rgba(0, 0, 0, .12);
-    }
     &.red
     {
         background-color: $red;
         &:hover
         {
-            background-color: $red600;
+            background-color: $red400;
         }
     }
     &.indigo
@@ -184,14 +178,15 @@ button
             background-color: #e64a19;
         }
     }
-    &.e-blue{
-        background-color: transparent;
-        border: 1px solid $lightBlue600;
-        color: $lightBlue600;
+    &.e-blue
+    {
+        color: white;
+        background-color: $lightBlue600;
         &:hover
         {
-            color: white;
-            background-color: $lightBlue600;
+            color: $lightBlue600;
+            border: 1px solid $lightBlue600;
+            background-color: transparent;
         }
     }
 }
@@ -216,8 +211,6 @@ caption
 th
 {
     font-weight: lighter;
-
-    padding: 8px 0;
 
     border-top: 1px solid #ececec;
 }
@@ -295,6 +288,19 @@ td:first-child
 {
     max-width: 320px !important;
 }
+.mu-item
+{
+    transition: $material-enter;
+
+    border-left: 4px solid white;
+}
+.mu-item.selected
+{
+    box-sizing: border-box;
+
+    color: #f44336!important;
+    border-left: 4px solid #f44336;
+}
 
 .no-selection
 {
@@ -340,16 +346,12 @@ td:first-child
     max-width: 1280px;
     margin: 8px auto;
 
-    background: #f6f6f6;
-
             column-width: 320px;
        -moz-column-width: 320px;
     /* Firefox */
     -webkit-column-width: 320px;
     column-gap: 10px;
 }
-
-
 
 .console-panel .logo
 {
@@ -415,8 +417,6 @@ td:first-child
 
         transition: $material-enter;
         text-align: left;
-
-        background-color: #f6f6f6;
         &.nav-hide
         {
             margin-left: 0;
@@ -489,8 +489,8 @@ td:first-child
     background-color: white;
     &:hover
     {
-        border-color: $greenVue;
         color: $greenVue;
+        border-color: $greenVue;
     }
     .mu-icon
     {
@@ -500,9 +500,8 @@ td:first-child
     img
     {
         position: relative;
-        bottom: 2px;
-
-        width: 18px;
+        bottom: -1px;
+        left: -2px;
     }
 }
 

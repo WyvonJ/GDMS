@@ -10,12 +10,12 @@
 		<p v-if="reseted">
 			系统已重置，请重新上传导师和学生帐号。
 		</p>
-		<button class="red" @click="dialog=!dialog">重置系统</button>
+		<mu-raised-button @click="dialog=true" secondary label="重置系统"/>
 	</div>
      <mu-dialog :open="dialog" title="注意!" @close="dialog=false">
     操作不可逆，请再次确认操作
-    <button slot="actions" @click="dialog=false" class="cancel red">取消</button>
-    <button slot="actions" @click="resetSystem" class="confirm blue">确定</button>
+     <mu-flat-button slot="actions" @click="dialog=false" secondary label="取消"/>
+    <mu-flat-button slot="actions" @click="resetSystem" label="确定"/>
   </mu-dialog>
 		
 	</div>

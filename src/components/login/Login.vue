@@ -91,7 +91,6 @@ export default {
                   this.$router.push( '/admin')
                 }
               } else {
-
                 if (usertype === 0) {
                   this.$router.push('/student')
                 } else if (usertype === 1) {
@@ -125,13 +124,14 @@ export default {
       passwordForget() {
         this.isForgot = !this.isForgot
       },
-      ...mapActions(['login', 'progressbarStart', 'progressbarStop'])
+      ...mapActions(['login', 'progressbarStart', 'progressbarStop','getCurrentStep'])
     },
     watch: {
       account: 'errorClear',
       password: 'errorClear'
     },
     mounted() {
+      this.getCurrentStep()
     }
 }
 </script>
@@ -274,9 +274,6 @@ export default {
 
             width: 200px;
             margin-bottom: 0;
-        }
-        .mu-text-field.has-label .mu-text-field-label.float{
-          color: #646444 !important;
         }
         .login-button
         {

@@ -22,10 +22,7 @@
           </span>
         <input placeholder="请再输入一遍新密码" type="password" v-model.trim="passwordRepeat" />
       </div>
-      <button class="e-blue" @click="commitPassword">
-      <i class="material-icons">check</i>
-        <span>确认更改</span>
-      </button>
+       <mu-raised-button class="update" @click="commitPassword" backgroundColor="blue" label="确认更改"/>
     </div>
   </div>
 </template>
@@ -103,34 +100,13 @@ export default {
     {
         margin-top: 128px;
     }
-    .message-container
+    button.update
     {
-        font-size: 20px;
-        font-weight: 400;
+        width: 300px;
+           justify-content:center;
 
-        height: 64px;
-        padding-top: 20px;
-
-        transition: $material-enter;
-        text-align: center;
-
-        color: white;
-        border: 1px transparent solid;
-        border-radius: 4px;
-        &.warning
-        {
-            border-color: $red;
-            background-color: #e57373;
-        }
-        &.success
-        {
-            border-color: $greenVue;
-            background-color: #7bb99c;
-        }
-    }
-    button.e-blue
-    {
-        margin-left: 90px;
+            height: 48px;
+            font-size: 18px;
     }
 }
 
