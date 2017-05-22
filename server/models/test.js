@@ -1,6 +1,6 @@
 const kMeans = require('kmeans-js')
 let data = []
-  //const db = require('./db')
+ // const db = require('./db')
 const _ = require('lodash')
   /*for (let i = 0; i < 10; i++) {
     let n1 = parseInt(Math.random() * 10)
@@ -33,17 +33,20 @@ data = [
   ["2", "3", "10", "9", "6"],
   ["12", "1", "10", "16"]
 ]
-
-/*db.mentors.find({}, (err, mentors) => {
-    for (let i = 0, ilen = mentors.length; i < ilen; i++) {
+/*let tod=[]
+db.topics.find({}, (err, topics) => {
+    for (let i = 0, ilen = topics.length; i < ilen; i++) {
       let fina = []
-      data.push(mentors[i].fields)
+      tod.push(topics[i].fields)
     }
   })
-  .then(() => {*/
-// console.log(data)
+	.then(()=>{
+		//console.log(tod)
+	})
+*/
 let km = new kMeans({
-  K: 5
+  K: 6,
+  enableConvergenceTest:true
 })
 
 km.cluster(data)
@@ -54,11 +57,7 @@ while (km.step()) {
   if (km.hasConverged()) break
 }
 
-for (var i = 0; i < km.clusters.length; i++) {
-  if (km.clusters[i].length === 0) {
-    km.clusters.splice(i, 1)
-  }
-}
+console.log(km.currentIteration)
 //console.log('Finished in:', km.currentIteration, ' iterations')
-console.log(km)
   //})
+  //

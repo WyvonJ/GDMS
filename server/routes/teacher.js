@@ -206,8 +206,8 @@ router.post('/tchGrouping', (req, res) => {
         .populate('mentors', 'name gender')
         .populate('students', 'name final gender')
         .exec()
-        .then((err, group) => {
-          if (err) return
+        .then((group,err) => {
+          if (err) return res.sendStatus(404)
           cardData._id = group._id
           cardData.teachers = group.mentors
           Promise.all(group.students.map((student) => fillCardData(student, cardData)))

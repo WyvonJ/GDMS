@@ -120,7 +120,7 @@ export default {
     },
     methods: {
       handlePageChange(newPage){
-        this.currentPage = newPage-1
+        this.currentPage = newPage
         let body = this.$refs.tableBody
         let ch = body.clientHeight
         let anchor = (body.scrollHeight - body.clientHeight)/10

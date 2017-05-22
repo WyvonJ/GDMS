@@ -18,6 +18,7 @@ var groupMentors = function(numGroups) { //根据导师的类别比例进行分�
       query.sort({ classrate: -1 })
       query.exec()
         .then((mentors) => {
+          console.log(mentors)
           var groupId = 0
           var newNumGroupMembers = numGroupMembers
           for (var i = 0; groupId + 1 <= numGroups && i <= numMentors - numGroupMembers; i += numGroupMembers) {
@@ -58,19 +59,20 @@ var groupTopics = function(numGroups) {
       var numStudentsGroup = 5
       db.groups.find({}).exec()
         .then((groups) => {
-          var recordGroup = []
+          var recordGroup = []//记录组里面的学生数
           var recordTopic = []
 
-          for (var n = 0, nlen = groups.length; n < nlen; n++) recordGroup.push({ numStudents: 0 })
-          for (var i = 0 , ilen = topics.length; i < ilen; i++) {
-            recordTopic.push({ isgrouped: false })
+          for (var n = 0, nlen = groups.length; n < nlen; n++)
+            recordGroup.push({ numStudents: 0 })
+          for (var i = 0, ilen = topics.length; i < ilen; i++) {
+            recordTopic.push({ isgrouped: false })//是否已分组
             for (var j = 0, jlen = groups.length; j < jlen; j++) { //如果这组里有这个题目的导师
               if (groups[j].mentors.indexOf(topics[i].mentor) !== -1 || recordGroup[j].numStudents > numStudentsGroup) //如果题目的老师在这组里,就将题目放下一组
                 continue
-              for (var k = 0,klen = topics[i].fields.length; k < klen; k++)
+              for (var k = 0, klen = topics[i].fields.length; k < klen; k++)
                 if (groups[j].fields.indexOf(topics[i].fields[k]) != -1) { //如果这组有题目的研究方向
                   db.groups.findOneAndUpdate({ _id: groups[j]._id }, { $addToSet: { topics: topics[i]._id } }).exec()
-                  for (var s = 0 , slen = topics[i].finalstudents.length; s < slen; s++) {
+                  for (var s = 0, slen = topics[i].finalstudents.length; s < slen; s++) {
                     db.students.findOneAndUpdate({ _id: topics[i].finalstudents[s] }, { $set: { group: groups[j]._id } }).exec()
                     db.groups.findOneAndUpdate({ _id: groups[j]._id }, { $addToSet: { students: topics[i].finalstudents[s] } }).exec()
                   }
