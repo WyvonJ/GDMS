@@ -18,7 +18,6 @@ var groupMentors = function(numGroups) { //根据导师的类别比例进行分�
       query.sort({ classrate: -1 })
       query.exec()
         .then((mentors) => {
-          console.log(mentors)
           var groupId = 0
           var newNumGroupMembers = numGroupMembers
           for (var i = 0; groupId + 1 <= numGroups && i <= numMentors - numGroupMembers; i += numGroupMembers) {

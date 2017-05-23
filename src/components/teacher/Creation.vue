@@ -258,10 +258,7 @@ export default {
         .dispatch{
           margin-bottom: 10px;
         }
-        .wyvonj-tooltip{
-            background-color: rgba(0,0,0,.6);
-            color: white;
-          }
+        
     }
     table
     {

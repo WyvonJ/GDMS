@@ -121,9 +121,6 @@ export default {
         this.errorAccount = ''
         this.errorPassword = ''
       },
-      passwordForget() {
-        this.isForgot = !this.isForgot
-      },
       ...mapActions(['login', 'progressbarStart', 'progressbarStop','getCurrentStep'])
     },
     watch: {

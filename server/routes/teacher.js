@@ -194,11 +194,10 @@ router.post('/tchGrouping', (req, res) => {
   let mydb = [db.students, db.mentors]
   let type = account[0] == 1 ? 0 : 1
   let cardData = {
-      _id: Number,
-      teachers: [],
-      students: []
-    }
-    //console.log(account)
+    _id: Number,
+    teachers: [],
+    students: []
+  }
   mydb[type].findOne({ _id: account }, 'group', (err, doc) => {
     //if(err)return
     if (doc.group) {
@@ -206,12 +205,13 @@ router.post('/tchGrouping', (req, res) => {
         .populate('mentors', 'name gender')
         .populate('students', 'name final gender')
         .exec()
-        .then((group,err) => {
+        .then((group, err) => {
           if (err) return res.sendStatus(404)
           cardData._id = group._id
           cardData.teachers = group.mentors
           Promise.all(group.students.map((student) => fillCardData(student, cardData)))
             .then(() => {
+              console.log(cardData)
               res.send(cardData)
             })
         })
@@ -258,7 +258,6 @@ router.post('/tchAccountInfo', (req, res) => {
       res.send({ state: 1 })
     }
   })
-
 })
 
 router.post('/tchSetContact', (req, res) => {
@@ -276,14 +275,15 @@ router.get('/tchGetContact', (req, res) => {
     // let account = '2030513401'
   db.mentors.findOne({ _id: account }, ['tel', 'email', 'qq', 'wechat', 'office'], (err, mentor) => {
     if (err) return res.sendStatus(404)
-    let mentorContact = {
-      tel: mentor.tel,
-      email: mentor.email,
-      qq: mentor.qq,
-      wechat: mentor.wechat,
-      office: mentor.office
+    if (mentor) {
+      res.send({
+        tel: mentor.tel,
+        email: mentor.email,
+        qq: mentor.qq,
+        wechat: mentor.wechat,
+        office: mentor.office
+      })
     }
-    res.send(mentorContact)
   })
 })
 module.exports = router

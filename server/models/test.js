@@ -1,7 +1,7 @@
-const kMeans = require('kmeans-js')
-let data = []
- // const db = require('./db')
+const kMeans = require('../utils/kmeans')
 const _ = require('lodash')
+let data = []
+//const db = require('./db')
   /*for (let i = 0; i < 10; i++) {
     let n1 = parseInt(Math.random() * 10)
     let n2 = parseInt(Math.random() * 10)
@@ -33,31 +33,70 @@ data = [
   ["2", "3", "10", "9", "6"],
   ["12", "1", "10", "16"]
 ]
-/*let tod=[]
-db.topics.find({}, (err, topics) => {
-    for (let i = 0, ilen = topics.length; i < ilen; i++) {
-      let fina = []
-      tod.push(topics[i].fields)
-    }
-  })
-	.then(()=>{
-		//console.log(tod)
-	})
-*/
-let km = new kMeans({
-  K: 6,
-  enableConvergenceTest:true
+let tch = ['张得天',
+    '赵燕',
+    '晏涛',
+    '夏鸿斌',
+    '王士同',
+    '张军',
+    '陈飞',
+    '刘渊',
+    '狄岚',
+    '陈伟',
+    '邓赵红',
+    '黄秋儒',
+    '律睿敏',
+    '钱鹏江',
+    '林意',
+    '孟磊',
+    '陈丽芳',
+    '陈秀宏',
+    '丁彦蕊',
+    '吴锋',
+    '谢振平',
+    '蒋亦樟'
+  ]
+  /*db.mentors.find({}, (err, mentors) => {
+      for (let i = 0, ilen = mentors.length; i < ilen; i++) {
+        let fina = []
+        _.forEach(mentors[i].fields,(f,i)=>{
+        	console.log(f)
+        	mentors[i].fields[i]=
+        })
+        
+      }
+    })
+  	.then(()=>{
+  		//console.log(tch)
+  	})*/
+
+let newdata = []
+_.forEach(data, (row) => {
+  if (row.length < 8) {
+    let numof0 = 7 - row.length
+    let arr = _.fill(Array(numof0), 0)
+    newdata.push(_.concat(row, arr))
+  }
 })
 
-km.cluster(data)
+let km = new kMeans({
+  K: 6,
+  enableConvergenceTest: true
+})
+
+km.cluster(newdata)
 while (km.step()) {
   km.findClosestCentroids()
   km.moveCentroids()
-    // console.log(km.centroids);
+     console.log(km.centroids);
   if (km.hasConverged()) break
 }
 
-console.log(km.currentIteration)
-//console.log('Finished in:', km.currentIteration, ' iterations')
+_.forEach(km.clusters, (cluster) => {
+  _.forEach(cluster,(clt,i)=>{
+  	cluster[i]=tch[clt]
+  })
+})
+console.log(km.clusters)
+  //console.log('Finished in:', km.currentIteration, ' iterations')
   //})
-  //

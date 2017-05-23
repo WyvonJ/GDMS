@@ -1,5 +1,5 @@
 <template>
-  <div class="group-container">
+  <div class="group-container"> 
     <div class="group-status-card card">
       <div class="teacher-wrapper">
       <mu-avatar backgroundColor="red500" class="group-id-icon">{{step==='midgroup'?'中':'终'}}</mu-avatar>
