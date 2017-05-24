@@ -20,8 +20,7 @@ global.cookie = cookie
 Vue.use(MuseUI)
 Vue.use(VueDND)
 Vue.use(WyvonjTooltip)
-  //添加请求拦截器
-
+  //  添加请求拦截器
 
 Vue.prototype.GET = axios.get
 Vue.prototype.POST = axios.post
@@ -31,7 +30,7 @@ const vm = new Vue({
   store,
   components: {
     StyleInjector,
-    WyvonjSnackbar,
+    WyvonjSnackbar
   },
   computed: mapState(['isProgressbar', 'snackbarText', 'isSnackbar'])
 }).$mount('#GDMS')
@@ -47,7 +46,7 @@ axios.interceptors.request.use((config) => {
 })
 
 axios.interceptors.response.use((res) => {
-  if (res.status === 401||res.status===404) {
+  if (res.status === 401 || res.status === 404) {
     store.commit('UNSET_USER')
     router.go({ name: 'login' })
   }
@@ -55,4 +54,5 @@ axios.interceptors.response.use((res) => {
 }, (error) => {
   console.warn('找不到服务器')
   return Promise.reject(error)
+
 })
