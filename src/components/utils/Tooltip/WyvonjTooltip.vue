@@ -51,6 +51,7 @@
 		watch:{
 			direction(){
 				this.calcPosition()
+				
 			}
 		},
 		methods:{

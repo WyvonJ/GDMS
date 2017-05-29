@@ -16,7 +16,7 @@ import cookie from './utils/cookieUtil'
 const _ = require('lodash')
 
 global.cookie = cookie
-
+global.lg=console.log
 Vue.use(MuseUI)
 Vue.use(VueDND)
 Vue.use(WyvonjTooltip)
@@ -54,5 +54,4 @@ axios.interceptors.response.use((res) => {
 }, (error) => {
   console.warn('找不到服务器')
   return Promise.reject(error)
-
 })

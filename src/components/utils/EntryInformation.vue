@@ -30,6 +30,20 @@
       </mu-step>
       <mu-step v-if="usertype">
         <mu-step-label>
+          请填写您的职称
+          <br>
+        </mu-step-label>
+        <mu-step-content>
+          <mu-radio label="助教" name="proTitle" nativeValue="0" v-model="proTitle" class="pro-title-radio"/> 
+          <mu-radio label="讲师" name="proTitle" nativeValue="1" v-model="proTitle"  class="pro-title-radio"/>
+          <mu-radio label="副教授" name="proTitle" nativeValue="2" v-model="proTitle"  class="pro-title-radio"/>
+          <mu-radio label="教授" name="proTitle" nativeValue="4" v-model="proTitle"  class="pro-title-radio"/>
+          <mu-raised-button label="下一步" class="step-button" @click="handleTitle" secondary/>
+          <mu-flat-button label="上一步" class="step-button" @click="handlePrev" />
+        </mu-step-content>
+      </mu-step>
+      <mu-step v-if="usertype">
+        <mu-step-label>
           请填写您的办公室位置
           <br>
         </mu-step-label>
@@ -117,13 +131,14 @@ import { mapActions } from 'vuex'
 export default {
   data() {
       return {
-        activeStep: 0,
+        activeStep: 2,
         telError: '',
         emailError: '',
         fieldsError: '',
         introError: '',
-        usertype: 0,
+        usertype: 1,
         classratio: 50,
+        proTitle:'',
         account: '',
         tel: '',
         email: '',
@@ -142,10 +157,10 @@ export default {
           "16.算法研究", "17.其他"
         ]
       }
-    },
+    },//'1 4 15 16 12 11, 2 5 6 7 ,13 14 16, 3 10 9 17'
     computed: {
       finished() {
-        let steps = (this.usertype === 0 ? 3 : 4)
+        let steps = (this.usertype === 0 ? 3 : 5)
         return this.activeStep > steps
       }
     },
@@ -184,6 +199,9 @@ export default {
       },
       handleOffice() {
         this.activeStep++
+      },
+      handleTitle(){
+        this.proTitle===''?null:this.activeStep++
       },
       handleIntro() {
         if (this.intro.length <= 60)
@@ -233,6 +251,7 @@ export default {
               wechat: this.wechat,
               office: this.office,
               classratio: this.classratio,
+              protitle:this.proTitle,
               fields:fd
             })
             .then(() => {
@@ -250,7 +269,7 @@ export default {
     },
     mounted() {
       try {
-        this.usertype = _.parseInt(cookie.get('usertype'))
+        //this.usertype = _.parseInt(cookie.get('usertype'))
       } catch (err) {
         return console.log(err)
       }
@@ -331,5 +350,4 @@ span.title
 {
         width: 320px !important;
 }
-
 </style>

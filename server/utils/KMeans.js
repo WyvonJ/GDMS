@@ -6,25 +6,25 @@ kMeans = (function() {
     if (options == null) {
       options = {};
     }
-    this.K = (_ref = options.K) != null ? _ref : 5;//默认集群数为5
-    this.maxIterations = (_ref1 = options.maxIterations) != null ? _ref1 : 100;//最多进行100次迭代
-    this.enableConvergenceTest = (_ref2 = options.enableConvergenceTest) != null ? _ref2 : true;//是否打开收敛测试
+    this.K = (_ref = options.K) != null ? _ref : 5; //默认集群数为5
+    this.maxIterations = (_ref1 = options.maxIterations) != null ? _ref1 : 100; //最多进行100次迭代
+    this.enableConvergenceTest = (_ref2 = options.enableConvergenceTest) != null ? _ref2 : true; //是否打开收敛测试
     this.tolerance = (_ref3 = options.tolerance) != null ? _ref3 : 1e-9;
-    this.initialize = (_ref4 = options.initialize) != null ? _ref4 : kMeans.initializeForgy;//是否有初始函数 设置为initializeForgy
+    this.initialize = (_ref4 = options.initialize) != null ? _ref4 : kMeans.initializeForgy; //是否有初始函数 设置为initializeForgy
   }
 
   kMeans.prototype.cluster = function(X) {
     var _ref;
-    this.X = X;//数据集
-    this.prevCentroids = [];//上一次的形心
-    this.clusters = [];//集群
-    this.currentIteration = 0;//现在的迭代次数
+    this.X = X; //数据集
+    this.prevCentroids = []; //上一次的形心
+    this.clusters = []; //集群
+    this.currentIteration = 0; //现在的迭代次数
     _ref = [this.X.length, this.X[0].length], this.m = _ref[0], this.n = _ref[1];
     //m为传入数据集长度 n为第一行数据长度
-    if ((this.m == null) || (this.n == null) || this.m < this.K || this.n < 1) {//数据集长度需大于K 数据集的第一个数据应大于一
+    if ((this.m == null) || (this.n == null) || this.m < this.K || this.n < 1) { //数据集长度需大于K 数据集的第一个数据应大于一
       throw "You must pass more data";
     }
-    return this.centroids = this.initialize(this.X, this.K, this.m, this.n);//计算形心点
+    return this.centroids = this.initialize(this.X, this.K, this.m, this.n); //计算形心点
   };
   kMeans.prototype.step = function() {
     return this.currentIteration++ < this.maxIterations;
@@ -51,7 +51,7 @@ kMeans = (function() {
     var k, _i, _results;
     _results = [];
     for (k = _i = 0; 0 <= K ? _i < K : _i > K; k = 0 <= K ? ++_i : --_i) {
-      _results.push(X[Math.floor(Math.random() * m)]);//设置初始随机点
+      _results.push(X[Math.floor(Math.random() * m)]); //设置初始随机点
       //长度小于一
     }
     return _results;
@@ -97,7 +97,7 @@ kMeans = (function() {
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           r = _ref[_i];
-          _results.push(r.slice(0));//slice(0)返回该数组的一个副本
+          _results.push(r.slice(0)); //slice(0)返回该数组的一个副本
         }
         return _results;
       }).call(this);
@@ -106,18 +106,17 @@ kMeans = (function() {
       var _i, _ref, _results;
       _results = [];
       for (i = _i = 0, _ref = this.K; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-        _results.push([]);//初始化添加空数组
+        _results.push([]); //初始化添加空数组
       }
       return _results;
     }).call(this);
     _ref = this.X;
     _results = [];
     for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-      x = _ref[i];//_ref就是传入的数据集 i就是做一次遍历
+      x = _ref[i]; //_ref就是传入的数据集 i就是做一次遍历
       cMin = 0;
       xMin = Infinity;
-      _ref1 = this.centroids;//计算出的形心
-
+      _ref1 = this.centroids; //计算出的形心
       for (j = _j = 0, _len1 = _ref1.length; _j < _len1; j = ++_j) {
         c = _ref1[j];
         min = 0;
@@ -125,16 +124,18 @@ kMeans = (function() {
           //x为数据集第n行 c为形心的某一行
           min += (x[k] - c[k]) * (x[k] - c[k]);
         }
+        //只要小于infinity
         if (min < xMin) {
-          cMin = j;//如果是最近的
+          cMin = j; //如果是最近的
           xMin = min;
         }
       }
       _results.push(this.clusters[cMin].push(i));
     }
+    
     return _results;
   };
-//移动形心
+  //移动形心
   kMeans.prototype.moveCentroids = function() {
 
     var cl, d, i, j, sum, _i, _len, _ref, _results;
@@ -157,7 +158,6 @@ kMeans = (function() {
           _results1.push(this.centroids[i][j] = sum / cl.length);
         }
         return _results1;
-        console.log(_results1)
       }).call(this));
     }
     return _results;
@@ -171,7 +171,7 @@ kMeans = (function() {
     }
     for (i = _i = 0, _ref = this.n; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
       for (j = _j = 0, _ref1 = this.m; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; j = 0 <= _ref1 ? ++_j : --_j) {
-        absDelta = Math.abs(this.prevCentroids[i][j] - this.centroids[i][j]);//计算点距
+        absDelta = Math.abs(this.prevCentroids[i][j] - this.centroids[i][j]); //计算点距
         if (this.tolerance > absDelta) {
           //在允许的范围内则返回true 跳出循环
           return true;

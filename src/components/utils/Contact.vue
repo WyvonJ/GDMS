@@ -4,7 +4,7 @@
     <div class="message-container" :class="{'warning':warningMsg.length>0,'success':success}">
         {{warningMsg}}
       </div>
-      <mu-select-field v-model="fields" multiple :labelFocusClass="['label-foucs']" label="课题研究方向"  class="select-field" labelFloat v-if="usertype">
+      <mu-select-field v-model="fields" multiple :labelFocusClass="['label-foucs']" label="导师研究方向"  class="select-field" labelFloat v-if="usertype">
                 <mu-sub-header>可多选</mu-sub-header>
                 <mu-menu-item v-for="text,index in fieldsData" :value="text" :title="text" />
               </mu-select-field>

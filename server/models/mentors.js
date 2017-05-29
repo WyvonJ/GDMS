@@ -15,12 +15,13 @@ let mentorsSchema = new Schema({
   tel: { type: String }, //电话
   email: { type: String }, //邮箱
   students: [{ type: String, ref: 'students' }], //指导的学生
-  studentsscore: { type: [Number] }, //给每个学生打的分数
+  studentsscore: [{ type: Number, ref: 'students' }], //给每个学生打的分数
   group: { type: Number, ref: 'groups' }, //答辨所在的分组
   topics: [{ type: Number, ref: 'topics' }], //导师所出的题
   fields: { type: [String] }, //研究方向
   office: { type: String }, //办公室地址
   notification: { type: String },
+  protitle: { type: String }, //导师职称
   qq: { type: String },
   wechat: { type: String },
   salt: { type: String },

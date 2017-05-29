@@ -1,70 +1,81 @@
 
 
-.wyvonj-tooltip {
-  height: auto;
-  min-width: 64px;
-  background-color: white;
-  padding: 0 8px;
-  position: fixed;
-  z-index: 2000;
-  pointer-events: none;
-  border-radius: 2px;
-  opacity: 0;
-  transform-origin: center top;
-  transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);
-  transition-delay: 0s;
-  font-size: 16px;
-  line-height: 20px;
-  text-transform: none;
-  white-space: normal;
-  font-weight: lighter;
-  &.wyvonj-active {
-    opacity: 1;
-    transition: all 0.3s cubic-bezier(0, 0, 0.2, 1);
-    transition-duration: .3s;
-  }
+.wyvonj-tooltip
+{
+    font-size: 16px;
+    font-weight: lighter;
+    line-height: 20px;
 
-  &:not(.wyvonj-active) {
-    transition-delay: 0s !important;
-  }
+    position: fixed;
+    z-index: 2000;
 
-  &.wyvonj-transition-off {
-    transition: none !important;
-  }
+    min-width: 64px;
+    height: auto;
+    padding: 0 8px;
 
-  &.wyvonj-tooltip-top {
-    margin-top: -14px;
-    transform: translate(-50%, 8px);
+    transition: all .3s cubic-bezier(0, 0, .2, 1);
+    transition-delay: 0s;
+    transform-origin: center top;
+    white-space: normal;
+    text-transform: none;
+    pointer-events: none;
 
-    &.wyvonj-active {
-      transform: translate(-50%, 0);
+    opacity: 0;
+    border-radius: 2px;
+    background-color: white;
+    &.wyvonj-active
+    {
+        transition: all .3s cubic-bezier(0, 0, .2, 1);
+        transition-duration: .3s;
+
+        opacity: 1;
     }
-  }
-
-  &.wyvonj-tooltip-right {
-    margin-left: 14px;
-    transform: translate(-8px, 50%);
-
-    &.wyvonj-active {
-      transform: translate(0, 50%);
+    &:not(.wyvonj-active)
+    {
+        transition-delay: 0s !important;
     }
-  }
-
-  &.wyvonj-tooltip-bottom {
-    margin-top: 14px;
-    transform: translate(-50%, -8px);
-
-    &.wyvonj-active {
-      transform: translate(-50%, 0);
+    &.wyvonj-transition-off
+    {
+        transition: none !important;
     }
-  }
+    &.wyvonj-tooltip-top
+    {
+        margin-top: -14px;
 
-  &.wyvonj-tooltip-left {
-    margin-left: -14px;
-    transform: translate(8px, 50%);
-
-    &.wyvonj-active {
-      transform: translate(0, 50%);
+        transform: translate(-50%, 8px);
+        &.wyvonj-active
+        {
+            transform: translate(-50%, 0);
+        }
     }
-  }
+    &.wyvonj-tooltip-right
+    {
+        margin-left: 14px;
+
+        transform: translate(-8px, 50%);
+        &.wyvonj-active
+        {
+            transform: translate(0, 50%);
+        }
+    }
+    &.wyvonj-tooltip-bottom
+    {
+        margin-top: 14px;
+
+        transform: translate(-50%, -8px);
+        &.wyvonj-active
+        {
+            transform: translate(-50%, 0);
+        }
+    }
+    &.wyvonj-tooltip-left
+    {
+        margin-left: -14px;
+
+        transform: translate(8px, 50%);
+        &.wyvonj-active
+        {
+            transform: translate(0, 50%);
+        }
+    }
 }

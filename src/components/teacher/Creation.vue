@@ -1,5 +1,5 @@
 <template>
-    <div class="creation-container sub-padding">
+    <div class="creation-container">
       <div class="tab-button">
         <button type="button" @click="isTab=true" :class="{'focused':isTab}" class="add-topic-button">
           <img src="../../assets/icon/library_add.svg" alt="add" />
@@ -13,7 +13,7 @@
       </div>
       <transition-group class="tab-box" name="tab-tran">
         <div id="tab-box1" key="tab1" v-show="isTab">
-          <div class="creation-card paper">
+          <div class="creation-card">
               <span>可选人数：{{available}}</span>
               <mu-slider v-model="available" :min="1" :max="10" :step="1"  class="available-slider" />
               <br/>
@@ -23,6 +23,9 @@
                   <mu-radio label="论文" name="group" nativeValue="0" v-model="category"   uncheckIcon="assignment" checkedIcon="assignment"  class="category-radio"/>
               </div>
               <br/>
+              <div @click="dialog=true">
+                选择研究方向
+              </div>
               <mu-select-field v-model="fields" multiple :labelFocusClass="['label-foucs']" :errorText="fieldsError" label="课题研究方向"  class="select-field" labelFloat>
                 <mu-sub-header>可多选</mu-sub-header>
                 <mu-menu-item v-for="text,index in fieldsData" :value="text" :title="text" />
@@ -62,7 +65,7 @@
                     <td width="50%" class="topic-details">{{ topic.details }}</td>
                     <td width="8%" class="topic-restriction">{{ topic.restriction }}</td>
                     <td width="10%">
-                      <mu-icon-button @click="deleteTopic(topic , index)" icon="cancel"></mu-icon-button>
+                      <mu-icon-button @click="deleteTopic(topic , index)" icon="cancel"/>
                     </td>
                   </tr>
                 </tbody>
@@ -70,12 +73,16 @@
             </div>
         </div>
       </transition-group>
+      <mu-dialog :open="dialog" title="选择课题研究方向">
+      <fields :fields="fieldsData" @getfields="getFields(finalFields)"></fields>
+      <mu-flat-button label="确定" slot="actions" primary @click="dialog=false"/>
+      </mu-dialog>
     </div>
 </template>
 
 <script type="text/javascript">
 import { mapState, mapActions } from 'vuex'
-
+import Fields from '../utils/Fields.vue'
 export default {
   data() {
       return {
@@ -88,6 +95,7 @@ export default {
         detailError: '',
         isTab: true,
         fields: [],
+        dialog:false,
         fieldsData: [
           "1.图形图像处理", "2.游戏开发设计", "3.信息可视化",
           "4.数字视音频处理", "5.移动互联网", "6.软件工程",
@@ -95,17 +103,18 @@ export default {
           "10.文化传媒", "11.信息安全", "12.信号处理",
           "13.云计算", "14.大数据", "15.机器学习&深度学习",
           "16.算法研究", "17.其他"
-        ],
-        fixedHeader: true,
-        selectable: false,
-        showCheckbox: false,
+        ]
       }
     },
     computed: {
       ...mapState(['_tch_TopicCreatedAll'])
     },
     methods: {
+      getfields(finalFields){
+        lg(finalFields)
+      },
       createTopic() {
+        this.dialog=true
         let id = cookie.get('user')
           //if (!id) return alert('登录超时，请重新操作')
         if (this.fields.length === 0) {
@@ -155,6 +164,7 @@ export default {
 
 
       },
+
       deleteTopic(topic, index) {
         let id = cookie.get('user')
         this.GET('/getstep')
@@ -195,6 +205,9 @@ export default {
         //if (!id) 
         //return this.$router.push('/')
       this.tchGetCreatedTopics({ teacherId: id })
+    },
+    components:{
+      Fields
     },
     watch: {
       fields: 'clearError',
@@ -277,7 +290,10 @@ export default {
         }
     }
 }
-
+.mu-dialog-wrapper
+{
+    max-width: 648px !important;
+}
 .tab-button
 {
     padding: 16px;

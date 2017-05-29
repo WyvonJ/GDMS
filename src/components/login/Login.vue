@@ -84,6 +84,11 @@ export default {
               cookie.set('user', this.account, date, '/', location.hostname)
               cookie.set('username',this.user.username , date, '/', location.hostname)
               cookie.set('usertype',usertype , date, '/', location.hostname)
+              this.GET('/getstep')
+                .then(res=>{
+                  console.log(res)
+                  cookie.set('step',res.data.curstep,date,'/',location.hostname)
+                })
               if (this.user.isFirstLogin) {
                 if (usertype < 2) {
                   this.$router.push('/entryinformation')

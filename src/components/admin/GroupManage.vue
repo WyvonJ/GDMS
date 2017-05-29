@@ -1,6 +1,6 @@
 <template>
   <div class="group-container">
-    <div class="final-group-teacher paper">
+    <div class="final-group-teacher">
       <div class="instructions">
         <p>
           <strong>
@@ -9,17 +9,23 @@
         </p>
       </div>
       <div class="group-settings">
-        <span class="group-length">{{groupCount}}</span>
+        <span class="group-length">{{groupCount}}组</span>
         <button @click="groupCount++" class="add-button">
           <span>+</span>
         </button>
         <button @click="groupCount--" class="minus-button">
           <span>-</span>
         </button>
-        <button @click="uploadGroupCount" class="upload-group-count">
-          <img src="../../assets/icon/file_upload.svg" alt="reset" />
-          <span>提交分组数</span>
-        </button>
+        <span>技艺比</span>
+        <mu-switch label="KMeans" v-model="groupMethod" class="group-switch" />
+        <br>
+        <mu-radio label="中期答辩" name="group" nativeValue="0" v-model="groupStatus" class="group-radio"/> 
+        <mu-radio label="最终答辩" name="group" nativeValue="1" v-model="groupStatus"  class="group-radio"/>
+        <br/> 
+        <mu-flat-button @click="beginGroup" icon="file_upload" class="upload-group-count" label="开始分组"/>
+        <mu-flat-button @click="uploadGroups" icon="update" label="更新分组"/>
+        <br>
+        <mu-flat-button href="/admin/download?filename=MidGroup" secondary label="导出分组表"/>
       </div>
       <div class="deleted-students">
         <h3>已删除学生</h3>
@@ -37,7 +43,6 @@
                     {{student._id}}{{student.name}}
                     <span @click="deleteItem(student._id)" class="delete-item">
                     X
-                    <wyvonj-tooltip>删除</wyvonj-tooltip>
                     </span>
                 </span>
           </div>
@@ -45,21 +50,18 @@
         </div>
       </div>
       
-      <div class="actions">
-         <mu-raised-button @click="uploadGroups" secondary label="更新分组">
-          <img src="../../assets/icon/upload.svg" alt="upload" />
-          
-        </mu-raised-button>
-         <mu-raised-button href="/admin/download?filename=MidGroup" secondary label="导出最终分组表">
-          <img src="../../assets/icon/export.svg" alt="export" />
-         </mu-raised-button>
-      </div>
       <div class="overlap" v-if="isOverlap">
         <div class="progress">
-        <span>请稍等，正在后台处理中...</span>
+        <p><strong>{{warningMsg}}</strong></p>
           <mu-circular-progress :size="120" color="red"/>
         </div>
       </div>
+       <mu-dialog :open="dialog" title="注意" @close="dialog=false">
+       <div>
+         请选择是中期答辩还是最终答辩！
+       </div>
+        <mu-flat-button slot="actions" primary @click="dialog=false" label="好"/>
+      </mu-dialog>
     </div>
   </div>
 </template>
@@ -73,9 +75,13 @@ export default {
         status: 0,
         groupCount: 6,
         isTab: false,
+        dialog: false,
         isOverlap: false,
+        groupMethod: true,
+        groupStatus: '',
+        warningMsg:'请稍等，正在后台处理中...',
         finalGroups: [{
-          _id:1,
+          _id: 1,
           mentors: [{
             _id: '2103154',
             name: '张军'
@@ -95,7 +101,7 @@ export default {
           }, {
             _id: '4104567',
             name: '刘晓丽',
-            tchId:'20305134301'
+            tchId: '20305134301'
           }]
         }, {
           _id: 2,
@@ -146,79 +152,88 @@ export default {
       allowDrop($event) {
         $event.preventDefault()
       },
-      deleteItem(id){
-        this.$refs.deleted.append(document.getElementById('s'+id))
+      deleteItem(id) {
+        this.$refs.deleted.append(document.getElementById('s' + id))
       },
-      uploadGroupCount(){
-        new Promise((resolve,reject) => {
-          this.isOverlap = true
-          this.POST('/admin/admFnlGroupCount',{count:this.groupCount})
-          .then(res => {
-            this.finalGroups = res.data
-            resolve()
-          })
-          .catch(err=>{
-            console.log(err)
-          })
-        })
-        .then(()=>{
-          this.isOverlap=false
-        })
+      beginGroup() {
+        if (this.groupStatus === '') {
+          this.dialog = true
+        } else {
+          new Promise((resolve, reject) => {
+              this.isOverlap = true
+              this.POST('/admin/admFnlGroupCount', { count: this.groupCount })
+                .then(res => {
+                  this.finalGroups = res.data
+                  resolve()
+                })
+                .catch(err=>{
+              this.warningMsg = '无法连接到服务器，请重试'
+              window.setTimeout(()=>{
+                this.isOverlap = false
+              },1000)
+            })
+            })
+            .then(() => {
+              this.warningMsg = '请稍等，正在后台处理中...'
+              this.isOverlap = false
+            })
+        }
       },
       uploadGroups() {
-        new Promise((resolve,reject) => {
-          this.isOverlap = true
-          let group = document.getElementsByName('group'),
-          groups = []
-          if(!group)
-            return 
-        _.forEach(group, (g, index) => {
-            groups[index] = {
-              _id: 0,
-              mentors: [],
-              students: []
-            }
-            _.forEach(g.childNodes, (c) => {
-              if (c.nodeName==='SPAN') {
-                groups[index]._id=_.parseInt(c.id.substring(1))
+        new Promise((resolve, reject) => {
+            this.isOverlap = true
+            let group = document.getElementsByName('group'),
+              groups = []
+            if (!group)
+              return
+            _.forEach(group, (g, index) => {
+              groups[index] = {
+                _id: 0,
+                mentors: [],
+                students: []
               }
-              if (c.nodeName === 'DIV') {
-                if (c.id[0] === 't') {
-                  _.forEach(c.childNodes, (teacher) => {
-                    groups[index].mentors.push(teacher.id.substring(1))
-                  })
+              _.forEach(g.childNodes, (c) => {
+                if (c.nodeName === 'SPAN') {
+                  groups[index]._id = _.parseInt(c.id.substring(1))
                 }
-                if (c.id[0] === 's') {
-                  _.forEach(c.childNodes, (student) => {
-                    groups[index].students.push(student.id.substring(1))
-                  })
+                if (c.nodeName === 'DIV') {
+                  if (c.id[0] === 't') {
+                    _.forEach(c.childNodes, (teacher) => {
+                      groups[index].mentors.push(teacher.id.substring(1))
+                    })
+                  }
+                  if (c.id[0] === 's') {
+                    _.forEach(c.childNodes, (student) => {
+                      groups[index].students.push(student.id.substring(1))
+                    })
+                  }
                 }
-              }
+              })
             })
+            this.POST('/admin/admUpFTchGroups', groups)
+              .then(res => {
+                if (res.data.state === 1) {
+                  console.log('%c 上传分组完成', 'background:#3f51b5;color:#fff')
+                }
+              })
+              .catch(err => {
+                console.log(err)
+              })
+            resolve(groups)
           })
-          this.POST('/admin/admUpFTchGroups',groups)
-            .then(res => {
-              if (res.data.state===1) {
-                console.log('%c 上传分组完成','background:#3f51b5;color:#fff')
-              }
-            })
-            .catch(err => {
-              console.log(err)
+          .then((g) => {
+            this.isOverlap = false
           })
-          resolve(groups)
-        })
-        .then((g)=>{
-          this.isOverlap=false
-        })
       },
-      overflow(){
-        this.groupCount < 1 ? this.groupCount = 1 : 1  
+      overflow() {
+        this.groupCount < 1 ? this.groupCount = 1 : 1
       }
     },
-    watch:{
-      groupCount:'overflow'
+    watch: {
+      groupCount: 'overflow'
     }
 }
+
 </script>
 
 <style lang="sass" rel="stylesheet/scss" scoped>
@@ -261,10 +276,8 @@ export default {
     padding: 16px 8px;
     .group-settings
     {
-        display: flex;
-
         padding-left: 16px;
-        button
+        .add-button,.minus-button
         {
             color: #333;
             border: 1px solid #aaa;
@@ -291,6 +304,7 @@ export default {
             margin-left: 16px;
 
             border-radius: 3px;
+            vertical-align: bottom;
         }
     }
 }
@@ -299,7 +313,7 @@ export default {
 {
     padding: 8px;
 
-    border-bottom: 1px dashed #727877;
+    border-bottom: 1px dashed #d6d6d6;
 }
 .students-grouped
 {
@@ -320,14 +334,68 @@ export default {
     top: 1px;
     right: -6px;
 }
+.groups-wrapper
+{
+    display: flex;
+
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
 .group
 {
     position: relative;
 
     display: block;
+    box-shadow: 0px 0px 20px 0px #cacaca;
+    min-width: 320px;
+    min-height: 64px;
+    margin: 16px;
+    padding-right: 96px;
+
+    flex-wrap: wrap;
+    align-items: flex-start;
+    &::after
+    {
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        width: 92px;
+        height: 100%;
+        padding-top: 24px;
+        padding-left: 8px;
+        content: '\62D6\62FD\5230\8FD9\91CC';
+
+        border-left: 1px dashed #d6d6d6;
+        background-color: rgba(227, 225, 225, .28);
+    }
+    &:hover
+    {
+        border-color: $red;
+    }
+    span.group-id
+    {
+        font-size: 18px;
+
+        position: absolute;
+        top: -12px;
+        right: -12px;
+
+        width: 24px;
+        height: 24px;
+        padding-left: 7px;
+
+        color: white;
+        border-radius: 12px;
+        background-color: $green;
+        z-index: 3;
+    }
 }
 .group-length
 {
+  display:inline-block;
     font-size: 20px;
     line-height: 34px;
 
@@ -340,9 +408,16 @@ export default {
     border: 1px solid #aaa;
     border-radius: 3px;
 }
-.actions button
+a{
+    display: inline-flex;
+    border-radius: 1px;
+  }
+.teachers-grouped
 {
-    margin: 3px 16px;
+    display: flex;
+}
+.chip:hover{
+  cursor: move;
 }
 .overlap
 {

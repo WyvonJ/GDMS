@@ -23,13 +23,13 @@ export default {
       return {
         grade: 80,
         name: '导师',
-        isOpenForEva: true,
+        isOpenForEva: false,
         msg:'现在还不能评分'
       }
     },
     methods: {
       commitGrade() {
-        let id = cookie.get('user')
+        let id = _c.getCookie('user')
         if (!id)
           {
             alert('登录超时，请重新登录后操作')
@@ -46,8 +46,8 @@ export default {
       let id = cookie.get('user')
       this.POST('/student/stuSelectionResult',{studentId:id})
         .then((res)=>{
-          if(res.data.state===1){
-            this.isOpenForEva=false
+          if(res.data.state === 1){
+            this.isOpenForEva=true
             this.msg=''
             this.name=res.data.name
           }
