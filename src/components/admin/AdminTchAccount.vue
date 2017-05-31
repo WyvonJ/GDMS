@@ -1,10 +1,9 @@
 <template>
   <div class="teacher-account-container">
- 
     <div class="paper">
     <div class="table-admin">
-      <mu-flat-button class="upload" icon="file_upload" label="帐号上传" @click="dialog=true;manual=0"/>
-        <mu-flat-button label="创建新帐号" icon="add" @click="addAccount()"/>
+      <mu-raised-button class="upload" secondary icon="file_upload" label="帐号上传" @click="dialog=true;manual=0"/>
+        <mu-raised-button label="创建新帐号" primary icon="add" @click="createAccount()"/>
     </div>
       <table>
         <caption>导师信息表</caption>
@@ -14,8 +13,9 @@
             <th>姓名</th>
             <th>性别</th>
             <th>手机号码</th>
-            <th>办公室</th>
             <th>邮箱</th>
+            <th>办公室</th>
+            <th>职称</th>
             <th>微信</th>
             <th>QQ</th>
             <th>帐号编辑</th>
@@ -29,18 +29,19 @@
             <td>{{teacher.name}}</td>
             <td><mu-icon :value="teacher.gender==='男'?'mood':'face'" :color="teacher.gender==='男'?'blue':'red'"/></td>
             <td>{{teacher.tel||'无'}}</td>
-            <td>{{teacher.office||'无'}}</td>
             <td>{{teacher.email||'无'}}</td>
+            <td>{{teacher.office||'无'}}</td>
+            <td>{{proTitle(teacher.protitle)||'无'}}</td>
             <td>{{teacher.wechat||'无'}}</td>
             <td>{{teacher.qq||'无'}}</td>
-            <td><mu-icon-button icon="edit" style="color: #009688;" @click="openProfileEdit(teacher)"/></td>
-            <td><mu-icon-button icon="lock" style="color: #00bcd4;" @click="openPassEdit(teacher)"/></td>
-            <td><mu-icon-button icon="delete_forever" style="color: #f44336;" @click="deleteteacher(teacher)"/></td>
+            <td><mu-icon-button icon="edit" style="color: #009688;" @click="openDialog(1,teacher)"/></td>
+            <td><mu-icon-button icon="lock" style="color: #00bcd4;" @click="openDialog(2,teacher)"/></td>
+            <td><mu-icon-button icon="delete_forever" style="color: #f44336;" @click="openDialog(3,teacher)"/></td>
           </tr>
         </tbody>
       </table>
     </div>
-     <mu-dialog class="form-dialog" :open="dialog" title="帐号管理" @close="dialog=false" titleClass="title-class">
+     <mu-dialog  :style="dialogClass" :open="dialog" title="帐号管理" @close="dialog=false" titleClass="title-class">
      <div v-if="manual===0">
         <form enctype="multipart/form-data" role="form" class="form" onsubmit="return false">
           <div class="form-group">
@@ -54,13 +55,23 @@
       <mu-flat-button slot="actions" label="取消" @click="dialog=false"/>
      </div>
        <div v-if="manual===1">
-         <mu-text-field hintText="帐号" v-model="teacher._id" type="number" icon="account_circle"/><br/>
+         <mu-text-field hintText="帐号" v-model="teacher._id" type="number" icon="account_circle"/>
          <mu-text-field hintText="姓名" v-model="teacher.name" type="text" icon="person"/><br/>
+         <mu-text-field v-if="!addoredit" hintText="密码" v-model="teacher.password" type="text" icon="lock"/><br/>
          <div class="gender-radio">
            <mu-radio label="男" name="group" uncheckIcon="mood" checkedIcon="mood" nativeValue="男" v-model="teacher.gender" class="demo-radio"/>
-          <mu-radio label="女" name="group"  uncheckIcon="face" checkedIcon="face" nativeValue="女" v-model="teacher.gender"  class="demo-radio"/> 
+          <mu-radio label="女" name="group" uncheckIcon="face" checkedIcon="face" nativeValue="女" v-model="teacher.gender"  class="demo-radio"/> 
          </div>
          <mu-text-field hintText="手机号" v-model="teacher.tel" type="number" icon="phone"/>
+         <mu-text-field hintText="邮箱" v-model="teacher.email" type="text" icon="mail"/>
+         <div class="pro-title">
+           <mu-radio label="助教" name="proTitle" nativeValue="0" v-model="teacher.protitle" class="pro-title-radio"/> 
+          <mu-radio label="讲师" name="proTitle" nativeValue="1" v-model="teacher.protitle"  class="pro-title-radio"/>
+          <br>
+          <mu-radio label="副教授" name="proTitle" nativeValue="2" v-model="teacher.protitle"  class="pro-title-radio"/>
+          <mu-radio label="教授" name="proTitle" nativeValue="3" v-model="teacher.protitle"  class="pro-title-radio"/>
+         </div>
+         
          <mu-text-field hintText="办公室" v-model="teacher.office" type="text" icon="desktop_mac"/>
          <div class="addtional-contact">
            <img src="../../assets/icon/qq.svg" />
@@ -81,6 +92,12 @@
            <mu-flat-button slot="actions" secondary label="取消" @click="dialog=false"/>
          </div>
        </div>
+       <div v-if="manual===3">
+          <div class="actions">
+           <mu-raised-button slot="actions" color="white" backgroundColor="blue" label="确认删除该帐号？" @click="updatePassword"/>
+           <mu-flat-button slot="actions" secondary label="取消" @click="dialog=false"/>
+         </div>
+       </div>
       </mu-dialog>
   </div>
 </template>
@@ -92,81 +109,141 @@ export default {
         dialog: false,
         chosenFile: '选择文件',
         progressBar: 0,
-        manual:0,
-        addoredit:0,
-        teacherId:'',
-        teacher:{
-          tel:'',
-          name:'',
-          gender:'',
-          email:'',
-          office:'',
-          qq:'',
-          wechat:'',
+        manual: 0,
+        addoredit: 0,
+        teacherId: '',
+        dialogClass:{
+          width: '640px!important'
         },
-        password:'',
+        teacher: {
+          tel: '',
+          name: '',
+          gender: '',
+          email: '',
+          office: '',
+          protitle: '',
+          qq: '',
+          wechat: '',
+          password:''
+        },
+        password: '',
         teacherAccounts: [{
-          _id:'2030513430',
-          name:'吴吉',
-          gender:'男',
-          tel:'18861823231',
-          office:'asfd',
-          email:'wyvonj@gmail.com',
-          wechat:'dale71717',
-          qq:'552084208'
-        },{
-          _id:'2030513131',
-          name:'吉吴',
-          gender:'女',
-          tel:'18844512231',
-          office:'asfd',
-          email:'jiwuwu@gmail.com',
-          wechat:'nshishabi',
-          qq:'74747474'
+          _id: '2030513430',
+          name: '吴吉',
+          gender: '男',
+          tel: '18861823231',
+          office: 'asfd',
+          email: 'wyvonj@gmail.com',
+          protitle: '3',
+          wechat: 'dale71717',
+          qq: '552084208'
+        }, {
+          _id: '2030513131',
+          name: '吉吴',
+          gender: '女',
+          tel: '18844512231',
+          office: 'asfd',
+          email: 'jiwuwu@gmail.com',
+          protitle: '0',
+          wechat: 'nshishabi',
+          qq: '74747474'
         }]
       }
     },
+    computed: {
+
+    },
     methods: {
-      openProfileEdit(teacher){
-        this.addoredit=1
-        Object.keys(teacher).map((key)=>{
-          this.teacher[key]=teacher[key]
-        })
-        this.manual=1
-        this.dialog=true
-        
+      proTitle(title) {
+        let pt
+        title = _.parseInt(title)
+        switch (title) {
+          case 0:
+            pt = '助教'
+            break
+          case 1:
+            pt = '讲师'
+            break
+          case 2:
+            pt = '副教授'
+            break
+          case 3:
+            pt = '教授'
+            break
+        }
+        return pt
       },
-      openPassEdit(teacher){
+      openDialog(manual, teacher) {
+        this.manual = manual
+        lg(manual)
+        switch (manual) {
+          case 1:
+            {
+              this.addoredit = 1
+              Object.keys(teacher).map((key) => {
+                this.teacher[key] = teacher[key]
+              })
+              break
+            }
+          case 2:
+            {
+              this._id = teacher._id
+              break
+            }
+          case 3:
+            {
+              if (this.addoredit) {
+                //更新账户信息
+                lg('adfas')
+              } else {
+                //创建新账户
+
+                lg(this.teacher)
+              }
+              break
+            }
+
+        }
+        this.dialog = true
+
+      },
+      confProfileEdit(teacher) {//确认账户信息更新
+      },
+      confPassEdit(teacher) {//确认密码修改
         this.manual = 2
         this.dialog = true
         this._id = teacher._id
       },
-      updateProfile(teacher){
+      updateProfile(teacher) {
         if (this.addoredit) {
           //更新账户信息
           lg('adfas')
-        }else{
+        } else {
           //创建新账户
-          
+          if (this.teacher) {}
           lg(this.teacher)
         }
       },
-      updatePassword(teacher){
+      confCreate(){
+        lg(0)
+      },
+      updatePassword(teacher) {
 
       },
-      deleteteacher(teacher){
-
+      deleteTeacher(teacher) {
+        this.manual = 3
+        this.dialog = true
       },
-      addAccount(){
-        Object.keys(this.teacher).map((key)=>{
-          this.teacher[key]=''
+      createAccount() {
+        Object.keys(this.teacher).map((key) => {
+          this.teacher[key] = ''
         })
-        this.addoredit=0
+        this.addoredit = 0
         this.manual = 1
         this.dialog = true
       },
       fileInput() {
-        let routes  = '/admin/admStuAccUpload'
+        let routes = '/admin/admStuAccUpload'
         let file = document.querySelector('#file').files[0]
         if (file) {
           this.chosenFile = file.name
@@ -186,16 +263,16 @@ export default {
                 this.progressBar = 100
                 this.dialog = false
                 this.GET('/admin/admGetTchAccount')
-                .then(res => {
-                  this.teacherAccounts = res.data
-                })
-                .catch(err=>{
-                  console.log(err)
-                })
-            }else{
-              output.className = 'container text-danger'
-              this.message = '上传文件失败，请重新试试'
-            }
+                  .then(res => {
+                    this.teacherAccounts = res.data
+                  })
+                  .catch(err => {
+                    console.log(err)
+                  })
+              } else {
+                output.className = 'container text-danger'
+                this.message = '上传文件失败，请重新试试'
+              }
             })
             .catch((err) => {
               output.className = 'container text-danger'
@@ -209,9 +286,9 @@ export default {
         }
       }
     },
-    mounted(){
-      this.GET('/admin/admGetStuAccount')
-        .then(res=>{
+    mounted() {
+      this.GET('/admin/getTchAccount')
+        .then(res => {
           this.teacherAccounts = res.data
         })
     }
@@ -220,11 +297,17 @@ export default {
 </script>
 
 <style lang="sass" rel="stylesheet/scss" scoped>
-th{
-  padding: 8px;
-}
+
 .teacher-account-container
 {
+    th
+    {
+        padding: 8px;
+        text-align: center;
+    }
+    td{
+      text-align: center;
+    }
     .file-button
     {
         position: absolute;
@@ -246,97 +329,52 @@ th{
 
         border-bottom: 1px solid #d8d8d8;
     }
-    .upload:hover{
+    .upload:hover
+    {
         background-color: #dadada;
-      }
+    }
     caption
     {
         padding: 8px 0;
     }
 }
 
-.form
-{
-    position: relative;
-}
-.form-control
-{
-    position: absolute;
-    z-index: 12;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
 
-    width: 100%;
-
-    cursor: pointer;
-
-    opacity: 0;
-}
-
-.form-group
+.gender-radio,
+.actions
 {
-    margin: 4px;
-    padding: 18px 0;
+    text-align: center;
+    .mu-radio
+    {
+        margin-right: 20px;
+    }
+}
+.addtional-contact
+{
+    vertical-align: middle;
+    .mu-text-field
+    {
+        width: 200px;
+    }
+    img
+    {
+        padding: 0 16px;
+    }
+}
+.title-class
+{
+    margin-bottom: 16px;
+    padding: 20px 21px 20px;
 
-    border: 2px dashed #dedede;
+    color: #fff;
+    background-color: #4db6ac;
 }
-.container
-{
-    padding: 12px 4px;
-}
-.text-danger
-{
-    font-size: 18px;
-
-    color: #f44336;
-    border: 1px solid #f44336;
-}
-
-progress
-{
-    width: 274px;
-    height: 12px;
-    margin: 8px 0;
-
-    color: #4caf50; /*IE10*/
-    border: 1px solid #4caf50;
-    border-radius: 2px;
-}
-
-progress::-moz-progress-bar
-{
-    background: #4caf50;
-}
-progress::-webkit-progress-bar
-{
-    background: white;
-}
-progress::-webkit-progress-value
-{
-    background: #4caf50;
-}
-.gender-radio,.actions{
+.pro-title{
   text-align: center;
   .mu-radio{
-    margin-right: 20px;
-  }
-}
-.addtional-contact{
-  vertical-align: middle;
-  .mu-text-field{
-    width: 200px;
+  width: 110px;
+
   }
 
-  img{
-    padding: 0 16px;
-  }
-}
-.title-class {
-    color: #ffffff;
-    background-color: #4DB6AC;
-    padding: 20px 21px 20px;
-    margin-bottom: 16px;
 }
 </style>

@@ -1,12 +1,8 @@
 <template>
   <div class="teacher-topics">
   	<header class="teacher-topics-admin">
-  	
-    <a class="export-table shadow" href="/admin/download?filename=SelectedResult">
-          <img src="../../assets/icon/export.svg">
-          <span>导出导师题目表</span>
-    </a>
-    <div class="order-admin">
+    <mu-raised-button href="/admin/download?filename=SelectedResult" icon="file_download" secondary label="导出导师题目表"/>
+    <!--<div class="order-admin">
        <button @click="beginSelection(1)" class="order-button">
           <span>导师一轮选题</span>
       </button>
@@ -19,8 +15,14 @@
       <button @click="beginSelection(4)" class="order-button">
           <span>导师最终选题</span>
       </button>
+    </div>-->
+    <div>
+      <mu-raised-button @click="beginSelection(1)" primary label="导师一轮选题"/>
+      <mu-raised-button @click="beginSelection(2)" primary label="导师二轮选题"/>
+      <mu-raised-button @click="beginSelection(3)" primary label="导师三轮选题"/>
+      <mu-raised-button @click="beginSelection(4)" primary label="导师最终选题"/>
     </div>
-    
+      
   </header>
   <div class="columns">
   	<figure v-for="teacher of teacherTopics" class="teacher-wrapper paper">

@@ -7,6 +7,7 @@
       </div>
       <div class="grade-content">
         <mu-slider v-model="grade" :step="1" class="grade-slider" />
+        <mu-text-field hintText="评语" v-model="evaMsg" multiLine type="text" icon="thumb_up"/><br/>
          <mu-raised-button @click="commitGrade" :disabled="isOpenForEva" secondary label="评分">
            <wyvonj-tooltip>{{msg}}</wyvonj-tooltip>
          </mu-raised-button>
@@ -24,6 +25,7 @@ export default {
         grade: 80,
         name: '导师',
         isOpenForEva: false,
+        evaMsg:'',
         msg:'现在还不能评分'
       }
     },

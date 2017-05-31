@@ -3,8 +3,8 @@
  
   	<div class="paper">
   	<div class="table-admin">
-      <mu-flat-button class="upload" icon="file_upload" label="帐号上传" @click="dialog=true;manual=0"/>
-        <mu-flat-button label="创建新帐号" icon="add" @click="addAccount()"/>
+      <mu-raised-button class="upload" secondary icon="file_upload" label="帐号上传" @click="dialog=true;manual=0"/>
+        <mu-raised-button label="创建新帐号" primary icon="add" @click="addAccount()"/>
   	</div>
   		<table>
   			<caption>学生信息表</caption>
@@ -17,6 +17,7 @@
   					<th>邮箱</th>
             <th>微信</th>
             <th>QQ</th>
+            <th>是否答辩</th>
             <th>帐号编辑</th>
             <th>密码修改</th>
             <th>删除帐号</th>
@@ -31,6 +32,7 @@
   					<td>{{student.email||'无'}}</td>
             <td>{{student.wechat||'无'}}</td>
             <td>{{student.qq||'无'}}</td>
+            <td><mu-switch :label="student.finalreplied?'是':'否'" v-model="student.finalreplied" @change="updateReply(student)" class="reply-switch"/></td>
             <td><mu-icon-button icon="edit" style="color: #009688;" @click="openProfileEdit(student)"/></td>
             <td><mu-icon-button icon="lock" style="color: #00bcd4;" @click="openPassEdit(student)"/></td>
             <td><mu-icon-button icon="delete_forever" style="color: #f44336;" @click="deleteStudent(student)"/></td>
@@ -100,6 +102,7 @@ export default {
           email:'',
           qq:'',
           wechat:'',
+          finalreplied:false
         },
         password:'',
         studentAccounts: [{
@@ -109,7 +112,8 @@ export default {
           tel:'18861823231',
           email:'wyvonj@gmail.com',
           wechat:'dale71717',
-          qq:'552084208'
+          qq:'552084208',
+          finalreplied:true
         },{
           _id:'1030513131',
           name:'吉吴',
@@ -117,7 +121,8 @@ export default {
           tel:'18844512231',
           email:'jiwuwu@gmail.com',
           wechat:'nshishabi',
-          qq:'74747474'
+          qq:'74747474',
+          finalreplied:false
         }]
       }
     },
@@ -151,6 +156,9 @@ export default {
       },
       deleteStudent(student){
 
+      },
+      updateReply(student){
+        
       },
       addAccount(){
         Object.keys(this.student).map((key)=>{
@@ -250,68 +258,6 @@ th{
     }
 }
 
-.form
-{
-    position: relative;
-}
-.form-control
-{
-    position: absolute;
-    z-index: 12;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-
-    width: 100%;
-
-    cursor: pointer;
-
-    opacity: 0;
-}
-
-.form-group
-{
-    margin: 4px;
-    padding: 18px 0;
-
-    border: 2px dashed #dedede;
-}
-.container
-{
-    padding: 12px 4px;
-}
-.text-danger
-{
-    font-size: 18px;
-
-    color: #f44336;
-    border: 1px solid #f44336;
-}
-
-progress
-{
-    width: 274px;
-    height: 12px;
-    margin: 8px 0;
-
-    color: #4caf50; /*IE10*/
-    border: 1px solid #4caf50;
-    border-radius: 2px;
-}
-
-progress::-moz-progress-bar
-{
-    background: #4caf50;
-}
-progress::-webkit-progress-bar
-{
-    background: white;
-}
-progress::-webkit-progress-value
-{
-    background: #4caf50;
-}
 .gender-radio,.actions{
   text-align: center;
   .mu-radio{

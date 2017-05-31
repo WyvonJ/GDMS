@@ -40,7 +40,7 @@
 </script>
 
 <style lang="sass" rel="stylesheet/scss" scoped>
-@import '../../style/variables.scss'; 
+@import '../../style/variables.scss';
 .student-card
 {
     position: relative;
@@ -52,60 +52,60 @@
     {
         .student-wrapper
         {
-            &.not-selected{
-                transform: translateX(-64px);
-               
-                background-color: #fff;
-                color: #343434;
-
-            }
             transition: $material-enter;
-            
+
             border-top-left-radius: 4px;
             border-bottom-left-radius: 4px;
+            &.not-selected
+            {
+                transform: translateX(-64px);
 
-        }
-        .check-button{
-            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.4);
-               -moz-box-shadow: inset 0 0 6px rgba(0,0,0,.4);
-                    box-shadow: inset 0 0 6px rgba(0,0,0,.4);
+                color: #343434;
+                background-color: #fff;
+            }
         }
     }
     .student-wrapper
     {
+        position: relative;
+        z-index: 6;
+
         width: 100%;
         height: 100%;
 
         border-bottom: 1px #dfdfdf solid;
-        position: relative;
-        z-index: 6;
         border-left: 6px $teal solid;
         .student-name
         {
+            font-size: 16px;
+            line-height: 64px;
+
             display: inline-block;
+            float: left;
+
             width: 64px;
             height: 64px;
-            text-align: center;
-            line-height: 64px;
-            float: left;
-            font-size: 16px;
 
+            text-align: center;
         }
-        &.not-selected{
-            background-color: white;
+        &.not-selected
+        {
             color: rgba(0,0,0,.7);
-            .student-gpa{
-            color: $indigo;
+            background-color: white;
+            .student-gpa
+            {
+                color: $indigo;
             }
         }
-        &.gender-girl{
-           border-left: 6px $red400 solid;
+        &.gender-girl
+        {
+            border-left: 6px $red400 solid;
         }
-        
-        .student-gpa{
-        	position: absolute;
-        	right: 72px;
-        	top: 2px;
+        .student-gpa
+        {
+            position: absolute;
+            top: 2px;
+            right: 72px;
         }
         .student-info
         {
@@ -125,9 +125,11 @@
 
         cursor: pointer;
         transition: $material-enter;
-        border: none;
-        outline: none;
+
         color: white;
+        border: none;
+        border-radius: 0;
+        outline: none;
         background-color: $greenVue;
         &:hover
         {
@@ -143,8 +145,13 @@
 
         width: 64px;
         height: 64px;
-        &.is-selected{
-            background-color: $lightBlue;
+        &.is-selected
+        {
+            background-color: transparent;
+            i{
+                color: $red;
+                font-size: 28px;
+            }
         }
     }
 }

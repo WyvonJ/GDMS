@@ -4,11 +4,13 @@
       <div class="instructions">
         <p>
           <strong>
-            请先设定分组数并上传，然后下载分组表，也可以调整后确认分组再下载分组表。
+            请先设定分组数、分组方式和分组类型并开始分组，对分组结果微调后请更新分组。
           </strong>
         </p>
       </div>
       <div class="group-settings">
+        <mu-raised-button slot="actions" v-if="groupProc==1" primary @click="dialog=true;manual=1" label="选择中心点"/>
+
         <span class="group-length">{{groupCount}}组</span>
         <button @click="groupCount++" class="add-button">
           <span>+</span>
@@ -18,21 +20,22 @@
         </button>
         <span>技艺比</span>
         <mu-switch label="KMeans" v-model="groupMethod" class="group-switch" />
+        <div class="group-radio-wrapper">
+          <mu-radio label="中期答辩" name="group" nativeValue="0" v-model="groupProc" class="group-radio"/> 
+          <mu-radio label="最终答辩" name="group" nativeValue="1" v-model="groupProc"  class="group-radio"/>
+        </div>
+        <mu-raised-button @click="beginGroup" secondary icon="group" class="upload-group-count" label="开始分组"/>
+        <mu-raised-button @click="uploadGroups" :disabled="!groups.length" primary icon="update" label="更新分组"/>
         <br>
-        <mu-radio label="中期答辩" name="group" nativeValue="0" v-model="groupStatus" class="group-radio"/> 
-        <mu-radio label="最终答辩" name="group" nativeValue="1" v-model="groupStatus"  class="group-radio"/>
-        <br/> 
-        <mu-flat-button @click="beginGroup" icon="file_upload" class="upload-group-count" label="开始分组"/>
-        <mu-flat-button @click="uploadGroups" icon="update" label="更新分组"/>
-        <br>
-        <mu-flat-button href="/admin/download?filename=MidGroup" secondary label="导出分组表"/>
       </div>
       <div class="deleted-students">
-        <h3>已删除学生</h3>
+        <h3>
+        <mu-icon value="delete_forever" :size="24"/>
+        无答辩资格学生</h3>
         <div ref="deleted"></div>
       </div>
       <div class="groups-wrapper">
-        <div class="group" name="group" v-for="(group,index) of finalGroups" @drop="drop($event)" @dragover="allowDrop($event)" :id="'g'+group._id">
+        <div class="group" name="group" v-for="(group,index) of groups" @drop="drop($event)" @dragover="allowDrop($event)" :id="'g'+group._id">
           <div class="teachers-grouped" :id="'tg'+group._id">
             <span class="teacher-to chip no-selection" v-for="teacher of group.mentors" draggable="true" @dragstart="drag($event)" :id="'t'+teacher._id">
                   {{teacher.name}}
@@ -42,7 +45,7 @@
             <span class="student-to chip no-selection" v-for="student of group.students" draggable="true" @dragstart="drag($event)" :id="'s'+student._id">
                     {{student._id}}{{student.name}}
                     <span @click="deleteItem(student._id)" class="delete-item">
-                    X
+                    <mu-icon value="clear" :size="16"/>
                     </span>
                 </span>
           </div>
@@ -57,10 +60,18 @@
         </div>
       </div>
        <mu-dialog :open="dialog" title="注意" @close="dialog=false">
-       <div>
+       <div v-if="manual===0">
+         <p>
          请选择是中期答辩还是最终答辩！
-       </div>
+       </p>
         <mu-flat-button slot="actions" primary @click="dialog=false" label="好"/>
+       </div>
+        <div v-if="manual===1">
+        <div class="centroids-checkbox-wrapper">
+          <mu-checkbox v-for="teacher of teachers" name="group"  :nativeValue="teacher._id" v-model="centroids" :label="teacher.name" class="centroids-checkbox"/> <br/>
+        </div>
+        <mu-raised-button slot="actions" primary @click="dialog=false" label="好"/>
+       </div>
       </mu-dialog>
     </div>
   </div>
@@ -68,7 +79,6 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import { post, get } from 'axios'
 export default {
   data() {
       return {
@@ -78,9 +88,21 @@ export default {
         dialog: false,
         isOverlap: false,
         groupMethod: true,
-        groupStatus: '',
+        manual:0,
+        groupProc: '',
         warningMsg:'请稍等，正在后台处理中...',
-        finalGroups: [{
+        teachers:[{
+          _id:'2030513410',
+          name:'张军'
+        },{
+          _id:'2030513411',
+          name:'李军'
+        },{
+          _id:'2030513412',
+          name:'王军'
+        }],
+        centroids:[],
+        groups: [{
           _id: 1,
           mentors: [{
             _id: '2103154',
@@ -156,14 +178,19 @@ export default {
         this.$refs.deleted.append(document.getElementById('s' + id))
       },
       beginGroup() {
-        if (this.groupStatus === '') {
+        if (this.groupProc === '') {
+          this.manual=0
           this.dialog = true
         } else {
-          new Promise((resolve, reject) => {
+          if (this.groupProc == 0) {
+            new Promise((resolve, reject) => {
               this.isOverlap = true
-              this.POST('/admin/admFnlGroupCount', { count: this.groupCount })
-                .then(res => {
-                  this.finalGroups = res.data
+              this.POST('/admin/admMidGroup', { 
+                count: this.groupCount,
+                method:this.groupMethod,
+                proc:this.groupProc 
+              }).then(res => {
+                  this.groups = res.data
                   resolve()
                 })
                 .catch(err=>{
@@ -177,6 +204,29 @@ export default {
               this.warningMsg = '请稍等，正在后台处理中...'
               this.isOverlap = false
             })
+          }else{
+            new Promise((resolve, reject) => {
+              this.isOverlap = true
+              this.POST('/admin/admFnlGroup', { 
+                count: this.groupCount,
+                method:this.groupMethod,
+                proc:this.groupProc 
+              }).then(res => {
+                  this.groups = res.data
+                  resolve()
+                })
+                .catch(err=>{
+              this.warningMsg = '无法连接到服务器，请重试'
+              window.setTimeout(()=>{
+                this.isOverlap = false
+              },1000)
+            })
+            })
+            .then(() => {
+              this.warningMsg = '请稍等，正在后台处理中...'
+              this.isOverlap = false
+            })
+          }
         }
       },
       uploadGroups() {
@@ -226,7 +276,7 @@ export default {
           })
       },
       overflow() {
-        this.groupCount < 1 ? this.groupCount = 1 : 1
+        this.groupCount < 1 ? this.groupCount = 1 : null
       }
     },
     watch: {
@@ -267,8 +317,13 @@ export default {
   }
   h3{
     color: #f44336;
+    display: flex;
+    align-items: center;
   }
 
+}
+.group-radio-wrapper{
+  margin: 0 24px;
 }
 .final-group-teacher
 {
@@ -277,6 +332,9 @@ export default {
     .group-settings
     {
         padding-left: 16px;
+        display: flex;
+    justify-content: center;
+    align-items: center;
         .add-button,.minus-button
         {
             color: #333;
@@ -298,6 +356,7 @@ export default {
             border-left: none;
             border-top-right-radius: 3px;
             border-bottom-right-radius: 3px;
+                margin-right: 32px;
         }
         .upload-group-count
         {
@@ -326,8 +385,7 @@ export default {
     width: 20px;
     height: 20px;
     border-radius: 10px;
-    background-color: #f44336;
-    color: white;
+    color: #f44336;
     align-items: center;
     cursor: pointer;
     position: relative;
@@ -348,14 +406,14 @@ export default {
     position: relative;
 
     display: block;
-    box-shadow: 0px 0px 20px 0px #cacaca;
     min-width: 320px;
     min-height: 64px;
     margin: 16px;
     padding-right: 96px;
-
+    transition: $material-enter;
     flex-wrap: wrap;
     align-items: flex-start;
+    border: 1px solid rgba(0,0,0,.1);
     &::after
     {
         position: absolute;
@@ -369,11 +427,11 @@ export default {
         content: '\62D6\62FD\5230\8FD9\91CC';
 
         border-left: 1px dashed #d6d6d6;
-        background-color: rgba(227, 225, 225, .28);
+        background-color: rgba(227, 225, 225, .18);
     }
     &:hover
     {
-        border-color: $red;
+    box-shadow: 0px 0px 20px 0px #cacaca;
     }
     span.group-id
     {
@@ -389,7 +447,7 @@ export default {
 
         color: white;
         border-radius: 12px;
-        background-color: $green;
+        background-color: $red;
         z-index: 3;
     }
 }
@@ -399,7 +457,7 @@ export default {
     font-size: 20px;
     line-height: 34px;
 
-    width: 40px;
+    min-width: 40px;
     height: 38px;
     margin-right: 16px;
 
@@ -418,6 +476,9 @@ a{
 }
 .chip:hover{
   cursor: move;
+}
+.chip .mu-icon{
+  top: 0;
 }
 .overlap
 {

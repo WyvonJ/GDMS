@@ -2,12 +2,12 @@
     <div class="creation-container">
       <div class="tab-button">
         <button type="button" @click="isTab=true" :class="{'focused':isTab}" class="add-topic-button">
-          <img src="../../assets/icon/library_add.svg" alt="add" />
+          <mu-icon value="library_add"/>
           <span>课题发布</span>
         </button>
          
         <button type="button" @click="isTab=false" :class="{'focused':!isTab}" class="manage-topic-button">
-          <img src="../../assets/icon/subject.svg" alt="man" />
+          <mu-icon value="subject"/>
           <span>课题管理</span>
         </button>
       </div>
@@ -18,7 +18,6 @@
               <mu-slider v-model="available" :min="1" :max="10" :step="1"  class="available-slider" />
               <br/>
               <div class="category-box">
-                  <wyvonj-tooltip>选择课题所属类别</wyvonj-tooltip>
                   <mu-radio label="设计" name="group" nativeValue="1" v-model="category"  uncheckIcon="build" checkedIcon="build" class="category-radio"/> 
                   <mu-radio label="论文" name="group" nativeValue="0" v-model="category"   uncheckIcon="assignment" checkedIcon="assignment"  class="category-radio"/>
               </div>
@@ -302,28 +301,24 @@ export default {
     button
     {
         border-radius: 0;
+        color: $teal;
+        border: 1px solid $teal;
+        background-color: transparent;
         &.focused
         {
-            -webkit-box-shadow: 0 0 3px 1px #898989;
-               -moz-box-shadow: 0 0 3px 1px #898989;
-                    box-shadow: 0 0 3px 1px #898989;
+            background-color: $teal;
+            color: white;
         }
     }
     .add-topic-button
     {
-        background-color: $greenVue;
-        &:hover
-        {
-            background-color: #4cd798;
-        }
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
     }
     .manage-topic-button
     {
-        background-color: $blue;
-        &:hover
-        {
-            background-color: #64b5f6;
-        }
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
     }
 }
 
@@ -331,6 +326,8 @@ export default {
 #tab-box2
 {
     width: 100%;
+    display: flex;
+    justify-content:center;
 }
 .release-button img{
   position: relative;

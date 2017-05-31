@@ -1,6 +1,20 @@
 <template>
   <div class="group-container">
-    
+  <div class="group-admin">
+    <mu-raised-button :href="downloadURL" icon="file_download" secondary label="导出分组表"/>
+    <h3>{{title}}</h3>
+  </div>
+    <div class="groups">
+      <div class="group" v-for="(group,index) of groups">
+        <span class="group-id">{{group._id}}</span>
+        <div class="teachers-group">
+          <span class="teacher chip" v-for="teacher of group.mentors">{{teacher.name}}</span>
+        </div>
+        <div class="students-group">
+          <span class="student chip" v-for="student of group.students">{{student._id}}{{student.name}}</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -10,15 +24,11 @@ export default {
       return {
         status: 0,
         groupLength: 6,
-        groups: [
-          [],
-          [],
-          [],
-          [],
-          [],
-          []
-        ],
-        teachers: [{
+        title:'中期分组表',
+        downloadURL:'/admin/download?filename=MidGroup',
+        groups: [{
+          _id:1,
+          mentors:[{
           _id: '200001',
           name: '张军'
         }, {
@@ -37,52 +47,45 @@ export default {
           _id: '2000036',
           name: '刘军'
         }],
+          students:[{
+          _id: '200001',
+          name: '张军'
+        }, {
+          _id: '200002',
+          name: '陈伟'
+        }, {
+          _id: '200003',
+          name: '陈丽芳'
+        },{
+          _id: '200004',
+          name: '王军'
+        }, {
+          _id: '200005',
+          name: '李俊'
+        }, {
+          _id: '2000036',
+          name: '刘军'
+        }]
+        }
+        ]
       }
     },
     methods: {
-      drop($event) {
-        $event.preventDefault() //阻止默认事件，防止页面跳转
-        if ($event.target.nodeName === 'DIV') //如果拖拽到非div则不接受
-        {
-          let elId = $event.dataTransfer.getData("elId") //被拖拽元素id和name
-        let id = $event.target.id.substring(1) //group id
-        if (elId && id)
-          $event.target.appendChild(document.getElementById(elId))
-        }
-      },
-      drag($event) {
-        //获取被拖拽元素的id 也就是绑定的帐号id
-        $event.dataTransfer.setData("elId", $event.target.id)
-          //获取用户姓名 用于传递
-        $event.dataTransfer.setData("elName", $event.target.innerHTML.trim())
-      },
-      allowDrop($event) {
-        $event.preventDefault()
-      },
-      resetGroups() {
-        window.location.reload()
-      },
-      uploadGroups() {
-        let group = document.getElementsByName('group')
-        let groups = []
-        _.forEach(group, (g, index) => {
-           groups[index] = []
-          _.forEach(g.childNodes, (c) => {
-            if (c.id) {
-              groups[index].push(c.id.substring(1))
-            }
-          })
-        })
-        this.POST('/admin/admUpMTchGroups', groups)
-          .then(res => {
-
-          })
-          .catch(err => {
-            console.log(err)
-          })
-      }
+      
     },
-    created() {
+    mounted() {
+      let step
+      this.GET('/getstep')
+        .then(res=>{
+          step = res.data.curstep
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+      if (step==='') {
+        this.title='最终分组表'
+        this.downloadURL='/admin/download?filename=FnlGroup'
+      }
     }
 }
 
@@ -90,5 +93,63 @@ export default {
 
 <style lang="sass" rel="stylesheet/scss" scoped>
 @import '../../style/variables.scss';
+.group-admin{
+  padding: 16px;
+  h3{
+    font-size: 24px;
+    font-weight: normal;
+  }
+}
+.groups
+{
+    display: flex;
 
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+.group
+{
+    position: relative;
+
+    display: block;
+    box-shadow: 0px 0px 20px 0px #cacaca;
+    min-width: 320px;
+    min-height: 64px;
+    margin: 16px;
+
+    flex-wrap: wrap;
+    align-items: flex-start;
+    border-radius: 3px;
+    span.group-id
+    {
+        font-size: 18px;
+
+        position: absolute;
+        top: -12px;
+        right: -12px;
+
+        width: 24px;
+        height: 24px;
+        padding-left: 7px;
+
+        color: white;
+        border-radius: 12px;
+        background-color: $red;
+        z-index: 3;
+    }
+}
+.chip{
+  cursor: default;
+}
+.teachers-group
+{
+  padding: 8px;
+    display: flex;
+    border-bottom: 1px solid #d6d6d6;
+}
+.students-group
+{
+    padding: 8px;
+}
 </style>

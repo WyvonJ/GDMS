@@ -192,8 +192,13 @@ router.post('/admGradeUpload', (req, res) => {
   })
 })
 
-router.post('/admFnlGroupCount', (req, res) => {
-  let groupCount = req.body.count
+router.post('/admStartGrouping', (req, res) => {
+  let groupCount = req.body.count//分组数
+  let groupMethod = req.body.method//分组方式 0 正常 1 Kmeans
+  let groupStatus = req.body.proc//分组类型 0 中期 1 最终
+  res.send({
+    group:groupCount
+  })
   db.groups.remove({}, function(err) {
     if (err) return
     console.log('pre groups dropped')
@@ -215,23 +220,23 @@ router.post('/admUpFTchGroups', (req, res) => {
   let groups = req.body
     // console.log(groups)
   new Promise((resolve, reject) => {
-    for (let j = 0, jlen = groups.length; j < jlen; j++) {
-      let group = groups[j]
-      db.groups.findOneAndUpdate({ _id: group._id }, { $set: { 'mentors': group.mentors, 'students': group.students } }, { new: true }).exec()
-      let students = group.students
-      let mentors = group.mentors
-      for (let i = 0, ilen = students.length; i < ilen; i++)
-        db.students.findOneAndUpdate({ _id: students[i] }, { $set: { 'group': group._id } }, { new: true }).exec()
-      for (let m = 0, mlen = mentors.length; i < mlen; i++)
-        db.mentors.findOneAndUpdate({ _id: mentors[m] }, { $set: { 'group': group._id } }, { new: true }).exec()
-    }
-  })
-  .then(()=>{
-    res.send({state:1})
-  })
-  .catch(err=>{
-    res.sendStatus(404).end()
-  })
+      for (let j = 0, jlen = groups.length; j < jlen; j++) {
+        let group = groups[j]
+        db.groups.findOneAndUpdate({ _id: group._id }, { $set: { 'mentors': group.mentors, 'students': group.students } }, { new: true }).exec()
+        let students = group.students
+        let mentors = group.mentors
+        for (let i = 0, ilen = students.length; i < ilen; i++)
+          db.students.findOneAndUpdate({ _id: students[i] }, { $set: { 'group': group._id } }, { new: true }).exec()
+        for (let m = 0, mlen = mentors.length; i < mlen; i++)
+          db.mentors.findOneAndUpdate({ _id: mentors[m] }, { $set: { 'group': group._id } }, { new: true }).exec()
+      }
+    })
+    .then(() => {
+      res.send({ state: 1 })
+    })
+    .catch(err => {
+      res.sendStatus(404).end()
+    })
 })
 router.get('/download', (req, res) => {
   let q = req.query
@@ -269,54 +274,47 @@ router.get('/download', (req, res) => {
         .populate('students', '_id name final')
         .then(groups => {
           Promise.all(groups.map(group => {
-              return new Promise((resolve1, reject) => {
-                let sheet = {}
-                sheet.name = group._id + '组'
-                sheet.data = [
-                  ['学号', '姓名', '毕设题目', '论文类型', '题目研究方向', '导师']
-                ]
-                let students = group.students
-                Promise.all(students.map(student => {
-                  return new Promise((resolve2, reject) => {
-                    db.topics.findOne({ _id: student.final }, ['title', 'mentor', 'fields', 'category'])
-                      .populate('mentor', 'name')
-                      .exec((err, topic) => {
-                        let row = []
-                        row.push(
-                          student._id,
-                          student.name,
-                          topic.title,
-                          topic.category == 0 ? '论文' : '设计', [topic.fields],
-                          topic.mentor.name
-                        )
-                        sheet.data.push(row)
-                        resolve2()
-                      })
+            return new Promise((resolve1, reject) => {
+              let sheet = {}
+              sheet.name = group._id + '组'
+              sheet.data = [
+                ['学号', '姓名', '毕设题目', '论文类型', '题目研究方向', '导师']
+              ]
+              let students = group.students
+              Promise.all(students.map(student => {
+                return new Promise((resolve2, reject) => {
+                  db.topics.findOne({ _id: student.final }, ['title', 'mentor', 'fields', 'category'])
+                    .populate('mentor', 'name')
+                    .exec((err, topic) => {
+                      let row = []
+                      row.push(
+                        student._id,
+                        student.name,
+                        topic.title,
+                        topic.category == 0 ? '论文' : '设计', [topic.fields],
+                        topic.mentor.name
+                      )
+                      sheet.data.push(row)
+                      resolve2()
+                    })
+                })
+              })).then(() => {
+                sheet.data.push(['本组导师:'])
+                sheet.data.push(['姓名', '研究方向'])
+                  //  delete group.mentors._id
+                let mentors = group.mentors
+                Promise.all(mentors.map(mentor => {
+                  return new Promise((resolve3, reject) => {
+                    sheet.data.push([mentor.name, [mentor.fields]])
+                    resolve3()
                   })
                 })).then(() => {
-                  sheet.data.push(['本组导师:'])
-                  sheet.data.push(['姓名', '研究方向'])
-                    //  delete group.mentors._id
-                  let mentors = group.mentors
-                  Promise.all(mentors.map(mentor => {
-                    return new Promise((resolve3, reject) => {
-                      sheet.data.push([mentor.name, [mentor.fields]])
-                      resolve3()
-                    })
-                  })).then(() => {
-                    excelData.push(sheet)
-                    resolve1()
-                  })
-
-
-                  //   console.log(sheet)
+                  excelData.push(sheet)
+                  resolve1()
                 })
               })
-            }
-
-
-
-          )).then(() => {
+            })
+          })).then(() => {
             //console.log(excelData)
             let buffer = xlsx.build(excelData)
             fs.writeFileSync('./server/files/download/FinalResult.xlsx', buffer, { 'flag': 'w' });
@@ -333,8 +331,6 @@ router.get('/download', (req, res) => {
             } catch (err) {
               console.log('最终答辨分组结果文件不存在')
             }
-
-
             // res.send(cardData)
           })
         })

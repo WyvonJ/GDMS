@@ -33,6 +33,7 @@ let studentsSchema = new Schema({
   teachergrade: { type: Number }, //老师评分
   isselected: { type: Boolean, default: false }, //这个学生是不是已经选择了题目
   notification: { type: String }, //这个学生是不是已经选择了题目
+  finalreplied: { type: Boolean, default: false }, //是否完成了最后答辩
   isfirstlogin: { type: Boolean, default: true }
 }, { colletion: 'students' })
 
