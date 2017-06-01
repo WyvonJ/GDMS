@@ -137,7 +137,7 @@ router.post('/stuContacInfo', (req, res) => {
   let email = req.body.email
   let wechat = req.body.wechat
   db.students.findOneAndUpdate({ _id: account }, { $set: { 'tel': tel, 'email': email, 'qq': qq, 'wechat': wechat } }, { new: true }).exec()
-    .then(res.send(1))
+    .then(res.send({state:1}))
 })
 router.post('/stuAccountInfo', (req, res) => {
   let account = req.body.studentId

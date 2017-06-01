@@ -22,8 +22,11 @@
           <mu-list-item title="学生帐号" value="stuaccount">
             <img src="../../assets/icon/student.svg" slot="left" alt="student" />
           </mu-list-item>
-          <mu-list-item value="groupmanage" title="分组管理">
+          <mu-list-item value="middle" title="中期分组">
             <img src="../../assets/icon/dashboard.svg" slot="left" alt="middle" />
+          </mu-list-item>
+          <mu-list-item value="final" title="最终分组">
+            <img src="../../assets/icon/group.svg" slot="left" alt="final" />
           </mu-list-item>
           <mu-list-item value="groups" title="分组结果">
             <img src="../../assets/icon/assignment.svg" slot="left" alt="final" />

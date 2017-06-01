@@ -11,6 +11,7 @@ let groups = require('./groups').groups
 let mentorsSchema = new Schema({
   _id: { type: String, index: 1, required: true, unique: true }, //工号
   name: { type: String, required: true }, //姓名
+  gender: { type: String },
   password: { type: String, required: true }, //密码 required表示一开始存数据的时候就要有
   tel: { type: String }, //电话
   email: { type: String }, //邮箱
@@ -21,7 +22,7 @@ let mentorsSchema = new Schema({
   fields: { type: [String] }, //研究方向
   office: { type: String }, //办公室地址
   notification: { type: String },
-  protitle: { type: String }, //导师职称
+  protitle: { type: Number }, //导师职称 0助教 1讲师 2副教授 3教授
   qq: { type: String },
   wechat: { type: String },
   salt: { type: String },

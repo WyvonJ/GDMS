@@ -9,28 +9,13 @@
         </p>
       </div>
       <div class="group-settings">
-        <mu-raised-button slot="actions" v-if="groupProc==1" primary @click="dialog=true;manual=1" label="选择中心点"/>
-
-        <span class="group-length">{{groupCount}}组</span>
-        <button @click="groupCount++" class="add-button">
-          <span>+</span>
-        </button>
-        <button @click="groupCount--" class="minus-button">
-          <span>-</span>
-        </button>
-        <span>技艺比</span>
-        <mu-switch label="KMeans" v-model="groupMethod" class="group-switch" />
-        <div class="group-radio-wrapper">
-          <mu-radio label="中期答辩" name="group" nativeValue="0" v-model="groupProc" class="group-radio"/> 
-          <mu-radio label="最终答辩" name="group" nativeValue="1" v-model="groupProc"  class="group-radio"/>
-        </div>
-        <mu-raised-button @click="beginGroup" secondary icon="group" class="upload-group-count" label="开始分组"/>
+        <mu-raised-button @click="dialog=true" secondary icon="group" class="upload-group-count" label="开始分组"/>
         <mu-raised-button @click="uploadGroups" :disabled="!groups.length" primary icon="update" label="更新分组"/>
         <br>
       </div>
       <div class="deleted-students">
         <h3>
-        <mu-icon value="delete_forever" :size="24"/>
+        <mu-icon value="delete_forever" :size="32"/>
         无答辩资格学生</h3>
         <div ref="deleted"></div>
       </div>
@@ -39,7 +24,7 @@
           <div class="teachers-grouped" :id="'tg'+group._id">
             <span class="teacher-to chip no-selection" v-for="teacher of group.mentors" draggable="true" @dragstart="drag($event)" :id="'t'+teacher._id">
                   {{teacher.name}}
-                </span>
+            </span>
           </div>
           <div class="students-grouped" :id="'sg'+group._id">
             <span class="student-to chip no-selection" v-for="student of group.students" draggable="true" @dragstart="drag($event)" :id="'s'+student._id">
@@ -59,18 +44,12 @@
           <mu-circular-progress :size="120" color="red"/>
         </div>
       </div>
-       <mu-dialog :open="dialog" title="注意" @close="dialog=false">
-       <div v-if="manual===0">
-         <p>
-         请选择是中期答辩还是最终答辩！
-       </p>
-        <mu-flat-button slot="actions" primary @click="dialog=false" label="好"/>
-       </div>
-        <div v-if="manual===1">
+       <mu-dialog :open="dialog" title="请选择作为组长（中心点）的导师" @close="dialog=false">
+        <div>
         <div class="centroids-checkbox-wrapper">
           <mu-checkbox v-for="teacher of teachers" name="group"  :nativeValue="teacher._id" v-model="centroids" :label="teacher.name" class="centroids-checkbox"/> <br/>
         </div>
-        <mu-raised-button slot="actions" primary @click="dialog=false" label="好"/>
+        <mu-raised-button slot="actions" backgroundColor="lightBlue" @click="beginGroup" label="确认"/>
        </div>
       </mu-dialog>
     </div>
@@ -177,40 +156,11 @@ export default {
       deleteItem(id) {
         this.$refs.deleted.append(document.getElementById('s' + id))
       },
-      beginGroup() {
-        if (this.groupProc === '') {
-          this.manual=0
-          this.dialog = true
-        } else {
-          if (this.groupProc == 0) {
-            new Promise((resolve, reject) => {
-              this.isOverlap = true
-              this.POST('/admin/admMidGroup', { 
-                count: this.groupCount,
-                method:this.groupMethod,
-                proc:this.groupProc 
-              }).then(res => {
-                  this.groups = res.data
-                  resolve()
-                })
-                .catch(err=>{
-              this.warningMsg = '无法连接到服务器，请重试'
-              window.setTimeout(()=>{
-                this.isOverlap = false
-              },1000)
-            })
-            })
-            .then(() => {
-              this.warningMsg = '请稍等，正在后台处理中...'
-              this.isOverlap = false
-            })
-          }else{
+      beginGroup() { 
             new Promise((resolve, reject) => {
               this.isOverlap = true
               this.POST('/admin/admFnlGroup', { 
-                count: this.groupCount,
-                method:this.groupMethod,
-                proc:this.groupProc 
+                centroids: this.centroids
               }).then(res => {
                   this.groups = res.data
                   resolve()
@@ -226,8 +176,6 @@ export default {
               this.warningMsg = '请稍等，正在后台处理中...'
               this.isOverlap = false
             })
-          }
-        }
       },
       uploadGroups() {
         new Promise((resolve, reject) => {
@@ -274,13 +222,18 @@ export default {
           .then((g) => {
             this.isOverlap = false
           })
-      },
-      overflow() {
-        this.groupCount < 1 ? this.groupCount = 1 : null
       }
     },
-    watch: {
-      groupCount: 'overflow'
+    mounted(){
+      this.GET('/admin/getTchGroupList')
+        .then(res=>{
+          if (res.data.state===1) {
+            this.teachers=res.data.teachers
+          }else{
+           alert('获取导师列表失败') 
+          }
+
+        })
     }
 }
 
@@ -322,9 +275,6 @@ export default {
   }
 
 }
-.group-radio-wrapper{
-  margin: 0 24px;
-}
 .final-group-teacher
 {
     width: 100%;
@@ -333,8 +283,9 @@ export default {
     {
         padding-left: 16px;
         display: flex;
-    justify-content: center;
-    align-items: center;
+        justify-content: flex-end;
+        align-items: center;
+
         .add-button,.minus-button
         {
             color: #333;

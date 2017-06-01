@@ -113,14 +113,18 @@ export default {
     position: relative;
 
     display: block;
-    box-shadow: 0px 0px 20px 0px #cacaca;
     min-width: 320px;
     min-height: 64px;
     margin: 16px;
-
+    border: 1px solid rgba(0,0,0,.1);
     flex-wrap: wrap;
     align-items: flex-start;
     border-radius: 3px;
+    transition: $material-enter;
+    &:hover{
+    box-shadow: 0px 0px 20px 0px #cacaca;
+
+    }
     span.group-id
     {
         font-size: 18px;

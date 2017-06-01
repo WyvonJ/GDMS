@@ -8,7 +8,7 @@
       <div class="grade-content">
         <mu-slider v-model="grade" :step="1" class="grade-slider" />
         <mu-text-field hintText="评语" v-model="evaMsg" multiLine type="text" icon="thumb_up"/><br/>
-         <mu-raised-button @click="commitGrade" :disabled="isOpenForEva" secondary label="评分">
+         <mu-raised-button @click="commitGrade" :disabled="isOpenForEva" secondary label="提交评价">
            <wyvonj-tooltip>{{msg}}</wyvonj-tooltip>
          </mu-raised-button>
       </div>
@@ -39,7 +39,8 @@ export default {
           } 
         this.stuEvaluationToTch({
           studentId: id,
-          grade: this.grade
+          grade: this.grade,
+          content:this.evaMsg
         })
       },
       ...mapActions(['stuEvaluationToTch'])
@@ -102,6 +103,8 @@ export default {
         }
     }
 }
-
+.mu-text-field{
+  width: 420px;
+}
 	
 </style>

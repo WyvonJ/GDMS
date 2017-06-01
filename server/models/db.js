@@ -4,7 +4,7 @@ const fs = require('fs') //读取文件内容
 const sha1 = require('sha1')
 const rand = require('csprng')
 
-let topics = require('./topics').topics;
+let topics = require('./topics').topics
 let students = require('./students').students
 let mentors = require('./mentors').mentors
 let groups = require('./groups').groups

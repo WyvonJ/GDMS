@@ -275,6 +275,10 @@ export default {
     table
     {
         width: 100%;
+        th{
+          padding-top: 8px;
+          padding-bottom: 8px;
+        }
         td
         {
             white-space: pre-line;

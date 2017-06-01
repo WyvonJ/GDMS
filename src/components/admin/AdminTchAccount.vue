@@ -1,10 +1,10 @@
 <template>
   <div class="teacher-account-container">
     <div class="paper">
-    <div class="table-admin">
-      <mu-raised-button class="upload" secondary icon="file_upload" label="帐号上传" @click="dialog=true;manual=0"/>
-        <mu-raised-button label="创建新帐号" primary icon="add" @click="createAccount()"/>
-    </div>
+      <div class="table-admin">
+        <mu-raised-button class="upload" secondary icon="file_upload" label="帐号上传" @click="dialog=true;manual=0;dialogTitle=''" />
+        <mu-raised-button label="创建新帐号" primary icon="add" @click="createAccount();dialogTitle='创建新帐号'" />
+      </div>
       <table>
         <caption>导师信息表</caption>
         <thead>
@@ -27,80 +27,99 @@
           <tr class="table-row-border" v-for="(teacher,index) in teacherAccounts">
             <td>{{teacher._id}}</td>
             <td>{{teacher.name}}</td>
-            <td><mu-icon :value="teacher.gender==='男'?'mood':'face'" :color="teacher.gender==='男'?'blue':'red'"/></td>
+            <td>
+              <svg width="24" height="24" viewBox="0 0 24 24">
+                <path v-if="teacher.gender==='男'" d="M9,9C10.29,9 11.5,9.41 12.47,10.11L17.58,5H13V3H21V11H19V6.41L13.89,11.5C14.59,12.5 15,13.7 15,15A6,6 0 0,1 9,21A6,6 0 0,1 3,15A6,6 0 0,1 9,9M9,11A4,4 0 0,0 5,15A4,4 0 0,0 9,19A4,4 0 0,0 13,15A4,4 0 0,0 9,11Z" fill="#00bcd4" />
+                <path v-else d="M12,4A6,6 0 0,1 18,10C18,12.97 15.84,15.44 13,15.92V18H15V20H13V22H11V20H9V18H11V15.92C8.16,15.44 6,12.97 6,10A6,6 0 0,1 12,4M12,6A4,4 0 0,0 8,10A4,4 0 0,0 12,14A4,4 0 0,0 16,10A4,4 0 0,0 12,6Z" fill="#f44336" />
+              </svg>
+            </td>
             <td>{{teacher.tel||'无'}}</td>
             <td>{{teacher.email||'无'}}</td>
             <td>{{teacher.office||'无'}}</td>
             <td>{{proTitle(teacher.protitle)||'无'}}</td>
             <td>{{teacher.wechat||'无'}}</td>
             <td>{{teacher.qq||'无'}}</td>
-            <td><mu-icon-button icon="edit" style="color: #009688;" @click="openDialog(1,teacher)"/></td>
-            <td><mu-icon-button icon="lock" style="color: #00bcd4;" @click="openDialog(2,teacher)"/></td>
-            <td><mu-icon-button icon="delete_forever" style="color: #f44336;" @click="openDialog(3,teacher)"/></td>
+            <td>
+              <mu-icon-button icon="edit" style="color: #009688;" @click="openDialog(1,teacher)" />
+            </td>
+            <td>
+              <mu-icon-button icon="lock" style="color: #00bcd4;" @click="openDialog(2,teacher)" />
+            </td>
+            <td>
+              <mu-icon-button icon="delete_forever" style="color: #f44336;" @click="openDialog(3,teacher)" />
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
-     <mu-dialog  :style="dialogClass" :open="dialog" title="帐号管理" @close="dialog=false" titleClass="title-class">
-     <div v-if="manual===0">
+    <mu-dialog :style="dialogClass" :open="dialog" :title="dialogTitle" @close="dialog=false" titleClass="title-class">
+      <div v-if="manual===0">
         <form enctype="multipart/form-data" role="form" class="form" onsubmit="return false">
           <div class="form-group">
-            <label for="file">{{chosenFile}}</label>
-            <input id="file" @change="fileInput" type="file" class="form-control" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+            <div class="upload-icons">
+              <mu-icon value="cloud_upload" :size="48" color="green" />
+              <p>{{chosenFile}}</p>
+            </div>
+            <input id="file" @change="fileInput" type="file" class="form-control" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
           </div>
         </form>
         <progress :value="progressBar" max="100"></progress>
         <div id="output">
         </div>
-      <mu-flat-button slot="actions" label="取消" @click="dialog=false"/>
-     </div>
-       <div v-if="manual===1">
-         <mu-text-field hintText="帐号" v-model="teacher._id" type="number" icon="account_circle"/>
-         <mu-text-field hintText="姓名" v-model="teacher.name" type="text" icon="person"/><br/>
-         <mu-text-field v-if="!addoredit" hintText="密码" v-model="teacher.password" type="text" icon="lock"/><br/>
-         <div class="gender-radio">
-           <mu-radio label="男" name="group" uncheckIcon="mood" checkedIcon="mood" nativeValue="男" v-model="teacher.gender" class="demo-radio"/>
-          <mu-radio label="女" name="group" uncheckIcon="face" checkedIcon="face" nativeValue="女" v-model="teacher.gender"  class="demo-radio"/> 
-         </div>
-         <mu-text-field hintText="手机号" v-model="teacher.tel" type="number" icon="phone"/>
-         <mu-text-field hintText="邮箱" v-model="teacher.email" type="text" icon="mail"/>
-         <div class="pro-title">
-           <mu-radio label="助教" name="proTitle" nativeValue="0" v-model="teacher.protitle" class="pro-title-radio"/> 
-          <mu-radio label="讲师" name="proTitle" nativeValue="1" v-model="teacher.protitle"  class="pro-title-radio"/>
-          <br>
-          <mu-radio label="副教授" name="proTitle" nativeValue="2" v-model="teacher.protitle"  class="pro-title-radio"/>
-          <mu-radio label="教授" name="proTitle" nativeValue="3" v-model="teacher.protitle"  class="pro-title-radio"/>
-         </div>
-         
-         <mu-text-field hintText="办公室" v-model="teacher.office" type="text" icon="desktop_mac"/>
-         <div class="addtional-contact">
-           <img src="../../assets/icon/qq.svg" />
+        <mu-flat-button slot="actions" label="取消" primary @click="dialog=false" />
+      </div>
+      <div v-if="manual===1">
+        <mu-text-field hintText="帐号" :errorText="idError" :maxLength="10" v-model="teacher._id" type="number" icon="account_circle" />
+        <mu-text-field hintText="姓名" :errorText="nameError" v-model="teacher.name" type="text" icon="person" />
+        <br/>
+        <mu-text-field v-if="!addoredit" hintText="密码" :errorText="passwordError" v-model="teacher.password" type="text" icon="lock" />
+        <br/>
+        <div class="gender-radio">
+            <mu-radio label="男" name="group" uncheckIcon="mood" checkedIcon="mood" nativeValue="男" v-model="teacher.gender" class="demo-radio" />
+            <mu-radio label="女" name="group" uncheckIcon="face" checkedIcon="face" nativeValue="女" v-model="teacher.gender" class="demo-radio" />
+          </div>
+        <div v-if="addoredit">
+          
+          <mu-text-field hintText="手机号" v-model="teacher.tel" type="number" icon="phone" />
+          <mu-text-field hintText="邮箱" v-model="teacher.email" type="text" icon="mail" />
+          <div class="pro-title">
+            <mu-radio label="助教" name="proTitle" nativeValue="0" v-model="teacher.protitle" class="pro-title-radio" />
+            <mu-radio label="讲师" name="proTitle" nativeValue="1" v-model="teacher.protitle" class="pro-title-radio" />
+            <br>
+            <mu-radio label="副教授" name="proTitle" nativeValue="2" v-model="teacher.protitle" class="pro-title-radio" />
+            <mu-radio label="教授" name="proTitle" nativeValue="3" v-model="teacher.protitle" class="pro-title-radio" />
+          </div>
+          <mu-text-field hintText="办公室" v-model="teacher.office" type="text" icon="desktop_mac" />
+          <div class="addtional-contact">
+            <img src="../../assets/icon/qq.svg" />
             <mu-text-field hintText="QQ" v-model="teacher.qq" />
             <br/>
-           <img src="../../assets/icon/wechat.svg" />
+            <img src="../../assets/icon/wechat.svg" />
             <mu-text-field hintText="Wechat" v-model="teacher.wechat" />
           </div>
-         <div class="actions">
-           <mu-raised-button slot="actions" color="white" backgroundColor="blue" :label="addoredit?'更新账户信息':'确认创建'" @click="updateProfile"/>
-           <mu-flat-button slot="actions" secondary label="取消" @click="dialog=false"/>
-         </div>
-       </div>
-       <div v-if="manual===2">
-          <mu-text-field hintText="新密码" v-model="password" type="text" icon="lock"/>
-          <div class="actions">
-           <mu-raised-button slot="actions" color="white" backgroundColor="blue" label="确认修改密码" @click="updatePassword"/>
-           <mu-flat-button slot="actions" secondary label="取消" @click="dialog=false"/>
-         </div>
-       </div>
-       <div v-if="manual===3">
-          <div class="actions">
-           <mu-raised-button slot="actions" color="white" backgroundColor="blue" label="确认删除该帐号？" @click="updatePassword"/>
-           <mu-flat-button slot="actions" secondary label="取消" @click="dialog=false"/>
-         </div>
-       </div>
-      </mu-dialog>
+        </div>
+        <div class="actions">
+          <mu-raised-button slot="actions" color="white" backgroundColor="blue" :label="addoredit?'更新账户信息':'确认创建'" @click="confAccount" />
+          <mu-flat-button slot="actions" secondary label="取消" @click="dialog=false" />
+        </div>
+      </div>
+      <div v-if="manual===2">
+        <mu-text-field hintText="新密码" v-model="password" type="text" icon="lock" />
+        <div class="actions">
+          <mu-raised-button slot="actions" color="white" backgroundColor="blue" label="确认修改密码" @click="updatePassword" />
+          <mu-flat-button slot="actions" secondary label="取消" @click="dialog=false" />
+        </div>
+      </div>
+      <div v-if="manual===3">
+        <div class="actions">
+          <mu-raised-button slot="actions" color="white" backgroundColor="blue" label="确认删除该帐号？" @click="deleteAccount" />
+          <mu-flat-button slot="actions" secondary label="取消" @click="dialog=false" />
+        </div>
+      </div>
+    </mu-dialog>
   </div>
 </template>
+
 
 <script type="text/javascript">
 export default {
@@ -108,14 +127,19 @@ export default {
       return {
         dialog: false,
         chosenFile: '选择文件',
+        dialogTitle:'帐号管理',
         progressBar: 0,
         manual: 0,
         addoredit: 0,
         teacherId: '',
+        idError:'',
+        nameError:'',
+        passwordError:'',
         dialogClass:{
           width: '640px!important'
         },
         teacher: {
+          _id:'',
           tel: '',
           name: '',
           gender: '',
@@ -175,10 +199,10 @@ export default {
       },
       openDialog(manual, teacher) {
         this.manual = manual
-        lg(manual)
         switch (manual) {
           case 1:
             {
+              this.dialogTitle='帐号编辑'
               this.addoredit = 1
               Object.keys(teacher).map((key) => {
                 this.teacher[key] = teacher[key]
@@ -187,57 +211,84 @@ export default {
             }
           case 2:
             {
-              this._id = teacher._id
+              this.dialogTitle='密码修改'
+              this.teacher._id = teacher._id
               break
             }
           case 3:
             {
-              if (this.addoredit) {
-                //更新账户信息
-                lg('adfas')
-              } else {
-                //创建新账户
-
-                lg(this.teacher)
-              }
+              this.dialogTitle='帐号删除'
               break
             }
 
         }
         this.dialog = true
+      },
+      confAccount() {
+        let {account,password,name,gender,}
+        let tchAccount={
+          account:account,
+          password:password,
+          name:name,
+          gender:gender
+        }
+        if (account.length==0) 
+          return this.idError='请填写用户账户！'
+        if (password.length==0) 
+          return this.passwordError='请填写用户密码！'
+        if (name.length==0) 
+          return this.nameError='请填写用户姓名！'
 
-      },
-      confProfileEdit(teacher) {//确认账户信息更新
-      },
-      confPassEdit(teacher) {//确认密码修改
-        this.manual = 2
-        this.dialog = true
-        this._id = teacher._id
-      },
-      updateProfile(teacher) {
         if (this.addoredit) {
           //更新账户信息
-          lg('adfas')
+          this.POST('/admin/updateTchAccount',tchAccount)
+            .then(res=>{
+              if (res.data.state===1) {
+
+              }
+            })
         } else {
           //创建新账户
-          if (this.teacher) {}
-          lg(this.teacher)
+          
+          this.POST('/admin/createTchAccount',{
+          account:account,
+          password:password,
+          name:name,
+          gender:gender
+        })
+            .then(res=>{
+              lg(res)
+            })
         }
       },
-      confCreate(){
-        lg(0)
+      updatePassword() {
+        this.POST('/admin/updateTchPassword',{
+          account:this.teacher._id,
+          password:this.password
+        })
+        .then(res=>{
+          if (res.data.state===1) {
+            alert('修改密码成功')
+          }else{
+            alert('暂时无法修改该用户')
+          }
+        })
       },
-      updatePassword(teacher) {
-
-      },
-      deleteTeacher(teacher) {
-        this.manual = 3
-        this.dialog = true
+      deleteAccount(teacher) {
+        this.POST('/admin/deleteTchAccount',{account:teacher._id})
+          .then(res=>{
+            if (res.data.state===1) {
+              alert('帐号已删除')
+            }else{
+              alert('删除出错，请重试')
+            }
+          })
       },
       createAccount() {
         Object.keys(this.teacher).map((key) => {
           this.teacher[key] = ''
         })
+        this.teacher.gender='男'
         this.addoredit = 0
         this.manual = 1
         this.dialog = true
@@ -287,10 +338,24 @@ export default {
       }
     },
     mounted() {
-      this.GET('/admin/getTchAccount')
+      this.GET('/admin/admGetTchAccount')
         .then(res => {
-          this.teacherAccounts = res.data
+          if (res.data.state===1) {
+            this.teacherAccounts=res.data.teachers
+          }else{
+            alert('获取导师帐号失败')
+          }
         })
+    },
+    watch:{
+      teacher:{
+        handler:function(oldVal,newVal){
+          this.idError=''
+          this.passwordError='',
+          this.nameError=''
+        },
+        deep:true
+      }
     }
 }
 

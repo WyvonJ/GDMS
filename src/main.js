@@ -36,6 +36,8 @@ const vm = new Vue({
 }).$mount('#GDMS')
 
 axios.interceptors.request.use((config) => {
+  let origin = window.location.origin.split(':')[2]==='8080'
+  if (origin) return lg('现在是静态服务器')
   let token = window.localStorage.getItem('token')
   if (token) {
     config.headers.common['Authorization'] = 'Bearer ' + token

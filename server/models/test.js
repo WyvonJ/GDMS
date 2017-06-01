@@ -2,29 +2,22 @@ const kMeans = require('kmeans-js')
 const _ = require('lodash')
 let lg = console.log
 let data = []
-  //const db = require('./db')
-  /*for (let i = 0; i < 10; i++) {
-    let n1 = parseInt(Math.random() * 10)
-    let n2 = parseInt(Math.random() * 10)
-    let n3 = parseInt(Math.random() * 10)
-    data.push([n1, n2, n3])
-  }
-  */
+const db = require('./db')
 
-let multiply = function(arr1, arr2) {
-  let abs = 0
-  for (var i = 0; i < arr1.length; i++) {
-    for (var j = 0; j < arr2.length; j++) {
-      //abs += (arr1[i] - arr2[j]) * (arr1[i] - arr2[j])
-      if ((arr1[i] - arr2[j]) === 0) {
-        abs++
-      }
+
+db.students.find({}, (err, students) => {
+    for (let i = 0, ilen = students.length; i < ilen; i++) {
+      let fina = []
+      students[i].finalreplied=false
+      students[i].save()
     }
-  }
-  return abs
-}
+  })
+  .then(() => {
+    //console.log(tch)
+  })
 
-let tch = [
+
+/*let tch = [
   '张得天',
   '赵燕',
   '晏涛',
@@ -74,14 +67,14 @@ data = [
     [12, 1, 10, 16]
   ]
   /**/
-  /*
-  [4, 7, 8, 9],
-  [1, 16],
-  [ 13, 7, 11, 4 ],
-  [ 4, 1, 9, 8, 10 ],
-  [ 5, 9, 2, 14, 12 ],
-  [ 6, 1, 7, 15 ]*/
-let ref = [
+/*
+[4, 7, 8, 9],
+[1, 16],
+[ 13, 7, 11, 4 ],
+[ 4, 1, 9, 8, 10 ],
+[ 5, 9, 2, 14, 12 ],
+[ 6, 1, 7, 15 ]*/
+/*let ref = [
   [4, 7, 8, 9],
   [1, 16],
   [13, 7, 11, 4],
@@ -134,53 +127,11 @@ rank.sort((a, b) => {
 let capacity = Math.floor(data.length / ref.length) //每组的基本容量
 let mod = data.length % ref.length //基本容量多出来的人
 
-lg(rank)
-  //以第一个为标准
+lg(rank)*/
+//以第一个为标准
 
-/*db.topics.find({}, (err, topics) => {
-    for (let i = 0, ilen = topics.length; i < ilen; i++) {
-      let fina = []
-      console.log(topics[i]._id)
-      _.forEach(topics[i].fields,(f,i)=>{
-        console.log(f)
-      })
-      
-    }
-  })
-  .then(()=>{
-    //console.log(tch)
-  })*/
 
-/*let newdata = []
-_.forEach(data, (row) => {
-  if (row.length < 8) {
-    let numof0 = 7 - row.length
-    let arr = _.fill(Array(numof0), 0)
-    newdata.push(_.concat(row, arr))
-  }
-})*/
-
-/*let km = new kMeans({
-  K: 6,
-  enableConvergenceTest: true
-})
-km.cluster(data)
-while (km.step()) {
-  km.findClosestCentroids()
-  km.moveCentroids()
-    // console.log(km.centroids);
-  if (km.hasConverged()) break
-}
-//console.log(km.clusters)
 /*
-_.forEach(km.clusters, (cluster) => {
-  _.forEach(cluster,(clt,i)=>{
-    cluster[i]=tch[clt]
-  })
-})*/
-//console.log(km.clusters)
-//console.log('Finished in:', km.currentIteration, ' iterations')
-//})
 var sort = function(data, n) {
   let mentors = []
   let groups = []
@@ -194,7 +145,7 @@ var sort = function(data, n) {
     mentor.name = data[i][1]
     mentor.iscenter = data[i][2]
     mentor.isgrouped = false
-    mentors.push(mentor)
+    mentors.push(mentor) 
   }
   for (var i = 0; i < n; i++) {
     var group = {}
@@ -227,4 +178,4 @@ var sort = function(data, n) {
   return groups
 }
 
-sort(rank, 6)
+sort(rank, 6)*/

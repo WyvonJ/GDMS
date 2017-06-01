@@ -8,23 +8,184 @@ const multiparty = require('multiparty')
 const grouping = require('../grouping')
 const processapplication = require('../processapplication')
 const path = require('path')
-  /*管理员获得教师账号*/
+const sha1 = require('sha1')
+const rand = require('csprng')
+const students = require('../models/students').students
+const mentors = require('../models/mentors').mentors
+
+/*管理员获得教师账号*/
 router.get('/admGetTchAccount', (req, res) => {
-    db.mentors.find({}, ['_id', 'name', 'password', 'tel', 'email', 'office', 'qq', 'wechat'], (err, mentors) => {
-      if (err) res.sendStatus(404)
-      else
-        res.send(mentors)
-    })
+  db.mentors.find({}, ['_id', 'name', 'tel', 'gender', 'email', 'office', 'qq', 'wechat'], (err, mentors) => {
+    if (err) res.sendStatus(404)
+    else
+      res.send({
+        state: 1,
+        teachers: mentors
+      })
   })
-  /*管理员获得学生账号*/
+})
+
+router.get('/getTchGroupList', (req, res) => {//获取用于分组的导师帐号列表
+  db.mentors.find({}, ['_id', 'name'], (err, mentors) => {
+    if (err) res.sendStatus(404)
+    else
+      res.send({
+        state: 1,
+        teachers: mentors
+      })
+  })
+})
+
+router.post('/createTchAccount', (req, res) => { //创建新帐号
+  let { account, password, name, gender } = req.body
+  let salt = rand(160, 36)
+  new mentors({
+      _id: account, //账号
+      name: name, //姓名
+      password: sha1(password + salt), //密码
+      gender: gender, //性别
+      salt: salt
+    })
+    .save()
+    .then(() => {
+      res.send({ state: 1 })
+    })
+    .catch(err => {
+      res.sendStatus(503)
+    })
+})
+
+router.post('/updateTchAccount', (req, res) => { //更新账户信息
+  let { account, tel, name, gender, email, office, protitle, qq, wechat } = req.body
+  db.mentors.findOneAndUpdate({ _id: account }, {
+      $set: {
+        'tel': tel,
+        'email': email,
+        'name': name,
+        'gender': gender,
+        'office': office,
+        'protitle': protitle,
+        'qq': qq,
+        'wechat': wechat
+      }
+    }, { new: true }).exec()
+    .then(res.send({ state: 1 }))
+    .catch(err => {
+      res.sendStatus(503)
+    })
+})
+
+router.post('/updateTchPassword', (req, res) => {
+  let account = req.body.account
+  let password = req.body.password
+  let salt = rand(160, 36)
+  password = sha1(password + salt)
+  db.mentors.findOneAndUpdate({ _id: account }, {
+      $set: {
+        'password': password,
+        'salt': salt
+      }
+    }, { new: true }).exec()
+    .then(res.send({ state: 1 }))
+    .catch(err => {
+      res.sendStatus(503)
+    })
+})
+
+router.post('/deleteTchAccount', (req, res) => { //更新账户信息
+  let account = req.body.account
+  db.mentors.remove({ _id: account }, function(err) {
+      if (err) console.log(err)
+    })
+    .then(res.send({ state: 1 }))
+    .catch(err => console.log(err))
+})
+
+/*管理员获得学生账号*/
 router.get('/admGetStuAccount', (req, res) => {
-    db.students.find({}, ['_id', 'name', 'gender', 'password', 'tel', 'email', 'qq', 'wechat'], (err, students) => {
-      if (err) res.sendStatus(404)
-      else
-        res.send(students)
-    })
+  db.students.find({}, ['_id', 'name', 'gender', 'password', 'tel', 'email', 'qq', 'wechat'], (err, students) => {
+    if (err) res.sendStatus(404)
+    else
+      res.send(students)
   })
-  /*获取题目*/
+})
+
+router.post('/createStuAccount', (req, res) => { //创建新帐号
+  let { account, password, name, gender } = req.body
+  let salt = rand(160, 36)
+  new students({
+      _id: account, //账号
+      name: name, //姓名
+      password: sha1(password + salt), //密码
+      gender: gender, //性别
+      salt: salt
+    })
+    .save()
+    .then(() => {
+      res.send({ state: 1 })
+    })
+    .catch(err => {
+      res.sendStatus(503)
+    })
+})
+
+router.post('/updateStuAccount', (req, res) => { //更新账户信息
+  let { account, tel, name, gender, email, qq, wechat } = req.body
+  db.students.findOneAndUpdate({ _id: account }, {
+      $set: {
+        'tel': tel,
+        'email': email,
+        'name': name,
+        'gender': gender,
+        'qq': qq,
+        'wechat': wechat
+      }
+    }, { new: true }).exec()
+    .then(res.send({ state: 1 }))
+    .catch(err => {
+      res.sendStatus(503)
+    })
+})
+
+router.post('/updateStuPassword', (req, res) => {
+  let account = req.body.account
+  let password = req.body.password
+  let salt = rand(160, 36)
+  password = sha1(password + salt)
+  db.students.findOneAndUpdate({ _id: account }, {
+      $set: {
+        'password': password,
+        'salt': salt
+      }
+    }, { new: true }).exec()
+    .then(res.send({ state: 1 }))
+    .catch(err => {
+      res.sendStatus(503)
+    })
+})
+
+router.post('/deleteStuPassword', (req, res) => {
+  let account = req.body.account
+  db.students.remove({ _id: account }, function(err) {
+      if (err) console.log(err)
+    })
+    .then(res.send({ state: 1 }))
+    .catch(err => console.log(err))
+})
+
+router.post('/updateStuReply', (req, res) => {
+  let studentId = req.body.studentId
+  let finalreplied = !!req.body.finalreplied
+  console.log(finalreplied)
+  db.students.findOneAndUpdate({ _id: studentId }, {
+      $set: {
+        'finalreplied': finalreplied
+      }
+    }, { new: true }.exec())
+    .then(res.send({ state: 1 }))
+})
+
+/*获取题目*/
 router.get('/admGetTchTopics', (req, res) => {
   let excelData = [{
     name: '学生最终选题结果表',
@@ -84,16 +245,6 @@ router.get('/admGetTchTopics', (req, res) => {
       })
     })
   }
-})
-router.get('/admTchMidList', (req, res) => {
-  db.mentors.find({}, ['_id', 'name'], (err, mentors) => {
-    if (err) return
-    else {
-      res.send(mentors)
-        // console.log(mentors)
-    }
-
-  })
 })
 
 router.post('/admUpMTchGroups', (req, res) => {
@@ -193,16 +344,13 @@ router.post('/admGradeUpload', (req, res) => {
 })
 
 router.post('/admStartGrouping', (req, res) => {
-  let groupCount = req.body.count//分组数
-  let groupMethod = req.body.method//分组方式 0 正常 1 Kmeans
-  let groupStatus = req.body.proc//分组类型 0 中期 1 最终
-  res.send({
-    group:groupCount
-  })
+  let groupCount = req.body.count //分组数
+  let groupMethod = req.body.method //分组方式 0 正常 1 Kmeans
+  let groupStatus = req.body.proc //分组类型 0 中期 1 最终
   db.groups.remove({}, function(err) {
     if (err) return
-    console.log('pre groups dropped')
-    grouping.finalgroup(groupCount)
+    console.log('previous groups dropped')
+    grouping.finalgroup(groupCount, groupMethod)
   })
   setTimeout(() => {
     db.groups.find({}, ['mentors', 'students'])
@@ -214,7 +362,7 @@ router.post('/admStartGrouping', (req, res) => {
         db.step.findOneAndUpdate({ key: 'system' }, { $set: { curstep: 'finalgroup' } }, { new: true }).exec()
         res.send(groups)
       })
-  }, 1000)
+  }, 0)
 })
 router.post('/admUpFTchGroups', (req, res) => {
   let groups = req.body
