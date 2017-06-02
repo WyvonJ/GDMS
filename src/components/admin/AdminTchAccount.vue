@@ -225,7 +225,10 @@ export default {
         this.dialog = true
       },
       confAccount() {
-        let {account,password,name,gender,}
+        let account = this.teacher._id,
+          password = this.teacher.password,
+          name = this.teacher.name,
+          gender = this.teacher.gender
         let tchAccount={
           account:account,
           password:password,
@@ -234,22 +237,26 @@ export default {
         }
         if (account.length==0) 
           return this.idError='请填写用户账户！'
-        if (password.length==0) 
-          return this.passwordError='请填写用户密码！'
+        
         if (name.length==0) 
           return this.nameError='请填写用户姓名！'
 
-        if (this.addoredit) {
+        if (this.addoredit==1) {
+          lg(this.teacher)
           //更新账户信息
-          this.POST('/admin/updateTchAccount',tchAccount)
+          this.POST('/admin/updateTchAccount',{teacher:this.teacher})
             .then(res=>{
               if (res.data.state===1) {
-
+                alert('更新账户信息成功')
+                this.dialog=false
+              }else{
+                alert('更新失败')
               }
             })
         } else {
           //创建新账户
-          
+          if (password.length==0) 
+          return this.passwordError='请填写用户密码！'
           this.POST('/admin/createTchAccount',{
           account:account,
           password:password,

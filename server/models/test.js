@@ -3,86 +3,18 @@ const _ = require('lodash')
 let lg = console.log
 let data = []
 const db = require('./db')
+  //const grouping = require('../grouping')
+db.mentors.find({}, (err, mentors) => {
+    let fina = []
+    for (let i = 0, ilen = mentors.length; i < ilen; i++) {
+      mentors[i].gender='男'
+      mentors[i].save()
 
-
-db.students.find({}, (err, students) => {
-    for (let i = 0, ilen = students.length; i < ilen; i++) {
-      let fina = []
-      students[i].finalreplied=false
-      students[i].save()
     }
+    // lg(fina)
+
   })
-  .then(() => {
-    //console.log(tch)
-  })
-
-
-/*let tch = [
-  '张得天',
-  '赵燕',
-  '晏涛',
-  '夏鸿斌',
-  '王士同',
-  '张军',
-  '陈飞',
-  '刘渊',
-  '狄岚',
-  '陈伟',
-  '邓赵红',
-  '黄秋儒',
-  '律睿敏',
-  '钱鹏江',
-  '林意',
-  '孟磊',
-  '陈丽芳',
-  '陈秀宏',
-  '丁彦蕊',
-  '吴锋',
-  '谢振平',
-  '蒋亦樟'
-]
-
-data = [
-    [7, 14, 13, 16, 17],
-    [8, 10, 9, 17],
-    [1, 4, 6],
-    [4, 7, 8, 9],
-    [1, 16],
-    [1, 3, 6, 16, 17],
-    [2, 7, 6, 5],
-    [13, 7, 11, 4],
-    [1, 9, 5, 2],
-    [12, 8, 1],
-    [5, 14, 1, 6],
-    [3, 8, 9, 10],
-    [1, 2, 3, 5, 8, 9, 10],
-    [6, 1, 7, 15],
-    [1, 4, 8, 9],
-    [3, 8, 9, 10],
-    [1, 4, 8, 10, 17],
-    [4, 1, 9, 8, 10],
-    [5, 9, 2, 14, 12],
-    [10, 8, 17],
-    [2, 3, 10, 9, 6],
-    [12, 1, 10, 16]
-  ]
-  /**/
-/*
-[4, 7, 8, 9],
-[1, 16],
-[ 13, 7, 11, 4 ],
-[ 4, 1, 9, 8, 10 ],
-[ 5, 9, 2, 14, 12 ],
-[ 6, 1, 7, 15 ]*/
-/*let ref = [
-  [4, 7, 8, 9],
-  [1, 16],
-  [13, 7, 11, 4],
-  [4, 1, 9, 8, 10],
-  [5, 9, 2, 14, 12],
-  [6, 1, 7, 15]
-]
-let rank = []
+/*let rank = []
 for (var i = 0; i < data.length; i++) {
   let min = Infinity
   let rec = 0
@@ -127,11 +59,8 @@ rank.sort((a, b) => {
 let capacity = Math.floor(data.length / ref.length) //每组的基本容量
 let mod = data.length % ref.length //基本容量多出来的人
 
-lg(rank)*/
-//以第一个为标准
+//lg(rank)
 
-
-/*
 var sort = function(data, n) {
   let mentors = []
   let groups = []
@@ -145,7 +74,7 @@ var sort = function(data, n) {
     mentor.name = data[i][1]
     mentor.iscenter = data[i][2]
     mentor.isgrouped = false
-    mentors.push(mentor) 
+    mentors.push(mentor)
   }
   for (var i = 0; i < n; i++) {
     var group = {}

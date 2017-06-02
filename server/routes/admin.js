@@ -106,7 +106,10 @@ router.get('/admGetStuAccount', (req, res) => {
   db.students.find({}, ['_id', 'name', 'gender', 'password', 'tel', 'email', 'qq', 'wechat'], (err, students) => {
     if (err) res.sendStatus(404)
     else
-      res.send(students)
+      res.send({
+        state: 1,
+        students: students
+      })
   })
 })
 
@@ -247,7 +250,7 @@ router.get('/admGetTchTopics', (req, res) => {
   }
 })
 
-router.post('/admUpMTchGroups', (req, res) => {
+router.post('/uploadMidGroups', (req, res) => {//进行中期分组
   let i = 1;
   let midMentorGroups = req.body //得到导师分组
   let Groups = []
@@ -267,8 +270,7 @@ router.post('/admUpMTchGroups', (req, res) => {
       midgroup.midgroup(Groups)
       db.step.findOneAndUpdate({ key: 'system' }, { $set: { curstep: 'midgroup' } }, { new: true }).exec()
         //console.log(Groups[0].mentors);
-    })
-    // midgroup.midgroup(midMentorGroups);
+    }).then(res.send({state:1}))
 })
 
 router.post('/admTchAccUpload', (req, res) => {
@@ -343,14 +345,12 @@ router.post('/admGradeUpload', (req, res) => {
   })
 })
 
-router.post('/admStartGrouping', (req, res) => {
-  let groupCount = req.body.count //分组数
-  let groupMethod = req.body.method //分组方式 0 正常 1 Kmeans
-  let groupStatus = req.body.proc //分组类型 0 中期 1 最终
-  db.groups.remove({}, function(err) {
+router.post('/finalGroup', (req, res) => {
+  let centroids = req.body.centroids
+  db.groups.remove({}, function(err) {//把原先存在的组删掉
     if (err) return
-    console.log('previous groups dropped')
-    grouping.finalgroup(groupCount, groupMethod)
+    console.log('Previous groups have been dropped.')
+    grouping.finalgroup(centroids)
   })
   setTimeout(() => {
     db.groups.find({}, ['mentors', 'students'])
@@ -362,7 +362,7 @@ router.post('/admStartGrouping', (req, res) => {
         db.step.findOneAndUpdate({ key: 'system' }, { $set: { curstep: 'finalgroup' } }, { new: true }).exec()
         res.send(groups)
       })
-  }, 0)
+  }, 500)
 })
 router.post('/admUpFTchGroups', (req, res) => {
   let groups = req.body

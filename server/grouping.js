@@ -1,18 +1,17 @@
 /*
  *答辨分组
  */
-var db = require('./models/db')
+const db = require('./models/db')
 
-//var numGroups = 6 //分成6组的话
+var numGroups = 6 //分成6组的话
 var numTopics = 128
 var numStu = 128
 var groupMentors = function(numGroups) { //根据导师的类别比例进行分组
-
   db.mentors.count({}).exec() //numMentors是所有导师的数量
     .then((numMentors) => {
       var numGroupMembers = 20
       numGroupMembers = Math.floor(numMentors / numGroups) //向下取整,每组中有多少人
-      var leftMentors = numMentors - numGroupMembers * numGroups //会剩下这么多人没得分组
+      var surplusMentors = numMentors - numGroupMembers * numGroups //会剩下这么多人没得分组
       var query = db.mentors.find()
       query.select({ name: 1, fields: 1, classrate: 1, group: 1 })
       query.sort({ classrate: -1 })
@@ -26,7 +25,7 @@ var groupMentors = function(numGroups) { //根据导师的类别比例进行分�
               mentors: [],
               fields: []
             }
-            if (numGroups - groupId + 1 == leftMentors) //到了最后面几组，一组给一个分不完的人
+            if (numGroups - groupId + 1 == surplusMentors) //到了最后面几组，一组给一个分不完的人
               newNumGroupMembers++
               for (var j = 0; j < newNumGroupMembers; j++) {
 
@@ -40,9 +39,9 @@ var groupMentors = function(numGroups) { //根据导师的类别比例进行分�
             if (newNumGroupMembers > numGroupMembers) i++
 
               var myGroup = new db.groups(group)
-            myGroup.save()
+              myGroup.save()
           }
-          //console.log(group)
+          console.log(group)
 
         }).then(() => {
           console.log('begin to group Topics')
@@ -51,7 +50,6 @@ var groupMentors = function(numGroups) { //根据导师的类别比例进行分�
     })
 
 }
-
 var groupTopics = function(numGroups) {
   db.topics.find({}, ['_id', 'mentor', 'fields', 'finalstudents']).exec()
     .then((topics) => {
@@ -99,20 +97,19 @@ var groupTopics = function(numGroups) {
               }
               recordTopic[i].isgrouped = true
               recordGroup[Index].numStudents += topics[i].finalstudents.length
-
             }
           }
-
         })
     })
 }
-var finalgroup = function(numGroups) {
-    db.students.count({}).exec().then((count) => numStu = count)
-    db.topics.count({}).exec().then((count) => numTopics = count)
-    groupMentors(numGroups)
+//
+let finalgroup = function(centroids) {
+    db.students.count({}).exec().then((count) => numStu = count)//获取学生数
+    db.topics.count({}).exec().then((count) => numTopics = count)//获取课题数
+    groupMentors(centroids)
 
     setTimeout(() => {
-      groupTopics(numGroups)
+      groupTopics(centroids)
     }, 500)
 
     /* new Promise((resolve,reject)=>{
@@ -126,6 +123,3 @@ var finalgroup = function(numGroups) {
   }
   //finalgroup(6)
 exports.finalgroup = finalgroup
-  //finalgroup()
-  //groupMentors()
-  // groupTopics()

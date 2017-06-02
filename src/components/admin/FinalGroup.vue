@@ -47,7 +47,9 @@
        <mu-dialog :open="dialog" title="请选择作为组长（中心点）的导师" @close="dialog=false">
         <div>
         <div class="centroids-checkbox-wrapper">
-          <mu-checkbox v-for="teacher of teachers" name="group"  :nativeValue="teacher._id" v-model="centroids" :label="teacher.name" class="centroids-checkbox"/> <br/>
+        <span class="chip" v-for="teacher of teachers">
+          <mu-checkbox name="centroids" :nativeValue="teacher._id" v-model="centroids" :label="teacher.name" class="centroids-checkbox"/> 
+        </span>
         </div>
         <mu-raised-button slot="actions" backgroundColor="lightBlue" @click="beginGroup" label="确认"/>
        </div>
@@ -159,7 +161,7 @@ export default {
       beginGroup() { 
             new Promise((resolve, reject) => {
               this.isOverlap = true
-              this.POST('/admin/admFnlGroup', { 
+              this.POST('/admin/finalGroup', { 
                 centroids: this.centroids
               }).then(res => {
                   this.groups = res.data

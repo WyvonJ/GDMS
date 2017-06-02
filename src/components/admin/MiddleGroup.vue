@@ -107,9 +107,11 @@ export default {
             }
           })
         })
-        this.POST('/admin/admUpMTchGroups', groups)
+        this.POST('/admin/uploadMidGroups', groups)
           .then(res => {
-
+            if (res.data.state===1) {
+              this.$router.push('/admin/groups')
+            }
           })
           .catch(err => {
             console.log(err)

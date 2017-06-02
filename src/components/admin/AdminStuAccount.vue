@@ -188,11 +188,11 @@ export default {
         this.dialog = true
       },
       confAccount() {
-        let account = this.teacher._id,
-          password = this.teacher.password,
-          name = this.teacher.name,
-          gender = this.teacher.gender
-        let tchAccount = {
+        let account = this.student._id,
+          password = this.student.password,
+          name = this.student.name,
+          gender = this.student.gender
+        let stuAccount = {
           account: account,
           password: password,
           name: name,
@@ -200,14 +200,12 @@ export default {
         }
         if (account.length == 0)
           return this.idError = '请填写用户账户！'
-        if (password.length == 0)
-          return this.passwordError = '请填写用户密码！'
-        if (name.length == 0)
+        
           return this.nameError = '请填写用户姓名！'
 
-        if (this.addoredit) {
+        if (this.addoredit==1) {
           //更新账户信息
-          this.POST('/admin/updatedStuAccount', tchAccount)
+          this.POST('/admin/updatedStuAccount', stuAccount)
             .then(res => {
               if (res.data.state === 1) {
 
@@ -215,7 +213,9 @@ export default {
             })
         } else {
           //创建新账户
-
+        if (password.length == 0)
+          return this.passwordError = '请填写用户密码！'
+        if (name.length == 0)
           this.POST('/admin/createStuAccount', {
               account: account,
               password: password,
@@ -244,7 +244,7 @@ export default {
         }
       },
       updatePassword() {
-        this.POST('/admin/updateTchPassword', {
+        this.POST('/admin/updateStuPassword', {
             account: this.student._id,
             password: this.password
           })
@@ -308,7 +308,7 @@ export default {
                 this.message = '成功上传文件'
                 this.progressBar = 100
                 this.dialog = false
-                this.GET('/admin/admGetTchAccount')
+                this.GET('/admin/admGetstuAccount')
                   .then(res => {
                     this.studentAccounts = res.data
                   })
@@ -347,7 +347,7 @@ export default {
         handler: function(oldVal, newVal) {
           this.idError = ''
           this.passwordError = '',
-            this.nameError = ''
+          this.nameError = ''
         },
         deep: true
       }
