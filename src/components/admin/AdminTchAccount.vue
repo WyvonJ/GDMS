@@ -218,6 +218,7 @@ export default {
           case 3:
             {
               this.dialogTitle='帐号删除'
+              this.teacherId = teacher._id
               break
             }
 
@@ -242,12 +243,12 @@ export default {
           return this.nameError='请填写用户姓名！'
 
         if (this.addoredit==1) {
-          lg(this.teacher)
           //更新账户信息
           this.POST('/admin/updateTchAccount',{teacher:this.teacher})
             .then(res=>{
               if (res.data.state===1) {
                 alert('更新账户信息成功')
+                this.loadTable()
                 this.dialog=false
               }else{
                 alert('更新失败')
@@ -256,15 +257,20 @@ export default {
         } else {
           //创建新账户
           if (password.length==0) 
-          return this.passwordError='请填写用户密码！'
+            return this.passwordError='请填写用户密码！'
           this.POST('/admin/createTchAccount',{
-          account:account,
-          password:password,
-          name:name,
-          gender:gender
-        })
+              account:account,
+              password:password,
+              name:name,
+              gender:gender
+          })
             .then(res=>{
-              lg(res)
+              if (res.data.state===1) {
+                
+                this.loadTable()
+                this.dialog=false
+                alert('成功创建新用户')
+              }
             })
         }
       },
@@ -275,16 +281,21 @@ export default {
         })
         .then(res=>{
           if (res.data.state===1) {
-            alert('修改密码成功')
+            
+                this.dialog=false
+                this.loadTable()
+                alert('修改密码成功')
           }else{
             alert('暂时无法修改该用户')
           }
         })
       },
       deleteAccount(teacher) {
-        this.POST('/admin/deleteTchAccount',{account:teacher._id})
+        this.POST('/admin/deleteTchAccount',{account:this.teacherId})
           .then(res=>{
             if (res.data.state===1) {
+              this.loadTable()
+              this.dialog=false
               alert('帐号已删除')
             }else{
               alert('删除出错，请重试')
@@ -342,10 +353,9 @@ export default {
           output.className = 'container'
           chosenFile = '选择文件'
         }
-      }
-    },
-    mounted() {
-      this.GET('/admin/admGetTchAccount')
+      },
+      loadTable(){
+        this.GET('/admin/admGetTchAccount')
         .then(res => {
           if (res.data.state===1) {
             this.teacherAccounts=res.data.teachers
@@ -353,6 +363,10 @@ export default {
             alert('获取导师帐号失败')
           }
         })
+      }
+    },
+    mounted() {
+      this.loadTable()
     },
     watch:{
       teacher:{
@@ -379,6 +393,7 @@ export default {
     }
     td{
       text-align: center;
+      padding: 0;
     }
     .file-button
     {

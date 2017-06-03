@@ -46,7 +46,7 @@ autoIncModel.find(null, function(err, doc) {
     } else if (!doc.length) {
       newAutoIncID.save()
     } else {
-      console.log('autoInc has initial topicsSeq')
+      console.log('AutoInc has initial topics sequence')
     }
   })
   //console.log(newAutoIncID._id);

@@ -15,7 +15,9 @@ const mentors = require('../models/mentors').mentors
 
 /*管理员获得教师账号*/
 router.get('/admGetTchAccount', (req, res) => {
-  db.mentors.find({}, ['_id', 'name', 'tel', 'gender', 'email', 'office', 'qq', 'wechat'], (err, mentors) => {
+  let query = db.mentors.find({}, ['_id', 'name', 'tel', 'gender', 'email', 'office', 'qq', 'wechat', 'protitle'])
+  query.sort({ '_id': 1 })
+  query.exec(function(err, mentors) {
     if (err) res.sendStatus(404)
     else
       res.send({
@@ -25,7 +27,7 @@ router.get('/admGetTchAccount', (req, res) => {
   })
 })
 
-router.get('/getTchGroupList', (req, res) => {//获取用于分组的导师帐号列表
+router.get('/getTchGroupList', (req, res) => { //获取用于分组的导师帐号列表
   db.mentors.find({}, ['_id', 'name'], (err, mentors) => {
     if (err) res.sendStatus(404)
     else
@@ -56,8 +58,8 @@ router.post('/createTchAccount', (req, res) => { //创建新帐号
 })
 
 router.post('/updateTchAccount', (req, res) => { //更新账户信息
-  let { account, tel, name, gender, email, office, protitle, qq, wechat } = req.body
-  db.mentors.findOneAndUpdate({ _id: account }, {
+  let { _id, tel, name, gender, email, office, protitle, qq, wechat } = req.body.teacher
+  db.mentors.findOneAndUpdate({ _id: _id }, {
       $set: {
         'tel': tel,
         'email': email,
@@ -94,8 +96,12 @@ router.post('/updateTchPassword', (req, res) => {
 
 router.post('/deleteTchAccount', (req, res) => { //更新账户信息
   let account = req.body.account
+
   db.mentors.remove({ _id: account }, function(err) {
-      if (err) console.log(err)
+      if (err) {
+        console.log(err)
+        res.sendStatus(503)
+      }
     })
     .then(res.send({ state: 1 }))
     .catch(err => console.log(err))
@@ -103,12 +109,15 @@ router.post('/deleteTchAccount', (req, res) => { //更新账户信息
 
 /*管理员获得学生账号*/
 router.get('/admGetStuAccount', (req, res) => {
-  db.students.find({}, ['_id', 'name', 'gender', 'password', 'tel', 'email', 'qq', 'wechat'], (err, students) => {
+
+  let query = db.students.find({}, ['_id', 'name', 'gender', 'gpa', 'tel', 'email', 'qq', 'wechat'])
+  query.sort({ '_id': 1 })
+  query.exec(function(err, students) {
     if (err) res.sendStatus(404)
     else
       res.send({
         state: 1,
-        students: students
+        teachers: students
       })
   })
 })
@@ -179,12 +188,11 @@ router.post('/deleteStuPassword', (req, res) => {
 router.post('/updateStuReply', (req, res) => {
   let studentId = req.body.studentId
   let finalreplied = !!req.body.finalreplied
-  console.log(finalreplied)
   db.students.findOneAndUpdate({ _id: studentId }, {
       $set: {
         'finalreplied': finalreplied
       }
-    }, { new: true }.exec())
+    }, { new: true }).exec()
     .then(res.send({ state: 1 }))
 })
 
@@ -250,27 +258,27 @@ router.get('/admGetTchTopics', (req, res) => {
   }
 })
 
-router.post('/uploadMidGroups', (req, res) => {//进行中期分组
+router.post('/uploadMidGroups', (req, res) => { //进行中期分组
   let i = 1;
   let midMentorGroups = req.body //得到导师分组
   let Groups = []
   Promise.all(midMentorGroups.map(group => {
-      return new Promise((resolve, reject) => {
-        let newGroup = {}
-        newGroup.name = i + '组'
-        newGroup.mentors = group
-        newGroup.data = [
-          ['序号', '学号', '学生姓名', '课题名', '指导教师']
-        ]
-        i++
-        Groups.push(newGroup)
-        resolve()
-      })
-    })).then(() => {
-      midgroup.midgroup(Groups)
-      db.step.findOneAndUpdate({ key: 'system' }, { $set: { curstep: 'midgroup' } }, { new: true }).exec()
-        //console.log(Groups[0].mentors);
-    }).then(res.send({state:1}))
+    return new Promise((resolve, reject) => {
+      let newGroup = {}
+      newGroup.name = i + '组'
+      newGroup.mentors = group
+      newGroup.data = [
+        ['序号', '学号', '学生姓名', '课题名', '指导教师']
+      ]
+      i++
+      Groups.push(newGroup)
+      resolve()
+    })
+  })).then(() => {
+    midgroup.midgroup(Groups)
+    db.step.findOneAndUpdate({ key: 'system' }, { $set: { curstep: 'midgroup' } }, { new: true }).exec()
+      //console.log(Groups[0].mentors);
+  }).then(res.send({ state: 1 }))
 })
 
 router.post('/admTchAccUpload', (req, res) => {
@@ -347,7 +355,7 @@ router.post('/admGradeUpload', (req, res) => {
 
 router.post('/finalGroup', (req, res) => {
   let centroids = req.body.centroids
-  db.groups.remove({}, function(err) {//把原先存在的组删掉
+  db.groups.remove({}, function(err) { //把原先存在的组删掉
     if (err) return
     console.log('Previous groups have been dropped.')
     grouping.finalgroup(centroids)

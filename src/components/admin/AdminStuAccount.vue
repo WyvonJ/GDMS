@@ -181,6 +181,7 @@ export default {
           case 3:
             {
               this.dialogTitle = '帐号删除'
+              this.studentId=student.id
               break
             }
 
@@ -189,9 +190,9 @@ export default {
       },
       confAccount() {
         let account = this.student._id,
-          password = this.student.password,
-          name = this.student.name,
-          gender = this.student.gender
+            password = this.student.password,
+            name = this.student.name,
+            gender = this.student.gender
         let stuAccount = {
           account: account,
           password: password,
@@ -200,15 +201,20 @@ export default {
         }
         if (account.length == 0)
           return this.idError = '请填写用户账户！'
-        
+        if (name.length==0) 
           return this.nameError = '请填写用户姓名！'
 
         if (this.addoredit==1) {
           //更新账户信息
-          this.POST('/admin/updatedStuAccount', stuAccount)
+          this.POST('/admin/updateStuAccount', {student:this.student})
             .then(res => {
-              if (res.data.state === 1) {
-
+                if (res.data.state===1) {
+                
+                this.loadTable()
+                this.dialog=false
+                alert('更新账户信息成功')
+              }else{
+                alert('更新失败')
               }
             })
         } else {
@@ -223,25 +229,15 @@ export default {
               gender: gender
             })
             .then(res => {
-              lg(res)
+              if (res.data.state===1) {
+                
+                this.loadTable()
+                this.dialog=false
+                alert('成功创建新用户')
+              }
             })
         }
 
-      },
-      openPassEdit(student) {
-        this.manual = 2
-        this.dialog = true
-        this._id = student._id
-      },
-      updateProfile(student) {
-        if (this.addoredit) {
-          //更新账户信息
-          lg('adfas')
-        } else {
-          //创建新账户
-
-          lg(this.student)
-        }
       },
       updatePassword() {
         this.POST('/admin/updateStuPassword', {
@@ -250,6 +246,9 @@ export default {
           })
           .then(res => {
             if (res.data.state === 1) {
+              this.loadTable()
+              
+              this.dialog=false
               alert('修改密码成功')
             } else {
               alert('暂时无法修改该用户')
@@ -258,10 +257,12 @@ export default {
       },
       deleteAccount(student) {
         this.POST('/admin/deleteStuAccount', {
-            account: student._id
+            account: this.studentId
           })
           .then(res => {
             if (res.data.state === 1) {
+             this.loadTable() 
+              this.dialog=false
               alert('帐号已删除')
             } else {
               alert('删除出错，请重试')
@@ -275,7 +276,9 @@ export default {
           })
           .then(res => {
             if (res.data.state === 1) {
-              lg('更改状态成功')
+              this.loadTable()
+              this.dialog=false
+              alert('更改状态成功')
             }
           })
       },
@@ -330,17 +333,20 @@ export default {
           output.className = 'container'
           chosenFile = '选择文件'
         }
-      }
-    },
-    mounted() {
-      this.GET('/admin/admGetStuAccount')
+      },
+      loadTable(){
+        this.GET('/admin/admGetStuAccount')
         .then(res => {
-          if (res.data.state === 1) {
-            this.studentAccounts = res.data.students
-          } else {
+          if (res.data.state===1) {
+            this.studentAccounts=res.data.students
+          }else{
             alert('获取导师帐号失败')
           }
         })
+      }
+    },
+    mounted() {
+      this.loadTable()
     },
     watch: {
       student: {
@@ -363,6 +369,8 @@ th{
 }
 td{
   text-align: center;
+      padding: 0;
+
 }
 .student-account-container
 {

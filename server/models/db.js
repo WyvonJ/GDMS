@@ -96,10 +96,10 @@ let initialtopics = function() {
     } else if (!doc.length) {
       console.log('Datebase opens for the first time...')
       Promise.all(topicsinitialdata.map(item => makePromise(item)))
-        .then(() => console.log('Initializetopics successfully.'))
+        .then(() => console.log('Initialize topics successfully.'))
         .catch((err) => console.log(err))
     } else {
-      console.log('topics have been initialize')
+      console.log('Topics have been initialized')
     }
   })
 }

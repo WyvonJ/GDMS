@@ -16,6 +16,8 @@ let topicsSchema = new Schema({ /*这里重写了_id属性，这样可以用来�
   available: { type: Number, required: true }, //可选人数
   selected: { type: Number, dafault: 0 }, //已选人数
   fields: { type: [{ id: Number, name: String }], required: true }, //课题方向
+  nfields: [Number], //课题方向
+
   mentor: { type: String, ref: 'mentors' }, //出题老师
   restriction: { type: Number }, //限制人数
   finalstudents: [{ type: String, ref: 'students' }], //最终选题的学生

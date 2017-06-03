@@ -34,9 +34,8 @@
      		<div v-for="topic of teacher.topics" class="topic-students">
      			<div class="topic-id-title">
      			<span class="topic-id">
-     				{{topic._id}}
+     				{{topic._id}}.{{topic.title}}
      			</span>
-     				.{{topic.title}}
      			</div>
      			<div class="student-id-name">
      				<span v-for="student of topic.finalstudents" class="single-student chip">

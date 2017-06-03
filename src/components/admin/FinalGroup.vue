@@ -344,6 +344,11 @@ export default {
     position: relative;
     top: 1px;
     right: -6px;
+    transition:$material-enter;
+    &:hover{
+      color:white;
+      background-color: #f44336;
+    }
 }
 .groups-wrapper
 {

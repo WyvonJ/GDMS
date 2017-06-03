@@ -20,10 +20,10 @@ step.find(null,function(err,doc){
       console.log(err)
     }else if (!doc.length){//如果数据库中没有初始状态
       initialStep.save()
-      console.log('System step is import mentors data')
+      console.log('System steps are imported to mentors data')
     }
     else{
-      console.log('There are initialstep in database')
+      console.log('There are initial steps in database')
       }
   })
 

@@ -19,10 +19,10 @@ let mentorsSchema = new Schema({
   studentsscore: [{ type: Number, ref: 'students' }], //给每个学生打的分数
   group: { type: Number, ref: 'groups' }, //答辨所在的分组
   topics: [{ type: Number, ref: 'topics' }], //导师所出的题
-  fields: [{ id: Number, name: String }], //研究方向
+  fields: [Number], //研究方向
   office: String, //办公室地址
   notification: String,
-  protitle: { id: Number, name: String }, //导师职称 0助教 1讲师 2副教授 3教授
+  protitle: Number, //导师职称 0助教 1讲师 2副教授 3教授
   qq: String,
   wechat: String,
   salt: String,

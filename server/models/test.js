@@ -1,73 +1,24 @@
-const kMeans = require('kmeans-js')
+//const kMeans = require('kmeans-js')
 const _ = require('lodash')
 let lg = console.log
-let data = []
 const db = require('./db')
   //const grouping = require('../grouping')
-db.mentors.find({}, (err, mentors) => {
-    let fina = []
-    for (let i = 0, ilen = mentors.length; i < ilen; i++) {
-      mentors[i].gender='男'
-      mentors[i].save()
+let ctrds = [
+  '2030513408',
+  '2030513423',
+  '2030513421',
+  '2030513411',
+  '2030513406',
+  '2030513401'
+]
 
-    }
-    // lg(fina)
-
-  })
-/*let rank = []
-for (var i = 0; i < data.length; i++) {
-  let min = Infinity
-  let rec = 0
-  let arr = []
-  arr[i] = []
-  let grouped = false
-  for (var j = 0; j < ref.length; j++) {
-    let _m = 1 - _.intersection(data[i], ref[j]).length / _.union(data[i], ref[j]).length
-    _m ? null : grouped = true
-    if (min > _m) {
-      min = _m
-      rec = j + 1
-    }
-    arr[i].push({
-      rank: j + 1,
-      value: _m.toFixed(2)
-    })
-  }
-  arr[i].sort((a, b) => {
-    return a.value - b.value
-  })
-  for (var k = 0; k < arr[i].length; k++) {
-    arr[i][k] = arr[i][k].value
-  }
-  rank[i] = [arr[i], tch[i], grouped]
-}
-
-_.forEach(rank, (e, i) => {
-  let min = 0
-  let len = e[0].length
-  let k
-  _.forEach(e[0], (_e, _i) => {
-    k = len - _i
-    min += (_e - _i) * (_e - _i) * Math.pow(4, 2 * k)
-  })
-  e.push(min)
-})
-rank.sort((a, b) => {
-  return _.last(a) - _.last(b)
-})
-
-let capacity = Math.floor(data.length / ref.length) //每组的基本容量
-let mod = data.length % ref.length //基本容量多出来的人
-
-//lg(rank)
-
-var sort = function(data, n) {
+let firstGroup = function(data, n) {
   let mentors = []
   let groups = []
-  var numMentors = data.length
-  var aveNum = Math.floor(numMentors / n)
-  var left = numMentors % n
-  var k = 0
+  let numMentors = data.length
+  let aveNum = Math.floor(numMentors / n)
+  let surplus = numMentors % n
+  let k = 0
   for (var i = 0; i < numMentors; i++) {
     var mentor = {}
     mentor.dist = data[i][0]
@@ -76,11 +27,12 @@ var sort = function(data, n) {
     mentor.isgrouped = false
     mentors.push(mentor)
   }
-  for (var i = 0; i < n; i++) {
+  for (var i = 0; i < n; i++) { //定义n个组
     var group = {}
     group.mentors = []
     group.restriction = aveNum
-    if (i >= n - left) group.restriction++
+    if (i >= n - surplus)
+      group.restriction++
       group.available = group.restriction
     groups.push(group)
   }
@@ -92,11 +44,10 @@ var sort = function(data, n) {
         k++
     }
   }
-
   for (var i = 0; i < n; i++) {
     for (var j = 0; j < numMentors; j++) {
       if (mentors[j].isgrouped) continue
-      var groupId = mentors[j].dist[i] - 1
+      var groupId = mentors[j].dist[i] - 1 //选择第一位数作为group id
       if (groups[groupId].available > 0) {
         groups[groupId].mentors.push(mentors[j].name)
         mentors[j].isgrouped = true
@@ -107,4 +58,94 @@ var sort = function(data, n) {
   return groups
 }
 
-sort(rank, 6)*/
+let groupByCentroids = function(centroids, fn) {
+
+  let centrFields = [] //中心点领域
+  let allFields = [] //全部导师领域
+
+  let _centroids = []
+  let _tchFields = []
+  let tchGroups = []
+
+  let query = db.mentors.find({}, ['name', 'fields'], (err, mentors) => {
+
+      for (let i = 0, ilen = mentors.length; i < ilen; i++) {
+        allFields.push([mentors[i]._id, mentors[i].name, mentors[i].fields])
+        _.forEach(centroids, c => {
+          if (mentors[i]._id == c) {
+            centrFields.push(mentors[i].fields)
+          }
+        })
+      }
+      //lg(allFields)
+      return Promise.resolve('centroids')
+    })
+    .then((str) => {
+      _.forEach(centrFields, (centr, ci) => {
+        let cf = []
+        _.forEach(centr, field => {
+          cf.push(field.id)
+        })
+        _centroids.push(cf)
+      })
+      _.forEach(allFields, (centr, ci) => {
+        let af = []
+        af[0] = centr[0]
+        af[1] = centr[1]
+        af[2] = []
+        _.forEach(centr[2], field => {
+          af[2].push(field)
+        })
+        _tchFields.push(af)
+      })
+      return Promise.resolve(_tchFields)
+    })
+    .then((pro) => {
+      for (let i = 0; i < _tchFields.length; i++) {
+        let min = Infinity
+        let rec = 0
+        let arr = []
+        arr[i] = []
+        let grouped = false
+        for (let j = 0; j < _centroids.length; j++) {
+          let _m = 1 - _.intersection(_tchFields[i], _centroids[j]).length / _.union(_tchFields[i], _centroids[j]).length
+            //_m ? null : grouped = true
+          _tchFields[i] == centroids[j] ? grouped = true : null //判断是否是centroids
+          if (min > _m) {
+            min = _m
+            rec = j + 1
+          }
+          arr[i].push({
+            rank: j + 1,
+            value: _m.toFixed(2)
+          })
+        }
+        arr[i].sort((a, b) => {
+          return a.value - b.value
+        })
+        for (let k = 0; k < arr[i].length; k++) {
+          arr[i][k] = arr[i][k].rank
+        }
+        tchGroups[i] = [arr[i], _tchFields[i][1], grouped]
+      }
+
+      _.forEach(tchGroups, (e, i) => {
+        let min = 0
+        let len = e[0].length
+        let k
+        _.forEach(e[0], (_e, _i) => {
+          k = len - _i
+          min += (_e - _i) * (_e - _i) * Math.pow(2, 2 * k)
+        })
+        e.push(min)
+      })
+      tchGroups.sort((a, b) => {
+        return _.last(a) - _.last(b)
+      })
+      fn(firstGroup(tchGroups, centroids.length))//记住这个用法
+    })
+}
+
+let groups = groupByCentroids(ctrds, (centr) => {
+  lg(centr)
+})
