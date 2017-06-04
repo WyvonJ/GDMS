@@ -1,7 +1,7 @@
 <template>
     <div class="creation-container">
       <div class="tab-button">
-        <button type="button" @click="isTab=true" :class="{'focused':isTab}" class="add-topic-button">
+        <button type="button" title="课题发布" @click="isTab=true" :class="{'focused':isTab}" class="add-topic-button">
           <mu-icon value="library_add"/>
           <span>课题发布</span>
         </button>
@@ -22,13 +22,12 @@
                   <mu-radio label="论文" name="group" nativeValue="0" v-model="category"   uncheckIcon="assignment" checkedIcon="assignment"  class="category-radio"/>
               </div>
               <br/>
-              <div @click="dialog=true">
+              <mu-flat-button secondary @click="dialog=true">
                 选择研究方向
+              </mu-flat-button>
+              <div class="fields-chip">
+                <span class="chip" v-for="field of fields">{{field}}</span>
               </div>
-              <mu-select-field v-model="fields" multiple :labelFocusClass="['label-foucs']" :errorText="fieldsError" label="课题研究方向"  class="select-field" labelFloat>
-                <mu-sub-header>可多选</mu-sub-header>
-                <mu-menu-item v-for="text,index in fieldsData" :value="text" :title="text" />
-              </mu-select-field>
               <br/>
               <mu-text-field label="课题名称" v-model.trim="titleText" :errorText="titleError" labelFloat/>
               <br/>
@@ -73,7 +72,9 @@
         </div>
       </transition-group>
       <mu-dialog :open="dialog" title="选择课题研究方向">
-      <fields :fields="fieldsData" @getfields="getFields(finalFields)"></fields>
+      <div class="fields">
+          <mu-checkbox v-for="field of fieldsData"  :nativeValue="field" v-model="fields" :label="field" class="fields-checkbox"/>
+      </div>
       <mu-flat-button label="确定" slot="actions" primary @click="dialog=false"/>
       </mu-dialog>
     </div>

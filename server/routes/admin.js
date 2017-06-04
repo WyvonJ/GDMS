@@ -117,7 +117,7 @@ router.get('/admGetStuAccount', (req, res) => {
     else
       res.send({
         state: 1,
-        teachers: students
+        students: students
       })
   })
 })

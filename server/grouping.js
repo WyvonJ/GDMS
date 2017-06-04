@@ -39,15 +39,13 @@ var groupMentors = function(numGroups) { //根据导师的类别比例进行分�
                 }
               }
             if (newNumGroupMembers > numGroupMembers) i++
-
+              lg(group)
               var myGroup = new db.groups(group)
-            myGroup.save()
+              myGroup.save()
           }
-          console.log(group)
 
-        }).then(() => {
+        }).then((group) => {
           console.log('begin to group Topics')
-            //groupTopics()
         })
     })
 
@@ -55,7 +53,8 @@ var groupMentors = function(numGroups) { //根据导师的类别比例进行分�
 
 //const grouping = require('../grouping')
 
-let firstGroup = function(data, n) { //n为组数
+
+let firstGroup = function(data, n) {
   let mentors = []
   let groups = []
   let numMentors = data.length
@@ -98,13 +97,21 @@ let firstGroup = function(data, n) { //n为组数
       }
     }
   }
-  return groups
+  lg(groups)
+  _.forEach(groups,(group,i)=>{
+
+  })
 }
-let groupByCentroids = function(centroids) {
+
+let groupByCentroids = function(centroids, fn) { //fn用于将返回结果传递出去
+
   let centrFields = [] //中心点领域
   let allFields = [] //全部导师领域
-  let _centroids = [] //处理后的 
+
+  let _centroids = []
   let _tchFields = []
+  let tchGroups = []
+
   let query = db.mentors.find({}, ['name', 'fields'], (err, mentors) => {
 
       for (let i = 0, ilen = mentors.length; i < ilen; i++) {
@@ -116,10 +123,9 @@ let groupByCentroids = function(centroids) {
         })
       }
       //lg(allFields)
-      //allFields格式 [_id,name,[fields]]
-      //centrFields   [_id]
+      return Promise.resolve('centroids')
     })
-    .then(() => {
+    .then((str) => {
       _.forEach(centrFields, (centr, ci) => {
         let cf = []
         _.forEach(centr, field => {
@@ -133,13 +139,13 @@ let groupByCentroids = function(centroids) {
         af[1] = centr[1]
         af[2] = []
         _.forEach(centr[2], field => {
-          af[2].push(field.id)
+          af[2].push(field)
         })
         _tchFields.push(af)
       })
+      return Promise.resolve(_tchFields)
     })
-    .then(() => {
-      let tchGroups = []
+    .then((pro) => {
       for (let i = 0; i < _tchFields.length; i++) {
         let min = Infinity
         let rec = 0
@@ -147,9 +153,9 @@ let groupByCentroids = function(centroids) {
         arr[i] = []
         let grouped = false
         for (let j = 0; j < _centroids.length; j++) {
-          let _m = 1 - _.intersection(_tchFields[i][2], _centroids[j]).length / _.union(_tchFields[i][2], _centroids[j]).length
+          let _m = 1 - _.intersection(_tchFields[i], _centroids[j]).length / _.union(_tchFields[i], _centroids[j]).length
             //_m ? null : grouped = true
-          _tchFields[i][0] == centroids[j] ? grouped = true : null //判断是否是centroids
+          _tchFields[i] == centroids[j] ? grouped = true : null //判断是否是centroids
           if (min > _m) {
             min = _m
             rec = j + 1
@@ -179,13 +185,11 @@ let groupByCentroids = function(centroids) {
         e.push(min)
       })
       tchGroups.sort((a, b) => {
-          return _.last(a) - _.last(b)
-        })
-        //lg(tchGroups)
-      return firstGroup(tchGroups,centroids.length)
+        return _.last(a) - _.last(b)
+      })
+      fn(firstGroup(tchGroups, centroids.length)) //记住这个用法
     })
 }
-
 
 
 var groupTopics = function(numGroups) {
@@ -244,8 +248,10 @@ var groupTopics = function(numGroups) {
 let finalgroup = function(centroids) {
     db.students.count({}).exec().then((count) => numStu = count) //获取学生数
     db.topics.count({}).exec().then((count) => numTopics = count) //获取课题数
-    groupByCentroids(centroids)
-
+    groupByCentroids(centroids, (centr) => {
+      //lg(centr)
+    })
+    groupMentors(centroids.length)
     setTimeout(() => {
       groupTopics(centroids)
     }, 500)
