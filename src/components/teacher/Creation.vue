@@ -1,12 +1,11 @@
 <template>
     <div class="creation-container">
       <div class="tab-button">
-        <button type="button" title="课题发布" @click="isTab=true" :class="{'focused':isTab}" class="add-topic-button">
+        <button type="button" title="发布新课题" @click="isTab=true" :class="{'focused':isTab}" class="add-topic-button">
           <mu-icon value="library_add"/>
           <span>课题发布</span>
         </button>
-         
-        <button type="button" @click="isTab=false" :class="{'focused':!isTab}" class="manage-topic-button">
+        <button type="button" title="查看管理已发布课题" @click="isTab=false" :class="{'focused':!isTab}" class="manage-topic-button">
           <mu-icon value="subject"/>
           <span>课题管理</span>
         </button>
@@ -22,9 +21,9 @@
                   <mu-radio label="论文" name="group" nativeValue="0" v-model="category"   uncheckIcon="assignment" checkedIcon="assignment"  class="category-radio"/>
               </div>
               <br/>
-              <mu-flat-button secondary @click="dialog=true">
-                选择研究方向
-              </mu-flat-button>
+              <mu-flat-button secondary label="选择研究方向" @click="dialog=true;manual=0"/>
+              <br>
+              <span>{{fieldsError}} </span>
               <div class="fields-chip">
                 <span class="chip" v-for="field of fields">{{field}}</span>
               </div>
@@ -48,6 +47,7 @@
                     <th>课题名称</th>
                     <th>课题简介</th>
                     <th>可选人数</th>
+                    <th>编辑</th>
                     <th>删除</th>
                   </tr>
                 </thead>
@@ -62,6 +62,9 @@
                     </td>
                     <td width="50%" class="topic-details">{{ topic.details }}</td>
                     <td width="8%" class="topic-restriction">{{ topic.restriction }}</td>
+                    <td>
+                    <mu-icon-button icon="edit" style="color: #009688;" @click="openDialog(topic)" />
+                    </td>
                     <td width="10%">
                       <mu-icon-button @click="deleteTopic(topic , index)" icon="cancel"/>
                     </td>
@@ -72,10 +75,17 @@
         </div>
       </transition-group>
       <mu-dialog :open="dialog" title="选择课题研究方向">
-      <div class="fields">
+      <div v-if="manual===0">
+        <div class="fields">
           <mu-checkbox v-for="field of fieldsData"  :nativeValue="field" v-model="fields" :label="field" class="fields-checkbox"/>
       </div>
       <mu-flat-button label="确定" slot="actions" primary @click="dialog=false"/>
+      </div>
+      <div v-if="manual===1">
+        <mu-text-field hintText="题目" :errorText="idError" v-model="topic._id" type="number" icon="account_circle" labelFloat/>
+        <mu-text-field hintText="帐号" :errorText="idError" v-model="topic.title" type="text" icon="account_circle" labelFloat/>
+        <mu-text-field hintText="帐号" :errorText="idError" v-model="topic.details" type="text" icon="account_circle" labelFloat/>
+      </div>
       </mu-dialog>
     </div>
 </template>
@@ -93,9 +103,17 @@ export default {
         fieldsError: '', //错误提示文字
         titleError: '',
         detailError: '',
+        manual:0,
         isTab: true,
         fields: [],
         dialog:false,
+        topic:{
+          _id:0,
+          category:'1',
+          details:'',
+          title:'',
+          restriction:0
+        },
         fieldsData: [
           "1.图形图像处理", "2.游戏开发设计", "3.信息可视化",
           "4.数字视音频处理", "5.移动互联网", "6.软件工程",
@@ -110,13 +128,7 @@ export default {
       ...mapState(['_tch_TopicCreatedAll'])
     },
     methods: {
-      getfields(finalFields){
-        lg(finalFields)
-      },
       createTopic() {
-        this.dialog=true
-        let id = cookie.get('user')
-          //if (!id) return alert('登录超时，请重新操作')
         if (this.fields.length === 0) {
           return this.fieldsError = "还没选择课题研究方向！"
         }
@@ -161,10 +173,14 @@ export default {
             this.showSnackbar('出了点小问题，重新试试。')
             console.log(err)
           })
-
-
       },
-
+      openDialog(topic){
+        this.manual=1
+        Object.keys(topic).map((key) => {
+                this.topic[key] = topic[key]
+              })
+        this.dialog=true
+      },
       deleteTopic(topic, index) {
         let id = cookie.get('user')
         this.GET('/getstep')

@@ -96,7 +96,6 @@ router.post('/updateTchPassword', (req, res) => {
 
 router.post('/deleteTchAccount', (req, res) => { //更新账户信息
   let account = req.body.account
-
   db.mentors.remove({ _id: account }, function(err) {
       if (err) {
         console.log(err)
@@ -109,7 +108,6 @@ router.post('/deleteTchAccount', (req, res) => { //更新账户信息
 
 /*管理员获得学生账号*/
 router.get('/admGetStuAccount', (req, res) => {
-
   let query = db.students.find({}, ['_id', 'name', 'gender', 'gpa', 'tel', 'email', 'qq', 'wechat'])
   query.sort({ '_id': 1 })
   query.exec(function(err, students) {
@@ -214,7 +212,6 @@ router.get('/admGetTchTopics', (req, res) => {
           let buffer = xlsx.build(excelData)
           fs.writeFileSync('./server/files/download/SelectedResult.xlsx', buffer, { 'flag': 'w' });
           res.send(cardData)
-            // console.log(cardData)
         })
     })
 
@@ -230,7 +227,6 @@ router.get('/admGetTchTopics', (req, res) => {
             .select('finalstudents title')
             .populate('finalstudents', '_id name')
             .exec((err, topic) => {
-              //console.log(topic)
             })
             .then((topic) => {
               let students = topic.finalstudents;
@@ -258,7 +254,44 @@ router.get('/admGetTchTopics', (req, res) => {
   }
 })
 
-router.post('/uploadMidGroups', (req, res) => { //进行中期分组
+router.post('/uploadMidGroups', (req, res) => {//‘’/admUpMTchGroups
+    db.midgroups.remove({}, function(err) {
+        if (err) return
+        console.log('pre midgroups dropped');
+    var i = 1;
+    var midMentorGroups = req.body //得到导师分组
+    for (var i=0;i<midMentorGroups.length;i++){
+        var group = {
+            _id: i+1,
+            mentors:midMentorGroups[i],
+            students:[]
+        }
+        new db.midgroups(group).save()
+    }
+    var Groups = []
+    Promise.all(midMentorGroups.map(group => {
+            return new Promise((resolve, reject) => {
+                var newGroup = {}
+                newGroup.name = i + '组'
+                newGroup.mentors = group
+                newGroup.data = [
+                    ['序号', '学号', '学生姓名', '课题名', '指导教师']
+                ]
+                i++
+                Groups.push(newGroup)
+                resolve()
+            })
+        })).then(() => {
+            midgroup.midgroup(Groups)
+            db.step.findOneAndUpdate({key:'system'},{$set:{curstep: 'midgroup'}},{new:true}).exec()
+                //console.log(Groups[0].mentors);
+        })
+    });
+    
+        // midgroup.midgroup(midMentorGroups);
+})
+
+/*router.post('/uploadMidGroups', (req, res) => { //进行中期分组
   let i = 1;
   let midMentorGroups = req.body //得到导师分组
   let Groups = []
@@ -277,9 +310,8 @@ router.post('/uploadMidGroups', (req, res) => { //进行中期分组
   })).then(() => {
     midgroup.midgroup(Groups)
     db.step.findOneAndUpdate({ key: 'system' }, { $set: { curstep: 'midgroup' } }, { new: true }).exec()
-      //console.log(Groups[0].mentors);
   }).then(res.send({ state: 1 }))
-})
+})*/
 
 router.post('/admTchAccUpload', (req, res) => {
   let dstDir = './server/files/upload/'
@@ -368,13 +400,13 @@ router.post('/finalGroup', (req, res) => {
       .exec()
       .then((groups) => {
         db.step.findOneAndUpdate({ key: 'system' }, { $set: { curstep: 'finalgroup' } }, { new: true }).exec()
+        console.log(groups)
         res.send(groups)
       })
-  }, 500)
+  }, 1000)
 })
 router.post('/admUpFTchGroups', (req, res) => {
   let groups = req.body
-    // console.log(groups)
   new Promise((resolve, reject) => {
       for (let j = 0, jlen = groups.length; j < jlen; j++) {
         let group = groups[j]
@@ -457,7 +489,6 @@ router.get('/download', (req, res) => {
               })).then(() => {
                 sheet.data.push(['本组导师:'])
                 sheet.data.push(['姓名', '研究方向'])
-                  //  delete group.mentors._id
                 let mentors = group.mentors
                 Promise.all(mentors.map(mentor => {
                   return new Promise((resolve3, reject) => {
@@ -471,7 +502,6 @@ router.get('/download', (req, res) => {
               })
             })
           })).then(() => {
-            //console.log(excelData)
             let buffer = xlsx.build(excelData)
             fs.writeFileSync('./server/files/download/FinalResult.xlsx', buffer, { 'flag': 'w' });
             try {
@@ -481,18 +511,16 @@ router.get('/download', (req, res) => {
                 res.download('./server/files/download/FinalResult.xlsx', 'FinalResult.xlsx', (err) => {
                   if (err)
                     console.log('文件下载出错')
-                    //throw new Error(err)
                   else console.log("最终答辨分组结果文件下载成功")
                 })
             } catch (err) {
               console.log('最终答辨分组结果文件不存在')
             }
-            // res.send(cardData)
           })
         })
     }
 
-  } else if (filename == 'StudentFinalGreade') {
+  } else if (filename == 'FinalGrade') {
     let excelData = [{
       name: '学生最终分数排名表',
       data: [
@@ -514,12 +542,9 @@ router.get('/download', (req, res) => {
           .sort({ finalscore: -1 })
           .exec()
           .then((items) => {
-            //  console.log(items);
             Promise.all(items.map(item => {
               return new Promise((resolve1, reject) => {
                 let row = []
-                  //  if(!item.final)item.final.title=''
-                  //if(!item.mentor)item.mentor.name=''
                 row.push(
                   item._id,
                   item.name,
@@ -534,8 +559,8 @@ router.get('/download', (req, res) => {
 
             })).then(() => {
               let buffer = xlsx.build(excelData)
-              fs.writeFileSync('./server/files/download/FinalGrage.xlsx', buffer, { 'flag': 'w' });
-              res.download('./server/files/download/FinalGrage.xlsx', 'FinalGrage.xlsx', (err) => {
+              fs.writeFileSync('./server/files/download/FinalGrade.xlsx', buffer, { 'flag': 'w' });
+              res.download('./server/files/download/FinalGrade.xlsx', 'FinalGrade.xlsx', (err) => {
                 if (err)
                   console.log('文件下载出错')
                   //throw new Error(err)
@@ -551,12 +576,19 @@ router.get('/download', (req, res) => {
 router.post('/procSelection', (req, res) => {
   let order = req.body.order
   console.log(`开始第${order}次选题`)
-  if (order == 1) processapplication.autoProcessFirstApplication()
-  else if (order == 2) processapplication.autoProcessSecondApplication()
-  else if (order == 3) processapplication.autoProcessThirdApplication()
+  if (order == 1) {
+    console.log('here')
+    db.step.findOneAndUpdate({ key: 'system' }, { $set: { curstep: 'processfirst' } }, { new: true }).exec()
+    processapplication.autoProcessFirstApplication()}
+  else if (order == 2) {
+    db.step.findOneAndUpdate({ key: 'system' }, { $set: { curstep: 'processsecond' } }, { new: true }).exec()
+    processapplication.autoProcessSecondApplication()}
+  else if (order == 3) {
+    db.step.findOneAndUpdate({ key: 'system' }, { $set: { curstep: 'processthird' } }, { new: true }).exec()
+    processapplication.autoProcessThirdApplication()}
   else if (order == 4) {
     db.step.findOneAndUpdate({ key: 'system' }, { $set: { curstep: 'reselecttopics' } }, { new: true }).exec()
-    res.send('最后选题，每个学生只能选一个题目')
+    .then(()=>{res.send('最后选题，每个学生只能选一个题目')})
   } else {}
 })
 router.get('/unhandledTch', (req, res) => {

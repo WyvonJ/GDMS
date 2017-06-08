@@ -63,7 +63,6 @@
             <input id="file" @change="fileInput" type="file" class="form-control" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
           </div>
         </form>
-        <progress :value="progressBar" max="100"></progress>
         <div id="output">
         </div>
       <mu-flat-button slot="actions" primary label="取消" @click="dialog=false"/>

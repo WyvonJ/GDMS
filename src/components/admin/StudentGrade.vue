@@ -7,16 +7,19 @@
       <div class="workflow-panel">
         <mu-flat-button @click="dialog=true;gradeType=0" label="中期成绩上传" />
         <mu-flat-button @click="dialog=true;gradeType=1" label="终期成绩上传" />
-        <mu-flat-button href="" icon="file_download" secondary label="导出分组表" />
+        <mu-flat-button href="/admin/download?filename=FinalGrade" icon="file_download" secondary label="导出学生成绩表" />
+        <mu-flat-button href="/admin/download?filename=TeacherGrade" icon="file_download" secondary label="导出导师成绩表" />
       </div>
       <mu-dialog class="form-dialog" :open="dialog" title="文件上传" @close="dialog = false">
         <form enctype="multipart/form-data" role="form" class="form" onsubmit="return false">
           <div class="form-group">
-            <label for="file">{{chosenFile}}</label>
+           <div class="upload-icons">
+              <mu-icon value="cloud_upload" :size="48" color="green" />
+              <p>{{chosenFile}}</p>
+            </div>
             <input id="file" @change="fileInput" type="file" class="form-control" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
           </div>
         </form>
-        <progress :value="progressBar" max="100"></progress>
         <div id="output">
         </div>
         <mu-flat-button slot="actions" @click="dialog=false" secondary label="取消" />

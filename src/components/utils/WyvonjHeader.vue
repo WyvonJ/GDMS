@@ -2,7 +2,7 @@
   <nav class="nav-bar shadow" :style="bgColor">
     <div class="logo" @click="$router.push('/')">
       <img src="../../assets/img/gd_logo.png" alt="GDMS">
-      <p class="jnudm">Jnudm</p>
+      <p class="jnudm" title="江南大学">Jnudm</p>
     </div>
     <mu-icon-button tooltip="侧边栏" class="menu" @click="toggleNav">
       <img src="../../assets/icon/menu.svg" alt="menu" />

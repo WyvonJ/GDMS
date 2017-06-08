@@ -29,9 +29,7 @@
             <transition-group name="list" tag="tbody">
             <tr v-for="(topic,index) in search(_stu_TopicInTable)" :key="topic._id">
               <td width="10%">
-                <span class="add-topic-button" @click="addTopic(index,topic)">
-                <i class="material-icons">add_circle_outline</i>
-              </span>
+                <mu-icon-button icon="add_circle_outline" @click="addTopic(index,topic)" />
               </td>
               <td width="10%">{{topic._id}}</td>
               <td width="10%">{{topic.category===0?"论文":"设计"}}</td>
@@ -61,7 +59,7 @@
         </mu-pagination>
       </div>
     </div>
-    <div class="cart-toggle no-selection" @click="isCartDisplay=!isCartDisplay">
+    <div class="cart-toggle no-selection" title="查看已选课题" @click="isCartDisplay=!isCartDisplay">
       <img src="../../assets/icon/assignment_w.svg" alt="cart" />
     </div>
     <div class="topics-cart" :class="{'show-cart':isCartDisplay}">
@@ -87,10 +85,7 @@
             </li>
           </transition-group>
         </div>
-        <button class="e-blue submit-button" :disabled="!topicsInCart[0]" @click="commitSelectedTopics">
-          <i class="material-icons">check_circle</i>
-          <span>提交</span>
-        </button>
+          <mu-raised-button label="提 交" :disabled="!topicsInCart[0]" class="submit-button" color="white" backgroundColor="blue" icon="check_circle" v-on:click="commitSelectedTopics" />
       </div>
     </div>
   </div>
@@ -410,14 +405,11 @@ input::-o-input-placeholder
 
             height: 40px;
             padding: 2px 0;
-            .add-topic-button
+            .mu-icon-button
             {
-                width: 32px;
-                height: 32px;
-                margin-left: 12px;
-                display: inline-block;
-
-                cursor: pointer;
+                width: 36px;
+                height: 36px;
+                padding: 4px;
                 transition: $material-enter;
                 &:hover
                 {
@@ -619,10 +611,7 @@ input::-o-input-placeholder
     .submit-button
     {
         width: 128px;
-        span{
-              letter-spacing: 10px;
-               font-size: 16px;
-        }
+        margin-bottom: 4px;
     }
 }
 

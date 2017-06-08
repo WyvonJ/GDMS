@@ -131,7 +131,7 @@ export default {
   stuEvaluationToTch: ({ commit }, payload) => {
     return axios.post('/student/stuEvaluationToTch', payload)
       .then(res => {
-        showSnackbar({ commit }, '分数提交成功')
+        showSnackbar({ commit }, '评价提交成功')
       })
       .catch(err => {
         showSnackbar({ commit }, errMsg)

@@ -77,7 +77,6 @@ export default {
         position: relative;
 
         padding: 16px;
-        border-top: 16px solid $indigo; 
         height: 32px;
         .name
         {

@@ -121,6 +121,8 @@ router.post('/stuSelectionResult', (req, res) => {
         }catch(err){
           console.log(err)
         }
+          console.log(finalData)
+        
         res.send(finalData)
       } else {
         /******************************************************/
@@ -177,6 +179,30 @@ router.get('/stuGetContact', (req, res) => {
       wechat: student.wechat
     }
     res.send(studentContact)
+  })
+})
+
+router.post('/stuEvaluationToTch',(req,res)=>{
+  var studentId = req.body.studentId
+  var grade = req.body.grade
+  var evaluation = {
+    studentId:studentId,
+    studentsscore:grade
+  }
+  db.students.findOne({_id:studentId},['mentor'],(err,student)=>{
+    db.mentors.findOne({_id:student.mentor},['studentsscore'],(err,mentor)=>{
+      for(var i=0;i<mentor.studentsscore.length;i++){
+        if(mentor.studentsscore[i].studentId == studentId)
+        {
+            res.send('you have been evaluated mentor' )
+            console.log('you have been evaluated mentor')
+            return
+        }
+      }
+      mentor.studentsscore.push(evaluation)
+      mentor.save()
+      res.send({state:1})
+    })
   })
 })
 module.exports = router

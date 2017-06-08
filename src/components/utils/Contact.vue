@@ -41,7 +41,14 @@
       <br/>
       <mu-raised-button class="update" @click="commitContact" backgroundColor="blue" label="更新联系方式"/>
     </div>
+    <mu-dialog :open="dialog" title="选择课题研究方向">
+      <div class="fields">
+          <mu-checkbox v-for="field of fieldsData"  :nativeValue="field" v-model="fields" :label="field" class="fields-checkbox"/>
+      </div>
+      <mu-flat-button label="确定" slot="actions" primary @click="dialog=false"/>
+      </mu-dialog>
   </div>
+  
   </div>
 </template>
 
@@ -54,6 +61,7 @@ import {mapActions} from 'vuex'
         usertype:0,
         warningMsg: '',
         success: false,
+        dialog:false,
         fields: [],
         fieldsData: [
           "1.图形图像处理", "2.游戏开发设计", "3.信息可视化",
@@ -75,14 +83,14 @@ import {mapActions} from 'vuex'
     methods:{
       commitContact(){
         let fd=[]
-        for(let i=0,len=this.fields.length;i<len;i++){
+        for(let i = 0,len = this.fields.length;i<len;i++){
           fd.push(this.fields[i].split('.')[0])
         }
         if (fd.length>0) {
           this.contact.fields = fd
         }
         let routes = this.usertype=='0'?'/student/stuSetContact':'/teacher/tchSetContact'
-        let wrapper={
+        let wrapper = {
           account:cookie.get('user'),
           contact:this.contact
         }

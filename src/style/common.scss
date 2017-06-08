@@ -284,9 +284,9 @@ td:first-child
     padding-left: 48px !important;
 }
 
-.mu-dialog-wrapper
+.mu-dialog
 {
-    max-width: 320px !important;
+    max-width: 572px!important;
 }
 .mu-item
 {
@@ -466,15 +466,17 @@ progress::-webkit-progress-value
 
     opacity: 0;
 }
-.upload-icons{
+.upload-icons
+{
     text-align: center;
 }
 .form-group
 {
     margin: 4px;
     padding: 18px 0;
-    border-radius: 6px;
+
     border: 1px dashed #dedede;
+    border-radius: 6px;
 }
 .container
 {

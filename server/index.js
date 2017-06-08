@@ -12,7 +12,7 @@ const favicon = require('serve-favicon')
 const bodyParser = require('body-parser')
 const db = require('./models/db')
 const resolve = file => path.resolve(__dirname, file)
-let routes = require('./routes')
+const routes = require('./routes')
 
 //var session = require('express-session');
 //var MongoStore = require('connect-mongo')(session);
@@ -30,7 +30,7 @@ const app = express()
 
 
 //设置port为预设或3000
-app.set('port', (process.env.port || 3000))
+app.set('port', (process.env.port || 80))
   //设置图标
 app.use(favicon(resolve('../dist/favicon.ico')))
   //将文本作为json解析 然后以req.body为结果对象

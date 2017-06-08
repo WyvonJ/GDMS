@@ -3,8 +3,10 @@
 		<h2>
 			<img src="../../assets/img/jnu.png" alt="江南大学">
 			<br/>
-			<span>
-				欢迎使用毕业设计管理系统<br>
+			<span class="title">
+				欢迎使用毕业设计管理系统
+			</span><br>
+			<span class="time">
 				{{getTime}}
 			</span>
 		</h2>
@@ -40,9 +42,11 @@ import WyvonjCanvas from '../utils/WyvonjCanvas.vue'
 		margin-top: 128px;
 		color: rgba(0,0,0,.54);
 	}
-	span{
+	.title{
 		display: inline-block;
 		margin-top: 64px;
-		font-family: sans-serif;
+	}
+	.time{
+		font-family: Century Gothic;
 	}
 </style>

@@ -191,6 +191,7 @@ router.post('/tchSetContactData', (req, res) => {
 /*得到分组信息*/
 router.post('/tchGrouping', (req, res) => {
   let account = req.body.account
+  if(!account) return res.sendStatus(404)
   let mydb = [db.students, db.mentors]
   let type = account[0] == 1 ? 0 : 1
   let cardData = {
@@ -218,7 +219,6 @@ router.post('/tchGrouping', (req, res) => {
       res.sendStatus(401)
     }
   })
-
 
   function fillCardData(student, cardData) {
     return new Promise((resolve, reject) => {
@@ -272,7 +272,7 @@ router.get('/tchGetContact', (req, res) => {
   let q = req.query
   let account = q.account
     // let account = '2030513401'
-  db.mentors.findOne({ _id: account }, ['tel', 'email', 'qq', 'wechat', 'office'], (err, mentor) => {
+  db.mentors.findOne({ _id: account }, ['tel', 'email' ,'qq', 'wechat', 'office'], (err, mentor) => {
     if (err) return res.sendStatus(404)
     if (mentor) {
       res.send({
@@ -280,7 +280,7 @@ router.get('/tchGetContact', (req, res) => {
         email: mentor.email,
         qq: mentor.qq,
         wechat: mentor.wechat,
-        office: mentor.office
+        office: mentor.office,
       })
     }
   })

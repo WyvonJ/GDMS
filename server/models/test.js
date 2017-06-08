@@ -59,10 +59,6 @@ let firstGroup = function(data, n) {
 }
 
 let groupByCentroids = function(centroids, fn) {
-
-  let centrFields = [] //中心点领域
-  let allFields = [] //全部导师领域
-
   let _centroids = []
   let _tchFields = []
   let tchGroups = []
@@ -70,35 +66,15 @@ let groupByCentroids = function(centroids, fn) {
   let query = db.mentors.find({}, ['name', 'fields'], (err, mentors) => {
 
       for (let i = 0, ilen = mentors.length; i < ilen; i++) {
-        allFields.push([mentors[i]._id, mentors[i].name, mentors[i].fields])
+        _tchFields.push([mentors[i]._id, mentors[i].name, mentors[i].fields])
         _.forEach(centroids, c => {
-          if (mentors[i]._id == c) {
-            centrFields.push(mentors[i].fields)
+          if (mentors[i]._id == c) {//将中心点导师的领域push进去
+            _centroids.push(mentors[i].fields)
           }
         })
       }
       //lg(allFields)
       return Promise.resolve('centroids')
-    })
-    .then((str) => {
-      _.forEach(centrFields, (centr, ci) => {
-        let cf = []
-        _.forEach(centr, field => {
-          cf.push(field.id)
-        })
-        _centroids.push(cf)
-      })
-      _.forEach(allFields, (centr, ci) => {
-        let af = []
-        af[0] = centr[0]
-        af[1] = centr[1]
-        af[2] = []
-        _.forEach(centr[2], field => {
-          af[2].push(field)
-        })
-        _tchFields.push(af)
-      })
-      return Promise.resolve(_tchFields)
     })
     .then((pro) => {
       for (let i = 0; i < _tchFields.length; i++) {
@@ -108,9 +84,9 @@ let groupByCentroids = function(centroids, fn) {
         arr[i] = []
         let grouped = false
         for (let j = 0; j < _centroids.length; j++) {
-          let _m = 1 - _.intersection(_tchFields[i], _centroids[j]).length / _.union(_tchFields[i], _centroids[j]).length
+          let _m = 1 - _.intersection(_tchFields[i][2], _centroids[j]).length / _.union(_tchFields[i][2], _centroids[j]).length
             //_m ? null : grouped = true
-          _tchFields[i] == centroids[j] ? grouped = true : null //判断是否是centroids
+          _tchFields[i][2] == centroids[j] ? grouped = true : null //判断是否是centroids
           if (min > _m) {
             min = _m
             rec = j + 1
@@ -142,6 +118,7 @@ let groupByCentroids = function(centroids, fn) {
       tchGroups.sort((a, b) => {
         return _.last(a) - _.last(b)
       })
+      //lg(tchGroups)
       fn(firstGroup(tchGroups, centroids.length))//记住这个用法
     })
 }

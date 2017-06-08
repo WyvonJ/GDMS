@@ -55,8 +55,7 @@ const desktop=isDesktop()
 				openDrawer:desktop,
 				docked:desktop,
 				desktop:desktop,
-				menuValue:1,
-				notification:''
+				menuValue:1
 			}
 		},
     computed:{
