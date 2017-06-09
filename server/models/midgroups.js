@@ -1,11 +1,11 @@
 /*
 *负责处理中期分组的表
 */
-var mongoose = require('./mongodb')
-var Schema = mongoose.Schema
+const mongoose = require('./mongodb')
+const Schema = mongoose.Schema
 
-var students = require('./students').students
-var mentors = require('./mentors').mentors
+const students = require('./students').students
+const mentors = require('./mentors').mentors
 
 const midGroupsSchema = new Schema({
 		_id: 		{type: Number, required:true, unique: true},
@@ -16,7 +16,7 @@ const midGroupsSchema = new Schema({
 
 const midgroups = mongoose.model('midgroups',midGroupsSchema)
 
-var newMidGroup = new midgroups({
+let newMidGroup = new midgroups({
   _id: 0,
   students:[],
   mentors:[]
@@ -26,10 +26,7 @@ midgroups.find(null,function(err,doc){
     if(err){
       console.log(err)
     }else if (!doc.length){
-      newMidGroup.save()}
-   
+      newMidGroup.save()}   
 })
-
-
 
 exports.midgroups = midgroups

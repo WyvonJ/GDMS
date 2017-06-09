@@ -9,6 +9,7 @@ let students = require('./students').students
 let mentors = require('./mentors').mentors
 let groups = require('./groups').groups
 let admins = require('./admins').admins
+let midgroups = require('./midgroups').midgroups
 let step = require('./step').step
 let autoIncModel = require('./autoIncModel').autoIncModel
 let topicsinitialdata = require('../initialdata/topicsinitialdata.json') //初始的课题信息
@@ -20,6 +21,7 @@ exports.groups = groups
 exports.admins = admins
 exports.step = step
 exports.autoIncModel = autoIncModel
+exports.midgroups=midgroups
   //exports.connection = mongoose.connection
   /*初始化students数据*/
 let ImportStudentsData = function(FilePath) {

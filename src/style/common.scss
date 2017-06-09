@@ -288,12 +288,14 @@ td:first-child
 {
     max-width: 572px!important;
 }
+
 .mu-item
 {
     transition: $material-enter;
 
     border-left: 4px solid white;
 }
+
 .mu-item.selected
 {
     box-sizing: border-box;
@@ -423,13 +425,15 @@ td:first-child
         }
     }
 }
+
 progress
 {
     width: 274px;
     height: 12px;
     margin: 8px 0;
 
-    color: #4caf50; /*IE10*/
+    color: #4caf50;
+    /*IE10*/
     border: 1px solid #4caf50;
     border-radius: 2px;
 }
@@ -438,10 +442,12 @@ progress::-moz-progress-bar
 {
     background: #4caf50;
 }
+
 progress::-webkit-progress-bar
 {
     background: white;
 }
+
 progress::-webkit-progress-value
 {
     background: #4caf50;
@@ -451,6 +457,7 @@ progress::-webkit-progress-value
 {
     position: relative;
 }
+
 .form-control
 {
     position: absolute;
@@ -466,10 +473,12 @@ progress::-webkit-progress-value
 
     opacity: 0;
 }
+
 .upload-icons
 {
     text-align: center;
 }
+
 .form-group
 {
     margin: 4px;
@@ -478,10 +487,12 @@ progress::-webkit-progress-value
     border: 1px dashed #dedede;
     border-radius: 6px;
 }
+
 .container
 {
     padding: 12px 4px;
 }
+
 .text-danger
 {
     font-size: 18px;
@@ -489,7 +500,6 @@ progress::-webkit-progress-value
     color: #f44336;
     border: 1px solid #f44336;
 }
-
 
 //主内容区过渡动画
 .main-transition-enter-active
@@ -571,6 +581,15 @@ progress::-webkit-progress-value
     }
 }
 
+.mu-dialog{
+    .wide-text-field{
+        width: 80%;
+    }
+}
+.creation-dialog-class{
+    max-width: 768px !important;
+
+}
 
 @media screen and (max-width: 993px)
 {

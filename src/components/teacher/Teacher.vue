@@ -10,7 +10,7 @@
           </p>
         </div>
             <mu-list class="menu-border" @change="handleMenuChange" :value="menuValue">
-              <mu-list-item value="creation" title="选题发布">
+              <mu-list-item value="creation" title="选题管理">
                 <img src="../../assets/icon/playlist_add.svg" slot="left" alt="description"/>
               </mu-list-item>
               <mu-list-item value="confirmation" title="选择学生">

@@ -9,6 +9,8 @@
         </div>
         <div class="actions">
           <mu-raised-button @click="beginGroup" secondary icon="group" class="upload-group-count" label="开始分组" />
+          <mu-flat-button href="/admin/download?filename=MidGroup" icon="file_download" secondary label="导出分组表"/>
+
         </div>
       </div>
       <div class="to-be-grouped">
@@ -240,5 +242,8 @@ export default {
 {
     display: flex;
 }
+.actions{
+  display: flex;
 
+}
 </style>

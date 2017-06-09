@@ -1,94 +1,81 @@
 <template>
     <div class="creation-container">
-      <div class="tab-button">
-        <button type="button" title="发布新课题" @click="isTab=true" :class="{'focused':isTab}" class="add-topic-button">
-          <mu-icon value="library_add"/>
-          <span>课题发布</span>
-        </button>
-        <button type="button" title="查看管理已发布课题" @click="isTab=false" :class="{'focused':!isTab}" class="manage-topic-button">
-          <mu-icon value="subject"/>
-          <span>课题管理</span>
-        </button>
-      </div>
-      <transition-group class="tab-box" name="tab-tran">
-        <div id="tab-box1" key="tab1" v-show="isTab">
-          <div class="creation-card">
-              <span>可选人数：{{available}}</span>
-              <mu-slider v-model="available" :min="1" :max="10" :step="1"  class="available-slider" />
-              <br/>
-              <div class="category-box">
-                  <mu-radio label="设计" name="group" nativeValue="1" v-model="category"  uncheckIcon="build" checkedIcon="build" class="category-radio"/> 
-                  <mu-radio label="论文" name="group" nativeValue="0" v-model="category"   uncheckIcon="assignment" checkedIcon="assignment"  class="category-radio"/>
-              </div>
-              <br/>
-              <mu-flat-button secondary label="选择研究方向" @click="dialog=true;manual=0"/>
-              <br>
-              <span>{{fieldsError}} </span>
-              <div class="fields-chip">
-                <span class="chip" v-for="field of fields">{{field}}</span>
-              </div>
-              <br/>
-              <mu-text-field label="课题名称" v-model.trim="titleText" :errorText="titleError" labelFloat/>
-              <br/>
-              <mu-text-field label="课题简介" v-model.trim="detailText" :errorText="detailError" multiLine labelFloat :rows="6" :rowsMax="20" />
-              <br/>
-              <mu-raised-button label="发布课题" class="release-button" @click="createTopic" secondary>
+        <div class="tab-button">
+            <mu-raised-button label="发布课题" class="release-button" @click="dialogAdd" secondary>
                 <img src="../../assets/icon/release.svg" alt="add" />
-              </mu-raised-button>
-          </div>
+            </mu-raised-button>
         </div>
-        <div id="tab-box2" key="tab2" v-show="!isTab">
-          <div class="table-container paper">
-              <table>
+        <div class="table-container paper">
+            <table>
                 <thead slot="header">
-                  <tr>
-                    <th>序号</th>
-                    <th>类别</th>
-                    <th>课题名称</th>
-                    <th>课题简介</th>
-                    <th>可选人数</th>
-                    <th>编辑</th>
-                    <th>删除</th>
-                  </tr>
+                    <tr>
+                        <th>序号</th>
+                        <th>类别</th>
+                        <th>课题名称</th>
+                        <th class="row-details">课题简介</th>
+                        <th>可选人数</th>
+                        <th>编辑</th>
+                        <th>删除</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <tr v-if="!_tch_TopicCreatedAll.length" style="text-align: center;font-size: 32px;">
-                      <td colspan="6">无</td>
+                        <td colspan="6">无</td>
                     </tr>
-                  <tr v-for="(topic,index) in _tch_TopicCreatedAll">
-                    <td width="6%">{{topic._id}}</td>
-                    <td width="6%">{{topic.category===0?"论文":"设计"}}</td>
-                    <td width="25%">{{topic.title}}
-                    </td>
-                    <td width="50%" class="topic-details">{{ topic.details }}</td>
-                    <td width="8%" class="topic-restriction">{{ topic.restriction }}</td>
-                    <td>
-                    <mu-icon-button icon="edit" style="color: #009688;" @click="openDialog(topic)" />
-                    </td>
-                    <td width="10%">
-                      <mu-icon-button @click="deleteTopic(topic , index)" icon="cancel"/>
-                    </td>
-                  </tr>
+                    <tr v-for="(topic,index) in _tch_TopicCreatedAll">
+                        <td width="6%">{{topic._id}}</td>
+                        <td width="6%">{{topic.category==0?"论文":"设计"}}</td>
+                        <td width="25%">{{topic.title}}
+                        </td>
+                        <td width="50%" class="row-details">{{ topic.details }}</td>
+                        <td width="8%" class="topic-restriction">{{ topic.restriction }}</td>
+                        <td>
+                            <mu-icon-button icon="edit" style="color: #009688;" @click="openDialog(topic)" />
+                        </td>
+                        <td width="10%">
+                            <mu-icon-button @click="deleteTopic(topic , index)" icon="delete_forever" />
+                        </td>
+                    </tr>
                 </tbody>
-              </table>
-            </div>
+            </table>
         </div>
-      </transition-group>
-      <mu-dialog :open="dialog" title="选择课题研究方向">
-      <div v-if="manual===0">
-        <div class="fields">
-          <mu-checkbox v-for="field of fieldsData"  :nativeValue="field" v-model="fields" :label="field" class="fields-checkbox"/>
-      </div>
-      <mu-flat-button label="确定" slot="actions" primary @click="dialog=false"/>
-      </div>
-      <div v-if="manual===1">
-        <mu-text-field hintText="题目" :errorText="idError" v-model="topic._id" type="number" icon="account_circle" labelFloat/>
-        <mu-text-field hintText="帐号" :errorText="idError" v-model="topic.title" type="text" icon="account_circle" labelFloat/>
-        <mu-text-field hintText="帐号" :errorText="idError" v-model="topic.details" type="text" icon="account_circle" labelFloat/>
-      </div>
-      </mu-dialog>
+
+        <mu-dialog dialogClass="creation-dialog-class" :open="dialog" title="课题管理" @close="dialog=false">
+            <div v-if="manual===0">
+                <div class="fields">
+                    <mu-checkbox v-for="field of fieldsData" :nativeValue="field" v-model="fields" :label="field" class="fields-checkbox" />
+                </div>
+                <mu-flat-button label="确定" slot="actions" primary @click="dialog=false" />
+            </div>
+            <div v-if="manual===1">
+                <span v-if="!addoredit">课题编号{{topicId}}</span>
+                <br>
+                <span>可选人数：{{restriction}}</span>
+                <mu-slider v-model="restriction" :min="1" :max="10" :step="1" class="restriction-slider" />
+                <br/>
+                <div class="category-box">
+                    <mu-radio label="设计" name="group" nativeValue="1" v-model="category" uncheckIcon="build" checkedIcon="build" class="category-radio" />
+                    <mu-radio label="论文" name="group" nativeValue="0" v-model="category" uncheckIcon="assignment" checkedIcon="assignment" class="category-radio" />
+                </div>
+                <div class="fields">
+                <span style="color: #f44336;">{{fieldsError}} </span>
+                <br/>
+
+                    <mu-checkbox v-for="field of fieldsData" :nativeValue="field" v-model="fields" :label="field" class="fields-checkbox" />
+                    
+                </div>
+                <mu-text-field  class="wide-text-field" label="课题名称" v-model.trim="title" :errorText="titleError" labelFloat/>
+                <br/>
+                <mu-text-field class="wide-text-field" label="课题简介" v-model.trim="details" :errorText="detailError" multiLine labelFloat :rows="6" :rowsMax="20" />
+                <br/>
+                <mu-raised-button v-if="addoredit" slot="actions" label="确认" class="release-button" @click="confirmAdd" icon="check" backgroundColor="blue" />
+                <mu-raised-button  v-if="!addoredit" slot="actions" label="确认" class="release-button" @click="confirmEdit" icon="check" backgroundColor="blue" />
+                <mu-flat-button slot="actions" label="取消" class="release-button" @click="dialog=false" icon="cancel" secondary/>
+            </div>
+        </mu-dialog>
     </div>
 </template>
+
 
 <script type="text/javascript">
 import { mapState, mapActions } from 'vuex'
@@ -96,24 +83,19 @@ import Fields from '../utils/Fields.vue'
 export default {
   data() {
       return {
-        available: 1, //初始可选人数
+        restriction: 1, //初始可选人数
         category: '1', //初始类别 
-        titleText: '', //课题名称
-        detailText: '', //课题简介 
-        fieldsError: '', //错误提示文字
+        title: '', //课题名称
+        details: '', //课题简介 
+        fieldsError: '选择课题研究方向', //错误提示文字
         titleError: '',
         detailError: '',
+        addoredit:0,
         manual:0,
         isTab: true,
-        fields: [],
         dialog:false,
-        topic:{
-          _id:0,
-          category:'1',
-          details:'',
-          title:'',
-          restriction:0
-        },
+        topicId:0,
+        fields:[],
         fieldsData: [
           "1.图形图像处理", "2.游戏开发设计", "3.信息可视化",
           "4.数字视音频处理", "5.移动互联网", "6.软件工程",
@@ -128,14 +110,20 @@ export default {
       ...mapState(['_tch_TopicCreatedAll'])
     },
     methods: {
-      createTopic() {
+      dialogAdd(){
+        this.clearForms()
+        this.dialog=true
+        this.manual=1
+        this.addoredit=1
+      },
+      confirmAdd() {
         if (this.fields.length === 0) {
           return this.fieldsError = "还没选择课题研究方向！"
         }
-        if (this.titleText.length === 0) {
+        if (this.title.length === 0) {
           return this.titleError = "好像还没写课题名称？"
         }
-        if (this.detailText.length === 0) {
+        if (this.details.length === 0) {
           return this.detailError = "随便写点介绍吧！"
         }
         let fd=[]
@@ -149,9 +137,9 @@ export default {
                   mentor: id,
                   category: this.category,
                   fields: fd,
-                  title: this.titleText,
-                  details: this.detailText,
-                  available: this.available
+                  title: this.title,
+                  details: this.details,
+                  restriction: this.restriction
                 }
                 //重新取得所有topics
               this.tchCreateTopic(currentTopic)
@@ -160,9 +148,9 @@ export default {
                     teacherId: id,
                   })
                   this.fields = []
-                  this.titleText = ''
-                  this.detailText = ''
-                  this.available = '1'
+                  this.title = ''
+                  this.details = ''
+                  this.restriction = '1'
                   this.showSnackbar("课题创建成功")
                 })
             } else {
@@ -176,10 +164,28 @@ export default {
       },
       openDialog(topic){
         this.manual=1
-        Object.keys(topic).map((key) => {
-                this.topic[key] = topic[key]
-              })
+        this.addoredit=0
+        this.topicId=topic._id
+        this.title=topic.title
+        this.details=topic.details
+        this.fields=topic.fields
+        this.category=topic.category.toString()
+        this.restriction=topic.restriction
         this.dialog=true
+      },
+      confirmEdit(){
+        this.POST('/teacher/tchEditTopic',{
+          teacherId:tchId,
+          _id:this.topicId,
+          title:this.title,
+          details:this.details,
+          fields:this.fields,
+          category:this.category,
+          restriction:this.restriction
+        })
+        .then(res=>{
+
+        })
       },
       deleteTopic(topic, index) {
         let id = cookie.get('user')
@@ -203,8 +209,15 @@ export default {
             console.log(err)
           })
       },
+      clearForms(){
+        this.title=''
+        this.details=''
+        this.fields=[]
+        this.category='1'
+        this.restriction=1
+      },
       clearError() {
-        this.fieldsError = ''
+        this.fieldsError = '选择课题研究方向'
         this.titleError = ''
         this.detailError = ''
       },
@@ -227,8 +240,8 @@ export default {
     },
     watch: {
       fields: 'clearError',
-      titleText: 'clearError',
-      detailText: 'clearError'
+      title: 'clearError',
+      details: 'clearError'
     }
 }
 
@@ -244,7 +257,7 @@ export default {
         padding: 8px 24px;
 
         text-align: left;
-        .available-slider
+        .restriction-slider
         {
             width: 256px;
             margin-top: 12px;
@@ -252,40 +265,26 @@ export default {
         }
         .category-box{
           display: inline-block;
-
         }
-
         .category-radio{
           margin-right: 16px;
         }
         .mu-text-field
         {
             font-size: 14px;
-
-            width: 50vw;
             margin-bottom: 0;
+            width: 80%;
             .mu-text-field-content
             {
                 padding-top: 24px;
             }
         }
-        .available,
+        .restriction,
         .category
         {
             max-width: 120px;
 
             text-align: center;
-        }
-        .fields
-        {
-            max-width: 50vw;
-        }
-        .select-field
-        {
-            width: 256px !important;
-        }
-        .dispatch{
-          margin-bottom: 10px;
         }
         
     }
@@ -300,6 +299,11 @@ export default {
         {
             white-space: pre-line;
         }
+        .row-details{
+          @media screen and (max-width: 768px){
+            display: none;
+          }
+        }
         .mu-icon-button
         {
             color: #f44336;
@@ -310,46 +314,7 @@ export default {
         }
     }
 }
-.mu-dialog-wrapper
-{
-    max-width: 648px !important;
-}
-.tab-button
-{
-    padding: 16px;
 
-    text-align: center;
-    button
-    {
-        border-radius: 0;
-        color: $teal;
-        border: 1px solid $teal;
-        background-color: transparent;
-        &.focused
-        {
-            background-color: $teal;
-            color: white;
-        }
-    }
-    .add-topic-button
-    {
-        border-top-left-radius: 6px;
-        border-bottom-left-radius: 6px;
-    }
-    .manage-topic-button
-    {
-        border-top-right-radius: 6px;
-        border-bottom-right-radius: 6px;
-    }
-}
-
-#tab-box1,
-#tab-box2
-{
-    width: 100%;
-    display: flex;
-    justify-content:center;
-}
 .release-button img{
   position: relative;
   left: 8px;

@@ -115,7 +115,8 @@ const store = new Vuex.Store({
       category: 0,
       title: '基于java的后端管理系统设计，使用Vuejs技术栈实现',
       details: '每个 Vue 实例在被创建之前都要经过一系列的初始化过程。例如，实例需要配置数据观测(data observer)、编译模版、挂载实例到 DOM ，然后在数据变化时更新 DOM 。在这个过程中，实例也会调用一些 生命周期钩子',
-      restriction: 3
+      restriction: 3,
+      fields:['6.软件工程']
     }],
     _tch_StudentInCard: [{
       _id: 1,

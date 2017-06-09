@@ -1,7 +1,7 @@
 <template>
   <div class="group-container">
   <div class="group-admin">
-    <mu-raised-button :href="downloadURL" icon="file_download" secondary label="导出分组表"/>
+    <mu-raised-button href="/admin/download?filename=MidGroup" icon="file_download" secondary label="导出分组表"/>
     <h3>{{title}}</h3>
   </div>
     <div class="groups">

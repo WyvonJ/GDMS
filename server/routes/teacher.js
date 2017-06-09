@@ -123,6 +123,7 @@ router.post('/tchSelectionResult', (req, res) => {
   let tchId = req.body.teacherId
   let cardData = []
     // console.log(tchId)
+  if(!tchId) return res.sendStatus(404)
   db.mentors.findOne({ _id: tchId })
     .populate('topics')
     .exec()
@@ -157,7 +158,7 @@ router.post('/tchGetCreatedTopics', confirmToken, (req, res) => {
   let tchId = req.body.teacherId
   if (!tchId) return res.send({ state: 0 })
   db.mentors.findOne({ _id: tchId }, 'topics')
-    .populate('topics', '_id category title details restriction')
+    .populate('topics', '_id category fields title details restriction')
     .exec((err, mentor) => {
       if (mentor)
         res.send(mentor.topics)
@@ -285,4 +286,31 @@ router.get('/tchGetContact', (req, res) => {
     }
   })
 })
+
+router.post('/tchEvaluationToStu',(req,res)=>{
+  let students = req.body.students
+ // let students = [{_id:'1030513425',score:97,comment:'勤劳善良'},{_id:'1030513412',score:95,comment:'勤劳善良'}]
+  for(var i=0;i<students.length;i++){
+    let studentId = students[i]._id
+    let grade = students[i].score
+    let comment = students[i].comment
+    let mentorscore = {
+      grade:grade,
+      comment:comment
+    }
+    db.students.findOne({_id:studentId},'mentorscore',(err,student)=>{
+      if(err)return
+      else if(student.mentorscore)res.send({state:2})
+      else {
+        student.mentorscore = mentorscore
+        student.save()
+        res.send({state:1})
+      }
+    })
+  }
+  /*Promise.all(students.map((student)=>{
+    return new Promise
+  }))*/
+})
+
 module.exports = router

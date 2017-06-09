@@ -11,6 +11,8 @@
       <div class="group-settings">
         <mu-raised-button @click="dialog=true" secondary icon="group" class="upload-group-count" label="开始分组"/>
         <mu-raised-button @click="uploadGroups" :disabled="!groups.length" primary icon="update" label="更新分组"/>
+          <mu-flat-button href="/admin/download?filename=MidGroup" icon="file_download" secondary label="导出分组表"/>
+        
         <br>
       </div>
       <div class="deleted-students">
