@@ -9,7 +9,7 @@
         </div>
         <div class="actions">
           <mu-raised-button @click="beginGroup" secondary icon="group" class="upload-group-count" label="开始分组" />
-          <mu-flat-button href="/admin/download?filename=MidGroup" icon="file_download" secondary label="导出分组表"/>
+          <mu-flat-button href="/admin/download?filename=MidGroup" icon="file_download" :disabled="disableDownload" title="分好组后才能下载分组表" secondary label="导出分组表"/>
 
         </div>
       </div>
@@ -38,6 +38,7 @@ export default {
       return {
         status: 0,
         groupLength: 6,
+        disableDownload:true,
         groups: [
           [],
           [],
@@ -112,7 +113,8 @@ export default {
         this.POST('/admin/uploadMidGroups', groups)
           .then(res => {
             if (res.data.state===1) {
-              this.$router.push('/admin/groups')
+              this.disableDownload=false
+              alert('可以导出分组表了')
             }
           })
           .catch(err => {

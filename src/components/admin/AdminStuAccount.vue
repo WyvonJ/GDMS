@@ -38,7 +38,7 @@
   					<td>{{student.email||'无'}}</td>
             <td>{{student.wechat||'无'}}</td>
             <td>{{student.qq||'无'}}</td>
-            <td><mu-switch :label="student.finalreplied?'是':'否'" v-model="student.finalreplied" @change="updateReply(student)" class="reply-switch"/></td>
+            <td><mu-switch v-model="student.finalreplied" @change="updateReply(student)" class="reply-switch"/></td>
             <td>
             <mu-icon-button icon="edit" style="color: #009688;" @click="openDialog(1,student)"/>
             </td>

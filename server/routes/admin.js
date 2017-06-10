@@ -13,7 +13,7 @@ const rand = require('csprng')
 const students = require('../models/students').students
 const mentors = require('../models/mentors').mentors
 
-/*管理员获得教师账号*/
+//管理员获得教师账号
 router.get('/admGetTchAccount', (req, res) => {
   let query = db.mentors.find({}, ['_id', 'name', 'tel', 'gender', 'email', 'office', 'qq', 'wechat', 'protitle'])
   query.sort({ '_id': 1 })
@@ -27,7 +27,8 @@ router.get('/admGetTchAccount', (req, res) => {
   })
 })
 
-router.get('/getTchGroupList', (req, res) => { //获取用于分组的导师帐号列表
+//获取用于分组的导师帐号列表
+router.get('/getTchGroupList', (req, res) => { 
   db.mentors.find({}, ['_id', 'name'], (err, mentors) => {
     if (err) res.sendStatus(404)
     else
@@ -38,8 +39,10 @@ router.get('/getTchGroupList', (req, res) => { //获取用于分组的导师帐�
   })
 })
 
-router.post('/createTchAccount', (req, res) => { //创建新帐号
+//创建新帐号
+router.post('/createTchAccount', (req, res) => { 
   let { account, password, name, gender } = req.body
+  if(!(account&&password&&name)) return res.sendStatus(404) 
   let salt = rand(160, 36)
   new mentors({
       _id: account, //账号
@@ -59,6 +62,7 @@ router.post('/createTchAccount', (req, res) => { //创建新帐号
 
 router.post('/updateTchAccount', (req, res) => { //更新账户信息
   let { _id, tel, name, gender, email, office, protitle, qq, wechat } = req.body.teacher
+  if(!_id) return res.sendStatus(404)
   db.mentors.findOneAndUpdate({ _id: _id }, {
       $set: {
         'tel': tel,
@@ -82,6 +86,7 @@ router.post('/updateTchPassword', (req, res) => {
   let password = req.body.password
   let salt = rand(160, 36)
   password = sha1(password + salt)
+  if(!account) return res.sendStatus(404)
   db.mentors.findOneAndUpdate({ _id: account }, {
       $set: {
         'password': password,
@@ -257,9 +262,12 @@ router.get('/admGetTchTopics', (req, res) => {
 router.post('/uploadMidGroups', (req, res) => {//‘’/admUpMTchGroups
     db.midgroups.remove({}, function(err) {
         if (err) return
-        console.log('pre midgroups dropped');
-    var i = 1;
+        console.log('pre midgroups dropped')
+    var i = 1
     var midMentorGroups = req.body //得到导师分组
+    if (midMentorGroups.length===0) {
+      return res.sendStatus(404)
+    }
     for (var i=0;i<midMentorGroups.length;i++){
         var group = {
             _id: i+1,
@@ -284,34 +292,13 @@ router.post('/uploadMidGroups', (req, res) => {//‘’/admUpMTchGroups
         })).then(() => {
             midgroup.midgroup(Groups)
             db.step.findOneAndUpdate({key:'system'},{$set:{curstep: 'midgroup'}},{new:true}).exec()
+            res.send({state:1})
                 //console.log(Groups[0].mentors);
         })
-    });
-    
+    }) 
         // midgroup.midgroup(midMentorGroups);
 })
 
-/*router.post('/uploadMidGroups', (req, res) => { //进行中期分组
-  let i = 1;
-  let midMentorGroups = req.body //得到导师分组
-  let Groups = []
-  Promise.all(midMentorGroups.map(group => {
-    return new Promise((resolve, reject) => {
-      let newGroup = {}
-      newGroup.name = i + '组'
-      newGroup.mentors = group
-      newGroup.data = [
-        ['序号', '学号', '学生姓名', '课题名', '指导教师']
-      ]
-      i++
-      Groups.push(newGroup)
-      resolve()
-    })
-  })).then(() => {
-    midgroup.midgroup(Groups)
-    db.step.findOneAndUpdate({ key: 'system' }, { $set: { curstep: 'midgroup' } }, { new: true }).exec()
-  }).then(res.send({ state: 1 }))
-})*/
 
 router.post('/admTchAccUpload', (req, res) => {
   let dstDir = './server/files/upload/'
@@ -452,6 +439,7 @@ router.get('/download', (req, res) => {
           else console.log("中期答辨分组结果文件下载成功")
         })
     } catch (err) {
+      return res.sendStatus(404)
       console.log('中期答辨分组结果文件不存在')
     }
   } else if (filename == 'FinalGroup') {
