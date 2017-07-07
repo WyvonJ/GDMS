@@ -8,7 +8,7 @@
       <div class="grade-content">
         <mu-slider v-model="grade" :step="1" class="grade-slider" />
         <mu-text-field hintText="评语" v-model="evaMsg" multiLine type="text" icon="thumb_up"/><br/>
-         <mu-raised-button @click="commitGrade" :disabled="isOpenForEva" secondary label="提交评价">
+         <mu-raised-button @click="commitGrade" secondary label="提交评价">
            <wyvonj-tooltip>{{msg}}</wyvonj-tooltip>
          </mu-raised-button>
       </div>
@@ -22,7 +22,7 @@ import { mapActions } from 'vuex'
 export default {
   data() {
       return {
-        grade: 80,
+        grade: 100,
         name: '导师',
         isOpenForEva: false,
         evaMsg:'',
@@ -50,7 +50,7 @@ export default {
       this.POST('/student/stuSelectionResult',{studentId:id})
         .then((res)=>{
           if(res.data.state === 1){
-            this.isOpenForEva=true
+            this.isOpenForEva=false
             this.msg=''
             this.name=res.data.name
           }

@@ -1,12 +1,14 @@
-import Student from '../components/student/Student.vue'
-import Topics from '../components/student/Topics.vue'
-import TopicsStatus from '../components/student/TopicsStatus.vue'
-import TeacherEvaluation from '../components/student/TeacherEvaluation.vue'
-import Contact from "../components/utils/Contact.vue"
+const Student = resolve=> require(['../components/student/Student.vue'],resolve)
+const Topics = resolve=> require(['../components/student/Topics.vue'],resolve)
+const TopicsStatus = resolve=> require(['../components/student/TopicsStatus.vue'],resolve)
+const TeacherEvaluation = resolve=> require(['../components/student/TeacherEvaluation.vue'],resolve)
+const Contact = resolve=> require(['../components/utils/Contact.vue'],resolve)
 
-import Grouping from '../components/utils/Grouping.vue'
-import Welcome from '../components/utils/Welcome.vue'
-import AccountSetting from '../components/utils/AccountSetting.vue'
+const Grouping = resolve=> require(['../components/utils/Grouping.vue'],resolve)
+const AccountSetting = resolve=> require(['../components/utils/AccountSetting.vue'],resolve)
+
+const Welcome = resolve=> require(['../components/utils/Welcome.vue'],resolve)
+
 let StudentRouter = {
   path: '/student',
   component: Student,

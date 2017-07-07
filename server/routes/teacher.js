@@ -153,17 +153,17 @@ router.post('/tchSelectionResult', (req, res) => {
 
 })
 
-router.post('/tchGetCreatedTopics', confirmToken, (req, res) => {
+router.post('/tchGetCreatedTopics', (req, res) => {
   //console.log(tchId)
   let tchId = req.body.teacherId
   if (!tchId) return res.send({ state: 0 })
   db.mentors.findOne({ _id: tchId }, 'topics')
-    .populate('topics', '_id category fields title details restriction')
+    .populate('topics', '_id category fields title details available')
     .exec((err, mentor) => {
       if (mentor)
         res.send(mentor.topics)
       else
-        res.sendStatus({ state: 0 })
+        res.send({ state: 0 })
     })
 
 })
@@ -179,6 +179,7 @@ router.post('/tchSetContactData', (req, res) => {
         'qq': req.body.qq,
         'wechat': req.body.wechat,
         'office': req.body.office,
+        'protitle':req.body.protitle,
         'classratio': req.body.classratio,
         'fields': req.body.fields
       }
@@ -264,7 +265,7 @@ router.post('/tchSetContact', (req, res) => {
 
   let account = req.body.account
   let contact = req.body.contact
-  db.mentors.findOneAndUpdate({ _id: account }, { $set: { 'tel': contact.tel, 'email': contact.email, 'qq': contact.qq, 'wechat': contact.wechat, 'office': contact.office, 'fields': contact.fields } }, { new: true }).exec()
+  db.mentors.findOneAndUpdate({ _id: account }, { $set: { 'tel': contact.tel, 'email': contact.email, 'qq': contact.qq, 'wechat': contact.wechat, 'office': contact.office} }, { new: true }).exec()
     .then(res.send({ state: 1 }))
 })
 

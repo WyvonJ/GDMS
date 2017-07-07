@@ -15,7 +15,7 @@ let topicsSchema = new Schema({ /*这里重写了_id属性，这样可以用来�
   isselected: { type: Boolean, required: true, default: false }, //这个学生是不是已经选择了题目
   available: { type: Number, required: true }, //可选人数
   selected: { type: Number, dafault: 0 }, //已选人数
-  fields: { type: [{ id: Number, name: String }], required: true }, //课题方向
+  fields: { type: [{ id: Number, name: String }] }, //课题方向
   nfields: [Number], //课题方向
 
   mentor: { type: String, ref: 'mentors' }, //出题老师
@@ -51,10 +51,13 @@ topicsSchema.methods.initializeTopicsId = function(cb) {
 topicsSchema.methods.createTopic = function(cb) {
     // this.initializeTopicsId(()=> this.save())//注意这里是一个回调函数，为了让回调函数的this是指向topic的
     autoIncModel.getTopicsId('topics', (ID) => {
+      console.log(ID)
       this._id = ID
-      this.restriction = this.available
+      this.available = this.restriction
       this.save((err, topic) => {
         getNewId(err, this._id)
+      console.log(err)  
+      console.log(this)  
         mentors.findOneAndUpdate({ _id: topic.mentor }, { $addToSet: { topics: topic._id } }, { new: true }).exec((err, mentor) => {
         })
       })

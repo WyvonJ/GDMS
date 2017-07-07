@@ -11,7 +11,7 @@
       <div class="group-settings">
         <mu-raised-button @click="dialog=true" secondary icon="group" class="upload-group-count" label="开始分组"/>
         <mu-raised-button @click="uploadGroups" :disabled="!groups.length" primary icon="update" label="更新分组"/>
-          <mu-flat-button href="/admin/download?filename=MidGroup" icon="file_download" secondary label="导出分组表"/>
+          <mu-flat-button href="/admin/download?filename=FinalGroup" icon="file_download" secondary label="导出分组表"/>
 
         <br>
       </div>
@@ -74,63 +74,9 @@ export default {
         manual:0,
         groupProc: '',
         warningMsg:'请稍等，正在后台处理中...',
-        teachers:[{
-          _id:'2030513410',
-          name:'张军'
-        },{
-          _id:'2030513411',
-          name:'李军'
-        },{
-          _id:'2030513412',
-          name:'王军'
-        }],
+        teachers:[],
         centroids:[],
-        groups: [{
-          _id: 1,
-          mentors: [{
-            _id: '2103154',
-            name: '张军'
-          }, {
-            _id: '5312561',
-            name: '陈伟'
-          }, {
-            _id: '2310231',
-            name: '陈丽芳'
-          }],
-          students: [{
-            _id: '103051234 ',
-            name: '李大康'
-          }, {
-            _id: '1012345',
-            name: '李大伟'
-          }, {
-            _id: '4104567',
-            name: '刘晓丽',
-            tchId: '20305134301'
-          }]
-        }, {
-          _id: 2,
-          mentors: [{
-            _id: '42145',
-            name: '李军'
-          }, {
-            _id: '45612645',
-            name: '刘伟'
-          }, {
-            _id: '645134',
-            name: '张丽'
-          }],
-          students: [{
-            _id: '123453 ',
-            name: '王宝钏'
-          }, {
-            _id: '484123',
-            name: '周大新'
-          }, {
-            _id: '45328543',
-            name: '赵倩'
-          }]
-        }]
+        groups: []
       }
     },
     methods: {
@@ -237,7 +183,7 @@ export default {
           }else{
            alert('获取导师列表失败') 
           }
-
+          //每组可以添加附加信息
         })
     }
 }

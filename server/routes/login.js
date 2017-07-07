@@ -20,6 +20,7 @@ router.post('/login', (req, res) => {
   let type = 0
   let account = req.body.account
   let password = req.body.password
+
   if (account[0] === '2') type = 1
   else if (account === 'admin') type = 2
   models[type].findOne({ _id: account }, ['password', 'name', 'notification', 'isfirstlogin', 'salt'], (err, doc) => {

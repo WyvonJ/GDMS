@@ -13,6 +13,7 @@ const rand = require('csprng')
 const students = require('../models/students').students
 const mentors = require('../models/mentors').mentors
 
+let lg=console.log
 //管理员获得教师账号
 router.get('/admGetTchAccount', (req, res) => {
   let query = db.mentors.find({}, ['_id', 'name', 'tel', 'gender', 'email', 'office', 'qq', 'wechat', 'protitle'])
@@ -127,6 +128,7 @@ router.get('/admGetStuAccount', (req, res) => {
 
 router.post('/createStuAccount', (req, res) => { //创建新帐号
   let { account, password, name, gender } = req.body
+  if(!(account&&password&&name)) return res.sendStatus(404) 
   let salt = rand(160, 36)
   new students({
       _id: account, //账号
@@ -137,6 +139,8 @@ router.post('/createStuAccount', (req, res) => { //创建新帐号
     })
     .save()
     .then(() => {
+  console.log('success')
+
       res.send({ state: 1 })
     })
     .catch(err => {
@@ -276,6 +280,7 @@ router.post('/uploadMidGroups', (req, res) => {//‘’/admUpMTchGroups
         }
         new db.midgroups(group).save()
     }
+
     var Groups = []
     Promise.all(midMentorGroups.map(group => {
             return new Promise((resolve, reject) => {
@@ -463,11 +468,23 @@ router.get('/download', (req, res) => {
                     .populate('mentor', 'name')
                     .exec((err, topic) => {
                       let row = []
+                      let fd=[]
+                      for (var i = 0; i < topic.fields.length; i++) {
+                        fd.push(topic.fields[i].name)
+                        lg(topic.fields[i].name)
+                      }
+                      if(topic.mentor==null){
+                        topic.mentor={
+                          _id:0,
+                          name:'无'
+                        }
+                      }
                       row.push(
                         student._id,
                         student.name,
                         topic.title,
-                        topic.category == 0 ? '论文' : '设计', [topic.fields],
+                        topic.category == 0 ? '论文' : '设计', 
+                        [fd],
                         topic.mentor.name
                       )
                       sheet.data.push(row)

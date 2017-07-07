@@ -1,5 +1,10 @@
 <template>
   <div class="procedure">
+  <section>
+    <mu-raised-button label="切换创建题目" class="procedure-button" @click="toCreateTopic" secondary/>
+    <mu-raised-button label="切换选择题目" class="procedure-button" @click="toSelectStudent" secondary/>
+  	
+  </section>
     <section class="paper workflow">
       <div class="workflow-title">
         <span>流程未完成导师</span>
@@ -35,11 +40,26 @@
 	export default{
 		data(){
 			return {
-				teacherUnfinished:['陈伟','陈丽芳','迪兰'],
-				notLoginStu:[{
-					_id:'1030513410',
-					name:'张大伟'
-				}]
+				teacherUnfinished:[],
+				notLoginStu:[]
+			}
+		},
+		methods:{
+			toCreateTopic(){
+				this.GET('/admin/toCreateTopic')
+					.then(res=>{
+						if (res.data.state===1) {
+							alert('现在可以创建题目了')
+						}
+					})
+			},
+			toSelectStudent(){
+				this.GET('/admin/toSelectStudent')
+					.then(res=>{
+						if (res.data.state===1) {
+							alert('现在导师可以选择学生了了')
+						}
+					})
 			}
 		},
 		mounted(){
@@ -68,10 +88,11 @@
 	display: flex;
 	align-items: flex-start;
 	justify-content: flex-start;
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
 	section{
 		display: inline-block;
 		margin: 8px;
+		flex: 1;
 		div[class$="title"]{
 
 		height: 40px;

@@ -1,5 +1,4 @@
 import axios from 'axios'
-
 const duration = 3000 //snackbar显示事件
 
 let timer
@@ -78,7 +77,6 @@ export default {
       .then((res) => {
         if (res.data.state === 1) {
           showSnackbar({ commit }, errMsg)
-          router.push('/student/status')
         }
       })
       .catch(err => {

@@ -28,7 +28,7 @@
                         <td width="25%">{{topic.title}}
                         </td>
                         <td width="50%" class="row-details">{{ topic.details }}</td>
-                        <td width="8%" class="topic-restriction">{{ topic.restriction }}</td>
+                        <td width="8%" class="topic-restriction">{{ topic.available }}</td>
                         <td>
                             <mu-icon-button icon="edit" style="color: #009688;" @click="openDialog(topic)" />
                         </td>
@@ -117,6 +117,8 @@ export default {
         this.addoredit=1
       },
       confirmAdd() {
+        let id = cookie.get('user')
+
         if (this.fields.length === 0) {
           return this.fieldsError = "还没选择课题研究方向！"
         }
@@ -128,15 +130,15 @@ export default {
         }
         let fd=[]
         for(let i=0,len=this.fields.length;i<len;i++){
-          fd.push(this.fields[i].split('.')[0])
+          fd.push(_.parseInt(this.fields[i].split('.')[0]))
         }
         this.GET('/getstep')
           .then(res => {
-            if (res.data.curstep === 'createtopics') {
+            if (true) {//res.data.curstep === 'createtopics'
               let currentTopic = {
                   mentor: id,
-                  category: this.category,
-                  fields: fd,
+                  category: _.parseInt(this.category),
+                  nfields: fd,
                   title: this.title,
                   details: this.details,
                   restriction: this.restriction
@@ -152,6 +154,7 @@ export default {
                   this.details = ''
                   this.restriction = '1'
                   this.showSnackbar("课题创建成功")
+                  this.dialog=false
                 })
             } else {
               this.showSnackbar('现在无法对课题进行操作')
@@ -174,39 +177,34 @@ export default {
         this.dialog=true
       },
       confirmEdit(){
+        let fd=[]
+        for(let i=0,len=this.fields.length;i<len;i++){
+          fd.push(_.parseInt(this.fields[i].split('.')[0]))
+        }
+        let tchId = cookie.get('user')
         this.POST('/teacher/tchEditTopic',{
           teacherId:tchId,
           _id:this.topicId,
           title:this.title,
           details:this.details,
-          fields:this.fields,
+          nfields:fd,
           category:this.category,
           restriction:this.restriction
         })
         .then(res=>{
-
         })
+          this.dialog=false
+          this.showSnackbar('修改课题成功')
       },
       deleteTopic(topic, index) {
         let id = cookie.get('user')
-        this.GET('/getstep')
-          .then((res) => {
-            let step = res.data.curstep
-            if (step === 'createtopics') {
-              this.tchDeleteTopic({
-                  teacherId: id,
-                  topicId: topic._id
-                })
-                .then(() => {
-                  this.tchGetCreatedTopics({ teacherId: id, })
-                })
-            } else {
-              this.showSnackbar('现在无法对课题进行操作')
-            }
+        this.tchDeleteTopic({
+            teacherId: id,
+            topicId: topic._id
           })
-          .catch(err => {
-            this.showSnackbar('出了点小问题，重新试试。')
-            console.log(err)
+          .then(() => {
+            this.tchGetCreatedTopics({ teacherId: id, })
+            this.dialog=false
           })
       },
       clearForms(){
@@ -234,6 +232,9 @@ export default {
         //if (!id) 
         //return this.$router.push('/')
       this.tchGetCreatedTopics({ teacherId: id })
+        .then(res=>{
+
+        })
     },
     components:{
       Fields

@@ -66,6 +66,7 @@ export default {
       },
       //登录方法
       doLogin() {
+        lg(this.account)
         if (!this.account.length) 
           return this.errorAccount = '请输入帐号！'
         if (!this.password.length) 

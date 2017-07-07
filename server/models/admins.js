@@ -16,6 +16,7 @@ let adminsSchema = new Schema({
   tel: { type: String }, //电话
   email: { type: String }, //邮箱
   notification: { type: String },
+  salt:String,
   eventstack: [{ type: Number }], //导师需要人工选择学生的题，如果stack里有题的话，就要取stack里题处理
   isfirstlogin: { type: Boolean, default: true }
 }, { colletion: 'admins' })

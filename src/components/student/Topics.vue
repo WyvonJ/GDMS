@@ -128,12 +128,8 @@ export default {
         let reg = new RegExp(this.searchStr, 'i')
           //let isNum = this.searchStr.search(/^[0-9]*[1-9][0-9]*$/)
         return topics.filter((topics) => {
-
-
           if ((topics.title.match(reg) || topics._id.toString().match(reg))) {
             return true
-          } else {
-
           }
         })
       },
@@ -148,7 +144,7 @@ export default {
       },
       addTopic(index, topic) {
         //根据进度选择能选几个题目
-        if(this.step === 'selecttopics'){
+        if(true){//this.step === 'selecttopics'
         let cart = this.topicsInCart
         if (topic._id !== this.lastSelection) {
           this.toggleTableBar = false
@@ -198,7 +194,7 @@ export default {
           alert('登录超时，请重新登录')
           this.$router.push('/')
         }
-        if (this.step==='selecttopics') {
+        if (true) {//this.step==='selecttopics'
 
           let wrapper = {
             _id: user,
@@ -208,6 +204,10 @@ export default {
         }
         //提交选题是否成功
         this.stuCommitSelection(wrapper)
+          .then(res=>{
+              this.$router.push('/student/status')
+
+          })
         }else if (this.step==='reselecttopics'){
           this.POST('/student/stuFinalTopic',{
             _id: user,

@@ -38,7 +38,7 @@
   					<td>{{student.email||'无'}}</td>
             <td>{{student.wechat||'无'}}</td>
             <td>{{student.qq||'无'}}</td>
-            <td><mu-switch v-model="student.finalreplied" @change="updateReply(student)" class="reply-switch"/></td>
+            <td><mu-switch :label="student.finalreplied?'是':'否'" v-model="student.finalreplied" @change="updateReply(student)" class="reply-switch"/></td>
             <td>
             <mu-icon-button icon="edit" style="color: #009688;" @click="openDialog(1,student)"/>
             </td>
@@ -202,7 +202,8 @@ export default {
           return this.idError = '请填写用户账户！'
         if (name.length==0) 
           return this.nameError = '请填写用户姓名！'
-
+        if (password.length==0) 
+          return this.passwordError = '请填写用户密码！'
         if (this.addoredit==1) {
           //更新账户信息
           this.POST('/admin/updateStuAccount', {student:this.student})
@@ -218,9 +219,6 @@ export default {
             })
         } else {
           //创建新账户
-        if (password.length == 0)
-          return this.passwordError = '请填写用户密码！'
-        if (name.length == 0)
           this.POST('/admin/createStuAccount', {
               account: account,
               password: password,

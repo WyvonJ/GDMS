@@ -1,18 +1,18 @@
-import Welcome from '../components/utils/Welcome.vue'
-import Admin from '../components/admin/Admin.vue'
-import AdminStuAccount from '../components/admin/AdminStuAccount.vue'
-import AdminTchAccount from '../components/admin/AdminTchAccount.vue'
-import AdminTchTopics from '../components/admin/AdminTchTopics.vue'
-import Procedure from '../components/admin/Procedure.vue'
+const Welcome = resolve=> require(['../components/utils/Welcome.vue'],resolve)
+const Admin = resolve=> require(['../components/admin/Admin.vue'],resolve)
+const AdminStuAccount = resolve=> require(['../components/admin/AdminStuAccount.vue'],resolve)
+const AdminTchAccount = resolve=> require(['../components/admin/AdminTchAccount.vue'],resolve)
+const AdminTchTopics = resolve=> require(['../components/admin/AdminTchTopics.vue'],resolve)
+const Procedure = resolve=> require(['../components/admin/Procedure.vue'],resolve)
 
-import StudentGrade from '../components/admin/StudentGrade.vue'
+const StudentGrade = resolve=> require(['../components/admin/StudentGrade.vue'],resolve)
 
-import FinalGroup from '../components/admin/FinalGroup.vue'
-import MiddleGroup from '../components/admin/MiddleGroup.vue'
+const FinalGroup = resolve=> require(['../components/admin/FinalGroup.vue'],resolve)
+const MiddleGroup = resolve=> require(['../components/admin/MiddleGroup.vue'],resolve)
 
-import Groups from '../components/admin/Groups.vue'
+const Groups = resolve=> require(['../components/admin/Groups.vue'],resolve)
 
-import ResetSystem from '../components/admin/ResetSystem.vue'
+const ResetSystem = resolve=> require(['../components/admin/ResetSystem.vue'],resolve)
 
 
 export default {

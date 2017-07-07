@@ -32,7 +32,7 @@
 .wyvonj-snackbar
 {
     position: fixed;
-    z-index: 300;
+    z-index: 20148888;
     top: -100px;
     right: 0;
     left: 0;

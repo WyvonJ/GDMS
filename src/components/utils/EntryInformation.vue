@@ -131,7 +131,7 @@ import { mapActions } from 'vuex'
 export default {
   data() {
       return {
-        activeStep: 2,
+        activeStep: 0,
         telError: '',
         emailError: '',
         fieldsError: '',
@@ -269,7 +269,7 @@ export default {
     },
     mounted() {
       try {
-        //this.usertype = _.parseInt(cookie.get('usertype'))
+        this.usertype = _.parseInt(cookie.get('usertype'))
       } catch (err) {
         return console.log(err)
       }

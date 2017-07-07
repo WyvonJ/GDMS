@@ -1,14 +1,14 @@
 //teacher panel
-import Teacher from '../components/teacher/Teacher.vue'
-import Confirmation from '../components/teacher/Confirmation.vue'
-import Creation from '../components/teacher/Creation.vue'
-import StudentEvaluation from '../components/teacher/StudentEvaluation.vue'
+const Teacher = resolve=> require(['../components/teacher/Teacher.vue'],resolve)
+const Confirmation = resolve=> require(['../components/teacher/Confirmation.vue'],resolve)
+const Creation = resolve=> require(['../components/teacher/Creation.vue'],resolve)
+const StudentEvaluation = resolve=> require(['../components/teacher/StudentEvaluation.vue'],resolve)
 
-import SelectionResult from '../components/teacher/SelectionResult.vue'
-import Contact from '../components/utils/Contact.vue'
-import Grouping from '../components/utils/Grouping.vue'
-import Welcome from '../components/utils/Welcome.vue'
-import AccountSetting from '../components/utils/AccountSetting.vue'
+const SelectionResult = resolve=> require(['../components/teacher/SelectionResult.vue'],resolve)
+const Contact = resolve=> require(['../components/utils/Contact.vue'],resolve)
+const Grouping = resolve=> require(['../components/utils/Grouping.vue'],resolve)
+const Welcome = resolve=> require(['../components/utils/Welcome.vue'],resolve)
+const AccountSetting = resolve=> require(['../components/utils/AccountSetting.vue'],resolve)
 export default {
   path: '/teacher',
   component: Teacher,

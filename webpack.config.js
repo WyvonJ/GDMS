@@ -14,7 +14,8 @@ module.exports = {
     //按需载入或如图片文件的外部资源的访问路径
     publicPath: '/dist/',
     //输出的Bundle文件名，对于每个entry有对应的静态名
-    filename: 'build.js'
+    filename: 'build.js',
+    chunkFilename:'chunks/[name]-[chunkhash:8].js'
   },
   resolveLoader: {
     moduleExtensions: ['-loader']

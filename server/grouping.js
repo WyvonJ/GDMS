@@ -152,13 +152,13 @@ let groupByCentroids = function(centroids, fn) {
           let _m = 1 - _.intersection(_tchFields[i][2], _centroids[j]).length / _.union(_tchFields[i][2], _centroids[j]).length
             //_m ? null : grouped = true
           _tchFields[i][2] == centroids[j] ? grouped = true : null //判断是否是centroids
-          if (min > _m) {
+          if (min > _m) {//记录最小值
             min = _m
             rec = j + 1
           }
           arr[i].push({
             rank: j + 1,
-            value: _m.toFixed(2)
+            value: _m.toFixed(2)//保留2位小数
           })
         }
         arr[i].sort((a, b) => {
@@ -168,6 +168,7 @@ let groupByCentroids = function(centroids, fn) {
           arr[i][k] = arr[i][k].rank
         }
         tchGroups[i] = [arr[i], _tchFields[i][0], grouped]
+        //导师记录为 距离 研究姓名 是否分组
       }
 
       _.forEach(tchGroups, (e, i) => {
@@ -176,14 +177,14 @@ let groupByCentroids = function(centroids, fn) {
         let k
         _.forEach(e[0], (_e, _i) => {
           k = len - _i
-          min += (_e - _i) * (_e - _i) * Math.pow(2, 2 * k)
+          min += (_e - _i) * (_e - _i) * Math.pow(2, 2 * k)//加权计算用于排序
         })
         e.push(min)
       })
       tchGroups.sort((a, b) => {
         return _.last(a) - _.last(b)
       })
-      fn(firstGroup(tchGroups, centroids.length))//记住这个用法
+      fn(firstGroup(tchGroups, centroids.length))//将参数传递到外面
     })
 }
 

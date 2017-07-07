@@ -81,7 +81,17 @@ li
 {
     list-style: none;
 }
+@function trible($val){
+    @return $val*3;
+}
 
+.box{
+    @for $item from 1 to 6{
+        .span#{$item}{
+            display: inline-block;
+        }
+    }
+}
 button
 {
     font-size: 16px;
@@ -505,7 +515,6 @@ progress::-webkit-progress-value
 .main-transition-enter-active
 {
     transition: all .1s cubic-bezier(0, .87, .21, 1.1);
-    transition-delay: .1s !important;
     //元素进来时给大于等于离开动画的延迟
     //就能避免两个元素同时在画内
 }
@@ -514,15 +523,12 @@ progress::-webkit-progress-value
 //因为元素的opacity本来为1 所以会渐变化成1
 .main-transition-enter
 {
-    transform: translateY(-70px); //这个是执行函数
 
     opacity: 0; //而这个是直接设置
 }
 
 .main-transition-leave-active
 {
-    transform: translateY(70px);
-
     opacity: 0;
 }
 
