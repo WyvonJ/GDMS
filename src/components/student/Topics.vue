@@ -122,6 +122,7 @@ export default {
         body.scrollTop = newPage * anchor
       },
       sortCategory() {
+        lg(this)
         this.isCategorySorted = !this.isCategorySorted
       },
       search(topics) {
@@ -134,7 +135,7 @@ export default {
         })
       },
       refreshTopics() {
-        this.stuGetTopics()
+        //this.stuGetTopics()
       },
       getTotal(topic) {
         let t1 = topic.firststudents ?  topic.firststudents.length:0

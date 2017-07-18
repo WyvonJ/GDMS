@@ -76,6 +76,7 @@ export default {
         this.openDrawer = !this.openDrawer
       },
       toggleNav() {
+        this.$children[2].sortCategory.apply(this)
         this.openDrawer = !this.openDrawer
       }
     },
@@ -90,6 +91,7 @@ export default {
       window.removeEventListener('resize', this.handleResize)
     },
     mounted() {
+      var that = this
       //if (cookie.get('usertype') != 0)
       //return this.$router.push('/')
       this.handleResize = () => {

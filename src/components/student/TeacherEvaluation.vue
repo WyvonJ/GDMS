@@ -12,6 +12,13 @@
            <wyvonj-tooltip>{{msg}}</wyvonj-tooltip>
          </mu-raised-button>
       </div>
+      <ul @click="handleClick">
+        <li>11111111</li>
+        <li>222222</li>
+        <li>333333</li>
+        <li>4444444</li>
+        <li>555555</li>
+      </ul>
     </div>
   </div>
 </template>
@@ -42,6 +49,9 @@ export default {
           grade: this.grade,
           content:this.evaMsg
         })
+      },
+      handleClick($event){
+        lg($event)
       },
       ...mapActions(['stuEvaluationToTch'])
     },
